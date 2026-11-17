@@ -149,8 +149,11 @@ button:active{transform:scale(.97)}
 /* pencereler */
 .sheet-bg{position:fixed;inset:0;background:#02030acc;z-index:30;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
 .sheet-bg.show{display:flex;animation:fade .2s both}
-.sheet{background:linear-gradient(180deg,#1a1f42,#13173300 ),#141834;width:100%;max-width:520px;border-radius:28px 28px 0 0;padding:10px 18px calc(env(safe-area-inset-bottom) + 18px);max-height:94vh;overflow:auto;border:1px solid var(--line);border-bottom:0;animation:sheet .32s cubic-bezier(.2,.9,.25,1) both}
-.grab{width:42px;height:5px;border-radius:3px;background:#ffffff30;margin:0 auto 12px}
+.sheet{background:#141834;width:100%;max-width:520px;border-radius:28px 28px 0 0;display:flex;flex-direction:column;max-height:92vh;max-height:92dvh;overflow:hidden;border:1px solid var(--line);border-bottom:0;animation:sheet .32s cubic-bezier(.2,.9,.25,1) both}
+.sheet-top{position:relative;flex:none;min-height:54px;padding:10px 0 0}
+.sheet-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 18px calc(env(safe-area-inset-bottom) + 18px);overscroll-behavior:contain}
+.xbtn{position:absolute;right:14px;top:8px;width:36px;height:36px;border-radius:50%;background:#ffffff1f;color:#fff;font-size:16px;font-weight:700;display:grid;place-items:center;z-index:5}
+.grab{width:42px;height:5px;border-radius:3px;background:#ffffff30;margin:0 auto}
 .sheet h3{margin:0 0 12px;font-size:20px;font-family:var(--num);letter-spacing:-.3px}
 .seg{display:flex;background:#ffffff0d;border-radius:15px;padding:4px;margin-bottom:14px}
 .seg button{flex:1;padding:11px;border-radius:12px;font-weight:700;color:var(--mut)}
@@ -293,7 +296,8 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
 <!-- Gelir/gider penceresi -->
 <div class="sheet-bg" id="sbg">
   <div class="sheet">
-    <div class="grab"></div>
+    <div class="sheet-top"><div class="grab"></div><button class="xbtn" data-close="s" aria-label="Kapat">✕</button></div>
+    <div class="sheet-body">
     <h3 id="sTitle">Yeni işlem</h3>
     <div class="seg"><button class="o on" id="sOut">⬇ Gider</button><button class="i" id="sIn">⬆ Gelir</button></div>
     <input class="amt" id="sAmt" inputmode="decimal" placeholder="0 ₺" autocomplete="off">
@@ -309,13 +313,15 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
     <button class="btn sec sm" id="sPlan">🗓️ Taksit / abonelik mi? Düzenli ödeme ekle</button>
     <button class="btn del" id="sDel" style="display:none">Sil</button>
     <button class="btn sec sm" id="sCancel">Vazgeç</button>
+    </div>
   </div>
 </div>
 
 <!-- Taksit / abonelik penceresi -->
 <div class="sheet-bg" id="pbg">
   <div class="sheet">
-    <div class="grab"></div>
+    <div class="sheet-top"><div class="grab"></div><button class="xbtn" data-close="p" aria-label="Kapat">✕</button></div>
+    <div class="sheet-body">
     <div class="stickypill" id="pPillWrap" style="display:none"><div class="vp" id="pPill"></div></div>
     <h3 id="pTitle">Düzenli ödeme</h3>
     <div class="note" id="pTryNote" style="display:none;margin:-4px 0 12px">Burada denediğin hiçbir şey kaydedilmez. Tek seferlik alışveriş için taksit sayısına 1 yaz.</div>
@@ -340,6 +346,7 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
     <button class="btn" id="pSave">Kaydet</button>
     <button class="btn del" id="pDel" style="display:none">Sil</button>
     <button class="btn sec sm" id="pCancel">Vazgeç</button>
+    </div>
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -359,7 +366,7 @@ var CATS={
   out:[['Kredi','🏦','#7c5cff'],['Kredi Kartı','💳','#ff6b81'],['Doğalgaz','🔥','#ff9f43'],['Su','💧','#2c9cf0'],['Elektrik','⚡','#ffd23f'],
        ['İnternet','🌐','#27d3c3'],['Telefon','📱','#a37cff'],['Market','🛒','#3ddc97'],['Ulaşım','🚌','#5f8bff'],['Yemek','🍽️','#ff7eb6'],
        ['Sağlık','💊','#4dd6a3'],['Eğlence','🎬','#ffb648'],['Diğer','📦','#8f95c2']],
-  inc:[['Maaş','💼','#3ddc97'],['Ek gelir','✨','#27d3c3'],['Diğer','📥','#8f95c2']]
+  'in':[['Maaş','💼','#3ddc97'],['Ek gelir','✨','#27d3c3'],['Diğer','📥','#8f95c2']]
 };
 var EXTRA=['#e056fd','#f78fb3','#badc58','#22a6b3','#f0932b','#6ab04c'];
 var MONTHS=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
@@ -761,7 +768,7 @@ function openPlan(id,isTry){
     $('pStart').value=mk(now);$('pDay').value=now.getDate();$('pEnd').value='';
   }
   planCheck();$('pbg').classList.add('show');
-  var sh=$('pbg').querySelector('.sheet');sh.scrollTop=0;
+  var sh=$('pbg').querySelector('.sheet-body');sh.scrollTop=0;
   setTimeout(function(){if(!p)$(isTry?'pTotal':'pName').focus()},200);
 }
 function closePlan(){$('pbg').classList.remove('show');planEdit=null;tryMode=false}
@@ -778,6 +785,7 @@ $('pEnd').onchange=function(){var st=$('pStart').value,en=$('pEnd').value;
   var c=parseInt($('pCount').value,10),a=parseNum($('pAmt').value);if(c>0&&a>0)$('pTotal').value=toIn(a*c);planCheck()};
 $('pEnd').oninput=$('pEnd').onchange;
 $('pCancel').onclick=closePlan;
+document.querySelectorAll('.xbtn').forEach(function(b){b.onclick=function(){if(b.getAttribute('data-close')==='s')closeSheet();else closePlan()}});
 $('pbg').onclick=function(ev){if(ev.target===$('pbg'))closePlan()};
 $('pSave').onclick=function(){
   var amt=parseNum($('pAmt').value),day=parseInt($('pDay').value,10),st=$('pStart').value,en=$('pEnd').value,name=$('pName').value.trim();
