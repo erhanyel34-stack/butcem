@@ -615,6 +615,40 @@ html.big body{zoom:1.12}
 #pOldWrap{margin:0 0 6px}
 #pOldBox{background:#ffffff0a;border:1.5px solid #7c5cff55;border-radius:16px;padding:12px;margin:2px 0 10px}
 #pOldBox .chk{margin:0 0 8px}
+/* v1.15 genel arama */
+.toast{z-index:9200}
+.topr{display:flex;align-items:center;gap:8px}
+.gsb{width:42px;height:42px;border-radius:15px;background:#ffffff0d;border:1px solid var(--line);font-size:18px;display:flex;align-items:center;justify-content:center;padding:0;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+#gs{position:fixed;inset:0;z-index:200;background:#0b0e22;display:none;color:#fff;overflow:hidden}
+#gs.show{display:block}
+#gs::before{content:"";position:absolute;width:380px;height:380px;border-radius:50%;background:#7c5cff;opacity:.13;right:-160px;top:-150px;pointer-events:none}
+.gsin{position:relative;height:100%;max-width:520px;margin:0 auto;display:flex;flex-direction:column;padding:max(env(safe-area-inset-top),18px) 16px 0}
+.gsh{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.gsbox{flex:1;min-width:0;display:flex;align-items:center;gap:10px;background:#ffffff14;border:1.5px solid #7c5cff;border-radius:16px;padding:0 12px;height:48px}
+.gsbox input{flex:1;min-width:0;background:none;border:0;outline:none;color:#fff;font:inherit;font-size:16px}
+.gsbox input::placeholder{color:#6d74a6}
+.gsbox button{background:#ffffff1c;border:0;color:#cfd3f5;width:24px;height:24px;border-radius:50%;font-size:12px;display:none;padding:0}
+.gscl{flex:none;white-space:nowrap;background:none;border:0;color:#9aa0cf;font-size:15px;padding:8px 2px}
+#gsb{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 0 40px}
+.gsg{font-size:11.5px;color:#9aa0cf;letter-spacing:.5px;margin:16px 2px 7px;text-transform:uppercase;font-weight:700}
+.gsr{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#ffffff0d;border:0;border-radius:15px;padding:11px 12px;margin-bottom:7px;color:#fff}
+.gsr .ico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
+.gsr .m{flex:1;min-width:0}.gsr .m b{display:block;font-size:14.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.gsr .m small{display:block;font-size:12.5px;color:#9aa0cf;margin-top:1px}
+.gsr .a{font-size:13.5px;font-weight:700;white-space:nowrap;font-family:var(--num)}
+.gsr .go{color:#6d74a6;font-size:18px}
+.gsr.act{background:#2d2768;border:1px solid #7c5cff77}
+.gsbar{height:5px;background:#ffffff1c;border-radius:3px;overflow:hidden;margin-top:7px}.gsbar i{display:block;height:100%;background:#7c5cff;border-radius:3px}
+.gsch{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 4px}
+.gsch button{background:#ffffff12;border:1.5px solid transparent;color:#fff;border-radius:20px;padding:8px 13px;font-size:13px}
+.gsch button.on{background:#2d2768;border-color:#7c5cff}
+.gsform{background:#ffffff0d;border:1.5px solid #7c5cff77;border-radius:18px;padding:14px;margin:-2px 0 8px}
+.gsform h4{margin:0 0 10px;font-size:15px}
+.gsform .fld{margin-bottom:8px}
+.gsform .two{margin-bottom:8px}
+.gsdone{background:#17896a33;border:1px solid #3ddc9755;border-radius:16px;padding:14px;margin:0 0 8px}
+.gsdone b{display:block;font-size:15px;margin-bottom:8px}
+.gsdone .row{display:flex;gap:8px}.gsdone button{flex:1;padding:11px;border-radius:12px;background:#ffffff18;border:0;color:#fff;font-weight:700;font-size:14px}
+.gsempty{text-align:center;color:#9aa0cf;padding:36px 10px;font-size:14px;line-height:1.5}
 /* v1.11 banka kartı görünümü + deri dikiş */
 .dnhint{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .dnadd{background:#ffffff1a;color:#fff;border:0;border-radius:10px;padding:6px 12px;font-size:12.5px;font-weight:700;white-space:nowrap;flex:none}
@@ -663,7 +697,7 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
 <div class="wrap">
   <div class="top">
     <div class="brand"><span class="logo">₺</span>Bütçem</div>
-    <div class="month"><button id="prev" aria-label="Önceki ay">‹</button><span id="mlabel"></span><button id="next" aria-label="Sonraki ay">›</button></div>
+    <div class="topr"><button type="button" id="gsBtn" class="gsb" aria-label="Ara">🔍</button><div class="month"><button id="prev" aria-label="Önceki ay">‹</button><span id="mlabel"></span><button id="next" aria-label="Sonraki ay">›</button></div></div>
   </div>
   <div class="banner" id="banner"><b>📝 Bugünkü harcamalarını not ettin mi?</b><button id="bAdd">Ekle</button></div>
 
@@ -1115,6 +1149,7 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
 <div class="cbg" id="igbg"><div class="ig" id="igBox"></div></div>
 <div class="cbg" id="tiBg"><div class="ti" id="tiBox"></div></div>
 <div class="cbg" id="cfBg"><div class="cf" id="cfBox"></div></div>
+<div id="gs"><div class="gsin"><div class="gsh"><div class="gsbox"><span class="gsi">🔍</span><input id="gsq" placeholder="Kredi, yemek, telefon faturası…" autocomplete="off" autocapitalize="off" enterkeyhint="search"><button type="button" id="gsx" aria-label="Temizle">✕</button></div><button type="button" id="gsc" class="gscl">Kapat</button></div><div id="gsb"></div></div></div>
 <div class="cbg" id="wnBg"><div class="wn" id="wnBox"></div></div>
 <div class="toast" id="toast"></div>
 
@@ -2154,10 +2189,14 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.14';
+var APP_VER='1.15';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
-var RELEASES=[{v:'1.14',date:'Kasım 2026',title:'Yarıda kalan krediyi ekle',items:[
+var RELEASES=[{v:'1.15',date:'Kasım 2026',title:'Her şeyi bulan arama',items:[
+  ['🔍','Arama butonu','Üstteki büyüteçle krediler, taksitler, faturalar, abonelikler, tatiller, kartlar, ek gelirler, işlemler ve Ayarlar bölümleri tek yerden aranır.',1],
+  ['⚡','Aramadan hızlı ekleme','“yemek” yazınca “Yemek gideri ekle” çıkar: tutarı yaz, nakit ya da kart seç, bakiyenden hemen düşsün. “kredi”, “tatil”, “maaş” yazınca da ilgili ekleme çıkar.',1],
+  ['📋','Kalan ve ödenmiş taksitler','“kredi” yazınca kalan ve ödenmiş taksitleri seçip toplam tutarlarıyla görebilirsin.',1]]},
+{v:'1.14',date:'Kasım 2026',title:'Yarıda kalan krediyi ekle',items:[
   ['🏦','Zaten başlamış kredi / taksit','Taksit eklerken “zaten başladı” seçeneğini işaretleyip kaç taksit ödediğini yazarsan başlangıç ayını, kalan taksit sayısını ve kalan tutarı kendim hesaplarım.',1],
   ['🗓','Geçmiş ödemeler','Ödediğin taksitler geçmiş aylara da işlenir. İstemezsen “geçmiş aylara da işlensin” kutusunu kapatabilirsin, o zaman sadece bugünden sonrası hesaba katılır.',1],
   ['📊','Kredinin toplamı','Kredinin toplam tutarı, ödenen ve kalan taksitler formda birlikte görünür.',1]]},
@@ -3164,6 +3203,138 @@ $('txsr').onclick=function(ev){var b=ev.target.closest('.tx');if(!b)return;openS
 $('txf').onclick=function(ev){var b=ev.target.closest('[data-f]');if(!b)return;txFilter=b.getAttribute('data-f');
   $('txf').querySelectorAll('.chip').forEach(function(x){x.classList.toggle('on',x===b)});render();renderSearch()};
 
+/* ---------- Genel arama ---------- */
+function trn(x){return String(x==null?'':x).toLocaleLowerCase('tr').replace(/ı/g,'i').replace(/ş/g,'s').replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ö/g,'o').replace(/ç/g,'c')}
+var GS_STOP=['fatura','faturasi','faturalari','gider','gideri','harcama','harcamasi','odeme','odemesi','ekle','ekleme','ara','kalan','odenmis','odenen'];
+var GS_AL={'Market':['market','bakkal','manav','kasap','alisveris'],'Yemek':['yemek','restoran','lokanta','kafe','cafe','kahve','doner','pizza','yemeksepeti'],'Ulaşım':['ulasim','otobus','metro','taksi','dolmus','bilet'],'Araç':['arac','benzin','akaryakit','yakit','otopark','hgs','ogs','kasko','sigorta'],'Sağlık':['saglik','ilac','eczane','doktor','hastane'],'Eğlence':['eglence','sinema','konser','oyun'],'Doğalgaz':['dogalgaz','gaz'],'İnternet':['internet','wifi'],'Telefon':['telefon','cep','hat'],'Elektrik':['elektrik'],'Su':['su'],'Diğer':['diger']};
+var gsAct=null,gsPay='n',gsDone=null,gsMode='all',gsActList=[];
+function gsWords(q){var ws=trn(q).split(/\s+/).filter(Boolean),core=ws.filter(function(w){return GS_STOP.indexOf(w)<0});return{ws:ws,core:core.length?core:ws,onlyStop:!core.length}}
+function gsHit(hay,words){hay=trn(hay);return words.every(function(w){return hay.indexOf(w)>-1})}
+function gsRecent(){try{return JSON.parse(lsGet('butcem_gsr')||'[]')}catch(e){return[]}}
+function gsRemember(){var q=$('gsq').value.trim();if(q.length<2)return;var a=gsRecent().filter(function(x){return x!==q});a.unshift(q);lsSet('butcem_gsr',JSON.stringify(a.slice(0,5)))}
+function gsOpen(){$('gs').classList.add('show');gsAct=null;gsDone=null;gsMode='all';$('gsq').value='';gsRender();setTimeout(function(){$('gsq').focus()},120)}
+function gsClose(){$('gs').classList.remove('show');$('gsq').blur()}
+function gsGoTab(v,target){document.querySelector('.nav .t[data-v="'+v+'"]').click();if(target)setTimeout(function(){var e=$(target);if(e&&e.scrollIntoView)e.scrollIntoView({block:'start',behavior:'smooth'})},350)}
+function gsRow(cls,ico,icoBg,title,sub,amt,attr,extra){return '<button type="button" class="gsr '+cls+'" '+attr+'><span class="ico" style="background:'+icoBg+'">'+ico+'</span><span class="m"><b>'+esc(title)+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+(extra||'')+'</span>'+(amt?'<span class="a">'+esc(amt)+'</span>':'<span class="go">›</span>')+'</button>'}
+function gsActions(W){
+  var out=[],c=W.core,i;
+  function any(list){return c.some(function(w){return w.length>=2&&list.some(function(n){return n.indexOf(w)===0||(w.length>=3&&n.indexOf(w)>-1)})})}
+  CATS.out.forEach(function(ct){var n=ct[0];if(['Kredi','Kredi Kartı','Tatil','Abonelik'].indexOf(n)>-1)return;
+    var names=[trn(n)].concat(GS_AL[n]||[]);if(any(names))out.push({k:'exp:'+n,ico:ct[1],col:ct[2],t:n+' gideri ekle',s:'Tutarı yaz, bakiyenden hemen düşsün'})});
+  if(any(['kredi','taksit','kredi karti']))out.push({k:'plan',ico:'🏦',col:'#7c5cff',t:'Kredi / taksit ekle',s:'Zaten başlamış krediyi de ekleyebilirsin'});
+  if(any(['tatil','otel','seyahat']))out.push({k:'trip',ico:'🏖️',col:'#ff9f43',t:'Tatil planı ekle',s:'Bütçeni ve harcamaları planla'});
+  if(any(['abonelik','uyelik','netflix','spotify','youtube','disney','instagram','icloud'])||S.plans.length&&false)out.push({k:'sub',ico:'📺',col:'#c06cff',t:'Üyelik / abonelik ekle',s:'Her ay otomatik düşer'});
+  if(any(['maas','gelir','mesai','prim']))out.push({k:'inc:Maaş',ico:'💼',col:'#3ddc97',t:'Maaş / gelir ekle',s:'Bakiyene hemen eklenir'});
+  if(any(['ek gelir','yan gelir','gelir','freelance']))out.push({k:'inc:Ek gelir',ico:'✨',col:'#27d3c3',t:'Ek gelir ekle',s:'Maaş dışı gelir'});
+  if(any(['kira','aidat','duzenli']))out.push({k:'rec',ico:'🔁',col:'#8f95c2',t:'Düzenli gider ekle',s:'Kira, aidat gibi her ay tekrarlayan'});
+  var seen={};return out.filter(function(a){if(seen[a.k])return false;seen[a.k]=1;return true}).slice(0,4);
+}
+function gsFormHtml(a){
+  var isIn=a.indexOf('inc:')===0,cat=a.split(':')[1],ci=catInfo(isIn?'in':'out',cat);
+  var h='<div class="gsform"><h4>'+ci.ico+' '+esc(isIn?(cat==='Maaş'?'Maaş / gelir':cat):cat+' gideri')+'</h4><input class="fld" id="gsAmt" inputmode="decimal" placeholder="0 ₺" autocomplete="off" style="font-size:22px;font-weight:700">';
+  if(!isIn)h+='<div class="paysg"><button type="button" class="'+(gsPay==='n'?'on':'')+'" data-gp="n">💵 Nakit</button><button type="button" class="'+(gsPay==='k'?'on':'')+'" data-gp="k">💳 Kredi kartı</button></div><select class="fld" id="gsCardSel" style="display:none"></select>';
+  h+='<div class="two"><input class="fld" id="gsDate" type="date" value="'+esc(today())+'"><input class="fld" id="gsNote" placeholder="Not (isteğe bağlı)" maxlength="60"></div><button type="button" class="btn" id="gsSave">'+(isIn?'Kaydet, bakiyeme ekle':'Kaydet, bakiyeden düş')+'</button></div>';
+  return h;
+}
+function gsRender(){
+  var q=$('gsq').value.trim(),box=$('gsb'),h='';
+  $('gsx').style.display=q?'block':'none';
+  if(gsDone){box.innerHTML='<div class="gsdone"><b>'+esc(gsDone.t)+'</b><div class="row"><button type="button" data-gd="undo">Geri al</button><button type="button" data-gd="more">Bir tane daha</button><button type="button" data-gd="close">Tamam</button></div></div>';return}
+  if(!q){
+    h+='<div class="gsg">Sık aranan</div><div class="gsch">';
+    [['Kredi','🏦'],['Tatil','🏖️'],['Fatura','💡'],['Abonelik','📺'],['Yemek','🍽️'],['Market','🛒'],['Kart','💳'],['Şifre','🔒']].forEach(function(x){h+='<button type="button" data-gq="'+esc(x[0])+'">'+x[1]+' '+esc(x[0])+'</button>'});
+    h+='</div>';
+    var r=gsRecent();if(r.length){h+='<div class="gsg">Son aramaların</div>';r.forEach(function(x){h+=gsRow('','🕘','#ffffff14',x,'','','data-gq="'+esc(x)+'"')})}
+    box.innerHTML=h;return}
+  var W=gsWords(q),words=W.core,n=0,acts=gsActions(W);gsActList=acts;
+  if(acts.length){h+='<div class="gsg">Hızlı ekle</div>';
+    acts.forEach(function(a){h+=gsRow('act',a.ico,a.col+'33',a.t,a.s,'','data-ga="'+esc(a.k)+'"');n++;if(gsAct===a.k)h+=gsFormHtml(a.k)})}
+  // taksit / krediler
+  var PL=S.plans.filter(function(p){return !p.sub}).filter(function(p){
+    var tx=W.core.join(' ');if(W.onlyStop&&W.ws.some(function(w){return ['kalan','odenmis','odenen'].indexOf(w)>-1}))return true;
+    if(/^(taksit|taksitler|taksitlerim|kredi|krediler|kredilerim)$/.test(tx))return tx.indexOf('kredi')===0?p.cat==='Kredi':true;
+    return gsHit(p.name+' '+p.cat,words)});
+  if(PL.length){
+    h+='<div class="gsg">'+(PL.every(function(p){return p.cat==='Kredi'})?'Krediler':'Taksitler')+'</div><div class="gsch">';
+    [['all','Taksitler'],['kalan','Kalan taksitler'],['odenen','Ödenmiş taksitler']].forEach(function(m){h+='<button type="button" class="'+(gsMode===m[0]?'on':'')+'" data-gm="'+m[0]+'">'+m[1]+'</button>'});h+='</div>';
+    PL.forEach(function(p){var inf=payInfo(p),rem=Math.max(0,inf.total-inf.done),ci=catInfo('out',p.cat),sub,amt;
+      if(gsMode==='kalan'){sub=inf.total?('Kalan '+rem+' taksit · son '+mlab(p.end)):'Süresiz';amt=inf.total?fmt(rem*p.amt):fmt(p.amt)+'/ay'}
+      else if(gsMode==='odenen'){sub='Ödenen '+inf.done+(inf.total?' / '+inf.total:'')+' taksit';amt=fmt(inf.done*p.amt)}
+      else{sub=inf.total?('Ödenen '+inf.done+' · kalan '+rem+' taksit'):'Süresiz';amt=fmt(p.amt)+'/ay'}
+      h+=gsRow('',ci.ico,ci.col+'33',p.name,sub,amt,'data-go="plan:'+esc(p.id)+'"',inf.total?'<div class="gsbar"><i style="width:'+Math.min(100,Math.round(inf.done/inf.total*100))+'%"></i></div>':'');n++});
+  }
+  // faturalar
+  var BL=S.bills.filter(function(b){return gsHit(b.name+' '+b.cat+(W.onlyStop?'':''),W.onlyStop?[]:words)});
+  if(BL.length){h+='<div class="gsg">Faturalar</div>';BL.forEach(function(b){var en=billEntry(b,nowK()),ci=catInfo('out',b.cat),last=billLatest(b,nowK());
+    h+=gsRow('',ci.ico,ci.col+'33',b.name,en?'✓ Bu ay ödendi · '+en.date.slice(8,10)+'.'+en.date.slice(5,7):(last>0?'Bu ay bekliyor · geçen ay '+fmt(last,true):'Bu ay bekliyor'),en?'−'+fmt(en.amt,true):'','data-go="bill:'+esc(b.id)+'"');n++})}
+  // abonelikler
+  var SB=subsActive().filter(function(p){return /^(abonelik|aboneliklerim|uyelik|uyeliklerim)$/.test(W.core.join(' '))||gsHit(p.name+' '+p.brand,words)});
+  if(SB.length){h+='<div class="gsg">Abonelikler</div>';SB.forEach(function(p){h+=gsRow('',tile(brandOf(p.brand)).replace('class="ico brand"','class="ico brand" style="width:40px;height:40px"'),'transparent',p.name,'Ayın '+p.day+'. günü','−'+fmt(p.amt,true),'data-go="sub:'+esc(p.id)+'"');n++})}
+  // tatiller
+  var TR=activeTrips().filter(function(t){return W.core.join(' ')==='tatil'||W.core.join(' ')==='tatiller'||gsHit((t.dest||'')+' tatil',words)});
+  if(TR.length){h+='<div class="gsg">Tatiller</div>';TR.forEach(function(t){var d=daysTo(t.start);h+=gsRow('',t.season==='kis'?'❄️':'☀️','#ff9f4333','Tatil · '+(t.dest||'Yeni tatil'),(d>0?d+' gün kaldı':'Devam ediyor ya da bitti'),'','data-go="trip:'+esc(t.id)+'"');n++})}
+  // ek gelir planları
+  var IP=S.incPlans.filter(function(p){return /^(ek|yan|gelir|gelirler)$/.test(W.core[0])&&W.core.length<=2||gsHit(p.name,words)});
+  if(IP.length){h+='<div class="gsg">Ek gelirler</div>';IP.forEach(function(p){h+=gsRow('','✨','#27d3c333',p.name,'Ayın '+p.day+'. günü','+'+fmt(p.amt,true),'data-go="ip:'+esc(p.id)+'"');n++})}
+  // kartlar
+  var CD=S.cardDefs.filter(function(c){return /^(kart|kartlar|kartlarim|kredi karti)$/.test(W.core.join(' '))||gsHit(c.name,words)});
+  if(CD.length){h+='<div class="gsg">Kartlar</div>';CD.forEach(function(c){h+=gsRow('','💳','#ff6b8133',c.name,'Limit '+fmt(c.limit)+' · kullanılan '+fmt(cdUsed(c.id)),'','data-go="cd"');n++})}
+  // işlemler
+  var EN=S.entries.filter(function(e){return !e.carry&&gsHit(e.cat+' '+(e.note||'')+' '+toIn(e.amt)+' '+e.amt,W.onlyStop?W.ws.filter(function(w){return GS_STOP.indexOf(w)<0}):words)}).sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0});
+  if(W.onlyStop)EN=[];
+  if(EN.length){h+='<div class="gsg">İşlemler · '+EN.length+'</div>';EN.slice(0,6).forEach(function(e){var ci=catInfo(e.type,e.cat);
+    h+=gsRow('',ci.ico,ci.col+'33',e.note||e.cat,e.date.slice(8,10)+'.'+e.date.slice(5,7)+'.'+e.date.slice(0,4)+(e.note?' · '+e.cat:''),(e.type==='in'?'+':'−')+fmt(e.amt,true),'data-go="tx:'+esc(e.id)+'"');n++});
+    if(EN.length>6)h+=gsRow('','🧾','#ffffff14','Tüm '+EN.length+' işlemi gör','İşlemler sekmesinde aç','','data-go="txall"')}
+  // ekranlar
+  var SC=[['Uygulama şifresi','Kilit, kurtarma kodu','🔒','ayar','pinSet',['sifre','kilit','pin','guvenlik','kurtarma','parola']],['Yedekle / geri yükle','Yedek al, dosyadan geri yükle','💾','ayar','bkStatus',['yedek','geri yukle','excel','csv','aktar']],['Tahmini harcama','Market, yemek tahmini','🔮','ayar','veCard',['tahmin','tahmini']],['Kategori limitleri','Aylık limit koy','🎯','ayar','limCard',['limit','butce siniri']],['Günlük hatırlatma','Bildirim kur','🔔','ayar','',['hatirlat','bildirim','alarm']],['Yenilikler','Sürüm notları','✨','ayar','',['yenilik','surum','guncelleme']],['Ödemeler','Fatura, abonelik, taksit','🔁','fatura','',['odemeler']],['İşlemler','Tüm kayıtlar','🧾','islem','',['islemler','kayitlar','hareketler']]];
+  var SH=SC.filter(function(x){return gsHit(x[0],words)||x[5].some(function(k){return words.every(function(w){return k.indexOf(w)>-1||w.indexOf(k)>-1&&w.length>=3})})});
+  if(SH.length){h+='<div class="gsg">Ekranlar</div>';SH.slice(0,4).forEach(function(x){h+=gsRow('',x[2],'#ffffff14',x[0],x[1],'','data-gt="'+x[3]+':'+x[4]+'"');n++})}
+  if(!h)h='<div class="gsempty">“'+esc(q)+'” için sonuç yok.<br>Başka bir sözcük dene: kredi, tatil, market, fatura…</div>';
+  box.innerHTML=h;
+  if(gsAct){var ai=$('gsAmt');if(ai){bindAmt(ai);ai.oninput=fmtAmt;fillCardSel('gsCardSel',gsPay==='k');if(!ai._f){ai._f=1;setTimeout(function(){ai.focus()},60)}}}
+}
+function gsSave(){
+  var a=gsAct,isIn=a.indexOf('inc:')===0,cat=a.split(':')[1],amt=parseNum($('gsAmt').value),date=$('gsDate').value,note=$('gsNote').value.trim();
+  if(!(amt>0)){toast('Tutarı yaz');$('gsAmt').focus();return}
+  if(!date){toast('Tarih seç');return}
+  amt=Math.round(amt*100)/100;markUndo();var msg;
+  if(!isIn&&gsPay==='k'){var rs=addCardSpend({date:date,amt:amt,cat:cat,tcat:'',note:note,cardId:cardPick('gsCardSel')});S.inited[date.slice(0,7)]=true;msg=cat+' · −'+fmt(amt,true)+' kart harcamalarına eklendi'}
+  else{S.entries.push({id:uid(),type:isIn?'in':'out',cat:cat,amt:amt,date:date,note:note});S.inited[date.slice(0,7)]=true;msg=cat+' · '+(isIn?'+':'−')+fmt(amt,true)+(isIn?' bakiyene eklendi':' bakiyenden düştü')}
+  var m=new Date(date+'T00:00:00');if(!isNaN(m))cur=new Date(m.getFullYear(),m.getMonth(),1);
+  save();render();gsRemember();gsDone={t:'✓ '+msg};gsRender();
+  try{var lm=(!isIn)&&limMsg(cat,date);if(lm)toast(lm)}catch(e){}
+}
+$('gsBtn').onclick=gsOpen;$('gsc').onclick=gsClose;
+$('gsx').onclick=function(){$('gsq').value='';gsAct=null;gsRender();$('gsq').focus()};
+$('gsq').oninput=function(){gsAct=null;gsMode='all';gsRender()};
+document.addEventListener('keydown',function(ev){if(ev.key==='Escape'&&$('gs').classList.contains('show'))gsClose()});
+$('gsb').addEventListener('click',function(ev){
+  var t=ev.target.closest('button');if(!t)return;
+  var gq=t.getAttribute('data-gq'),ga=t.getAttribute('data-ga'),go=t.getAttribute('data-go'),gt=t.getAttribute('data-gt'),gm=t.getAttribute('data-gm'),gp=t.getAttribute('data-gp'),gd=t.getAttribute('data-gd');
+  if(gq!==null){$('gsq').value=gq;gsAct=null;gsMode='all';gsRender();return}
+  if(gm){gsMode=gm;gsRender();return}
+  if(gp){gsPay=gp;[].forEach.call($('gsb').querySelectorAll('[data-gp]'),function(b){b.classList.toggle('on',b.getAttribute('data-gp')===gp)});fillCardSel('gsCardSel',gp==='k');return}
+  if(t.id==='gsSave'){gsSave();return}
+  if(gd){if(gd==='undo'){doUndo();gsDone=null;gsAct=null;gsRender();return}if(gd==='more'){gsDone=null;gsRender();return}gsClose();return}
+  if(ga){
+    gsRemember();
+    if(ga.indexOf('exp:')===0||ga.indexOf('inc:')===0){gsAct=(gsAct===ga)?null:ga;gsPay='n';gsRender();return}
+    gsClose();
+    if(ga==='plan'){openPlan();return}
+    if(ga==='trip'){openTripScreen();return}
+    if(ga==='sub'){openSub();return}
+    if(ga==='rec'){openSheet();$('sRec').checked=true;syncMode();return}
+    return}
+  if(go){
+    gsRemember();gsClose();var p=go.split(':'),k=p[0],id=p.slice(1).join(':');
+    if(k==='plan')openPlan(id);else if(k==='sub')openSub(id);else if(k==='trip')openTripScreen(id);else if(k==='ip')openIp(id);
+    else if(k==='tx')openSheet(id);
+    else if(k==='cd')gsGoTab('fatura','cdCard');
+    else if(k==='bill'){billOpen=id;gsGoTab('fatura','billList');renderBills()}
+    else if(k==='txall'){var q=$('gsq').value.trim();gsGoTab('islem');$('txq').value=q;renderSearch()}
+    return}
+  if(gt){gsClose();var z=gt.split(':');gsGoTab(z[0],z[1]||'')}
+});
 /* ---------- Kategori limitleri ---------- */
 function catSpent(k){
   var m={};
