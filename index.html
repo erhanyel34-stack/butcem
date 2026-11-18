@@ -611,6 +611,10 @@ html.big body{zoom:1.12}
 .lkp button.ph{visibility:hidden}
 .lkl{display:block;margin:auto 0 0;background:none;border:0;color:#9aa0cf;font-size:15px;padding:10px 16px}
 #lkCancel{margin-top:0}
+/* v1.14 geçmişten başlayan kredi */
+#pOldWrap{margin:0 0 6px}
+#pOldBox{background:#ffffff0a;border:1.5px solid #7c5cff55;border-radius:16px;padding:12px;margin:2px 0 10px}
+#pOldBox .chk{margin:0 0 8px}
 /* v1.11 banka kartı görünümü + deri dikiş */
 .dnhint{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .dnadd{background:#ffffff1a;color:#fff;border:0;border-radius:10px;padding:6px 12px;font-size:12.5px;font-weight:700;white-space:nowrap;flex:none}
@@ -986,6 +990,13 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
       <div><span class="lbl">Başlangıç ayı</span><input class="fld" id="pStart" type="month"></div>
       <div><span class="lbl">Ayın kaçında ödenir?</span><input class="fld" id="pDay" type="number" min="1" max="31" inputmode="numeric" placeholder="5"></div>
     </div>
+    <div id="pOldWrap"><label class="chk"><input type="checkbox" id="pOld"> Bu kredi / taksit zaten başladı, bazı taksitleri ödedim</label>
+      <div id="pOldBox" style="display:none">
+        <span class="lbl">Şu ana kadar kaç taksit ödedin?</span>
+        <input class="fld" id="pPaid" type="number" min="0" inputmode="numeric" placeholder="Örn. 8" autocomplete="off">
+        <label class="chk"><input type="checkbox" id="pHist" checked> Ödediğim aylar geçmiş aylara da işlensin</label>
+        <div class="note" id="pOldSum" style="margin:0 0 10px;font-size:14px"></div>
+      </div></div>
     <span class="lbl">Son ödeme ayı (boşsa süresiz)</span>
     <input class="fld" id="pEnd" type="month">
     <div class="note" id="pRemain" style="display:none;margin:0 0 10px;font-size:14px"></div>
@@ -1270,7 +1281,7 @@ function planEntries(d){
   var k=mk(d),t=today(),res=[];
   S.plans.forEach(function(p){
     if(p.id===EXP)return;
-    if(k<p.start||(p.end&&k>p.end))return;
+    if(k<p.start||(p.end&&k>p.end)||(p.from&&k<p.from))return;
     var date=payDate(p,k);
     res.push({id:'p:'+p.id+':'+k,type:'out',cat:p.cat,amt:p.amt,date:date,note:p.name,plan:true,planId:p.id,pending:date>t});
   });
@@ -1518,7 +1529,22 @@ function planItems(){
   var items=[];for(var i=ym(from);i<=ym(last);i++)items.push({k:fromYm(i),amt:amt});
   return{items:items,horizon:horizon};
 }
+function oldApply(){
+  var on=$('pOld').checked&&!tryMode&&!planEdit;
+  $('pOldBox').style.display=on?'':'none';
+  var ps=$('pStart');ps.style.pointerEvents=on?'none':'';ps.style.opacity=on?'.65':'';
+  if(!on)return;
+  var c=parseInt($('pCount').value,10),pd=parseInt($('pPaid').value,10),day=parseInt($('pDay').value,10),a=parseNum($('pAmt').value),sm=$('pOldSum');
+  if(!(c>0)){sm.innerHTML='Önce yukarıya toplam vadeyi (kaç ay) yaz.';return}
+  if(!(pd>=0)){sm.innerHTML='Kaç taksit ödediğini yaz, geri kalanını ben hesaplarım.';return}
+  if(pd>c)pd=c;
+  var td=new Date().getDate(),counted=(day>=1&&day<=31)?(day<=td):true,si=ym(nowK())-(counted?pd-1:pd);
+  var st=fromYm(si);$('pStart').value=st;$('pEnd').value=fromYm(si+c-1);
+  var rem=c-pd,tot=a>0?a*c:0;
+  sm.innerHTML='İlk taksit <b>'+esc(mlab(st))+'</b>, son taksit <b>'+esc(mlab(fromYm(si+c-1)))+'</b><br>Ödenen <b>'+pd+'</b> · kalan <b>'+rem+' taksit</b>'+(a>0?' ('+esc(fmt(rem*a,true))+')<br>Kredinin toplamı <b>'+esc(fmt(tot,true))+'</b>':'');
+}
 function planCheck(){
+  try{oldApply()}catch(e){}
   try{planRemainUI()}catch(e){}
   pArm=false;var sv=$('pSave');sv.textContent=tryMode?'Plana ekle':'Kaydet';sv.classList.remove('warn');
   var box=$('pCheck'),pw=$('pPillWrap'),pp=$('pPill');pVer='none';
@@ -1787,6 +1813,7 @@ function openPlan(id,isTry){
     $('pName').value='';$('pAmt').value='';$('pTotal').value='';$('pCount').value='';$('pCat').value='Diğer';
     $('pStart').value=mk(now);$('pDay').value=now.getDate();$('pEnd').value='';
   }
+  $('pOld').checked=false;$('pPaid').value='';$('pHist').checked=true;$('pOldWrap').style.display=(p||isTry)?'none':'';
   applyKredi();planCheck();$('pbg').classList.add('show');
   var sh=$('pbg').querySelector('.sheet-body');sh.scrollTop=0;
   setTimeout(function(){if(!p)$(isTry?'pTotal':'pName').focus()},200);
@@ -1816,6 +1843,9 @@ $('pCount').oninput=function(){syncEnd();if(isKredi()){var a0=parseNum($('pAmt')
 $('pAmt').oninput=function(ev){fmtAmt(ev);var a=parseNum($('pAmt').value),c=parseInt($('pCount').value,10);$('pTotal').value=(a>0&&c>0)?toIn(a*c):'';planCheck()};
 $('pStart').onchange=function(){syncEnd();planCheck()};
 $('pDay').oninput=planCheck;
+$('pOld').onchange=function(){if(!$('pOld').checked){$('pStart').value=mk(new Date())}planCheck()};
+$('pPaid').oninput=planCheck;
+$('pHist').onchange=planCheck;
 $('pEnd').onchange=function(){var st=$('pStart').value,en=$('pEnd').value;
   $('pCount').value=(st&&en)?Math.max(1,ym(en)-ym(st)+1):'';
   var c=parseInt($('pCount').value,10),a=parseNum($('pAmt').value);if(c>0&&a>0)$('pTotal').value=toIn(a*c);planCheck()};
@@ -1833,7 +1863,7 @@ $('pSave').onclick=function(){
   if(pVer==='over'&&!pArm){pArm=true;$('pSave').textContent='⚠️ Bütçeyi aşıyor — yine de kaydet';$('pSave').classList.add('warn');return}
   var o={name:name,cat:$('pCat').value,amt:Math.round(amt*100)/100,start:st,end:en||'',day:day};
   if(planEdit){S.plans.forEach(function(x){if(x.id===planEdit){x.name=o.name;x.cat=o.cat;x.amt=o.amt;x.start=o.start;x.end=o.end;x.day=o.day}})}
-  else{o.id=uid();S.plans.push(o)}
+  else{o.id=uid();if($('pOld').checked&&!$('pHist').checked)o.from=nowK();S.plans.push(o)}
   save();closePlan();render();toast('Taksit kaydedildi ✓');
 };
 $('pDel').onclick=function(){
@@ -2124,10 +2154,14 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.13.2';
+var APP_VER='1.14';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
-var RELEASES=[{v:'1.13.2',date:'Kasım 2026',title:'Yeni şifre ekranı',items:[
+var RELEASES=[{v:'1.14',date:'Kasım 2026',title:'Yarıda kalan krediyi ekle',items:[
+  ['🏦','Zaten başlamış kredi / taksit','Taksit eklerken “zaten başladı” seçeneğini işaretleyip kaç taksit ödediğini yazarsan başlangıç ayını, kalan taksit sayısını ve kalan tutarı kendim hesaplarım.',1],
+  ['🗓','Geçmiş ödemeler','Ödediğin taksitler geçmiş aylara da işlenir. İstemezsen “geçmiş aylara da işlensin” kutusunu kapatabilirsin, o zaman sadece bugünden sonrası hesaba katılır.',1],
+  ['📊','Kredinin toplamı','Kredinin toplam tutarı, ödenen ve kalan taksitler formda birlikte görünür.',1]]},
+{v:'1.13.2',date:'Kasım 2026',title:'Yeni şifre ekranı',items:[
   ['✨','Daha modern şifre ekranı','Tuşlar artık tam yuvarlak ve büyük, ekran boydan boya kullanılıyor. Uygulamanın mor renkleri ve ₺ simgesiyle uyumlu.',1]]},
 {v:'1.13.1',date:'Kasım 2026',title:'Şifre için kurtarma kodu',items:[
   ['🔑','Kurtarma kodu','Şifre koyarken sana bir kurtarma kodu veriliyor. “Notlar’a kaydet” ile Notlar’a kaydedebilirsin.',1],
