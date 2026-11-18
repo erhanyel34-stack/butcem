@@ -228,7 +228,7 @@ select.fld{appearance:none;-webkit-appearance:none}
 .step{display:flex;gap:12px;margin:11px 0;font-size:14px;line-height:1.5}
 .step i{font-style:normal;width:27px;height:27px;border-radius:50%;background:linear-gradient(135deg,var(--acc),#2c7be5);display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
 textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:16px}
-.toast{position:fixed;left:50%;bottom:118px;transform:translateX(-50%) translateY(8px);background:#fff;color:#111;padding:11px 18px;border-radius:14px;font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:all .25s;z-index:60;box-shadow:0 10px 30px #0006;white-space:nowrap}
+.toast{position:fixed;left:50%;bottom:118px;transform:translateX(-50%) translateY(8px);background:#fff;color:#111;padding:11px 18px;border-radius:14px;font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:all .25s;z-index:60;box-shadow:0 10px 30px #0006;white-space:normal;width:max-content;max-width:calc(100vw - 32px);text-align:center;line-height:1.35}
 .toast.show{opacity:1;transform:translateX(-50%)}
 .toast.act{pointer-events:auto;display:flex;align-items:center;gap:14px}.toast button{color:#6a4cf5;font-weight:800;font-size:14px;padding:4px 2px}
 .view{display:none}.view.on{display:block}
@@ -615,6 +615,12 @@ html.big body{zoom:1.12}
 #pOldWrap{margin:0 0 6px}
 #pOldBox{background:#ffffff0a;border:1.5px solid #7c5cff55;border-radius:16px;padding:12px;margin:2px 0 10px}
 #pOldBox .chk{margin:0 0 8px}
+/* v1.15.3 */
+.bill.flash{animation:billfl 2.2s}
+@keyframes billfl{0%,60%{box-shadow:0 0 0 2px #7c5cff,0 0 22px #7c5cff88}100%{box-shadow:0 0 0 0 #7c5cff00}}
+/* v1.15.2 form düzeltmeleri */
+.two>*{min-width:0}
+input[type=month].fld,input[type=date].fld{min-width:0;max-width:100%;width:100%;box-sizing:border-box;-webkit-appearance:none;appearance:none;text-align:left;display:block}
 /* v1.15 genel arama */
 .gsfind{position:sticky;top:calc(env(safe-area-inset-top) + 8px);z-index:25;display:flex;align-items:center;gap:10px;width:100%;height:48px;margin:0 0 14px;padding:0 14px;text-align:left;background:#1a1d44e6;border:1.5px solid #7c5cff66;border-radius:16px;color:#9aa0cf;font-size:15px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 6px 18px #0006}
 .gsfind:active{border-color:#7c5cff}
@@ -824,6 +830,7 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
 
   <!-- FATURALAR -->
   <div class="view" id="v-fatura">
+    <div class="card" id="billMove" style="margin-top:0;display:none"></div>
     <div class="card" style="margin-top:0">
       <h2>💡 Bu ayın düzenli ödemeleri</h2>
       <div class="bill-sum" id="billSum"></div>
@@ -857,10 +864,13 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
       <div class="note" style="margin:10px 0 0">Kartla yaptığın harcamalar buraya yazılır, bakiyen düşmez. Ekstreyi ödediğinde “Ekstreyi ödedim” de; tutar nakit bakiyenden düşer.</div>
     </div>
     <div class="card">
-      <h2>➕ Yeni düzenli gider ekle</h2>
+      <h2>➕ Yeni fatura / düzenli gider ekle</h2>
+      <div class="note" style="margin:0 0 8px">Her ay gelen elektrik, su, internet, telefon, aidat, kira gibi kalemler. Eklediğin kalem yukarıdaki <b>“Bu ayın düzenli ödemeleri”</b> listesine girer.</div>
       <input class="fld" id="nbName" placeholder="Örn. Cep telefonu 2, Site aidatı" maxlength="40">
       <select class="fld" id="nbCat"></select>
       <button class="btn sec" id="nbAdd">Listeye ekle</button>
+      <div class="note" style="margin:10px 0 6px">Kredi, kredi kartı ya da borç mu ekleyeceksin? Onlar fatura değil, kalan taksiti takip edilen ödemelerdir.</div>
+      <button class="btn sec sm" id="nbGoKr" style="margin:0">🏦 Kredi / taksit ekle</button>
     </div>
   </div>
 
@@ -1016,8 +1026,8 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
     <div class="note" id="pTryNote" style="display:none;margin:-4px 0 12px">Burada denediğin hiçbir şey kaydedilmez. Tek seferlik alışveriş için taksit sayısına 1 yaz.</div>
     <span class="lbl">Taksidin adı</span>
     <input class="fld" id="pName" placeholder="Örn. Telefon taksiti, Buzdolabı, Sigorta" maxlength="40">
-    <span class="lbl">Kategori</span>
-    <select class="fld" id="pCat"></select>
+    <div id="pCatWrap"><span class="lbl">Kategori</span>
+    <select class="fld" id="pCat"></select></div>
     <div class="two">
       <div><span class="lbl">Aylık taksit tutarı</span><input class="fld" id="pAmt" inputmode="decimal" placeholder="10.000 ₺" autocomplete="off"></div>
       <div><span class="lbl">Vade (kaç ay)</span><input class="fld" id="pCount" type="number" min="1" max="600" inputmode="numeric" placeholder="12"></div>
@@ -1833,12 +1843,13 @@ function saveSheet(){
 /* ---------- Taksit penceresi ---------- */
 var PLAN_CATS=['Kredi','Kredi Kartı','Araç','Tatil','Diğer'];
 (function(){var o='';CATS.out.forEach(function(c){if(PLAN_CATS.indexOf(c[0])<0)return;o+='<option value="'+esc(c[0])+'">'+c[1]+' '+esc(c[0])+'</option>'});$('pCat').innerHTML=o})();
-function openPlan(id,isTry){
+function openPlan(id,isTry,fixCat){
   Array.prototype.slice.call($('pCat').querySelectorAll('option[data-x]')).forEach(function(o){o.parentNode.removeChild(o)});
   var p=id?S.plans.filter(function(x){return x.id===id})[0]:null;
   if(p&&p.sub&&!isTry){openSub(id);return}
   planEdit=id||null;tryMode=!!isTry;pArm=false;pDelArm=false;
-  $('pTitle').textContent=isTry?'🧮 Alabilir miyim?':(p?'Taksiti düzenle':'Yeni taksit');
+  var PT={'Kredi':'Yeni kredi','Kredi Kartı':'Yeni kredi kartı taksidi','Araç':'Yeni araç taksidi','Diğer':'Yeni taksit'};
+  $('pTitle').textContent=isTry?'🧮 Alabilir miyim?':(p?'Taksiti düzenle':(fixCat&&PT[fixCat]?PT[fixCat]:'Yeni taksit'));
   $('pTryNote').style.display=isTry?'block':'none';
   $('pDel').style.display=p?'block':'none';$('pDel').textContent='Sil';
   $('pSave').textContent=isTry?'Plana ekle':'Kaydet';$('pSave').classList.remove('warn');
@@ -1854,6 +1865,10 @@ function openPlan(id,isTry){
     $('pStart').value=mk(now);$('pDay').value=now.getDate();$('pEnd').value='';
   }
   $('pOld').checked=false;$('pPaid').value='';$('pHist').checked=true;$('pOldWrap').style.display=(p||isTry)?'none':'';
+  if(fixCat&&!p&&!isTry){$('pCat').value=fixCat}
+  $('pCatWrap').style.display=(fixCat&&!p&&!isTry)?'none':'';
+  var PH={'Kredi':'Örn. Taşıt kredisi, İhtiyaç kredisi','Kredi Kartı':'Örn. Telefon taksiti (kart), Buzdolabı','Araç':'Örn. Kasko, Lastik','Diğer':'Örn. Telefon taksiti, Buzdolabı, Sigorta'};
+  $('pName').placeholder=(fixCat&&PH[fixCat])?PH[fixCat]:'Örn. Telefon taksiti, Buzdolabı, Sigorta';
   applyKredi();planCheck();$('pbg').classList.add('show');
   var sh=$('pbg').querySelector('.sheet-body');sh.scrollTop=0;
   setTimeout(function(){if(!p)$(isTry?'pTotal':'pName').focus()},200);
@@ -1874,7 +1889,7 @@ function applyKredi(){
   planRemainUI();
 }
 $('pCat').onchange=function(){applyKredi();planCheck()};
-function closePlan(){$('pbg').classList.remove('show');planEdit=null;tryMode=false}
+function closePlan(){$('pbg').classList.remove('show');planEdit=null;tryMode=false;moveBill=null}
 function syncEnd(){var c=parseInt($('pCount').value,10),st=$('pStart').value;if(c>0&&st)$('pEnd').value=fromYm(ym(st)+c-1)}
 function fromTotal(){var t=parseNum($('pTotal').value),c=parseInt($('pCount').value,10);if(t>0&&c>0)$('pAmt').value=toIn(t/c)}
 $('pTotal').oninput=function(ev){fmtAmt(ev);fromTotal();planCheck()};
@@ -1903,8 +1918,8 @@ $('pSave').onclick=function(){
   if(pVer==='over'&&!pArm){pArm=true;$('pSave').textContent='⚠️ Bütçeyi aşıyor — yine de kaydet';$('pSave').classList.add('warn');return}
   var o={name:name,cat:$('pCat').value,amt:Math.round(amt*100)/100,start:st,end:en||'',day:day};
   if(planEdit){S.plans.forEach(function(x){if(x.id===planEdit){x.name=o.name;x.cat=o.cat;x.amt=o.amt;x.start=o.start;x.end=o.end;x.day=o.day}})}
-  else{o.id=uid();if($('pOld').checked&&!$('pHist').checked)o.from=nowK();S.plans.push(o)}
-  save();closePlan();render();toast('Taksit kaydedildi ✓');
+  else{o.id=uid();if($('pOld').checked&&!$('pHist').checked)o.from=nowK();S.plans.push(o);if(moveBill){S.bills=S.bills.filter(function(x){return x.id!==moveBill});moveBill=null}}
+  save();closePlan();render();toast('✓ “'+o.name+'” Ödemeler > Kredi ve taksitler listesine eklendi');
 };
 $('pDel').onclick=function(){
   if(!planEdit)return;
@@ -1913,7 +1928,7 @@ $('pDel').onclick=function(){
 };
 
 /* ---------- Faturalar ---------- */
-var billOpen=null,billRemoveArm=null,billPop=null;
+var billOpen=null,billRemoveArm=null,billPop=null,moveBill=null;
 function renderBills(){
   var k=mk(cur),nk=nowK(),h='',paid=0,sum=0,unpaid=[];
   S.bills.forEach(function(b){
@@ -1935,6 +1950,7 @@ function renderBills(){
     }
     h+='</div>';
   });
+  try{renderBillMove()}catch(e){}
   $('billList').innerHTML=h||'<div class="empty"><em>💡</em>Henüz düzenli gider yok.<br>Aşağıdan ekleyebilirsin.</div>';
   $('billSum').textContent=S.bills.length?(paid+'/'+S.bills.length+' ödendi · '+fmt(sum,true)):'';
   var ba=$('bAmt');if(ba){bindAmt(ba);ba.oninput=fmtAmt}
@@ -1944,7 +1960,18 @@ function renderBills(){
     $('billcardSub').textContent=unpaid.length?('Bekleyen: '+unpaid.join(', ')):'Bu ayın tüm faturaları ödendi 🎉';
   }else bc.style.display='none';
 }
-(function(){var o='';CATS.out.forEach(function(c){o+='<option value="'+esc(c[0])+'">'+c[1]+' '+esc(c[0])+'</option>'});$('nbCat').innerHTML=o;$('nbCat').value='Diğer'})();
+function renderBillMove(){
+  var c=$('billMove');if(!c)return;
+  var L=S.bills.filter(function(b){return b.cat==='Kredi'||b.cat==='Kredi Kartı'});
+  if(!L.length){c.style.display='none';return}
+  var h='<h2>🏦 Bunlar fatura değil, kredi gibi görünüyor</h2><div class="note" style="margin:0 0 8px">Kredi ve kart ödemeleri “Kredi ve taksitler” bölümünde takip edilir, böylece kalan taksit ve toplam tutar görünür. Fatura listesinde kalırlarsa ay sonu hesabı yanlış çıkabilir.</div>';
+  L.forEach(function(b){h+='<div class="citem" style="display:flex;align-items:center;gap:10px;padding:6px 0"><b style="flex:1;min-width:0">'+esc(b.name)+'</b><button type="button" class="btn sm" data-mv="'+esc(b.id)+'" style="width:auto;margin:0;padding:10px 14px">Taksite taşı</button></div>'});
+  c.innerHTML=h;c.style.display='';
+}
+$('billMove').onclick=function(ev){var t=ev.target.closest('[data-mv]');if(!t)return;var id=t.getAttribute('data-mv'),b=S.bills.filter(function(x){return x.id===id})[0];if(!b)return;
+  moveBill=id;openPlan(null,false,b.cat);$('pName').value=b.name;var la=billLatest(b,'9999-99');if(la>0){$('pAmt').value=toIn(la);$('pAmt').oninput({target:$('pAmt'),inputType:''})}planCheck()};
+var BILL_CATS=['Elektrik','Su','Doğalgaz','İnternet','Telefon','Ulaşım','Diğer'];
+(function(){var o='';CATS.out.forEach(function(c){if(BILL_CATS.indexOf(c[0])<0)return;o+='<option value="'+esc(c[0])+'">'+c[1]+' '+esc(c[0])+'</option>'});$('nbCat').innerHTML=o;$('nbCat').value='Diğer'})();
 $('billList').onclick=function(ev){
   var t=ev.target.closest('[data-act]');if(!t)return;
   var act=t.getAttribute('data-act'),id=t.getAttribute('data-b'),k=mk(cur);
@@ -1971,9 +1998,12 @@ $('billList').onclick=function(ev){
 $('nbAdd').onclick=function(){
   var nm=$('nbName').value.trim();
   if(!nm){toast('Bir ad yaz');$('nbName').focus();return}
-  S.bills.push({id:uid(),name:nm,cat:$('nbCat').value});
-  $('nbName').value='';save();render();toast('Listeye eklendi ✓');
+  var id=uid();S.bills.push({id:id,name:nm,cat:$('nbCat').value});billOpen=id;
+  $('nbName').value='';save();render();
+  toast('✓ “'+nm+'” “Bu ayın düzenli ödemeleri” listesine eklendi');
+  setTimeout(function(){var r=$('billList').querySelector('[data-b="'+id+'"]');if(r){var w=r.closest('.bill')||r;w.scrollIntoView({block:'center',behavior:'smooth'});w.classList.add('flash');setTimeout(function(){w.classList.remove('flash')},2200)}},150);
 };
+$('nbGoKr').onclick=function(){chooseInstall()};
 $('bBillGo').onclick=function(){document.querySelector('.nav .t[data-v="fatura"]').click()};
 ['sAmt','pTotal','pAmt'].forEach(function(id){bindAmt($(id))});
 
@@ -2194,10 +2224,19 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.15.1';
+var APP_VER='1.16';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
-var RELEASES=[{v:'1.15.1',date:'Kasım 2026',title:'Arama çubuğu hep elinin altında',items:[
+var RELEASES=[{v:'1.16',date:'Kasım 2026',title:'Fatura ve kredi ayrıldı',items:[
+  ['💡','Faturalarda sadece faturalar','Fatura listesine artık sadece elektrik, su, doğalgaz, internet, telefon, ulaşım ve diğer (aidat, kira) eklenebilir. Kredi ve kredi kartı seçeneği kalktı.',1],
+  ['🏦','Kredi için ayrı yol','Fatura bölümünün altındaki “Kredi / taksit ekle” düğmesi seni kredi, kart taksidi ve borç ekleme ekranına götürür. İkinci, üçüncü kredi de adıyla eklenir.',1],
+  ['🔄','Eski kayıtları taşı','Daha önce fatura listesine kredi olarak eklediysen “Taksite taşı” düğmesiyle doğru yere aktarabilirsin.',1],
+  ['📍','Nereye kaydedildi?','Bir şey eklediğinde artık hangi listeye eklendiği yazıyor. Fatura eklediğinde liste açılıp o satır parlıyor.',1]]},
+{v:'1.15.2',date:'Kasım 2026',title:'Taksit formu sadeleşti',items:[
+  ['🏦','Önce türünü seç','Taksit eklerken önce Banka kredisi, Kredi kartı taksidi, Araç ya da Başka taksit seçiliyor. Seçtiğin türün kategorisi otomatik gelir, “Diğer” gibi bir seçeneği tekrar seçmen gerekmez.',1],
+  ['🔍','Aramadan doğru ekleme','Aramaya “kredi” yazınca Kredi ekle, “kredi kartı” yazınca Kredi kartı taksidi ekle çıkar ve doğrudan ilgili forma gider.',1],
+  ['🛠','Tarih alanları taştı','Başlangıç ve son ay alanları telefonda yan alana taşıyordu, düzeltildi.',1]]},
+{v:'1.15.1',date:'Kasım 2026',title:'Arama çubuğu hep elinin altında',items:[
   ['🔍','Arama çubuğu üstte','Arama artık küçük bir buton değil, başlığın altında tam genişlikte bir arama çubuğu. Her sekmede görünür, sayfayı kaydırsan da yukarıda kalır. Dokunup yazmaya başla.',1]]},
 {v:'1.15',date:'Kasım 2026',title:'Her şeyi bulan arama',items:[
   ['🔍','Arama butonu','Üstteki büyüteçle krediler, taksitler, faturalar, abonelikler, tatiller, kartlar, ek gelirler, işlemler ve Ayarlar bölümleri tek yerden aranır.',1],
@@ -2358,13 +2397,23 @@ $('next').onclick=function(){cur=new Date(cur.getFullYear(),cur.getMonth()+1,1);
 $('fab').onclick=function(){openSheet()};
 $('bAdd').onclick=function(){openSheet()};
 $('bSim').onclick=function(){openPlan(null,true)};
-$('bNewPlan').onclick=function(){openPlan()};
-$('sPlan').onclick=function(){closeSheet();openPlan()};
+function chooseInstall(){
+  askBox('Ne için taksit ekleyeceksin?','Türünü seç, sana uygun alanları göstereyim.',[
+    {t:'🏦 Banka kredisi',f:function(){openPlan(null,false,'Kredi')}},
+    {t:'💳 Kredi kartı taksidi',f:function(){openPlan(null,false,'Kredi Kartı')}},
+    {t:'🚗 Araç (kasko, lastik…)',f:function(){openPlan(null,false,'Araç')}},
+    {t:'📦 Başka taksit (telefon, buzdolabı…)',f:function(){openPlan(null,false,'Diğer')}},
+    {t:'Vazgeç',c:'sec'}]);
+}
+$('bNewPlan').onclick=chooseInstall;
+$('sPlan').onclick=function(){closeSheet();chooseInstall()};
 $('sGoDz').onclick=function(){
   closeSheet();
   askBox('Ne ekleyeceksin?','Düzenli ödemeni türüne göre ekle, her ay kendiliğinden hesaba girer.',[
     {t:'📺 Abonelik / üyelik (Netflix, Spotify…)',f:function(){openSub()}},
-    {t:'🏦 Kredi / taksit',f:function(){openPlan()}},
+    {t:'🏦 Banka kredisi',f:function(){openPlan(null,false,'Kredi')}},
+    {t:'💳 Kredi kartı taksidi',f:function(){openPlan(null,false,'Kredi Kartı')}},
+    {t:'📦 Başka taksit (telefon, buzdolabı…)',f:function(){openPlan(null,false,'Diğer')}},
     {t:'🏠 Her ay tekrarlayan gider (kira, aidat…)',f:function(){openSheet();$('sRec').checked=true;syncMode()}},
     {t:'💡 Fatura (elektrik, su, internet…)',f:function(){document.querySelector('.nav .t[data-v="fatura"]').click()}},
     {t:'Vazgeç',c:'sec'}]);
@@ -3228,7 +3277,10 @@ function gsActions(W){
   function any(list){return c.some(function(w){return w.length>=2&&list.some(function(n){return n.indexOf(w)===0||(w.length>=3&&n.indexOf(w)>-1)})})}
   CATS.out.forEach(function(ct){var n=ct[0];if(['Kredi','Kredi Kartı','Tatil','Abonelik'].indexOf(n)>-1)return;
     var names=[trn(n)].concat(GS_AL[n]||[]);if(any(names))out.push({k:'exp:'+n,ico:ct[1],col:ct[2],t:n+' gideri ekle',s:'Tutarı yaz, bakiyenden hemen düşsün'})});
-  if(any(['kredi','taksit','kredi karti']))out.push({k:'plan',ico:'🏦',col:'#7c5cff',t:'Kredi / taksit ekle',s:'Zaten başlamış krediyi de ekleyebilirsin'});
+  var hasKart=c.some(function(w){return w.indexOf('kart')===0});
+  if(hasKart)out.push({k:'plan:Kredi Kartı',ico:'💳',col:'#ff6b81',t:'Kredi kartı taksidi ekle',s:'Kart taksitlerini takip et'});
+  else if(any(['kredi']))out.push({k:'plan:Kredi',ico:'🏦',col:'#7c5cff',t:'Kredi ekle',s:'Zaten başlamış krediyi de ekleyebilirsin'});
+  else if(any(['taksit']))out.push({k:'plan',ico:'🗓️',col:'#7c5cff',t:'Taksit ekle',s:'Kredi, kart ya da başka taksit'});
   if(any(['tatil','otel','seyahat']))out.push({k:'trip',ico:'🏖️',col:'#ff9f43',t:'Tatil planı ekle',s:'Bütçeni ve harcamaları planla'});
   if(any(['abonelik','uyelik','netflix','spotify','youtube','disney','instagram','icloud'])||S.plans.length&&false)out.push({k:'sub',ico:'📺',col:'#c06cff',t:'Üyelik / abonelik ekle',s:'Her ay otomatik düşer'});
   if(any(['maas','gelir','mesai','prim']))out.push({k:'inc:Maaş',ico:'💼',col:'#3ddc97',t:'Maaş / gelir ekle',s:'Bakiyene hemen eklenir'});
@@ -3327,7 +3379,8 @@ $('gsb').addEventListener('click',function(ev){
     gsRemember();
     if(ga.indexOf('exp:')===0||ga.indexOf('inc:')===0){gsAct=(gsAct===ga)?null:ga;gsPay='n';gsRender();return}
     gsClose();
-    if(ga==='plan'){openPlan();return}
+    if(ga==='plan'){chooseInstall();return}
+    if(ga.indexOf('plan:')===0){openPlan(null,false,ga.slice(5));return}
     if(ga==='trip'){openTripScreen();return}
     if(ga==='sub'){openSub();return}
     if(ga==='rec'){openSheet();$('sRec').checked=true;syncMode();return}
