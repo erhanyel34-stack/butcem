@@ -2322,10 +2322,12 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.23';
+var APP_VER='1.23.1';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
-var RELEASES=[{v:'1.23',date:'Kasım 2026',title:'Birikim, yan menü ve kendi kalemlerin',items:[
+var RELEASES=[{v:'1.23.1',date:'Kasım 2026',title:'Kurlar Merkez Bankası’ndan',items:[
+  ['🏛️','TCMB kuru öncelikli','Dolar, euro ve sterlin kuru önce Merkez Bankası’nın günlük kurundan alınıyor. Alınamazsa başka kaynak denenir. Merkez Bankası kuru iş günlerinde günde bir kez açıklanır, hafta sonu son açıklanan kur görünür.',1]]},
+{v:'1.23',date:'Kasım 2026',title:'Birikim, yan menü ve kendi kalemlerin',items:[
   ['☰','Yan menü','Sol üstteki düğmeye dokununca soldan bir menü açılıyor: Birikimlerim, Tatil planı, 12 aylık tahmin ve Ayarlar. Tatil kartı cüzdan kartlarından çıktı, menüye taşındı.',1],
   ['🪙','Birikimlerim','Elindeki altını (gram, çeyrek, yarım, tam), gümüşü, doları, euroyu ve sterlini ekle. Güncel kurla TL karşılığını görürsün. Ana bakiyenden tamamen ayrı çalışır, gelir ve gidere karışmaz.',1],
   ['🕒','Kur çekilemezse','İnternetten kur alınamazsa son bilinen kur ve ne zaman alındığı yazar. İstersen fiyatı elle de yazabilirsin.',1],
@@ -2726,15 +2728,20 @@ function svAuto(k){var sv=S.savOv[k];S.savOv[k]=0;var p=svPrice(k);if(sv>0)S.sav
 function fj(u,ms){return new Promise(function(res,rej){var done=false,t=setTimeout(function(){if(!done){done=true;rej(new Error('t'))}},ms||7000);
   fetch(u).then(function(r){if(!r.ok)throw new Error('h');return r.json()}).then(function(j){if(!done){done=true;clearTimeout(t);res(j)}}).catch(function(e){if(!done){done=true;clearTimeout(t);rej(e)}})})}
 var svFail=false,svBusy=false,svEdit=null,svType='altin';
+function ft(u,ms){return new Promise(function(res,rej){var done=false,t=setTimeout(function(){if(!done){done=true;rej(new Error('t'))}},ms||7000);
+  fetch(u).then(function(r){if(!r.ok)throw new Error('h');return r.text()}).then(function(x){if(!done){done=true;clearTimeout(t);res(x)}}).catch(function(e){if(!done){done=true;clearTimeout(t);rej(e)}})})}
+function svTcmb(){return ft('https://www.tcmb.gov.tr/kurlar/today.xml').then(function(x){var d=new DOMParser().parseFromString(x,'application/xml'),o={};
+  [].forEach.call(d.getElementsByTagName('Currency'),function(c){var k=c.getAttribute('Kod'),u=parseFloat((c.getElementsByTagName('Unit')[0]||{}).textContent)||1,b=parseFloat((c.getElementsByTagName('ForexBuying')[0]||{}).textContent);if(b>0)o[k]=b/u});return o})}
 function svFetch(){
-  var R=svRates(),got=0,oz=null,ozS=null;
-  function cur(r){if(r&&r.TRY>0){R.usd=r.TRY;if(r.EUR>0)R.eur=r.TRY/r.EUR;if(r.GBP>0)R.gbp=r.TRY/r.GBP;if(r.XAU>0)oz=1/r.XAU;if(r.XAG>0)ozS=1/r.XAG;got++}}
-  return fj('https://open.er-api.com/v6/latest/USD').then(function(j){cur(j&&j.rates)}).catch(function(){})
+  var R=svRates(),got=0,oz=null,ozS=null,tc=false;
+  function cur(r){if(r&&r.TRY>0){if(!tc){R.usd=r.TRY;if(r.EUR>0)R.eur=r.TRY/r.EUR;if(r.GBP>0)R.gbp=r.TRY/r.GBP}if(r.XAU>0)oz=1/r.XAU;if(r.XAG>0)ozS=1/r.XAG;got++}}
+  return svTcmb().then(function(o){if(o.USD>0){R.usd=o.USD;if(o.EUR>0)R.eur=o.EUR;if(o.GBP>0)R.gbp=o.GBP;tc=true;got++;R.src='TCMB'}}).catch(function(){})
+  .then(function(){return fj('https://open.er-api.com/v6/latest/USD').then(function(j){cur(j&&j.rates)}).catch(function(){})})
   .then(function(){if(got)return;return fj('https://api.frankfurter.app/latest?from=USD&to=TRY,EUR,GBP').then(function(j){cur(j&&j.rates)}).catch(function(){})})
   .then(function(){if(oz)return;return fj('https://api.gold-api.com/price/XAU').then(function(j){if(j&&j.price>0){oz=j.price;got++}}).catch(function(){})})
   .then(function(){if(ozS)return;return fj('https://api.gold-api.com/price/XAG').then(function(j){if(j&&j.price>0){ozS=j.price;got++}}).catch(function(){})})
   .then(function(){if(oz&&R.usd)R.gold=oz*R.usd/31.1035;if(ozS&&R.usd)R.silver=ozS*R.usd/31.1035;
-    var full=!!(R.usd&&R.gold);if(got){R.t=Date.now();lsSet('butcem_rates',JSON.stringify(R))}return got>0&&full})
+    var full=!!(R.usd&&R.gold);if(got){if(!tc)R.src='';R.t=Date.now();lsSet('butcem_rates',JSON.stringify(R))}return got>0&&full})
 }
 function svWhen(t){if(!t)return 'hiç alınmadı';var d=new Date(t),n=new Date(),hm=pad(d.getHours())+':'+pad(d.getMinutes());
   if(d.toDateString()===n.toDateString())return 'bugün '+hm;var y=new Date(n);y.setDate(n.getDate()-1);if(d.toDateString()===y.toDateString())return 'dün '+hm;return pad(d.getDate())+'.'+pad(d.getMonth()+1)+' '+hm}
@@ -2744,7 +2751,7 @@ function svRender(){
   var R=svRates(),tot=0,rows='',miss=false;
   S.sav.forEach(function(x){var t=svT(x.type);if(!t)return;var p=svPrice(x.type),v=p*x.amt;if(p>0)tot+=v;else miss=true;
     rows+='<button type="button" class="tx" data-sv="'+esc(x.id)+'"><span class="ico" style="background:#ffffff14">'+t[2]+'</span><span class="m"><b>'+esc(t[1])+'</b><small>'+esc(svAmtTx(x))+(p>0?' · '+esc(fmt(p,true))+(S.savOv[x.type]>0?' (elle)':''):' · fiyat yok')+'</small></span><span class="a">'+(p>0?esc(fmt(v,true)):'—')+'</span></button>'});
-  var st=svBusy?'Kurlar alınıyor…':(svFail?'Güncel kur alınamadı. Son güncelleme: '+svWhen(R.t):'Kurlar: '+svWhen(R.t));
+  var st=svBusy?'Kurlar alınıyor…':(svFail?'Güncel kur alınamadı. Son güncelleme: '+svWhen(R.t):'Kurlar'+(R.src==='TCMB'?' (TCMB)':'')+': '+svWhen(R.t));
   var h='<div class="svtot"><small>Toplam birikim değeri</small><div class="big">'+esc(fmt(tot,true))+'</div><small>'+esc(st)+' · ana bakiyene karışmaz</small></div>';
   if(miss)h+='<div class="svnote">Bazı kalemlerin fiyatı yok. Kalemin üstüne dokunup fiyatı elle yazabilirsin.</div>';
   h+=rows||'<div class="empty" style="padding:16px 4px"><em>🪙</em>Henüz birikim eklemedin.</div>';
