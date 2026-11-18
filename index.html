@@ -1875,17 +1875,18 @@ $('bBillGo').onclick=function(){document.querySelector('.nav .t[data-v="fatura"]
 ['sAmt','pTotal','pAmt'].forEach(function(id){bindAmt($(id))});
 
 /* ---------- Üyelikler & Abonelikler ---------- */
-// Not: Marka logoları telif/ticari marka kapsamında olduğundan, her platform kendi renginde ve baş harfli bir simgeyle gösterilir.
+// Not: Marka logoları ticari marka kapsamında olduğundan kullanılmaz; her platform kendi renginde ve türünü anlatan bir simgeyle gösterilir.
 var BRANDS=[
- ['Netflix','NF','#e50914','#7a0510',99.99],['YouTube Premium','YT','#ff2d2d','#a01010',119.99],['Spotify','SP','#1ed760','#0b7a35',39.99],
- ['Amazon Prime','PR','#1aa7ec','#0b5d8c',39],['Apple iCloud+','iC','#5e8cf5','#2d4fa8',12.99],['Apple Music','AM','#fc3c5a','#a0142d',39.99],
- ['Apple TV+','TV','#555a66','#1c1e24',99.99],['Disney+','D+','#1b4fd8','#0a1f6b',134.99],['HBO Max','HB','#7b2cf0','#3a0f8c',149.99],
- ['BluTV','BL','#1c9bff','#0a4a8c',149],['Exxen','EX','#ffcc00','#a87d00',199],['TOD','TO','#ff5a1f','#a02a00',199],
- ['Gain','GA','#9b5cff','#4a1e9c',99],['ChatGPT','GP','#10a37f','#075c47',null],['Claude','CL','#d97757','#8a3a1f',null],
- ['Google One','G1','#4285f4','#1a4aa0',29.99],['Microsoft 365','M3','#e8590c','#8a2a00',null],['Duolingo','DU','#58cc02','#2d6b00',null],
+ ['Netflix','🎬','#e50914','#7a0510',99.99],['YouTube Premium','🎞️','#ff2d2d','#a01010',119.99],['Spotify','🎵','#1ed760','#0b7a35',39.99],
+ ['Amazon Prime','📦','#1aa7ec','#0b5d8c',39],['Apple iCloud+','☁️','#5e8cf5','#2d4fa8',12.99],['Apple Music','🎶','#fc3c5a','#a0142d',39.99],
+ ['Apple TV+','📺','#555a66','#1c1e24',99.99],['Disney+','🏰','#1b4fd8','#0a1f6b',134.99],['HBO Max','🍿','#7b2cf0','#3a0f8c',149.99],
+ ['BluTV','🎥','#1c9bff','#0a4a8c',149],['Exxen','🎭','#ffcc00','#a87d00',199],['TOD','🏟️','#ff5a1f','#a02a00',199],
+ ['Gain','📡','#9b5cff','#4a1e9c',99],['ChatGPT','💬','#10a37f','#075c47',null],['Claude','✨','#d97757','#8a3a1f',null],
+ ['Google One','💾','#4285f4','#1a4aa0',29.99],['Microsoft 365','📝','#e8590c','#8a2a00',null],['Duolingo','🗣️','#58cc02','#2d6b00',null],
+ ['Instagram Plus','📸','#e1306c','#8a1a4a',null],
  ['Spor salonu','🏋️','#ff7a45','#a03a10',null],['Diğer','＋','#8f95c2','#4a4f78',null]];
 function brandOf(n){for(var i=0;i<BRANDS.length;i++)if(BRANDS[i][0]===n)return BRANDS[i];return BRANDS[BRANDS.length-1]}
-function tile(b,sz){return '<span class="ico brand" style="background:linear-gradient(145deg,'+b[2]+','+b[3]+');'+(sz?'width:'+sz+'px;height:'+sz+'px;':'')+(b[1].length>2?'font-size:20px':'')+'">'+esc(b[1])+'</span>'}
+function tile(b,sz){return '<span class="ico brand" style="background:linear-gradient(145deg,'+b[2]+','+b[3]+');'+(sz?'width:'+sz+'px;height:'+sz+'px;':'')+(b[1].charCodeAt(0)>0x2000&&b[1]!=='＋'?'font-size:24px':'')+'">'+esc(b[1])+'</span>'}
 function subsActive(){return S.plans.filter(function(x){return x.sub})}
 /* Çift kayıt: eski "düzenli gider" ile aynı aboneliğin Abonelikler bölümündeki hâli */
 var DUP_STOP={apple:1,google:1,microsoft:1,amazon:1,premium:1,prime:1,disney:1};
@@ -2090,10 +2091,13 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.12';
+var APP_VER='1.12.1';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
-var RELEASES=[{v:'1.12',date:'Kasım 2026',title:'Yeni işlem ekranı sadeleşti',items:[
+var RELEASES=[{v:'1.12.1',date:'Kasım 2026',title:'Yeni üyelik simgeleri',items:[
+  ['📸','Instagram Plus eklendi','Üyelikler listesine Instagram Plus için kendi butonu eklendi.',1],
+  ['🎬','Harfler yerine simgeler','Platformların baş harfleri yerine türünü anlatan simgeler (film, müzik, bulut, paket…) kullanılıyor. Resmî logolar ticari marka olduğu için kullanılamıyor, her platform kendi rengini koruyor.',1]]},
+{v:'1.12',date:'Kasım 2026',title:'Yeni işlem ekranı sadeleşti',items:[
   ['🧩','Daha derli toplu ekran','Kategoriler artık ikonlu karolar. En çok kullanılan 7 tanesi görünür, gerisi “Tümü” altında. Son harcamalar tek satırda kayıyor.',1],
   ['🏖','Tatil ekranı kendiliğinden kaydetmiyor','Tatil ekranına bakmak için girip çıktığında artık tatil hemen kaydedilmiyor. Çıkarken “Tatil kaydedilsin mi?” diye soruyor.',1],
   ['❓','Tek seferlik mi, her ay mı, taksitli mi?','Kaydetmeden hemen önce ödemenin nasıl olacağını soran net bir seçim eklendi. Taksitli seçersen taksit ayarlarına, gelirde Süreli seçersen süreli gelir ekranına geçer.',1]]},
