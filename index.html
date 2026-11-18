@@ -1908,6 +1908,7 @@ $('pEnd').oninput=$('pEnd').onchange;
 $('pCancel').onclick=closePlan;
 document.querySelectorAll('.xbtn').forEach(function(b){b.onclick=function(){if(b.getAttribute('data-close')==='s')closeSheet();else closePlan()}});
 $('pbg').onclick=function(ev){if(ev.target===$('pbg'))closePlan()};
+var pDupGo=false;
 $('pSave').onclick=function(){
   var amt=parseNum($('pAmt').value),day=parseInt($('pDay').value,10),st=$('pStart').value,en=$('pEnd').value,name=$('pName').value.trim();
   if(!name){toast('Ödemeye bir ad ver');$('pName').focus();return}
@@ -1916,6 +1917,8 @@ $('pSave').onclick=function(){
   if(!(day>=1&&day<=31)){toast('Ödeme günü 1-31 arası olmalı');return}
   if(en&&en<st){toast('Son ay, başlangıçtan önce olamaz');return}
   if(pVer==='over'&&!pArm){pArm=true;$('pSave').textContent='⚠️ Bütçeyi aşıyor — yine de kaydet';$('pSave').classList.add('warn');return}
+  if(!planEdit&&!pDupGo){var dl=S.plans,kd=($('pCat').value==='Kredi Kartı'?'kart taksidi':($('pCat').value==='Kredi'?'kredi':'taksit'));
+    if(dupAsk(dl,name,amt,kd,function(nn){$('pName').value=nn;pDupGo=true;$('pSave').onclick();pDupGo=false}))return}
   var o={name:name,cat:$('pCat').value,amt:Math.round(amt*100)/100,start:st,end:en||'',day:day};
   if(planEdit){S.plans.forEach(function(x){if(x.id===planEdit){x.name=o.name;x.cat=o.cat;x.amt=o.amt;x.start=o.start;x.end=o.end;x.day=o.day}})}
   else{o.id=uid();if($('pOld').checked&&!$('pHist').checked)o.from=nowK();S.plans.push(o);if(moveBill){S.bills=S.bills.filter(function(x){return x.id!==moveBill});moveBill=null}}
@@ -1929,6 +1932,16 @@ $('pDel').onclick=function(){
 
 /* ---------- Faturalar ---------- */
 var billOpen=null,billRemoveArm=null,billPop=null,moveBill=null;
+function baseName(n){return String(n||'').replace(/\s+\d+$/,'').trim()}
+function dupFind(list,name){var b=nrm(baseName(name));return list.filter(function(x){return nrm(baseName(x.name))===b})}
+function nextName(list,name){var base=baseName(name),used={};list.forEach(function(x){used[nrm(x.name)]=1});var n=2;while(used[nrm(base+' '+n)])n++;return base+' '+n}
+function dupAsk(list,name,newAmt,kind,onGo){
+  var f=dupFind(list,name);if(!f.length)return false;
+  var ex=f[0],nn=nextName(list,baseName(ex.name));ex=f[f.length-1];
+  var msg='Listede zaten “'+esc(ex.name)+'”'+(ex.amt?' var ('+esc(fmt(ex.amt,true))+' / ay)':' var')+'.'+(newAmt>0&&ex.amt?' Şimdi eklediğin: '+esc(fmt(newAmt,true))+' / ay.':'')+'<br><br>Bu ikinci bir '+kind+' mi? Evet dersen “'+esc(nn)+'” adıyla eklerim, adı sonra değiştirebilirsin.';
+  askBox('“'+baseName(f[0].name)+'” zaten var',msg,[{t:'Evet, “'+nn+'” olarak ekle',f:function(){onGo(nn)}},{t:'Hayır, aynısı zaten var',c:'sec'}]);
+  return true;
+}
 function renderBills(){
   var k=mk(cur),nk=nowK(),h='',paid=0,sum=0,unpaid=[];
   S.bills.forEach(function(b){
@@ -1995,9 +2008,11 @@ $('billList').onclick=function(ev){
     S.bills=S.bills.filter(function(x){return x.id!==id});billOpen=null;billRemoveArm=null;save();render();toast('Listeden kaldırıldı');
   }
 };
+var nbDupGo=false;
 $('nbAdd').onclick=function(){
   var nm=$('nbName').value.trim();
   if(!nm){toast('Bir ad yaz');$('nbName').focus();return}
+  if(!nbDupGo&&dupAsk(S.bills,nm,0,'fatura',function(nn){$('nbName').value=nn;nbDupGo=true;$('nbAdd').onclick();nbDupGo=false}))return;
   var id=uid();S.bills.push({id:id,name:nm,cat:$('nbCat').value});billOpen=id;
   $('nbName').value='';save();render();
   toast('✓ “'+nm+'” “Bu ayın düzenli ödemeleri” listesine eklendi');
@@ -2224,10 +2239,15 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.16';
+var APP_VER='1.17';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
-var RELEASES=[{v:'1.16',date:'Kasım 2026',title:'Fatura ve kredi ayrıldı',items:[
+var RELEASES=[{v:'1.17',date:'Kasım 2026',title:'İkinci kredi kendiliğinden numaralanır',items:[
+  ['🔢','Aynı adı tekrar yazmana gerek yok','Zaten “QNB” varken bir daha QNB eklersen uygulama sorar: ikinci bir kredi mi? “Evet” dersen adı kendisi “QNB 2”, sonra “QNB 3” yapar. İstersen sonra adı değiştirebilirsin.',1],
+  ['💬','Tutarı da gösterir','Soruda önceki kaydın tutarı yazar, böylece aynı kaydı yanlışlıkla iki kez eklemediğini hemen anlarsın.',1],
+  ['🧾','Her yerde aynı','Banka kredisi, kart taksidi, araç ve diğer taksitlerde, ayrıca faturalarda çalışır.',1],
+  ['🙏','Teşekkür','Yardımların için sağ ol Hasan Çelik!',0]]},
+{v:'1.16',date:'Kasım 2026',title:'Fatura ve kredi ayrıldı',items:[
   ['💡','Faturalarda sadece faturalar','Fatura listesine artık sadece elektrik, su, doğalgaz, internet, telefon, ulaşım ve diğer (aidat, kira) eklenebilir. Kredi ve kredi kartı seçeneği kalktı.',1],
   ['🏦','Kredi için ayrı yol','Fatura bölümünün altındaki “Kredi / taksit ekle” düğmesi seni kredi, kart taksidi ve borç ekleme ekranına götürür. İkinci, üçüncü kredi de adıyla eklenir.',1],
   ['🔄','Eski kayıtları taşı','Daha önce fatura listesine kredi olarak eklediysen “Taksite taşı” düğmesiyle doğru yere aktarabilirsin.',1],
