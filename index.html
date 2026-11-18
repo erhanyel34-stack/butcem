@@ -477,6 +477,18 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
 .mini3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .mini3>div{background:#00000024;border-radius:13px;padding:8px 10px}.mini3 small{display:block;font-size:11px;color:#ffffffd9}.mini3 b{font-size:15px;font-family:var(--num)}
 .paysg{display:flex;gap:8px;margin-bottom:12px}
+.psg{display:flex;gap:4px;background:#ffffff0d;border-radius:14px;padding:4px;margin:0 0 12px}.psg button{flex:1;padding:10px 4px;border-radius:11px;font-weight:700;font-size:13px;color:var(--mut)}.psg button.on{background:#ffffff1f;color:#fff}
+#v-fatura[data-p="f"] [data-ps]:not([data-ps="f"]),#v-fatura[data-p="k"] [data-ps]:not([data-ps="k"]),#v-fatura[data-p="g"] [data-ps]:not([data-ps="g"]){display:none!important}
+#v-fatura>button.btn[data-ps],#moreBtn{margin:12px 0 0;width:100%}
+#attnHead{margin-top:12px;color:inherit;border-color:#ffcc4d66}
+#v-ozet:not(.attnOpen) #dupChk,#v-ozet:not(.attnOpen) #subChk{display:none!important}
+.grp{font-size:12px;font-weight:800;color:var(--mut);letter-spacing:.04em;text-transform:uppercase;margin:20px 6px 2px}
+.card.acc>h2{cursor:pointer;display:flex;justify-content:space-between;align-items:center;margin-bottom:0}
+.card.acc>h2::after{content:'›';font-size:20px;color:var(--mut);transition:transform .2s}
+.card.acc.open>h2{margin-bottom:10px}.card.acc.open>h2::after{transform:rotate(90deg)}
+.card.acc:not(.open)>:not(h2){display:none!important}
+.mgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:6px 0 10px}.mgrid button{display:flex;align-items:center;gap:8px;padding:14px 10px;border-radius:14px;background:#ffffff0d;border:1.5px solid transparent;font-weight:700;font-size:14px;color:#fff;text-align:left}
+.gdr{display:flex;align-items:center;gap:10px;padding:10px 0;width:100%;text-align:left;color:inherit;font-weight:600}.gdr i{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--mut);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:12px;flex:none}.gdr.done i{background:var(--in);border-color:var(--in);color:#04201a}.gdr.done span{opacity:.55;text-decoration:line-through}
 .paysg button{flex:1;padding:12px 4px;border-radius:14px;font-weight:700;font-size:14px;background:#ffffff0d;border:1.5px solid transparent;color:var(--mut)}
 .paysg button.on{border-color:var(--acc);background:#ffffff14;color:#fff}
 .moti{border-radius:22px;padding:16px;margin-bottom:12px;background:linear-gradient(135deg,#ffffff1f,#ffffff0a);border:1px solid #ffffff2a}
@@ -753,6 +765,7 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
       </div>
     </div>
 
+    <div class="card" id="guide" style="display:none"><div class="dnh"><h2 style="margin:0">👋 Başlayalım</h2><button type="button" class="linkbtn" id="gdX" style="width:auto;padding:4px 8px">Kapat</button></div><div class="note" style="margin:4px 0 8px">Üç adımda bütçen hazır. Dokun, ilgili yere götüreyim.</div><div id="gdList"></div></div>
     <div class="card" id="zamCard" style="display:none"><h2 id="zamTitle">🎉 Maaşında zam oldu mu?</h2><div class="note" id="zamNote" style="margin:0 0 8px"></div>
       <input class="fld" id="zamAmt" inputmode="decimal" placeholder="Güncel aylık maaşın" autocomplete="off">
       <div class="two"><button class="btn sm" id="zamOk">Maaşımı güncelle</button><button class="btn sec sm" id="zamNo">Zam yok</button></div>
@@ -774,6 +787,7 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
       </div>
     </div>
 
+    <button type="button" class="card" id="attnHead" style="display:none;width:100%;text-align:left"><div class="citem" style="padding:0"><b>⚠️ Dikkat edilecekler (<span id="attnN">0</span>)</b><span id="attnCh">›</span></div></button>
     <div class="card" id="dupChk" style="display:none">
       <h2>⚠️ Muhtemel çift kayıt</h2>
       <div id="dupBody"></div>
@@ -792,6 +806,8 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
       <div class="dnhint" id="dnHint" style="display:none"></div>
     </div>
 
+    <button type="button" class="btn sec" id="moreBtn">Daha fazla: kategori detayı, limitler, 12 ay ▾</button>
+    <div id="moreWrap" style="display:none">
     <div class="card">
       <h2>📊 Kategori detayı</h2>
       <div class="catbars" id="catbars"></div>
@@ -821,6 +837,7 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
       <div id="yrBody"></div>
     </div>
 
+    </div>
     <div class="card cta">
       <h3>🧮 Büyük bir alışveriş mi düşünüyorsun?</h3>
       <p>Yeni bir taksit ya da büyük bir harcama yapmadan önce bütçene yetip yetmediğini ay ay gör. Burada denediğin hiçbir şey kaydedilmez.</p>
@@ -829,27 +846,33 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
   </div>
 
   <!-- FATURALAR -->
-  <div class="view" id="v-fatura">
-    <div class="card" id="billMove" style="margin-top:0;display:none"></div>
-    <div class="card" style="margin-top:0">
-      <h2>💡 Bu ayın düzenli ödemeleri</h2>
+  <div class="view" id="v-fatura" data-p="f">
+    <div class="psg" id="psSeg"><button type="button" class="on" data-p="f">Faturalar</button><button type="button" data-p="k">Kredi ve kartlar</button><button type="button" data-p="g">Gelir</button></div>
+    <div class="card" id="billMove" data-ps="f" style="margin-top:0;display:none"></div>
+    <div class="card" data-ps="f" style="margin-top:0">
+      <h2>💡 Bu ayın faturaları</h2>
       <div class="bill-sum" id="billSum"></div>
       <div class="note" style="margin:0 0 6px">Ödediğin kaleme dokun, bu ayki tutarı yaz ve kaydet. Tutar bakiyenden hemen düşer. Ulaşım gibi birden çok ödeme yaptığın kalemlerde ayın toplamını yazabilirsin.</div>
       <div id="billList"></div>
     </div>
-    <div class="card">
-      <h2>📺 Üyelikler &amp; Abonelikler</h2>
+    <div class="card" data-ps="f">
+      <h2>📺 Abonelikler</h2>
       <div id="subList"></div>
       <div class="subtot" id="subTot" style="display:none"><div><b>Toplam (aylık)</b><small id="subYear"></small></div><span class="num neg" id="subSum"></span></div>
       <button class="btn sec sm" id="bNewSub" style="margin-top:12px">+ Üyelik / abonelik ekle</button>
     </div>
-    <div class="card" id="ipCard">
+    <div class="card" id="ipCard" data-ps="g" style="margin-top:0">
       <h2>✨ Ek gelirlerim</h2>
       <div id="ipList"></div>
       <div class="note" style="margin:8px 0 8px">Prim, kira geliri, freelance gibi süreli ya da düzenli ek gelirlerin. Her ay geldiğinde “geldi mi?” diye sorulur, gelince bakiyene eklenir.</div>
       <button class="btn sec sm" id="ipNew">+ Ek gelir ekle</button>
     </div>
-    <div class="card" id="cdCard">
+        <div class="card" data-ps="k" id="planCard">
+      <h2>🏦 Kredi ve taksitler</h2>
+      <div id="plist"></div>
+      <button class="btn sec sm" id="bNewPlan">+ Taksit ekle</button>
+    </div>
+    <div class="card" id="cdCard" data-ps="k">
       <h2>💳 Kartlarım</h2>
       <div id="cdSum"></div><div id="cdList"></div>
       <div id="mcList"></div>
@@ -868,14 +891,15 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
       </div>
       <div id="mcTx"></div>
     </div>
-    <div class="card" id="cardsCard">
+    <div class="card" id="cardsCard" data-ps="k">
       <h2>💳 Kart harcamaları</h2>
       <div id="cardList"></div>
       <div class="note" style="margin:10px 0 0">Kartla yaptığın harcamalar buraya yazılır, bakiyen düşmez. Ekstreyi ödediğinde “Ekstreyi ödedim” de; tutar nakit bakiyenden düşer.</div>
     </div>
-    <div class="card">
-      <h2>➕ Yeni fatura / düzenli gider ekle</h2>
-      <div class="note" style="margin:0 0 8px">Her ay gelen elektrik, su, internet, telefon, aidat, kira gibi kalemler. Eklediğin kalem yukarıdaki <b>“Bu ayın düzenli ödemeleri”</b> listesine girer.</div>
+    <button type="button" class="btn sec" id="nbOpen" data-ps="f">+ Fatura ekle</button>
+    <div class="card" id="nbCard" data-ps="f" style="display:none">
+      <h2>➕ Yeni fatura ekle</h2>
+      <div class="note" style="margin:0 0 8px">Her ay gelen elektrik, su, internet, telefon, aidat, kira gibi kalemler. Eklediğin kalem yukarıdaki <b>“Bu ayın faturaları”</b> listesine girer.</div>
       <input class="fld" id="nbName" placeholder="Örn. Cep telefonu 2, Site aidatı" maxlength="40">
       <select class="fld" id="nbCat"></select>
       <button class="btn sec" id="nbAdd">Listeye ekle</button>
@@ -887,11 +911,6 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
   <!-- İŞLEMLER -->
   <div class="view" id="v-islem">
     <div class="card" style="margin-top:0">
-      <h2>🗓️ Taksitler</h2>
-      <div id="plist"></div>
-      <button class="btn sec sm" id="bNewPlan">+ Taksit ekle</button>
-    </div>
-    <div class="card">
       <h2>🧾 İşlemler</h2>
       <input class="fld" id="txq" placeholder="🔍 Tüm aylarda ara (kategori, not, tutar)" autocomplete="off" style="margin-bottom:8px">
       <div class="chips" id="txf" style="margin-bottom:8px"><button type="button" class="chip on" data-f="all">Hepsi</button><button type="button" class="chip" data-f="out">Gider</button><button type="button" class="chip" data-f="in">Gelir</button></div>
@@ -902,7 +921,8 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
 
   <!-- AYARLAR -->
   <div class="view" id="v-ayar">
-    <div class="card" style="margin-top:0"><h2>🔒 Uygulama şifresi</h2>
+    <div class="grp">Güvenlik</div>
+    <div class="card acc"><h2>🔒 Uygulama şifresi</h2>
       <div class="note" id="pinStat" style="margin:0 0 10px;font-weight:700"></div>
       <button class="btn" id="pinSet">Şifre oluştur</button>
       <div id="pinOpts" style="display:none"><span class="lbl">Kilit ne zaman devreye girsin?</span>
@@ -910,7 +930,7 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
         <button class="btn sec" id="pinChg">Şifreyi değiştir</button><button class="btn sec" id="pinRc">🔑 Yeni kurtarma kodu oluştur</button><button class="btn del" id="pinOff">Şifreyi kaldır</button></div>
       <div class="note" style="margin-top:8px">Uygulama açılırken bu şifre sorulur, böylece telefonunu eline alan biri gelir gider bilgilerini göremez. Şifre sadece bu telefonda saklanır, bize ya da bir yere gönderilmez. Şifreyi koyarken sana bir kurtarma kodu verilir, onu Notlar’a kaydet. Unutursan bu kodla verilerini kaybetmeden yeni şifre koyarsın.</div>
     </div>
-    <div class="card" style="margin-top:0">
+    <div class="card acc">
       <h2>💾 Yedekle / Geri yükle</h2>
       <div class="note" id="bkStatus" style="margin:0 0 6px;font-weight:700"></div>
       <div class="note" style="margin:0 0 10px">Veriler bu telefonda, uygulamanın kendi hafızasında saklanır. Tarayıcı verisini silersen kaybolabilir; arada bir yedek al.</div>
@@ -928,7 +948,30 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
       <button class="btn del" id="bWipe">Tüm verileri sil</button>
       <div class="note" id="wipeNote" style="display:none;color:var(--out)">Emin misin? Silmek için bir kez daha dokun.</div>
     </div>
-    <div class="card">
+    <div class="card acc">
+      <h2>🕘 Otomatik yedekler</h2>
+      <div class="note" style="margin:0 0 8px">Uygulama, veriyi her gün kendiliğinden bu telefonda ayrıca saklar. Yanlışlıkla silme ya da bir hata olursa buradan geri dönebilirsin. (Telefon hafızası ya da tarayıcı verisi silinirse bunlar da gider; o yüzden iCloud Drive'a dosya yedeği de al.)</div>
+      <div id="snapList"></div>
+    </div>
+    <div class="grp">Hesaplama</div>
+    <div class="card acc" id="veCard" style="margin-top:0">
+      <h2>🔮 Tahmini harcama</h2>
+      <div class="note" id="veNote" style="margin:0 0 8px"></div>
+      <input class="fld" id="veAmt" inputmode="decimal" placeholder="Aylık tahmini harcamam ₺ (0 yazarsan hiç eklenmez)" autocomplete="off">
+      <div class="two"><button class="btn sm" id="veSave" type="button">Kaydet</button><button class="btn sec sm" id="veAuto" type="button">Otomatik hesapla</button></div>
+    </div>
+    <div class="card acc">
+      <h2>🎯 Kategori limitleri</h2>
+      <div class="note" style="margin:0 0 10px">Bir kategori için aylık üst sınır koy. Yaklaşınca ve aşınca uyarırım.</div>
+      <div class="two"><select class="fld" id="limCat"></select><input class="fld" id="limAmt" inputmode="decimal" placeholder="Aylık limit" autocomplete="off"></div>
+      <button class="btn sec sm" id="limAdd" style="margin-bottom:8px">Limiti kaydet</button>
+      <div id="limList"></div>
+    </div>
+    <div class="card acc">
+      <h2>🧠 Bütçe kontrolü nasıl hesaplanıyor?</h2>
+      <div class="note" style="margin-top:0">Her ay için: <b>gelirin</b> − <b>her ay tekrarlayan giderler</b> − <b>taksit ve abonelikler</b> − <b>değişken harcama tahmini</b> = boş pay. Değişken harcama tahmini son aylardaki market, yemek gibi harcama ortalamandır. Gelecek aylar için gelir, son aydaki gelirinle (maaş) aynı kabul edilir. Boş payın gelirinin %10'unun altına düşerse “sıkışık”, sıfırın altına düşerse “bütçe aşılıyor” uyarısı alırsın.</div>
+    </div>    <div class="grp">Uygulama</div>
+    <div class="card acc">
       <h2>🔔 Günlük hatırlatma kur</h2>
       <div class="note" style="margin-top:0">Web uygulamaları iPhone'da kendi kendine bildirim gönderemez. En güvenilir yol, iPhone'un kendi Hatırlatıcılar uygulamasıdır:</div>
       <div class="step"><i>1</i><div><b>Hatırlatıcılar</b> uygulamasını aç → <b>+ Yeni</b></div></div>
@@ -936,38 +979,16 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
       <div class="step"><i>3</i><div><b>ⓘ</b> → Tarih'i aç, saat seç (örn. 21:00) → <b>Tekrarla → Her Gün</b></div></div>
       <div class="step"><i>4</i><div>Bugün hiç gider girmediysen, öğleden sonra uygulamayı açtığında üstte ayrıca bir hatırlatma çubuğu çıkar.</div></div>
     </div>
-    <div class="card" id="veCard" style="margin-top:0">
-      <h2>🔮 Tahmini harcama</h2>
-      <div class="note" id="veNote" style="margin:0 0 8px"></div>
-      <input class="fld" id="veAmt" inputmode="decimal" placeholder="Aylık tahmini harcamam ₺ (0 yazarsan hiç eklenmez)" autocomplete="off">
-      <div class="two"><button class="btn sm" id="veSave" type="button">Kaydet</button><button class="btn sec sm" id="veAuto" type="button">Otomatik hesapla</button></div>
-    </div>
-    <div class="card" style="margin-top:0">
-      <h2>🎯 Kategori limitleri</h2>
-      <div class="note" style="margin:0 0 10px">Bir kategori için aylık üst sınır koy. Yaklaşınca ve aşınca uyarırım.</div>
-      <div class="two"><select class="fld" id="limCat"></select><input class="fld" id="limAmt" inputmode="decimal" placeholder="Aylık limit" autocomplete="off"></div>
-      <button class="btn sec sm" id="limAdd" style="margin-bottom:8px">Limiti kaydet</button>
-      <div id="limList"></div>
-    </div>
-    <div class="card">
-      <h2>✨ Yenilikler</h2>
-      <button type="button" class="btn sec sm" id="wnOpen" style="display:flex;justify-content:space-between;align-items:center;margin:0 0 14px"><span>Neler eklendi, neler değişti?</span><b id="wnVer" style="color:#7ab8ff">v0.2 ›</b></button>
-    </div>
-    <div class="card">
+    <div class="card acc">
       <h2>🎨 Görünüm</h2>
       <span class="lbl">Yazı boyutu</span>
       <div class="paysg"><button type="button" id="fsN" class="on">Normal</button><button type="button" id="fsB">Büyük</button></div>
       <button class="btn sec sm" id="igAgain">📲 Ana ekrana ekleme rehberi</button>
       <button class="btn sec sm" id="obAgain">👋 Tanıtımı tekrar göster</button>
     </div>
-    <div class="card">
-      <h2>🧠 Bütçe kontrolü nasıl hesaplanıyor?</h2>
-      <div class="note" style="margin-top:0">Her ay için: <b>gelirin</b> − <b>her ay tekrarlayan giderler</b> − <b>taksit ve abonelikler</b> − <b>değişken harcama tahmini</b> = boş pay. Değişken harcama tahmini son aylardaki market, yemek gibi harcama ortalamandır. Gelecek aylar için gelir, son aydaki gelirinle (maaş) aynı kabul edilir. Boş payın gelirinin %10'unun altına düşerse “sıkışık”, sıfırın altına düşerse “bütçe aşılıyor” uyarısı alırsın.</div>
-    </div>
-    <div class="card">
-      <h2>🕘 Otomatik yedekler</h2>
-      <div class="note" style="margin:0 0 8px">Uygulama, veriyi her gün kendiliğinden bu telefonda ayrıca saklar. Yanlışlıkla silme ya da bir hata olursa buradan geri dönebilirsin. (Telefon hafızası ya da tarayıcı verisi silinirse bunlar da gider; o yüzden iCloud Drive'a dosya yedeği de al.)</div>
-      <div id="snapList"></div>
+    <div class="card acc">
+      <h2>✨ Yenilikler</h2>
+      <button type="button" class="btn sec sm" id="wnOpen" style="display:flex;justify-content:space-between;align-items:center;margin:0 0 14px"><span>Neler eklendi, neler değişti?</span><b id="wnVer" style="color:#7ab8ff">v0.2 ›</b></button>
     </div>
   </div>
   <div class="credit"><b>Savaş Erhan Yel</b>tarafından geliştirildi ve tasarlandı</div>
@@ -1731,11 +1752,12 @@ function render(){
   // işlemler
   var tl=$('txlist');
   var les=es.filter(function(e){return txFilter==='all'||e.type===txFilter});
+  if(txFilter!=='in'){S.mealTx.forEach(function(t){if(t.date.slice(0,7)===mk(cur)){var mm=mcById(t.mealId);les.push({id:'x:m:'+t.id,type:'out',cat:t.cat,amt:t.amt,date:t.date,note:t.note,mealN:mm?mm.name:'Yemek kartı'})}})}
   if(!les.length)tl.innerHTML='<div class="empty"><em>🧾</em>Bu ayda işlem yok.<br>+ düğmesiyle gelir veya gider ekle.</div>';
   else{
     var sorted=les.slice().sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0}),th='';
     sorted.forEach(function(e){var ci=catInfo(e.type,e.cat),d=e.date.slice(8,10)+'.'+e.date.slice(5,7);
-      th+='<button class="tx'+(e.pending?' pend':'')+'" data-id="'+esc(e.id)+'"><span class="ico" style="background:'+ci.col+'33">'+ci.ico+'</span><span class="m"><b>'+esc(e.cat)+(e.rec?' 🔁':'')+(e.plan?' 🗓️':'')+(e.bill?' 🧾':'')+(e.carry?' ↪️':'')+(e.trip?' 🏖️':'')+(e.proj?' 🔮':'')+(e.cardpay?' 💳':'')+'</b><small>'+(e.pending?'⏳ ':'')+d+(e.note?' · '+esc(e.note):'')+(cu.map[e.id]?'<span class="cr">↪️ '+(cu.map[e.id]>=e.amt-0.004?'Devredenden ödendi':esc(fmt(cu.map[e.id],true))+' devredenden')+'</span>':'')+'</small></span><span class="a '+(e.type==='in'?'pos':'neg')+'">'+(e.type==='in'?'+':'−')+esc(fmt(e.amt,true))+'</span></button>'});
+      th+='<button class="tx'+(e.pending?' pend':'')+'" data-id="'+esc(e.id)+'"><span class="ico" style="background:'+ci.col+'33">'+ci.ico+'</span><span class="m"><b>'+esc(e.cat)+(e.rec?' 🔁':'')+(e.plan?' 🗓️':'')+(e.bill?' 🧾':'')+(e.carry?' ↪️':'')+(e.trip?' 🏖️':'')+(e.proj?' 🔮':'')+(e.cardpay?' 💳':'')+(e.mealN?' 🍽️ '+esc(e.mealN):'')+'</b><small>'+(e.pending?'⏳ ':'')+d+(e.note?' · '+esc(e.note):'')+(cu.map[e.id]?'<span class="cr">↪️ '+(cu.map[e.id]>=e.amt-0.004?'Devredenden ödendi':esc(fmt(cu.map[e.id],true))+' devredenden')+'</span>':'')+'</small></span><span class="a '+(e.type==='in'?'pos':'neg')+'">'+(e.type==='in'?'+':'−')+esc(fmt(e.amt,true))+'</span></button>'});
     tl.innerHTML=th;
   }
   renderPlans(es);
@@ -1745,6 +1767,7 @@ function render(){
   if(typeof bkBanner==='function')bkBanner();
   if(typeof renderSnaps==='function')renderSnaps();
   if(typeof renderTripCard==='function'){renderTripCard();renderCards();renderVe();renderInCard();renderIncDonut();renderIncPlans();renderIpPend();renderZam();tripBanner();renderSubChk();renderDupChk();renderLimits();renderYear();renderLimSettings();renderSearch()}
+  try{refreshAttn();renderGuide()}catch(e){}
 }
 
 function renderPlans(es){
@@ -1940,8 +1963,8 @@ $('pSave').onclick=function(){
     if(dupAsk(dl,name,amt,kd,function(nn){$('pName').value=nn;pDupGo=true;$('pSave').onclick();pDupGo=false}))return}
   var o={name:name,cat:$('pCat').value,amt:Math.round(amt*100)/100,start:st,end:en||'',day:day};
   if(planEdit){S.plans.forEach(function(x){if(x.id===planEdit){x.name=o.name;x.cat=o.cat;x.amt=o.amt;x.start=o.start;x.end=o.end;x.day=o.day}})}
-  else{o.id=uid();if($('pOld').checked&&!$('pHist').checked)o.from=nowK();S.plans.push(o);if(moveBill){S.bills=S.bills.filter(function(x){return x.id!==moveBill});moveBill=null}}
-  save();closePlan();render();toast('✓ “'+o.name+'” Ödemeler > Kredi ve taksitler listesine eklendi');
+  else{markUndo();o.id=uid();if($('pOld').checked&&!$('pHist').checked)o.from=nowK();S.plans.push(o);if(moveBill){S.bills=S.bills.filter(function(x){return x.id!==moveBill});moveBill=null}}
+  save();closePlan();render();toast(planEdit?'✓ “'+o.name+'” güncellendi':'✓ “'+o.name+'” Ödemeler > Kredi ve kartlar bölümüne eklendi',!planEdit);
 };
 $('pDel').onclick=function(){
   if(!planEdit)return;
@@ -2032,13 +2055,13 @@ $('nbAdd').onclick=function(){
   var nm=$('nbName').value.trim();
   if(!nm){toast('Bir ad yaz');$('nbName').focus();return}
   if(!nbDupGo&&dupAsk(S.bills,nm,0,'fatura',function(nn){$('nbName').value=nn;nbDupGo=true;$('nbAdd').onclick();nbDupGo=false}))return;
-  var id=uid();S.bills.push({id:id,name:nm,cat:$('nbCat').value});billOpen=id;
-  $('nbName').value='';save();render();
-  toast('✓ “'+nm+'” “Bu ayın düzenli ödemeleri” listesine eklendi');
+  markUndo();var id=uid();S.bills.push({id:id,name:nm,cat:$('nbCat').value});billOpen=id;
+  $('nbName').value='';save();render();nbShow(false);
+  toast('✓ “'+nm+'” Faturalar listesine eklendi',true);
   setTimeout(function(){var r=$('billList').querySelector('[data-b="'+id+'"]');if(r){var w=r.closest('.bill')||r;w.scrollIntoView({block:'center',behavior:'smooth'});w.classList.add('flash');setTimeout(function(){w.classList.remove('flash')},2200)}},150);
 };
 $('nbGoKr').onclick=function(){chooseInstall()};
-$('bBillGo').onclick=function(){document.querySelector('.nav .t[data-v="fatura"]').click()};
+$('bBillGo').onclick=function(){goPay('f')};
 ['sAmt','pTotal','pAmt'].forEach(function(id){bindAmt($(id))});
 
 /* ---------- Üyelikler & Abonelikler ---------- */
@@ -2258,10 +2281,18 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.18';
+var APP_VER='1.19';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
-var RELEASES=[{v:'1.18',date:'Kasım 2026',title:'Yemek kartları',items:[
+var RELEASES=[{v:'1.19',date:'Kasım 2026',title:'Daha kolay, daha derli toplu',items:[
+  ['➕','Tek giriş: + düğmesi','Ortadaki + düğmesi artık “Ne ekliyorsun?” diye soruyor: harcama, gelir, fatura, kredi / taksit, abonelik ya da kart. Nereye gideceğini düşünmen gerekmiyor.',1],
+  ['🗂️','Ödemeler üç bölüm oldu','Faturalar, Kredi ve kartlar, Gelir. Krediler ve taksitler artık İşlemler’de değil, Ödemeler > Kredi ve kartlar altında. İşlemler sadece işlemleri gösteriyor.',1],
+  ['🏠','Sadeleşen Özet','Önce bakiyen ve yaklaşan ödemelerin görünüyor. Uyarılar tek “Dikkat edilecekler” kartında, 12 ay, limitler ve kategori detayı “Daha fazla” altında.',1],
+  ['⚙️','Ayarlar üç grupta','Güvenlik, Hesaplama, Uygulama. Başlığa dokununca açılıyor.',1],
+  ['🍽️','Yemek kartı harcamaları İşlemler’de','Ana bakiyeye ve toplamlara karışmadan, küçük bir yemek kartı etiketiyle listede görünüyor.',1],
+  ['👋','İlk açılış rehberi','Yeni başlayanlar için üç adımlık kısa liste: maaş, faturalar, kredi veya kart.',1],
+  ['↩️','Geri al her yerde','Fatura, kredi ve kart eklerken de “Geri al” çıkıyor.',1]]},
+{v:'1.18',date:'Kasım 2026',title:'Yemek kartları',items:[
   ['🍽️','Yemek kartı ekle','Kartlarım bölümünden “Yemek kartı” seçip adını (Sodexo, Multinet…) ve şu anki bakiyeni yaz. Kaç kart istersen ekleyebilirsin.',1],
   ['🔁','Her ay kendiliğinden yüklenir','Aylık yükleme tutarını ve gününü bir kez yaz, her ay o gün bakiyeye kendisi eklenir. Tutar değişirse kartın üstüne dokunup güncelleyebilirsin. Kalan bakiye ertesi aya devreder.',1],
   ['🧾','Ana bakiyeden düşmez','Harcama eklerken ödeme şekli olarak yemek kartının adını seçersen tutar kartın bakiyesinden düşer, ana bakiyen değişmez. Altta kalan bakiyeyi görürsün.',1],
@@ -2438,7 +2469,7 @@ function maybeWn(){
 /* ---------- Olaylar ---------- */
 $('prev').onclick=function(){cur=new Date(cur.getFullYear(),cur.getMonth()-1,1);render()};
 $('next').onclick=function(){cur=new Date(cur.getFullYear(),cur.getMonth()+1,1);render()};
-$('fab').onclick=function(){openSheet()};
+
 $('bAdd').onclick=function(){openSheet()};
 $('bSim').onclick=function(){openPlan(null,true)};
 function chooseInstall(){
@@ -2459,7 +2490,7 @@ $('sGoDz').onclick=function(){
     {t:'💳 Kredi kartı taksidi',f:function(){openPlan(null,false,'Kredi Kartı')}},
     {t:'📦 Başka taksit (telefon, buzdolabı…)',f:function(){openPlan(null,false,'Diğer')}},
     {t:'🏠 Her ay tekrarlayan gider (kira, aidat…)',f:function(){openSheet();$('sRec').checked=true;syncMode()}},
-    {t:'💡 Fatura (elektrik, su, internet…)',f:function(){document.querySelector('.nav .t[data-v="fatura"]').click()}},
+    {t:'💡 Fatura (elektrik, su, internet…)',f:function(){goPay('f');nbShow(true)}},
     {t:'Vazgeç',c:'sec'}]);
 };
 $('sOut').onclick=function(){setType('out')};
@@ -2490,7 +2521,7 @@ $('sDel').onclick=function(){
   markUndo();S.cards.forEach(function(c){if(c.payId===editId){c.paid=false;delete c.payId}});
   S.entries=S.entries.filter(function(x){return x.id!==editId});delete b.dataset.arm;b.textContent='Sil';save();closeSheet();render();toast('Silindi',true);
 };
-$('txlist').onclick=function(ev){var b=ev.target.closest('.tx');if(!b)return;var id=b.getAttribute('data-id');if(id==='x:v'){varExplain();return}if(id.indexOf('x:')===0){toast(id.indexOf('x:i:')===0?'Ek gelir: Ödemeler sekmesinden yönetebilirsin':'Tahmini kalem: ay gelince kendiliğinden oluşur');return}if(id.indexOf('p:')===0)openPlan(id.split(':')[1]);else openSheet(id)};
+$('txlist').onclick=function(ev){var b=ev.target.closest('.tx');if(!b)return;var id=b.getAttribute('data-id');if(id==='x:v'){varExplain();return}if(id.indexOf('x:m:')===0){toast('Yemek kartı harcaması: Ödemeler > Kredi ve kartlar bölümünden silebilirsin');return}if(id.indexOf('x:')===0){toast(id.indexOf('x:i:')===0?'Ek gelir: Ödemeler sekmesinden yönetebilirsin':'Tahmini kalem: ay gelince kendiliğinden oluşur');return}if(id.indexOf('p:')===0)openPlan(id.split(':')[1]);else openSheet(id)};
 $('catbars').onclick=function(ev){
   var b=ev.target.closest('[data-g]');if(!b)return;var g=b.getAttribute('data-g');
   openRing=(openRing===g)?null:g;
@@ -2498,7 +2529,46 @@ $('catbars').onclick=function(ev){
   $('catbars').querySelectorAll('.rdet').forEach(function(x){x.classList.toggle('open',x.getAttribute('data-for')===openRing)});
 };
 $('plist').onclick=function(ev){var b=ev.target.closest('.tx');if(b)openPlan(b.getAttribute('data-pid'))};
+var psCur='f';
+function setPs(p){psCur=p;$('v-fatura').setAttribute('data-p',p);[].forEach.call($('psSeg').querySelectorAll('button'),function(b){b.classList.toggle('on',b.getAttribute('data-p')===p)})}
+$('psSeg').onclick=function(ev){var b=ev.target.closest('[data-p]');if(b){setPs(b.getAttribute('data-p'));window.scrollTo(0,0)}};
+function goPay(p){document.querySelector('.nav .t[data-v="fatura"]').click();setPs(p||'f')}
+function nbShow(on){$('nbCard').style.display=on?'':'none';$('nbOpen').style.display=on?'none':'';if(on){setTimeout(function(){$('nbCard').scrollIntoView({block:'center',behavior:'smooth'});$('nbName').focus()},120)}}
+$('nbOpen').onclick=function(){nbShow(true)};
+function openMore(on){$('moreWrap').style.display=on?'':'none';$('moreBtn').textContent=on?'Daha az göster ▴':'Daha fazla: kategori detayı, limitler, 12 ay ▾'}
+$('moreBtn').onclick=function(){openMore($('moreWrap').style.display==='none')};
+$('attnHead').onclick=function(){var o=$('v-ozet').classList.toggle('attnOpen');$('attnCh').textContent=o?'⌄':'›'};
+function refreshAttn(){var n=0;['dupChk','subChk'].forEach(function(i){var e=$(i);if(e&&e.style.display!=='none')n++});$('attnN').textContent=n;$('attnHead').style.display=n?'':'none';if(!n)$('v-ozet').classList.remove('attnOpen')}
+document.querySelectorAll('#v-ayar .card.acc>h2').forEach(function(h){h.onclick=function(){h.parentNode.classList.toggle('open')}});
+(function(){var o=Element.prototype.scrollIntoView;Element.prototype.scrollIntoView=function(){try{var a=this.closest&&this.closest('.acc');if(a)a.classList.add('open');if(this.closest&&this.closest('#moreWrap'))openMore(true);if(this.closest&&this.closest('#nbCard'))$('nbCard').style.display=''}catch(e){}return o.apply(this,arguments)}})();
+/* ---------- + menüsü ve ilk açılış rehberi ---------- */
+function addMenu(){
+  var it=[['out','⬇','Harcama'],['in','⬆','Gelir'],['bill','💡','Fatura'],['plan','🏦','Kredi / taksit'],['sub','🔁','Abonelik'],['card','💳','Kart ekle']];
+  askBox('Ne ekliyorsun?','',[]);
+  $('cfBox').innerHTML='<h3>Ne ekliyorsun?</h3><div class="mgrid">'+it.map(function(x){return '<button type="button" data-am="'+x[0]+'"><span style="font-size:20px">'+x[1]+'</span>'+x[2]+'</button>'}).join('')+'</div><button type="button" class="btn sec" data-am="x">Vazgeç</button>';
+  $('cfBox').onclick=function(ev){var b=ev.target.closest('[data-am]');if(!b)return;var k=b.getAttribute('data-am');$('cfBg').classList.remove('show');
+    if(k==='out')openSheet();
+    else if(k==='in'){openSheet();setType('in');syncMode()}
+    else if(k==='bill'){goPay('f');nbShow(true)}
+    else if(k==='plan')chooseInstall();
+    else if(k==='sub')openSub();
+    else if(k==='card'){goPay('k');cdType('k');setTimeout(function(){$('cdCard').scrollIntoView({block:'start',behavior:'smooth'})},150)}}
+}
+$('fab').onclick=addMenu;
+function gdSteps(){var d={};try{d=JSON.parse(lsGet('butcem_gsteps')||'{}')}catch(e){}return d}
+function renderGuide(){
+  var el=$('guide');if(!el)return;
+  if(lsGet('butcem_guide')||S.entries.length>=6){el.style.display='none';return}
+  var d=gdSteps(),hasIn=S.entries.some(function(e){return e.type==='in'});
+  var st=[['1','Maaşını yaz',hasIn||d[1]],['2','Faturalarını ekle',d[2]],['3','Kredi veya kartın varsa ekle',d[3]]];
+  if(st.every(function(x){return x[2]})){lsSet('butcem_guide','1');el.style.display='none';return}
+  $('gdList').innerHTML=st.map(function(x){return '<button type="button" class="gdr'+(x[2]?' done':'')+'" data-gs="'+x[0]+'"><i>'+(x[2]?'✓':x[0])+'</i><span>'+x[1]+'</span></button>'}).join('');el.style.display='';
+}
+$('gdX').onclick=function(){lsSet('butcem_guide','1');renderGuide()};
+$('gdList').onclick=function(ev){var b=ev.target.closest('[data-gs]');if(!b)return;var k=b.getAttribute('data-gs'),d=gdSteps();d[k]=1;lsSet('butcem_gsteps',JSON.stringify(d));
+  if(k==='1'){openSheet();setType('in');syncMode()}else if(k==='2'){goPay('f');nbShow(true)}else{goPay('k')}renderGuide()};
 document.querySelectorAll('.nav .t').forEach(function(b){b.onclick=function(){
+
   tab=b.getAttribute('data-v');
   document.querySelectorAll('.nav .t').forEach(function(x){x.classList.toggle('on',x===b)});
   ['ozet','fatura','islem','ayar'].forEach(function(v){$('v-'+v).classList.toggle('on',v===tab)});
@@ -2891,7 +2961,7 @@ function renderCardSpend(){
   names.slice(0,5).forEach(function(n){ch+='<span class="cspc">'+esc(n)+' · '+esc(fmt(by[n]))+'</span>'});
   $('cardSpendBody').innerHTML='<div class="citem" style="padding:0 0 8px"><b>Bu ay kartla</b><span class="num">'+esc(fmt(tot,true))+'</span></div><div class="cspw">'+ch+'</div>'+
     '<div class="note" style="margin:8px 0 0">'+(un>0?'Ekstresi ödenmemiş: <b>'+esc(fmt(un,true))+'</b>. Bu tutar bakiyenden henüz düşmedi, tahminlere dahil.':'Bu ayın kart harcamalarının ekstresi ödendi.')+'</div>'+(un>0?'<button type="button" class="btn sec sm" id="csGo" style="margin-top:8px">Kart listesine git</button>':'');
-  box.style.display='';var g=$('csGo');if(g)g.onclick=function(){document.querySelector('.nav .t[data-v="fatura"]').click()};
+  box.style.display='';var g=$('csGo');if(g)g.onclick=function(){goPay('k')};
 }
 function renderCards(){
   renderCardSpend();renderCardDefs();renderMeals();
@@ -3384,7 +3454,7 @@ function gsRecent(){try{return JSON.parse(lsGet('butcem_gsr')||'[]')}catch(e){re
 function gsRemember(){var q=$('gsq').value.trim();if(q.length<2)return;var a=gsRecent().filter(function(x){return x!==q});a.unshift(q);lsSet('butcem_gsr',JSON.stringify(a.slice(0,5)))}
 function gsOpen(){$('gs').classList.add('show');gsAct=null;gsDone=null;gsMode='all';$('gsq').value='';gsRender();$('gsq').focus();setTimeout(function(){$('gsq').focus()},150)}
 function gsClose(){$('gs').classList.remove('show');$('gsq').blur()}
-function gsGoTab(v,target){document.querySelector('.nav .t[data-v="'+v+'"]').click();if(target)setTimeout(function(){var e=$(target);if(e&&e.scrollIntoView)e.scrollIntoView({block:'start',behavior:'smooth'})},350)}
+function gsGoTab(v,target){document.querySelector('.nav .t[data-v="'+v+'"]').click();if(v==='fatura')setPs({cdCard:'k',cardsCard:'k',plist:'k',planCard:'k',ipCard:'g'}[target]||'f');if(target)setTimeout(function(){var e=$(target);if(e&&e.scrollIntoView)e.scrollIntoView({block:'start',behavior:'smooth'})},350)}
 function gsRow(cls,ico,icoBg,title,sub,amt,attr,extra){return '<button type="button" class="gsr '+cls+'" '+attr+'><span class="ico" style="background:'+icoBg+'">'+ico+'</span><span class="m"><b>'+esc(title)+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+(extra||'')+'</span>'+(amt?'<span class="a">'+esc(amt)+'</span>':'<span class="go">›</span>')+'</button>'}
 function gsActions(W){
   var out=[],c=W.core,i;
