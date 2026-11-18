@@ -185,6 +185,11 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
 .toast{position:fixed;left:50%;bottom:118px;transform:translateX(-50%) translateY(8px);background:#fff;color:#111;padding:11px 18px;border-radius:14px;font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:all .25s;z-index:50;box-shadow:0 10px 30px #0006;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%)}
 .view{display:none}.view.on{display:block}
+.cr{display:block;color:#b7a6ff;font-size:12px;margin-top:2px;font-weight:600}
+.cbar{height:8px;background:#ffffff12;border-radius:5px;overflow:hidden;margin:10px 0 12px}
+.cbar i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,#7c5cff,#27d3c3);transition:width .6s}
+.citem{display:flex;justify-content:space-between;gap:10px;padding:6px 0;font-size:14px}
+.citem span:last-child{font-family:var(--num);font-weight:700;color:#b7a6ff;white-space:nowrap}
 .credit{text-align:center;color:var(--mut);font-size:12px;padding:22px 0 8px;line-height:1.6;opacity:.85}
 .credit b{display:block;color:#cfd3f5;font-size:13px;font-weight:700}
 .grp{display:block;width:100%;text-align:left;padding:0;margin:0;background:none;border:0;color:inherit;font:inherit}
@@ -242,6 +247,14 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
       </div>
       <div class="bar"><i id="barfill" style="width:0%"></i></div>
       <div class="bar-l"><span id="barl1"></span><span id="barl2"></span></div>
+    </div>
+
+    <div class="card" id="carrycard" style="display:none">
+      <h2 id="carryTitle">↪️ Devreden bakiye</h2>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><b class="num" id="carryLeft" style="font-size:22px"></b><small id="carrySub" style="color:var(--mut);text-align:right"></small></div>
+      <div class="cbar"><i id="carryBar" style="width:0%"></i></div>
+      <div id="carryItems"></div>
+      <div class="note" id="carryNote" style="margin:8px 0 0"></div>
     </div>
 
     <div class="card" id="fcard">
@@ -434,6 +447,25 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
     </div>
   </div>
 </div>
+<div class="sheet-bg" id="rbg">
+  <div class="sheet">
+    <div class="sheet-top"><div class="grab"></div><button class="xbtn" id="rX" aria-label="Kapat">✕</button></div>
+    <div class="sheet-body">
+    <h3 id="rTitle">Geçen aydan bakiye kaldı</h3>
+    <div class="subtot" style="margin:0 0 14px"><div><b id="rLbl">Kalan bakiye</b><small>Yeni aya geçerken ne yapalım?</small></div><span class="num pos" id="rAmt"></span></div>
+    <button class="btn" id="rKeep">💰 Harcamadım, yeni aya devret</button>
+    <button class="btn sec" id="rSpent">🛍️ Harcadım</button>
+    <div id="rBox" style="display:none">
+      <button class="btn sec" id="rAll">Tamamını harcadım</button>
+      <span class="lbl">Ya da ne kadarını harcadığını yaz</span>
+      <input class="fld" id="rPartAmt" inputmode="decimal" placeholder="0 ₺" autocomplete="off">
+      <button class="btn" id="rPart">Bu kadarını harcadım, kalanı devret</button>
+    </div>
+    <button class="btn sec sm" id="rLater">Daha sonra sor</button>
+    <div class="note" style="margin-top:10px">Devredersen tutar bu ayın başına "Devreden" geliri olarak eklenir. Harcadığın kısım geçen ayın kayıtlarına düşülür.</div>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <nav class="nav">
@@ -452,7 +484,7 @@ var CATS={
   out:[['Kredi','🏦','#7c5cff'],['Kredi Kartı','💳','#ff6b81'],['Doğalgaz','🔥','#ff9f43'],['Su','💧','#2c9cf0'],['Elektrik','⚡','#ffd23f'],
        ['İnternet','🌐','#27d3c3'],['Telefon','📱','#a37cff'],['Market','🛒','#3ddc97'],['Ulaşım','🚌','#5f8bff'],['Yemek','🍽️','#ff7eb6'],
        ['Sağlık','💊','#4dd6a3'],['Eğlence','🎬','#ffb648'],['Abonelik','🔁','#c06cff'],['Diğer','📦','#8f95c2']],
-  'in':[['Maaş','💼','#3ddc97'],['Ek gelir','✨','#27d3c3'],['Diğer','📥','#8f95c2']]
+  'in':[['Maaş','💼','#3ddc97'],['Ek gelir','✨','#27d3c3'],['Devreden','↪️','#7c5cff'],['Diğer','📥','#8f95c2']]
 };
 var EXTRA=['#e056fd','#f78fb3','#badc58','#22a6b3','#f0932b','#6ab04c'];
 var MONTHS=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
@@ -462,12 +494,12 @@ var mem=null;
 function defBills(){return[
   {id:'b-elektrik',name:'Elektrik',cat:'Elektrik'},{id:'b-su',name:'Su',cat:'Su'},{id:'b-gaz',name:'Doğalgaz',cat:'Doğalgaz'},
   {id:'b-net',name:'Ev interneti',cat:'İnternet'},{id:'b-tel',name:'Cep telefonu',cat:'Telefon'},{id:'b-ulasim',name:'Ulaşım',cat:'Ulaşım'}]}
-var S={entries:[],inited:{},plans:[],bills:defBills()};
+var S={entries:[],inited:{},plans:[],bills:defBills(),rolled:{}};
 var cur=new Date();cur=new Date(cur.getFullYear(),cur.getMonth(),1);
 var tab='ozet',editId=null,sType='out',sCat='Market',wipeArm=false;
 var planEdit=null,tryMode=false,sVer='none',pVer='none',sArm=false,pArm=false,pDelArm=false;
 
-function load(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&Array.isArray(o.entries)){S={entries:o.entries,inited:o.inited||{},plans:Array.isArray(o.plans)?o.plans:[],bills:Array.isArray(o.bills)?o.bills:defBills()};}}}catch(e){if(mem)S=mem;}}
+function load(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&Array.isArray(o.entries)){S={entries:o.entries,inited:o.inited||{},plans:Array.isArray(o.plans)?o.plans:[],bills:Array.isArray(o.bills)?o.bills:defBills(),rolled:o.rolled||{}};}}}catch(e){if(mem)S=mem;}}
 function save(){mem=S;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 function $(id){return document.getElementById(id)}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -539,10 +571,11 @@ function payDate(p,k){var a=k.split('-'),n=new Date(parseInt(a[0],10),parseInt(a
 var EX=null,EXP=null; // simülasyonda hariç tutulan işlem / plan
 function sE(){return S.entries.filter(function(e){return e.id!==EX})}
 function monthIn(k){var t=0;sE().forEach(function(e){if(e.type==='in'&&e.date.slice(0,7)===k)t+=e.amt});return t}
+function monthInR(k){var t=0;sE().forEach(function(e){if(e.type==='in'&&!e.carry&&e.date.slice(0,7)===k)t+=e.amt});return t}
 function recIn(k){var t=0;sE().forEach(function(e){if(e.type==='in'&&e.rec&&e.date.slice(0,7)===k)t+=e.amt});return t}
 function recOut(k){var t=0;sE().forEach(function(e){if(e.type==='out'&&e.rec&&e.date.slice(0,7)===k)t+=e.amt});return t}
-function varSpend(k){var t=0;sE().forEach(function(e){if(e.type==='out'&&!e.rec&&!e.bill&&e.date.slice(0,7)===k)t+=e.amt});return t}
-function anyOut(k){var t=0;sE().forEach(function(e){if(e.type==='out'&&!e.bill&&e.date.slice(0,7)===k)t+=e.amt});return t}
+function varSpend(k){var t=0;sE().forEach(function(e){if(e.type==='out'&&!e.rec&&!e.bill&&!e.adj&&e.date.slice(0,7)===k)t+=e.amt});return t}
+function anyOut(k){var t=0;sE().forEach(function(e){if(e.type==='out'&&!e.bill&&!e.adj&&e.date.slice(0,7)===k)t+=e.amt});return t}
 
 function planEntries(d){
   var k=mk(d),t=today(),res=[];
@@ -575,7 +608,7 @@ function carry(){
   var i0=ym(nowK()),inc=0,fix=0,fI=false,fF=false;
   for(var i=0;i<=12&&(!fI||!fF);i++){
     var k=fromYm(i0-i);
-    if(!fI){var r=recIn(k),v=r>0?r:monthIn(k);if(v>0){inc=v;fI=true}}
+    if(!fI){var r=recIn(k),v=r>0?r:monthInR(k);if(v>0){inc=v;fI=true}}
     if(!fF){var f=recOut(k);if(f>0){fix=f;fF=true}}
   }
   return{inc:inc,fix:fix};
@@ -589,7 +622,7 @@ function outlook(k){
   if(k<=nk){
     var ro=recOut(k);inc=monthIn(k);fix=ro+bl;
     var vs=varSpend(k);vr=isCur?Math.max(vs,varEst()):vs;
-    if(inc<=0&&isCur){inc=c.inc;assumed=c.inc>0;if(ro<=0)fix=c.fix+bl}
+    if(monthInR(k)<=0&&isCur){inc=inc+c.inc;assumed=c.inc>0;if(ro<=0)fix=c.fix+bl}
   }else{
     inc=c.inc;fix=c.fix+anyOut(k)+bl;vr=varEst();
   }
@@ -614,6 +647,19 @@ function ensureMonth(d){
     S.entries.push({id:uid(),type:e.type,cat:e.cat,amt:e.amt,note:e.note,rec:true,date:k+'-'+pad(day)});
   });
   S.inited[k]=true;save();
+}
+// Devreden bakiye havuzu: ayın giderleri tarih sırasıyla önce bu havuzdan ödenir
+function carryUse(es){
+  var pool=0,map={},items=[];
+  es.forEach(function(e){if(e.type==='in'&&e.carry)pool+=e.amt});
+  if(pool<=0)return{pool:0,used:0,left:0,map:map,items:items};
+  var rest=pool;
+  es.filter(function(e){return e.type==='out'&&!e.pending&&!e.adj}).sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0}).forEach(function(e){
+    if(rest<=0.004)return;
+    var a=Math.min(rest,e.amt);a=Math.round(a*100)/100;
+    map[e.id]=a;rest=Math.round((rest-a)*100)/100;items.push({e:e,a:a});
+  });
+  return{pool:pool,used:Math.round((pool-rest)*100)/100,left:rest,map:map,items:items};
 }
 function monthEntries(){var k=mk(cur);return S.entries.filter(function(e){return e.date.slice(0,7)===k}).concat(planEntries(cur))}
 
@@ -744,6 +790,22 @@ function render(){
   $('barl1').textContent=inc>0?('Gelirin %'+Math.round(out/inc*100)+"'i harcandı"):'Önce gelirini ekle';
   $('barl2').textContent=bal<0?'Bütçe aşıldı!':'';
 
+  // devreden bakiye kartı
+  var cu=carryUse(es),cc=$('carrycard');
+  if(cu.pool>0){
+    var cs=es.filter(function(e){return e.carry})[0],cn=cs&&cs.note?cs.note.replace(' ayından devir',''):'Geçen ay';
+    $('carryTitle').textContent='↪️ '+cn+' ayından devreden bakiye';
+    $('carryLeft').textContent=fmt(cu.left,true)+' kaldı';$('carryLeft').className='num '+(cu.left>0?'pos':'');
+    $('carrySub').textContent=fmt(cu.pool,true)+' devredildi';
+    $('carryBar').style.width=Math.min(100,cu.used/cu.pool*100)+'%';
+    var ch='';cu.items.slice(0,5).forEach(function(it){
+      ch+='<div class="citem"><span>'+esc(it.e.note||it.e.cat)+(it.a<it.e.amt-0.004?' <small style="color:var(--mut)">(toplam '+esc(fmt(it.e.amt,true))+')</small>':'')+'</span><span>'+esc(fmt(it.a,true))+'</span></div>'});
+    if(cu.items.length>5)ch+='<div class="citem" style="color:var(--mut)"><span>+'+(cu.items.length-5)+' kalem daha</span><span></span></div>';
+    $('carryItems').innerHTML=ch;
+    $('carryNote').textContent=cu.items.length?(cu.left>0.004?'Bu ayın ilk giderleri önce devreden bakiyenden ödeniyor. Maaşına dokunulmadan '+fmt(cu.used,true)+' karşılandı 🎉':'Devreden bakiyen bitti. Bundan sonraki giderler maaşından düşecek.'):'Henüz bu ay bir gider yok. İlk giderlerin önce bu bakiyeden ödenecek.';
+    cc.style.display='';
+  }else cc.style.display='none';
+
   // durum çipi + ay sonu tahmini
   var chip=$('chipSt'),fc=$('fcard');chip.className='chip-st';
   if(isCur&&inc>0){
@@ -809,7 +871,7 @@ function render(){
   else{
     var sorted=es.slice().sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0}),th='';
     sorted.forEach(function(e){var ci=catInfo(e.type,e.cat),d=e.date.slice(8,10)+'.'+e.date.slice(5,7);
-      th+='<button class="tx'+(e.pending?' pend':'')+'" data-id="'+esc(e.id)+'"><span class="ico" style="background:'+ci.col+'33">'+ci.ico+'</span><span class="m"><b>'+esc(e.cat)+(e.rec?' 🔁':'')+(e.plan?' 🗓️':'')+(e.bill?' 🧾':'')+'</b><small>'+(e.pending?'⏳ ':'')+d+(e.note?' · '+esc(e.note):'')+'</small></span><span class="a '+(e.type==='in'?'pos':'neg')+'">'+(e.type==='in'?'+':'−')+esc(fmt(e.amt,true))+'</span></button>'});
+      th+='<button class="tx'+(e.pending?' pend':'')+'" data-id="'+esc(e.id)+'"><span class="ico" style="background:'+ci.col+'33">'+ci.ico+'</span><span class="m"><b>'+esc(e.cat)+(e.rec?' 🔁':'')+(e.plan?' 🗓️':'')+(e.bill?' 🧾':'')+(e.carry?' ↪️':'')+'</b><small>'+(e.pending?'⏳ ':'')+d+(e.note?' · '+esc(e.note):'')+(cu.map[e.id]?'<span class="cr">↪️ '+(cu.map[e.id]>=e.amt-0.004?'Devredenden ödendi':esc(fmt(cu.map[e.id],true))+' devredenden')+'</span>':'')+'</small></span><span class="a '+(e.type==='in'?'pos':'neg')+'">'+(e.type==='in'?'+':'−')+esc(fmt(e.amt,true))+'</span></button>'});
     tl.innerHTML=th;
   }
   renderPlans(es);
@@ -1132,13 +1194,13 @@ $('bRestore').onclick=function(){
     if(!o||!Array.isArray(o.entries))throw 0;
     S={entries:o.entries.filter(function(e){return e&&e.date&&e.amt>0&&(e.type==='in'||e.type==='out')}),inited:o.inited||{},
        plans:Array.isArray(o.plans)?o.plans.filter(function(p){return p&&p.start&&p.amt>0&&p.day>=1}):[],
-       bills:Array.isArray(o.bills)?o.bills.filter(function(b){return b&&b.id&&b.name}):defBills()};
+       bills:Array.isArray(o.bills)?o.bills.filter(function(b){return b&&b.id&&b.name}):defBills(),rolled:o.rolled||{}};
     save();render();toast('Geri yüklendi ✓');$('restoreTx').value='';
   }catch(e){toast('Yedek metni geçersiz')}
 };
 $('bWipe').onclick=function(){
   if(!wipeArm){wipeArm=true;$('wipeNote').style.display='block';setTimeout(function(){wipeArm=false;$('wipeNote').style.display='none'},3000);return}
-  S={entries:[],inited:{},plans:[],bills:defBills()};save();wipeArm=false;$('wipeNote').style.display='none';render();toast('Tüm veriler silindi');
+  S={entries:[],inited:{},plans:[],bills:defBills(),rolled:{}};save();wipeArm=false;$('wipeNote').style.display='none';render();toast('Tüm veriler silindi');
 };
 
 // Ana ekran simgesi
@@ -1146,7 +1208,57 @@ try{var cv=document.createElement('canvas');cv.width=cv.height=180;var x=cv.getC
   x.fillStyle=g;x.fillRect(0,0,180,180);x.fillStyle='#fff';x.font='800 108px -apple-system,Helvetica,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('₺',90,100);
   var lk=document.createElement('link');lk.rel='apple-touch-icon';lk.href=cv.toDataURL('image/png');document.head.appendChild(lk)}catch(e){}
 
-load();render();
+/* ---------- Ay sonu devri ---------- */
+var rollPk=null,rollBal=0,rollSkip={};
+function monthBal(k){
+  var inc=0,out=0;
+  S.entries.forEach(function(e){if(e.date.slice(0,7)===k){if(e.type==='in')inc+=e.amt;else out+=e.amt}});
+  planEntries(kDate(k)).forEach(function(e){out+=e.amt});
+  return Math.round((inc-out)*100)/100;
+}
+function checkRollover(){
+  var nk=nowK(),pk=fromYm(ym(nk)-1);
+  if(S.rolled[pk]||rollSkip[pk]||$('rbg').classList.contains('show'))return;
+  var has=S.entries.some(function(e){return e.date.slice(0,7)===pk});
+  if(!has){S.rolled[pk]=true;save();return}
+  var bal=monthBal(pk);
+  if(bal<1){S.rolled[pk]=true;save();return}
+  rollPk=pk;rollBal=bal;
+  var mn=MONTHS[parseInt(pk.slice(5),10)-1];
+  $('rTitle').textContent=mn+' ayından bakiye kaldı';$('rLbl').textContent=mn+' sonu bakiye';$('rAmt').textContent=fmt(bal,true);
+  $('rBox').style.display='none';$('rSpent').style.display='';$('rPartAmt').value='';
+  $('rbg').classList.add('show');$('rbg').querySelector('.sheet-body').scrollTop=0;
+}
+function settleRoll(spent){
+  if(!rollPk)return;
+  var nk=nowK(),mn=MONTHS[parseInt(rollPk.slice(5),10)-1];
+  spent=Math.max(0,Math.min(Math.round(spent*100)/100,rollBal));
+  if(spent>0){
+    var last=new Date(kDate(rollPk).getFullYear(),kDate(rollPk).getMonth()+1,0).getDate();
+    S.entries.push({id:uid(),type:'out',cat:'Diğer',amt:spent,date:rollPk+'-'+pad(last),note:'Ay sonu harcanan bakiye',adj:true});
+  }
+  var rest=Math.round((rollBal-spent)*100)/100;
+  if(rest>=0.01)S.entries.push({id:uid(),type:'in',cat:'Devreden',amt:rest,date:nk+'-01',note:mn+' ayından devir',carry:true});
+  S.rolled[rollPk]=true;S.inited[nk]=true;
+  var msg=rest>=0.01?(fmt(rest,true)+' yeni aya devredildi ✓'):'Kaydedildi ✓';
+  rollPk=null;$('rbg').classList.remove('show');save();render();toast(msg);
+}
+function laterRoll(){if(rollPk)rollSkip[rollPk]=true;rollPk=null;$('rbg').classList.remove('show')}
+bindAmt($('rPartAmt'));$('rPartAmt').oninput=fmtAmt;
+$('rKeep').onclick=function(){settleRoll(0)};
+$('rSpent').onclick=function(){$('rBox').style.display='block';$('rSpent').style.display='none';$('rPartAmt').focus()};
+$('rAll').onclick=function(){settleRoll(rollBal)};
+$('rPart').onclick=function(){
+  var v=parseNum($('rPartAmt').value);
+  if(!(v>0)){toast('Harcadığın tutarı yaz');$('rPartAmt').focus();return}
+  if(v>rollBal+0.005){toast('Kalan bakiyeden fazla yazdın');return}
+  settleRoll(v);
+};
+$('rLater').onclick=laterRoll;$('rX').onclick=laterRoll;
+$('rbg').onclick=function(ev){if(ev.target===$('rbg'))laterRoll()};
+document.addEventListener('visibilitychange',function(){if(!document.hidden){render();checkRollover()}});
+
+load();render();checkRollover();
 })();
 </script>
 </body>
