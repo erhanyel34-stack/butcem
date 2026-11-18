@@ -1857,7 +1857,7 @@ function renderPlans(es){
   if(!up.length&&!debt)uc.style.display='none';
   else{
     var h='',tt=0,cnt=up.length;
-    if(debt>0){h+='<div class="tx"><span class="ico" style="background:#a37cff33">💳</span><span class="m"><b>Kart ekstresi</b><small>Ödediğinde bakiyenden düşer</small></span><span class="a neg">−'+esc(fmt(debt,true))+'</span></div>';tt+=debt;cnt++}
+    if(debt>0){h+='<button type="button" class="tx" data-upc="1"><span class="ico" style="background:#a37cff33">💳</span><span class="m"><b>Kart ekstresi</b><small>Ödediysen dokun, işaretle</small></span><span class="a neg">−'+esc(fmt(debt,true))+'</span></button>';tt+=debt;cnt++}
     up.forEach(function(e){var ci=catInfo('out',e.cat),pp=e.planId?S.plans.filter(function(x){return x.id===e.planId})[0]:null;tt+=e.amt;
       var ic=(pp&&pp.sub)?tile(brandOf(pp.brand)):'<span class="ico" style="background:'+ci.col+'33">'+ci.ico+'</span>';
       h+='<div class="tx">'+ic+'<span class="m"><b>'+esc(e.note||e.cat)+'</b><small>'+e.date.slice(8,10)+'.'+e.date.slice(5,7)+' tarihinde düşecek</small></span><span class="a neg">−'+esc(fmt(e.amt,true))+'</span></div>'});
@@ -2378,10 +2378,10 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.26.3';
+var APP_VER='1.27.1';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
-var RELEASES=[{v:'1.26.3',date:'Kasım 2026',title:'Ek gelirler yan menüde',items:[['✨','Ek gelirlerim yan menüye taşındı','Ödemeler üç sekme oldu, ek gelirler soldaki menüden açılıyor.',0]]},{v:'1.26.2',date:'Kasım 2026',title:'Gizlilik metnine iletişim adresi',items:[['✉️','İletişim e-postası eklendi','KVKK metninde iletişim için e-posta adresi yer alıyor.',0]]},{v:'1.26.1',date:'Kasım 2026',title:'KVKK gizlilik metni',items:[['📄','Gizlilik politikası ve KVKK aydınlatma metni','Ayarlar > Gizlilik ve veriler içinde tam metin.',0]]},{v:'1.26',date:'Kasım 2026',title:'Gizlilik ve hız',items:[['🛡️','Gizlilik ve veriler','Ayarlar’da yeni bölüm: verilerinin nerede durduğu, internete ne gittiği, şifre ve yedeklerle ilgili her şey sade dille yazıldı.',1],['⚡','Daha hızlı','Ay değiştirmek ve kayıt eklemek, çok kayıt olunca bile daha seri.',1],['💾','Dolu telefonda daha güvenli','Depolama dolarsa uygulama eski yedekleri küçültüp asıl kaydı korur, olmazsa seni uyarır.',1]]},{v:'1.25.1',date:'Kasım 2026',title:'Yenilikler listesi sadeleşti',items:[['🧹','Küçük düzeltmeler listeden kalktı','Yenilikler artık sadece önemli sürümleri gösteriyor.',0]]},{v:'1.25',date:'Kasım 2026',title:'Gelecek aylar',items:[['🗓️','Ödemeler > Gelecek','Önümüzdeki 6 ayın her biri için çıkacak ödemeleri tek ekranda gör: düzenli giderler, taksit/kredi/abonelikler ve fatura tahminleri, ay toplamıyla birlikte.',1]]},{v:'1.24.1',date:'Kasım 2026',title:'Gelecek aylarda kayıp ödeme düzeldi',items:[['🔧','“Her ay” ödemen gelecek aylarda görünüyor','Kredi kartı gibi adı kategoriyle aynı olan düzenli ödemeler, benzer isimli bir taksit varsa gelecek ay listesinden ve tahminden gizleniyordu. Artık hepsi görünüyor.',1]]},{v:'1.24',date:'Kasım 2026',title:'Yeni alt menü',items:[['➕','Artı düğmesi ortada ve yukarıda','Üç sekme eşit bölünüyor, artı ortada üstte duruyor, her yerden kolay ulaşılıyor.',1],['⚙️','Ayarlar yan menüde','Alt bardan kalktı, soldaki menüden (☰) açılıyor.',1],['🔐','Birikimlerim simgesi kasa oldu','Yan menüdeki garip madeni para yerine kasa çizimi geldi.',1]]},{v:'1.23.2',date:'Kasım 2026',title:'Kendi kalemin artık tam işlem',items:[['🔢','Şifre tuşları anında basılıyor','Tuşlara basınca küçülüp geri yaylanıyor, takılma yok.',1],['⏳','3 yanlışta 30 saniye bekleme','Geri sayım kendi kendine akar, süre dolunca hak sıfırlanır.',1],['✨','Açılış ve şifre ekranı animasyonlu','Açılış ekranı biraz daha uzun kalır, sonra şifre ekranı yumuşakça gelir.',1],['💵','Birikimde doğru para birimi','Dolar için $, Euro için €, Sterlin için £, altın için gr/adet yazar.',1],['✂️','Kendi kalemini oluştur = tam form','Gelir/gider, taksit, tek seferlik, her ay, ödeme şekli… hepsi var. Kaydedince işlem ana ekrana düşer, istersen kalem “Kendi kalemlerim”e de eklenir.',1]]},{v:'1.23.1',date:'Kasım 2026',title:'Kurlar Merkez Bankası’ndan',items:[
+var RELEASES=[{v:'1.27.1',date:'Kasım 2026',title:'Gelecek aylarda fatura adları',items:[['🏷️','Faturalar kendi adlarıyla görünüyor','Gelecek sekmesinde “Annem Cep” gibi kaydettiğin isimler aynen görünür.',0]]},{v:'1.27',date:'Kasım 2026',title:'Kart ekstresini istediğin an öde',items:[['💳','Özet’teki “Kart ekstresi”ne dokununca kart bölümü açılır','Yaklaşan ödemelerde kart ekstresine dokun, doğrudan Kredi ve kartlar’daki ekstreye gidersin.',1],['📅','Son ödeme gününden önce ödersen sorar','“Bugün ödedim” dersen tutar bakiyenden hemen düşer, “son ödeme gününde düşsün” dersen o güne kadar bekler.',1]]},{v:'1.26.3',date:'Kasım 2026',title:'Ek gelirler yan menüde',items:[['✨','Ek gelirlerim yan menüye taşındı','Ödemeler üç sekme oldu, ek gelirler soldaki menüden açılıyor.',0]]},{v:'1.26.2',date:'Kasım 2026',title:'Gizlilik metnine iletişim adresi',items:[['✉️','İletişim e-postası eklendi','KVKK metninde iletişim için e-posta adresi yer alıyor.',0]]},{v:'1.26.1',date:'Kasım 2026',title:'KVKK gizlilik metni',items:[['📄','Gizlilik politikası ve KVKK aydınlatma metni','Ayarlar > Gizlilik ve veriler içinde tam metin.',0]]},{v:'1.26',date:'Kasım 2026',title:'Gizlilik ve hız',items:[['🛡️','Gizlilik ve veriler','Ayarlar’da yeni bölüm: verilerinin nerede durduğu, internete ne gittiği, şifre ve yedeklerle ilgili her şey sade dille yazıldı.',1],['⚡','Daha hızlı','Ay değiştirmek ve kayıt eklemek, çok kayıt olunca bile daha seri.',1],['💾','Dolu telefonda daha güvenli','Depolama dolarsa uygulama eski yedekleri küçültüp asıl kaydı korur, olmazsa seni uyarır.',1]]},{v:'1.25.1',date:'Kasım 2026',title:'Yenilikler listesi sadeleşti',items:[['🧹','Küçük düzeltmeler listeden kalktı','Yenilikler artık sadece önemli sürümleri gösteriyor.',0]]},{v:'1.25',date:'Kasım 2026',title:'Gelecek aylar',items:[['🗓️','Ödemeler > Gelecek','Önümüzdeki 6 ayın her biri için çıkacak ödemeleri tek ekranda gör: düzenli giderler, taksit/kredi/abonelikler ve fatura tahminleri, ay toplamıyla birlikte.',1]]},{v:'1.24.1',date:'Kasım 2026',title:'Gelecek aylarda kayıp ödeme düzeldi',items:[['🔧','“Her ay” ödemen gelecek aylarda görünüyor','Kredi kartı gibi adı kategoriyle aynı olan düzenli ödemeler, benzer isimli bir taksit varsa gelecek ay listesinden ve tahminden gizleniyordu. Artık hepsi görünüyor.',1]]},{v:'1.24',date:'Kasım 2026',title:'Yeni alt menü',items:[['➕','Artı düğmesi ortada ve yukarıda','Üç sekme eşit bölünüyor, artı ortada üstte duruyor, her yerden kolay ulaşılıyor.',1],['⚙️','Ayarlar yan menüde','Alt bardan kalktı, soldaki menüden (☰) açılıyor.',1],['🔐','Birikimlerim simgesi kasa oldu','Yan menüdeki garip madeni para yerine kasa çizimi geldi.',1]]},{v:'1.23.2',date:'Kasım 2026',title:'Kendi kalemin artık tam işlem',items:[['🔢','Şifre tuşları anında basılıyor','Tuşlara basınca küçülüp geri yaylanıyor, takılma yok.',1],['⏳','3 yanlışta 30 saniye bekleme','Geri sayım kendi kendine akar, süre dolunca hak sıfırlanır.',1],['✨','Açılış ve şifre ekranı animasyonlu','Açılış ekranı biraz daha uzun kalır, sonra şifre ekranı yumuşakça gelir.',1],['💵','Birikimde doğru para birimi','Dolar için $, Euro için €, Sterlin için £, altın için gr/adet yazar.',1],['✂️','Kendi kalemini oluştur = tam form','Gelir/gider, taksit, tek seferlik, her ay, ödeme şekli… hepsi var. Kaydedince işlem ana ekrana düşer, istersen kalem “Kendi kalemlerim”e de eklenir.',1]]},{v:'1.23.1',date:'Kasım 2026',title:'Kurlar Merkez Bankası’ndan',items:[
   ['🏛️','TCMB kuru öncelikli','Dolar, euro ve sterlin kuru önce Merkez Bankası’nın günlük kurundan alınıyor. Alınamazsa başka kaynak denenir. Merkez Bankası kuru iş günlerinde günde bir kez açıklanır, hafta sonu son açıklanan kur görünür.',1]]},
 {v:'1.23',date:'Kasım 2026',title:'Birikim, yan menü ve kendi kalemlerin',items:[
   ['☰','Yan menü','Sol üstteki düğmeye dokununca soldan bir menü açılıyor: Birikimlerim, Tatil planı, 12 aylık tahmin ve Ayarlar. Tatil kartı cüzdan kartlarından çıktı, menüye taşındı.',1],
@@ -2661,14 +2661,18 @@ function renderFut(){
   if(!futCur||ks.indexOf(futCur)<0)futCur=ks[0];
   $('futCh').innerHTML=ks.map(function(k){return '<button type="button" data-fk="'+k+'" class="'+(k===futCur?'on':'')+'">'+esc(MONTHS[parseInt(k.slice(5,7),10)-1])+'</button>'}).join('');
   var k=futCur,rows=projRows(k),pl=planEntries(kDate(k)),rec=[],bil=[],vr=0,inc=0,tot=0,h='';
-  rows.forEach(function(e){if(e.type==='in'){inc+=e.amt;return}if(e.id==='x:v'){vr=e.amt;return}if(e.bill)bil.push(e);else if(e.rec)rec.push(e)});
+  var billCats={};S.bills.forEach(function(b){if(billLatest(b,'9999-99')>0)billCats[b.cat]=1});
+  rows.forEach(function(e){if(e.type==='in'){inc+=e.amt;return}if(e.id==='x:v'){vr=e.amt;return}if(e.bill)return;if(e.rec){if(!e.note&&billCats[e.cat])return;rec.push(e)}});
+  S.bills.forEach(function(b){if(billEntry(b,k))return;var a=billLatest(b,'9999-99');if(!(a>0))return;var bn=nrm(b.name);
+    if(rec.some(function(x){var rn=nrm(x.note||'');return rn&&(rn===bn||rn.indexOf(bn)>-1||bn.indexOf(rn)>-1)}))return;
+    bil.push({id:'x:b:'+b.id,type:'out',cat:b.cat,amt:a,date:k+'-15',note:b.name})});
   S.entries.forEach(function(e){if(e.type==='in'&&e.date.slice(0,7)===k)inc+=e.amt});
   function dd(e){return parseInt(e.date.slice(8,10),10)+' '+MONTHS[parseInt(k.slice(5,7),10)-1]}
   function row(e,sub,tag){var c=catInfo('out',e.cat);tot+=e.amt;return '<div class="frw"><div class="ico" style="background:'+(c.col||'#7c5cff')+'33">'+c.ico+'</div><div class="m"><b>'+esc(e.note||e.cat)+(tag?'<span class="ftg">'+tag+'</span>':'')+'</b><small>'+esc(sub)+'</small></div><span class="a">−'+esc(fmt(e.amt,true))+'</span></div>'}
   var g1='',g2='',g3='';
   rec.sort(function(a,b){return a.date<b.date?-1:1}).forEach(function(e){g1+=row(e,dd(e),'her ay')});
   pl.sort(function(a,b){return a.date<b.date?-1:1}).forEach(function(e){var p=S.plans.filter(function(x){return x.id===e.planId})[0],sub=dd(e);if(p&&p.end){sub+=' · '+(ym(k)-ym(p.start)+1)+'/'+(ym(p.end)-ym(p.start)+1)+'. taksit'}else if(p&&p.sub)sub+=' · abonelik';g2+=row(e,sub)});
-  bil.sort(function(a,b){return a.date<b.date?-1:1}).forEach(function(e){g3+=row(e,'son faturana göre')});
+  bil.sort(function(a,b){return a.date<b.date?-1:1}).forEach(function(e){g3+=row(e,'son ödemene göre tahmin')});
   h+='<div class="fsum"><div><small>'+esc(mlab(k))+'\'da çıkacak</small><span class="n">'+esc(fmt(tot))+'</span></div><div style="text-align:right"><small>Gelir tahmini</small><b class="num">'+esc(fmt(inc))+'</b></div></div>';
   if(g1)h+='<div class="fgh">🔁 DÜZENLİ GİDERLER</div>'+g1;
   if(g2)h+='<div class="fgh">🏦 TAKSİT, KREDİ VE ABONELİKLER</div>'+g2;
@@ -3296,16 +3300,27 @@ function renderCards(){
   });
   $('cardList').innerHTML=h||'<div class="empty" style="padding:12px 4px"><em>💳</em>Bekleyen kart harcaması yok.</div>';
 }
+$('uplist').addEventListener('click',function(ev){if(!ev.target.closest('[data-upc]'))return;goPay('k');setTimeout(function(){var e=$('cardsCard');if(e)window.scrollTo({top:Math.max(0,e.getBoundingClientRect().top+window.scrollY-150),behavior:'smooth'})},250)});
 $('cardList').onclick=function(ev){
   var pb=ev.target.closest('[data-pay]');
   if(pb){var gk=pb.getAttribute('data-pay'),cid=gk.split('|')[0],k=gk.split('|')[1];
-    if(cardPayArm!==gk){cardPayArm=gk;renderCards();setTimeout(function(){if(cardPayArm===gk){cardPayArm=null;renderCards()}},3500);return}
+    var due0=stmtDate(k,cid),early=due0>today();
+    if(!early&&cardPayArm!==gk){cardPayArm=gk;renderCards();setTimeout(function(){if(cardPayArm===gk){cardPayArm=null;renderCards()}},3500);return}
     cardPayArm=null;var arr=S.cards.filter(function(c){return !c.paid&&stmtKey(c)===k&&(cdById(c.cardId)?c.cardId:'')===cid}),sum=0;arr.forEach(function(c){sum+=c.amt});
     if(!arr.length)return;sum=r2(sum);var df=cdById(cid);
-    var pid=uid(),pdt=stmtDate(k,cid);
-    S.entries.push({id:pid,type:'out',cat:'Kredi Kartı',amt:sum,date:pdt,note:monthName(k)+' ekstresi'+(df?' · '+df.name:''),cardpay:true});
-    arr.forEach(function(c){c.paid=true;c.payId=pid});
-    S.inited[pdt.slice(0,7)]=true;save();render();toast('Ekstre ödendi ✓ '+fmt(sum,true)+(pdt.slice(0,7)===nowK()?' bakiyenden düştü':' · '+monthName(pdt.slice(0,7))+' bakiyesinden düşer'));return}
+    function doPay(pdt){
+      var pid=uid();
+      S.entries.push({id:pid,type:'out',cat:'Kredi Kartı',amt:sum,date:pdt,note:monthName(k)+' ekstresi'+(df?' · '+df.name:''),cardpay:true});
+      arr.forEach(function(c){c.paid=true;c.payId=pid});
+      S.inited[pdt.slice(0,7)]=true;save();render();toast('Ekstre ödendi ✓ '+fmt(sum,true)+(pdt.slice(0,7)===nowK()?' bakiyenden düştü':' · '+monthName(pdt.slice(0,7))+' bakiyesinden düşer'));
+    }
+    if(early){
+      askBox('Son ödeme gününden önce mi ödedin?','<b>'+esc((df&&df.name)||'Kart')+'</b> ekstresinin son ödeme günü <b>'+esc(due0.slice(8,10)+'.'+due0.slice(5,7))+'</b>. <b>'+esc(fmt(sum,true))+'</b> tutarını şimdi ödediysen bakiyenden hemen düşer.',[
+        {t:'Evet, bugün ödedim',f:function(){doPay(today())}},
+        {t:'Hayır, son ödeme gününde düşsün',c:'sec',f:function(){doPay(due0)}},
+        {t:'Vazgeç',c:'sec'}]);
+      return}
+    doPay(due0);return}
   var b=ev.target.closest('[data-cid]');if(!b)return;var id=b.getAttribute('data-cid');
   if(cardArm!==id){cardArm=id;renderCards();setTimeout(function(){if(cardArm===id){cardArm=null;renderCards()}},2500);return}
   cardArm=null;markUndo();S.cards=S.cards.filter(function(c){return c.id!==id});save();render();toast('Silindi',true);
