@@ -591,23 +591,26 @@ html.big body{zoom:1.12}
 .mdlink{display:block;width:100%;text-align:left;background:none;border:0;color:var(--mut);font-size:12.5px;padding:10px 0 0;text-decoration:underline}
 /* v1.13 uygulama şifresi */
 #cfBg{z-index:9100}
-#lk{position:fixed;inset:0;z-index:9000;background:radial-gradient(500px 360px at 80% 0%,#3b2f8f55,transparent 70%),#0b0e22;display:none;align-items:center;justify-content:center;color:#fff;overflow:auto}
+#lk{position:fixed;inset:0;z-index:9000;background:#0b0e22;display:none;color:#fff;overflow:hidden}
 #lk.show{display:flex}
-.lkin{width:100%;max-width:340px;padding:24px 20px;text-align:center}
-.lkic{font-size:40px;margin-bottom:6px}
-.lkin h2{font-size:21px;margin:0 0 4px}
-.lkS{min-height:18px;font-size:13px;color:#9aa0cf;margin-bottom:14px}
-.lkd{display:flex;justify-content:center;gap:14px;margin:6px 0 22px;height:16px}
-.lkd i{width:14px;height:14px;border-radius:50%;border:2px solid #7c5cff;box-sizing:border-box}
-.lkd i.f{background:#7c5cff}
+#lk::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:#7c5cff;opacity:.16;right:-170px;top:-150px}
+#lk::after{content:"";position:absolute;width:320px;height:320px;border-radius:50%;background:#27d3c3;opacity:.08;left:-140px;bottom:-80px}
+.lkin{position:relative;z-index:1;width:100%;max-width:380px;margin:0 auto;height:100%;display:flex;flex-direction:column;align-items:center;padding:max(9vh,44px) 20px max(4vh,24px);text-align:center;box-sizing:border-box}
+.lkic{width:64px;height:64px;border-radius:20px;background:#7c5cff;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:600;font-family:var(--num);margin-bottom:16px;box-shadow:0 10px 30px #7c5cff55}
+.lkin h2{font-size:24px;font-weight:700;margin:0 0 6px}
+.lkS{min-height:20px;font-size:14px;color:#9aa0cf;margin-bottom:0;padding:0 10px}
+.lkd{display:flex;justify-content:center;gap:16px;margin:4vh 0;height:16px}
+.lkd i{width:15px;height:15px;border-radius:50%;background:#ffffff22;box-sizing:border-box;transition:background .15s,transform .15s}
+.lkd i.f{background:#7c5cff;transform:scale(1.15)}
 .lkd.shk{animation:lkshk .4s}
 @keyframes lkshk{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-7px)}80%{transform:translateX(7px)}}
-.lkp{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:280px;margin:0 auto}
-.lkp button{height:62px;border-radius:50%;background:#ffffff12;border:1px solid #ffffff1a;color:#fff;font-size:24px;font-weight:600;font-family:var(--num)}
-.lkp button:active{background:#ffffff2a}
-.lkp button.ok{background:linear-gradient(135deg,var(--acc),#2c7be5);border:0}
+.lkp{display:grid;grid-template-columns:repeat(3,var(--ks));gap:var(--kg) calc(var(--kg) + 6px);--ks:clamp(64px,10.5vh,84px);--kg:clamp(12px,2.2vh,20px);justify-content:center}
+.lkp button{width:var(--ks);height:var(--ks);border-radius:50%;background:#ffffff12;border:0;color:#fff;font-size:clamp(24px,3.6vh,30px);font-weight:600;font-family:var(--num);display:flex;align-items:center;justify-content:center;padding:0;transition:background .12s,transform .12s}
+.lkp button:active{background:#7c5cff88;transform:scale(.94)}
+.lkp button.ok{background:#7c5cff}
 .lkp button.ph{visibility:hidden}
-.lkl{display:block;margin:16px auto 0;background:none;border:0;color:#9aa0cf;font-size:14px;text-decoration:underline}
+.lkl{display:block;margin:auto 0 0;background:none;border:0;color:#9aa0cf;font-size:15px;padding:10px 16px}
+#lkCancel{margin-top:0}
 /* v1.11 banka kartı görünümü + deri dikiş */
 .dnhint{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .dnadd{background:#ffffff1a;color:#fff;border:0;border-radius:10px;padding:6px 12px;font-size:12.5px;font-weight:700;white-space:nowrap;flex:none}
@@ -632,7 +635,7 @@ html.big body{zoom:1.12}
 </style>
 </head>
 <body>
-<div id="lk"><div class="lkin"><div class="lkic">🔒</div><h2 id="lkT">Şifreni gir</h2><div class="lkS" id="lkS"></div><div class="lkd" id="lkD"></div>
+<div id="lk"><div class="lkin"><div class="lkic">₺</div><h2 id="lkT">Şifreni gir</h2><div class="lkS" id="lkS"></div><div class="lkd" id="lkD"></div>
 <div class="lkp" id="lkPad"></div><button type="button" class="lkl" id="lkForgot">Şifremi unuttum</button><button type="button" class="lkl" id="lkCancel" style="display:none">Vazgeç</button></div></div>
 <script>try{if(localStorage.getItem('butcem_pin'))document.getElementById('lk').classList.add('show')}catch(e){}</script>
 <div id="spl" aria-hidden="true">
@@ -2121,10 +2124,12 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.13.1';
+var APP_VER='1.13.2';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
-var RELEASES=[{v:'1.13.1',date:'Kasım 2026',title:'Şifre için kurtarma kodu',items:[
+var RELEASES=[{v:'1.13.2',date:'Kasım 2026',title:'Yeni şifre ekranı',items:[
+  ['✨','Daha modern şifre ekranı','Tuşlar artık tam yuvarlak ve büyük, ekran boydan boya kullanılıyor. Uygulamanın mor renkleri ve ₺ simgesiyle uyumlu.',1]]},
+{v:'1.13.1',date:'Kasım 2026',title:'Şifre için kurtarma kodu',items:[
   ['🔑','Kurtarma kodu','Şifre koyarken sana bir kurtarma kodu veriliyor. “Notlar’a kaydet” ile Notlar’a kaydedebilirsin.',1],
   ['🛟','Şifreni unutursan','Açılışta “Şifremi unuttum” > “Kurtarma kodum var” diyip kodu girersen verilerin silinmeden yeni şifre koyarsın.',1],
   ['🔄','Yeni kod','Ayarlar’dan şifreni doğrulayıp istediğin zaman yeni bir kurtarma kodu oluşturabilirsin. Eskisi geçersiz olur.',1]]},
@@ -3491,7 +3496,7 @@ function lkDraw(){
   var T={unlock:'Şifreni gir',verify:'Önce mevcut şifreni gir',new1:'Yeni şifre belirle',new2:'Şifreyi tekrar gir'};
   $('lkT').textContent=T[lkMode];
   var fl=lkFail(),wait=fl.u&&fl.u>Date.now()?Math.ceil((fl.u-Date.now())/1000):0;
-  $('lkS').textContent=wait?('Çok fazla yanlış deneme. '+wait+' sn sonra tekrar dene.'):(set?(lkMode==='new1'?'4 ile 6 rakam arası, sonra ✓ tuşuna bas':'Aynı şifreyi bir kez daha yaz'):'');
+  $('lkS').textContent=wait?('Çok fazla yanlış deneme. '+wait+' sn sonra tekrar dene.'):(set?(lkMode==='new1'?'4 ile 6 rakam, sonra ✓ tuşuna bas':'Aynı şifreyi bir kez daha yaz'):(lkMode==='verify'?'Devam etmek için mevcut şifreni gir':'Bütçen seni bekliyor'));
   if(set){for(i=0;i<Math.max(4,lkBuf.length);i++)h+='<i class="'+(i<lkBuf.length?'f':'')+'"></i>'}
   else for(i=0;i<n;i++)h+='<i class="'+(i<lkBuf.length?'f':'')+'"></i>';
   $('lkD').innerHTML=h;
