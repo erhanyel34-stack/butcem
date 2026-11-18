@@ -55,7 +55,7 @@ html{background:#0b0e22}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{background:var(--bg);overflow-x:hidden;max-width:100%}
 body{margin:0;color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.35;
-  min-height:100vh;padding:calc(env(safe-area-inset-top) + 14px) 16px calc(env(safe-area-inset-bottom) + 112px);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  min-height:100vh;padding:calc(env(safe-area-inset-top) + 14px) 16px calc(env(safe-area-inset-bottom) + 112px);-webkit-font-smoothing:antialiased;overflow-x:hidden;overflow-x:clip}
 .bgfx{position:fixed;left:0;top:0;right:0;bottom:0;overflow:hidden;z-index:-1;pointer-events:none}
 .bgfx i{position:absolute;border-radius:50%;filter:blur(70px)}
 .bgfx i:nth-child(1){width:420px;height:420px;left:-140px;top:-120px;background:#4b34d8;opacity:.55}
@@ -616,6 +616,10 @@ html.big body{zoom:1.12}
 #pOldBox{background:#ffffff0a;border:1.5px solid #7c5cff55;border-radius:16px;padding:12px;margin:2px 0 10px}
 #pOldBox .chk{margin:0 0 8px}
 /* v1.15 genel arama */
+.gsfind{position:sticky;top:calc(env(safe-area-inset-top) + 8px);z-index:25;display:flex;align-items:center;gap:10px;width:100%;height:48px;margin:0 0 14px;padding:0 14px;text-align:left;background:#1a1d44e6;border:1.5px solid #7c5cff66;border-radius:16px;color:#9aa0cf;font-size:15px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 6px 18px #0006}
+.gsfind:active{border-color:#7c5cff}
+.gsbi{font-size:18px}.gsbt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
 .toast{z-index:9200}
 .topr{display:flex;align-items:center;gap:8px}
 .gsb{width:42px;height:42px;border-radius:15px;background:#ffffff0d;border:1px solid var(--line);font-size:18px;display:flex;align-items:center;justify-content:center;padding:0;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
@@ -697,8 +701,9 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
 <div class="wrap">
   <div class="top">
     <div class="brand"><span class="logo">₺</span>Bütçem</div>
-    <div class="topr"><button type="button" id="gsBtn" class="gsb" aria-label="Ara">🔍</button><div class="month"><button id="prev" aria-label="Önceki ay">‹</button><span id="mlabel"></span><button id="next" aria-label="Sonraki ay">›</button></div></div>
+    <div class="topr"><div class="month"><button id="prev" aria-label="Önceki ay">‹</button><span id="mlabel"></span><button id="next" aria-label="Sonraki ay">›</button></div></div>
   </div>
+  <button type="button" id="gsBar" class="gsfind" aria-label="Ara"><span class="gsbi">🔍</span><span class="gsbt">Ara: kredi, yemek, telefon faturası…</span></button>
   <div class="banner" id="banner"><b>📝 Bugünkü harcamalarını not ettin mi?</b><button id="bAdd">Ekle</button></div>
 
   <div class="banner" id="bkBanner"><b id="bkTx">💾 Verilerini yedeklemeyi unutma</b><button id="bkGo">Kaydet</button><button id="bkLater">Sonra</button></div>
@@ -2189,10 +2194,12 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.15';
+var APP_VER='1.15.1';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
-var RELEASES=[{v:'1.15',date:'Kasım 2026',title:'Her şeyi bulan arama',items:[
+var RELEASES=[{v:'1.15.1',date:'Kasım 2026',title:'Arama çubuğu hep elinin altında',items:[
+  ['🔍','Arama çubuğu üstte','Arama artık küçük bir buton değil, başlığın altında tam genişlikte bir arama çubuğu. Her sekmede görünür, sayfayı kaydırsan da yukarıda kalır. Dokunup yazmaya başla.',1]]},
+{v:'1.15',date:'Kasım 2026',title:'Her şeyi bulan arama',items:[
   ['🔍','Arama butonu','Üstteki büyüteçle krediler, taksitler, faturalar, abonelikler, tatiller, kartlar, ek gelirler, işlemler ve Ayarlar bölümleri tek yerden aranır.',1],
   ['⚡','Aramadan hızlı ekleme','“yemek” yazınca “Yemek gideri ekle” çıkar: tutarı yaz, nakit ya da kart seç, bakiyenden hemen düşsün. “kredi”, “tatil”, “maaş” yazınca da ilgili ekleme çıkar.',1],
   ['📋','Kalan ve ödenmiş taksitler','“kredi” yazınca kalan ve ödenmiş taksitleri seçip toplam tutarlarıyla görebilirsin.',1]]},
@@ -3212,7 +3219,7 @@ function gsWords(q){var ws=trn(q).split(/\s+/).filter(Boolean),core=ws.filter(fu
 function gsHit(hay,words){hay=trn(hay);return words.every(function(w){return hay.indexOf(w)>-1})}
 function gsRecent(){try{return JSON.parse(lsGet('butcem_gsr')||'[]')}catch(e){return[]}}
 function gsRemember(){var q=$('gsq').value.trim();if(q.length<2)return;var a=gsRecent().filter(function(x){return x!==q});a.unshift(q);lsSet('butcem_gsr',JSON.stringify(a.slice(0,5)))}
-function gsOpen(){$('gs').classList.add('show');gsAct=null;gsDone=null;gsMode='all';$('gsq').value='';gsRender();setTimeout(function(){$('gsq').focus()},120)}
+function gsOpen(){$('gs').classList.add('show');gsAct=null;gsDone=null;gsMode='all';$('gsq').value='';gsRender();$('gsq').focus();setTimeout(function(){$('gsq').focus()},150)}
 function gsClose(){$('gs').classList.remove('show');$('gsq').blur()}
 function gsGoTab(v,target){document.querySelector('.nav .t[data-v="'+v+'"]').click();if(target)setTimeout(function(){var e=$(target);if(e&&e.scrollIntoView)e.scrollIntoView({block:'start',behavior:'smooth'})},350)}
 function gsRow(cls,ico,icoBg,title,sub,amt,attr,extra){return '<button type="button" class="gsr '+cls+'" '+attr+'><span class="ico" style="background:'+icoBg+'">'+ico+'</span><span class="m"><b>'+esc(title)+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+(extra||'')+'</span>'+(amt?'<span class="a">'+esc(amt)+'</span>':'<span class="go">›</span>')+'</button>'}
@@ -3304,7 +3311,7 @@ function gsSave(){
   save();render();gsRemember();gsDone={t:'✓ '+msg};gsRender();
   try{var lm=(!isIn)&&limMsg(cat,date);if(lm)toast(lm)}catch(e){}
 }
-$('gsBtn').onclick=gsOpen;$('gsc').onclick=gsClose;
+$('gsBar').onclick=gsOpen;$('gsc').onclick=gsClose;
 $('gsx').onclick=function(){$('gsq').value='';gsAct=null;gsRender();$('gsq').focus()};
 $('gsq').oninput=function(){gsAct=null;gsMode='all';gsRender()};
 document.addEventListener('keydown',function(ev){if(ev.key==='Escape'&&$('gs').classList.contains('show'))gsClose()});
