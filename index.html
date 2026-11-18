@@ -1187,7 +1187,8 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,4000-(Date.now()-t0))
     </div>
     <span class="lbl">Başlangıç ayı</span>
     <input class="fld" id="uStart" type="month">
-    <div class="note" style="margin:0 0 12px">Ödeme günü gelince tutar bakiyenden her ay otomatik düşer.</div>
+    <div id="uPayWrap" style="display:none"><span class="lbl">Nasıl ödenecek?</span><select class="fld" id="uPay"></select></div>
+    <div class="note" style="margin:0 0 12px" id="uPayNote">Ödeme günü gelince tutar bakiyenden her ay otomatik düşer.</div>
     <button class="btn" id="uSave">Kaydet</button>
     <button class="btn sec sm" id="uEndBtn" style="display:none">Aboneliği bitir (bu aydan sonra düşmesin)</button>
     <button class="btn del" id="uDel" style="display:none">Sil</button>
@@ -1442,10 +1443,12 @@ function recOut(k){var t=0;sE().forEach(function(e){if(e.type==='out'&&e.rec&&e.
 function varSpend(k){var t=0;sE().forEach(function(e){if(e.type==='out'&&!e.rec&&!e.bill&&!e.adj&&!e.trip&&!e.cardpay&&e.date.slice(0,7)===k)t+=e.amt});return t}
 function anyOut(k){var t=0;sE().forEach(function(e){if(e.type==='out'&&!e.bill&&!e.adj&&!e.trip&&!e.cardpay&&e.date.slice(0,7)===k)t+=e.amt});return t}
 
+function planOnCard(p,k){return !!(p.cardFrom&&k>=p.cardFrom&&(!p.cardTo||k<p.cardTo)&&cdById(p.cardId||p.cardLast))}
 function planEntries(d){
   var k=mk(d),t=today(),res=[];
   S.plans.forEach(function(p){
     if(p.id===EXP)return;
+    if(p.cardFrom&&k<=nowK()&&planOnCard(p,k))return;
     if(k<p.start||(p.end&&k>p.end)||(p.from&&k<p.from))return;
     var date=payDate(p,k);
     res.push({id:'p:'+p.id+':'+k,type:'out',cat:p.cat,amt:p.amt,date:date,note:p.name,plan:true,planId:p.id,pending:date>t});
@@ -1482,10 +1485,13 @@ function carry(){
   }
   return{inc:inc,fix:fix};
 }
-function billEntry(b,k){var r=null;sE().forEach(function(e){if(e.bill===b.id&&e.type==='out'&&e.date.slice(0,7)===k&&!r)r=e});return r}
-function billLatest(b,beforeK){var best=null;sE().forEach(function(e){if(e.bill===b.id&&e.type==='out'&&e.date.slice(0,7)<beforeK&&(!best||e.date>best.date))best=e});return best?best.amt:0}
+function billEntry(b,k){var r=null;sE().forEach(function(e){if(e.bill===b.id&&e.type==='out'&&e.date.slice(0,7)===k&&!r)r=e});
+  if(!r)S.cards.forEach(function(c){if(!r&&c.bill===b.id&&c.date.slice(0,7)===k)r={id:'c:'+c.id,type:'out',cat:b.cat,amt:c.amt,date:c.date,note:b.name,bill:b.id,viaCard:true,cardRec:c}});
+  return r}
+function billLatest(b,beforeK){var best=null;sE().forEach(function(e){if(e.bill===b.id&&e.type==='out'&&e.date.slice(0,7)<beforeK&&(!best||e.date>best.date))best=e});
+  S.cards.forEach(function(c){if(c.bill===b.id&&c.date.slice(0,7)<beforeK&&(!best||c.date>best.date))best=c});return best?best.amt:0}
 // Fatura tahmini: ödenmişse gerçek tutar, ödenmemişse son bilinen tutar
-function billEst(k){var t=0,nk=nowK();S.bills.forEach(function(b){var en=billEntry(b,k);if(en)t+=en.amt;else if(k>=nk)t+=billLatest(b,k>nk?'9999-99':k)});return t}
+function billEst(k){var t=0,nk=nowK();S.bills.forEach(function(b){var en=billEntry(b,k);if(en){if(!en.viaCard)t+=en.amt}else if(k>=nk)t+=billLatest(b,k>nk?'9999-99':k)});return t}
 function tripOut(k){var t=0;sE().forEach(function(e){if(e.type==='out'&&(e.trip||e.cardpay)&&!e.rec&&e.date.slice(0,7)===k)t+=e.amt});return t}
 function cardDebt(){var t=0;S.cards.forEach(function(c){if(!c.paid)t+=c.amt});return Math.round(t*100)/100}
 
@@ -1730,7 +1736,37 @@ function countTo(el,to){
   (function step(t){var p=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-p,3);el.textContent=fmt(from+(to-from)*e,true);if(p<1)el._r=requestAnimationFrame(step)})(t0);
 }
 
+function cardCommit(cid,skipId){
+  var nk=nowK(),t=today(),sum=0;
+  S.plans.forEach(function(p){
+    if(!p.sub||!p.cardFrom||p.cardTo||p.cardId!==cid||p.id===skipId)return;
+    if(p.end&&p.end<nk)return;if(p.start>nk)return;if(p.cDone&&p.cDone[nk])return;
+    if(payDate(p,nk)>t)sum+=p.amt});
+  return r2(sum);
+}
+function cardNeedMsg(cid,amt,skipId){
+  var c=cdById(cid);if(!c)return null;
+  var rem=r2(c.limit-cdUsed(cid)),need=r2(cardCommit(cid,skipId)+(amt||0));
+  if(need<=Math.max(rem,0)+0.004)return null;
+  return {name:c.name,rem:Math.max(rem,0),need:need};
+}
+function cardPlanSync(){
+  var made=[],over=[],t=today(),nk=nowK();
+  S.plans.forEach(function(p){
+    if(!p.cardFrom)return;var cid=p.cardId||p.cardLast;if(!cdById(cid))return;
+    if(!p.cDone)p.cDone={};
+    for(var i=ym(p.cardFrom>p.start?p.cardFrom:p.start);i<=ym(nk);i++){
+      var k=fromYm(i);if(p.cardTo&&k>=p.cardTo)break;if(p.end&&k>p.end)break;if(p.cDone[k])continue;
+      var d=payDate(p,k);if(d>t)continue;
+      p.cDone[k]=1;var cd1=cdById(cid),av1=cd1?r2(cd1.limit-cdUsed(cid)):0,rs=addCardSpend({date:d,amt:p.amt,cat:p.cat||'Abonelik',tcat:'',note:p.name,cardId:cid,subPlan:p.id,subKey:k},'card');
+      made.push(p.name+' ('+fmt(p.amt,true)+')');if(cd1&&av1<p.amt)over.push(cd1.name);
+    }
+  });
+  if(made.length){save();setTimeout(function(){try{toast('💳 Karttan ödendi: '+made.join(', '))}catch(e){}},900)}
+  if(over.length)setTimeout(function(){try{askBox('Kart limiti aşıldı','<b>'+esc(over.filter(function(x,i){return over.indexOf(x)===i}).join(', '))+'</b> kartının limiti otomatik ödemeler için yetmedi. Ödemeler karta yazıldı, limit aşılmış görünüyor. Kartın limiti arttıysa Ödemeler > Kredi ve kartlar’dan güncelle, ya da aboneliği başka karta al.',[{t:'Tamam'}])}catch(e){}},2200);
+}
 function render(){
+  try{cardPlanSync()}catch(e){}
   try{mcRoll();syncCustomCats()}catch(e){}
   var now=new Date();ensureMonth(new Date(now.getFullYear(),now.getMonth(),1));ensureMonth(cur);
   var isFutM=mk(cur)>nowK(),es=monthEntries(),inc=0,out=0,pend=0,byCat={},subBy={};
@@ -1943,8 +1979,14 @@ function saveSheet(){
     if(mm.bal<amt){askBox('Yemek kartında bakiye yetmiyor','<b>'+esc(mm.name)+'</b> bakiyesi '+esc(fmt(Math.max(mm.bal,0),true))+', harcama '+esc(fmt(amt,true))+'. Yine de eklersen kart bakiyesi eksiye düşer. Ana bakiyen değişmez.',[{t:'Yine de ekle',f:go},{t:'Vazgeç',c:'sec'}]);return}
     go();return}
   if(sType==='out'&&sPay==='k'&&!editId){
-    cuRegister();var rs=addCardSpend({date:date,amt:Math.round(amt*100)/100,cat:cat,tcat:'',note:$('sNote').value.trim(),cardId:cardPick('sCardSel')});
-    S.inited[date.slice(0,7)]=true;save();closeSheet();render();if(!limitNotice(rs))toast(limMsg(cat,date)||'Kart harcamalarına eklendi ✓ Ekstreyi ödeyince düşer');return}
+    var cardId0=cardPick('sCardSel'),amt0=Math.round(amt*100)/100,note0=$('sNote').value.trim();
+    limitAsk(cardId0,amt0,function(mode){
+    cuRegister();var rs=addCardSpend({date:date,amt:amt0,cat:cat,tcat:'',note:note0,cardId:cardId0},mode);
+    S.inited[date.slice(0,7)]=true;save();closeSheet();render();
+    if(!limitNotice(rs)){var cid2=cardPick('sCardSel'),cw=cardNeedMsg(cid2,0);
+      if(cw)askBox('Kart limiti abonelikleri karşılamayabilir','<b>'+esc(cw.name)+'</b> kartında bu harcamadan sonra kalan limit <b>'+esc(fmt(cw.rem,true))+'</b>. Bu ay bu karttan çekilecek abonelik ödemelerin <b>'+esc(fmt(cw.need,true))+'</b>. Limit yetmezse ödemeler yine karta yazılır ve limit aşılmış görünür. Başka bir kart eklemek ya da aboneliği başka karta almak ister misin?',[{t:'Tamam'}]);
+      else toast(limMsg(cat,date)||'Kart harcamalarına eklendi ✓ Ekstreyi ödeyince düşer')}
+    });return}
   var o={type:sType,cat:cat,amt:Math.round(amt*100)/100,date:date,note:$('sNote').value.trim(),rec:$('sRec').checked},wasEdit=!!editId;
   if(!editId&&o.type==='out'&&o.rec){
     var cx={t:'Vazgeç',c:'sec'};
@@ -2079,7 +2121,7 @@ function renderBills(){
   S.bills.forEach(function(b){
     var en=billEntry(b,k),ci=catInfo('out',b.cat),last=billLatest(b,k),open=(billOpen===b.id);
     if(en){paid++;sum+=en.amt;paidB.push(b)}else{unpaid.push(b.name);unpaidB.push(b)}
-    var st=en?('✓ Ödendi · '+en.date.slice(8,10)+'.'+en.date.slice(5,7)):(last>0?'Geçen ay: '+fmt(last,true):'Bekliyor');
+    var st=en?('✓ Ödendi · '+en.date.slice(8,10)+'.'+en.date.slice(5,7)+(en.viaCard?' · 💳 kartla':'')):(last>0?'Geçen ay: '+fmt(last,true):'Bekliyor');
     h+='<div class="bill'+(en?' paid':'')+'"><button class="bill-row" data-act="toggle" data-b="'+esc(b.id)+'"><span class="ck'+(en&&billPop===b.id?' pop':'')+'">'+(en?'✓':'')+'</span>'+
       '<span class="ico" style="background:'+ci.col+'33">'+ci.ico+'</span><span class="m"><b>'+esc(b.name)+'</b><small>'+esc(st)+'</small></span>'+
       '<span class="a'+(en?' neg':'')+'">'+(en?'−'+esc(fmt(en.amt,true)):'›')+'</span></button>';
@@ -2088,8 +2130,9 @@ function renderBills(){
       h+='<div class="bill-ed"><span class="lbl">Bu ayki fatura tutarı</span>'+
         '<input class="fld" id="bAmt" inputmode="decimal" autocomplete="off" placeholder="'+(last>0?esc(toIn(last)):'0 ₺')+'" value="'+esc(amtVal)+'">';
       if(!en&&last>0)h+='<button class="chip" data-act="uselast" data-b="'+id+'" style="margin-bottom:10px">Geçen ayki tutarı kullan: '+esc(fmt(last,true))+'</button>';
+      if(!en&&S.cardDefs.length){var po='<option value="">💵 Nakit (bakiyemden düşsün)</option>';S.cardDefs.forEach(function(c){po+='<option value="'+esc(c.id)+'"'+(b.cardId===c.id?' selected':'')+'>💳 '+esc(c.name)+' · kalan '+esc(fmt(Math.max(0,c.limit-cdUsed(c.id))))+'</option>'});h+='<span class="lbl">Nasıl ödedin?</span><select class="fld" id="bPay">'+po+'</select>'}
       h+='<span class="lbl">Ödeme tarihi</span><input class="fld" id="bDate" type="date" value="'+esc(dateVal)+'">'+
-        '<button class="btn" data-act="save" data-b="'+id+'">'+(en?'Güncelle':'Ödendi, bakiyeden düş')+'</button>';
+        '<button class="btn" data-act="save" data-b="'+id+'">'+(en?'Güncelle':'Ödendi')+'</button>';
       if(en)h+='<button class="btn sec sm" data-act="undo" data-b="'+id+'">Ödemeyi geri al</button>';
       h+='<button class="linkbtn" data-act="remove" data-b="'+id+'">'+(billRemoveArm===b.id?'Silmek için tekrar dokun':'Bu kalemi listeden kaldır')+'</button></div>';
     }
@@ -2132,14 +2175,23 @@ $('billList').onclick=function(ev){
     var amt=parseNum($('bAmt').value);
     if(!(amt>0)){toast('Fatura tutarını yaz');$('bAmt').focus();return}
     amt=Math.round(amt*100)/100;
-    var date=$('bDate').value||(k+'-01'),en=billEntry(b,k);
-    if(en){en.amt=amt;en.date=date;en.cat=b.cat;en.note=b.name}
-    else S.entries.push({id:uid(),type:'out',cat:b.cat,amt:amt,date:date,note:b.name,bill:b.id});
-    S.inited[date.slice(0,7)]=true;
-    var dm=new Date(date+'T00:00:00');if(!isNaN(dm))cur=new Date(dm.getFullYear(),dm.getMonth(),1);
-    billOpen=null;billPop=b.id;save();render();billPop=null;toast('Kaydedildi ✓ Bakiyenden düştü');return;
+    var date=$('bDate').value||(k+'-01'),en=billEntry(b,k),pay=$('bPay')?$('bPay').value:'';
+    function finB(mode,viaCard){
+      if(en&&en.viaCard){en.cardRec.amt=amt;en.cardRec.date=date}
+      else if(en){en.amt=amt;en.date=date;en.cat=b.cat;en.note=b.name}
+      else if(viaCard){addCardSpend({date:date,amt:amt,cat:b.cat,tcat:'',note:b.name,cardId:pay,bill:b.id},mode);b.cardId=pay}
+      else{S.entries.push({id:uid(),type:'out',cat:b.cat,amt:amt,date:date,note:b.name,bill:b.id});if(S.cardDefs.length)b.cardId=''}
+      S.inited[date.slice(0,7)]=true;
+      var dm=new Date(date+'T00:00:00');if(!isNaN(dm))cur=new Date(dm.getFullYear(),dm.getMonth(),1);
+      billOpen=null;billPop=b.id;save();render();billPop=null;
+      toast((en&&en.viaCard)?'Güncellendi ✓':(viaCard?'Karta yazıldı ✓ Nakit bakiyen düşmedi':'Kaydedildi ✓ Bakiyenden düştü'));
+    }
+    if(!en&&pay&&cdById(pay)){limitAsk(pay,amt,function(mode){finB(mode,true)});return}
+    finB('',false);return;
   }
-  if(act==='undo'){var e2=billEntry(b,k);if(e2)S.entries=S.entries.filter(function(x){return x!==e2});billOpen=null;save();render();toast('Ödeme geri alındı');return}
+  if(act==='undo'){var e2=billEntry(b,k);
+    if(e2&&e2.viaCard){if(e2.cardRec.paid){toast('Bu kartın ekstresi ödenmiş, geri alınamaz');return}S.cards=S.cards.filter(function(x){return x!==e2.cardRec})}
+    else if(e2)S.entries=S.entries.filter(function(x){return x!==e2});billOpen=null;save();render();toast('Ödeme geri alındı');return}
   if(act==='remove'){
     if(billRemoveArm!==id){billRemoveArm=id;renderBills();setTimeout(function(){if(billRemoveArm===id){billRemoveArm=null;renderBills()}},2500);return}
     S.bills=S.bills.filter(function(x){return x.id!==id});billOpen=null;billRemoveArm=null;save();render();toast('Listeden kaldırıldı');
@@ -2244,6 +2296,7 @@ function renderSubs(){
     var b=brandOf(p.brand),nx=subNext(p),act=nx!==null;
     if(act)tot+=p.amt;
     var st=act?(nx.slice(8,10)+'.'+nx.slice(5,7)+' tarihinde düşecek'):'Sona erdi';
+    if(act&&p.cardFrom&&p.cardId&&cdById(p.cardId)&&!p.cardTo){st=nx.slice(8,10)+'.'+nx.slice(5,7)+' · 💳 '+cdById(p.cardId).name;if(cardNeedMsg(p.cardId,0))st+=' · ⚠️ limit yetmiyor'}
     h+='<button class="tx" data-sid="'+esc(p.id)+'" style="'+(act?'':'opacity:.5')+'">'+tile(b)+'<span class="m"><b>'+esc(p.name)+'</b><small>'+esc(st)+'</small></span><span class="a neg">−'+esc(fmt(p.amt,true))+'</span></button>';
   });
   $('subList').innerHTML=h||'<div class="empty" style="padding:14px 8px"><em>📺</em>Henüz üyelik yok.<br>Netflix, YouTube, Spotify gibi abonelikleri ekle.</div>';
@@ -2264,8 +2317,22 @@ function openSub(id){
   $('uEndBtn').style.display=(p&&!p.end)?'block':'none';
   if(p){subBrand=p.brand;$('uName').value=p.name;$('uAmt').value=toIn(p.amt);$('uDay').value=p.day;$('uStart').value=p.start}
   else{subBrand='Netflix';$('uName').value='Netflix';$('uAmt').value=toIn(99.99);$('uDay').value=now.getDate();$('uStart').value=mk(now)}
+  subPayFill(p);
   drawBrands();$('ubg').classList.add('show');$('ubg').querySelector('.sheet-body').scrollTop=0;
 }
+function subPayFill(p){
+  var w=$('uPayWrap');if(!S.cardDefs.length){w.style.display='none';$('uPay').innerHTML='';subPayNote();return}
+  var h='<option value="">💵 Nakit (bakiyemden düşsün)</option>';
+  S.cardDefs.forEach(function(c){h+='<option value="'+esc(c.id)+'">💳 '+esc(c.name)+' · kalan '+esc(fmt(Math.max(0,c.limit-cdUsed(c.id))))+'</option>'});
+  $('uPay').innerHTML=h;w.style.display='';
+  var cur=(p&&p.cardFrom&&!p.cardTo&&cdById(p.cardId))?p.cardId:'';$('uPay').value=cur;subPayNote();
+}
+function subPayNote(){
+  var v=$('uPay').value,c=v?cdById(v):null;
+  var wm=c?cardNeedMsg(v,parseNum($('uAmt').value)||0,subEdit):null;
+  $('uPayNote').innerHTML=wm?('⚠️ <b>'+esc(c.name)+'</b> kartının kalan limiti <b>'+esc(fmt(wm.rem,true))+'</b>, bu kartla ödenecek tutar <b>'+esc(fmt(wm.need,true))+'</b>. Limit aşılabilir; başka kart seçebilir ya da limiti güncelleyebilirsin.'):c?'Ödeme günü gelince tutar <b>'+esc(c.name)+'</b> limitinden düşer ve ekstresine yazılır. Nakit bakiyen sen ekstreyi ödediğinde azalır, o yüzden iki kere düşmez.':'Ödeme günü gelince tutar bakiyenden her ay otomatik düşer.';
+}
+$('uPay').onchange=subPayNote;$('uAmt').addEventListener('input',function(){if($('uPay').value)subPayNote()});
 function closeSub(){$('ubg').classList.remove('show');subEdit=null}
 $('uBrands').onclick=function(ev){
   var t=ev.target.closest('[data-br]');if(!t)return;
@@ -2288,9 +2355,29 @@ $('uSave').onclick=function(){
   if(!st){toast('Başlangıç ayını seç');return}
   amt=Math.round(amt*100)/100;
   function fin(nm){
-    if(subEdit){S.plans.forEach(function(x){if(x.id===subEdit){x.name=nm;x.brand=subBrand;x.amt=amt;x.day=day;x.start=st;if(x.end&&x.end<st)x.end=st}})}
-    else S.plans.push({id:uid(),name:nm,cat:'Abonelik',amt:amt,start:st,end:'',day:day,sub:true,brand:subBrand});
-    save();closeSub();render();toast('Kaydedildi ✓ Her ay otomatik düşecek');
+    var pv=$('uPay').value,onCard=!!(pv&&cdById(pv));
+    if(onCard){var wm=cardNeedMsg(pv,amt,subEdit);if(wm){askBox('Kart limiti yetmiyor','<b>'+esc(wm.name)+'</b> kartının kalan limiti <b>'+esc(fmt(wm.rem,true))+'</b>, ama bu karttan ödenecek tutar <b>'+esc(fmt(wm.need,true))+'</b>. Ödeme günü geldiğinde ödeme yine karta yazılır ama limit aşılmış görünür.',[{t:'Başka kart seç / vazgeç',c:'sec'},{t:'Yine de bu kartla kaydet',f:function(){fin2()}}]);return}}
+    fin2();return;
+    function fin2(){
+    function setCard(x,isNew){
+      var was=!!(x.cardFrom&&!x.cardTo&&cdById(x.cardId));
+      if(onCard){
+        if(!was){
+          var nk=nowK(),k=x.start>nk?x.start:nk;
+          if(!isNew&&x.start<=nk&&payDate(x,k)<=today())k=fromYm(ym(k)+1);
+          x.cardFrom=k;delete x.cardTo;
+        }
+        x.cardId=pv;x.cardLast=pv;
+      }else if(was){
+        var nk2=nowK(),k2=nk2;if(x.cDone&&x.cDone[k2])k2=fromYm(ym(k2)+1);
+        else if(payDate(x,k2)<=today()&&x.start<=nk2)k2=fromYm(ym(k2)+1);
+        x.cardTo=k2;x.cardId='';
+      }
+    }
+    if(subEdit){S.plans.forEach(function(x){if(x.id===subEdit){x.name=nm;x.brand=subBrand;x.amt=amt;x.day=day;x.start=st;if(x.end&&x.end<st)x.end=st;setCard(x,false)}})}
+    else{var np={id:uid(),name:nm,cat:'Abonelik',amt:amt,start:st,end:'',day:day,sub:true,brand:subBrand};setCard(np,true);S.plans.push(np)}
+    save();closeSub();render();toast(onCard?'Kaydedildi ✓ Her ay 💳 '+cdById(pv).name+' ile ödenir, nakit bakiyen düşmez':'Kaydedildi ✓ Her ay otomatik düşecek');
+    }
   }
   if(subEdit){fin(name);return}
   var cancel={t:'Vazgeç',c:'sec'};
@@ -2378,10 +2465,10 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.27.1';
+var APP_VER='1.29';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
-var RELEASES=[{v:'1.27.1',date:'Kasım 2026',title:'Gelecek aylarda fatura adları',items:[['🏷️','Faturalar kendi adlarıyla görünüyor','Gelecek sekmesinde “Annem Cep” gibi kaydettiğin isimler aynen görünür.',0]]},{v:'1.27',date:'Kasım 2026',title:'Kart ekstresini istediğin an öde',items:[['💳','Özet’teki “Kart ekstresi”ne dokununca kart bölümü açılır','Yaklaşan ödemelerde kart ekstresine dokun, doğrudan Kredi ve kartlar’daki ekstreye gidersin.',1],['📅','Son ödeme gününden önce ödersen sorar','“Bugün ödedim” dersen tutar bakiyenden hemen düşer, “son ödeme gününde düşsün” dersen o güne kadar bekler.',1]]},{v:'1.26.3',date:'Kasım 2026',title:'Ek gelirler yan menüde',items:[['✨','Ek gelirlerim yan menüye taşındı','Ödemeler üç sekme oldu, ek gelirler soldaki menüden açılıyor.',0]]},{v:'1.26.2',date:'Kasım 2026',title:'Gizlilik metnine iletişim adresi',items:[['✉️','İletişim e-postası eklendi','KVKK metninde iletişim için e-posta adresi yer alıyor.',0]]},{v:'1.26.1',date:'Kasım 2026',title:'KVKK gizlilik metni',items:[['📄','Gizlilik politikası ve KVKK aydınlatma metni','Ayarlar > Gizlilik ve veriler içinde tam metin.',0]]},{v:'1.26',date:'Kasım 2026',title:'Gizlilik ve hız',items:[['🛡️','Gizlilik ve veriler','Ayarlar’da yeni bölüm: verilerinin nerede durduğu, internete ne gittiği, şifre ve yedeklerle ilgili her şey sade dille yazıldı.',1],['⚡','Daha hızlı','Ay değiştirmek ve kayıt eklemek, çok kayıt olunca bile daha seri.',1],['💾','Dolu telefonda daha güvenli','Depolama dolarsa uygulama eski yedekleri küçültüp asıl kaydı korur, olmazsa seni uyarır.',1]]},{v:'1.25.1',date:'Kasım 2026',title:'Yenilikler listesi sadeleşti',items:[['🧹','Küçük düzeltmeler listeden kalktı','Yenilikler artık sadece önemli sürümleri gösteriyor.',0]]},{v:'1.25',date:'Kasım 2026',title:'Gelecek aylar',items:[['🗓️','Ödemeler > Gelecek','Önümüzdeki 6 ayın her biri için çıkacak ödemeleri tek ekranda gör: düzenli giderler, taksit/kredi/abonelikler ve fatura tahminleri, ay toplamıyla birlikte.',1]]},{v:'1.24.1',date:'Kasım 2026',title:'Gelecek aylarda kayıp ödeme düzeldi',items:[['🔧','“Her ay” ödemen gelecek aylarda görünüyor','Kredi kartı gibi adı kategoriyle aynı olan düzenli ödemeler, benzer isimli bir taksit varsa gelecek ay listesinden ve tahminden gizleniyordu. Artık hepsi görünüyor.',1]]},{v:'1.24',date:'Kasım 2026',title:'Yeni alt menü',items:[['➕','Artı düğmesi ortada ve yukarıda','Üç sekme eşit bölünüyor, artı ortada üstte duruyor, her yerden kolay ulaşılıyor.',1],['⚙️','Ayarlar yan menüde','Alt bardan kalktı, soldaki menüden (☰) açılıyor.',1],['🔐','Birikimlerim simgesi kasa oldu','Yan menüdeki garip madeni para yerine kasa çizimi geldi.',1]]},{v:'1.23.2',date:'Kasım 2026',title:'Kendi kalemin artık tam işlem',items:[['🔢','Şifre tuşları anında basılıyor','Tuşlara basınca küçülüp geri yaylanıyor, takılma yok.',1],['⏳','3 yanlışta 30 saniye bekleme','Geri sayım kendi kendine akar, süre dolunca hak sıfırlanır.',1],['✨','Açılış ve şifre ekranı animasyonlu','Açılış ekranı biraz daha uzun kalır, sonra şifre ekranı yumuşakça gelir.',1],['💵','Birikimde doğru para birimi','Dolar için $, Euro için €, Sterlin için £, altın için gr/adet yazar.',1],['✂️','Kendi kalemini oluştur = tam form','Gelir/gider, taksit, tek seferlik, her ay, ödeme şekli… hepsi var. Kaydedince işlem ana ekrana düşer, istersen kalem “Kendi kalemlerim”e de eklenir.',1]]},{v:'1.23.1',date:'Kasım 2026',title:'Kurlar Merkez Bankası’ndan',items:[
+var RELEASES=[{v:'1.29',date:'Kasım 2026',title:'Kartla ödeme ve limit takibi',items:[['💳','Fatura ve abonelikleri karttan öde','Üyelik eklerken ya da fatura öderken “Nasıl ödedin?” seçimi var. Kart seçersen tutar kartın limitinden düşer ve ekstreye yazılır, nakit bakiyen ekstreyi ödediğinde azalır.',1],['⚠️','Limit yetmezse sorar','Karttan bir işlem yaparken kalan limit yetmiyorsa uyarır: karta yaz (limit aşılmış görünür), aşan kısmı ana bakiyenden düşür ya da vazgeç.',1],['🔔','Otomatik ödemeler haber verir','Abonelik karttan ödenince bildirim çıkar. Limit aşılmışsa ayrıca uyarılırsın.',1]]},{v:'1.28.1',date:'Kasım 2026',title:'Kart limiti uyarıları',items:[['⚠️','Limit yetmezse uyarır','Abonelikler için seçtiğin kartın limiti yetmiyorsa kaydederken, kartla harcama yaparken ve ödeme gününde uyarı çıkar.',0]]},{v:'1.28',date:'Kasım 2026',title:'Abonelikler karttan ödenebiliyor',items:[['💳','Aboneliği kredi kartına bağla','Üyelik eklerken ya da düzenlerken “Nasıl ödenecek?” bölümünden kartını seç. Ödeme günü gelince tutar kartın limitinden düşer ve ekstresine yazılır, nakit bakiyen ekstreyi ödediğinde azalır.',1],['🔔','Karttan ödenince haber verir','Abonelik kartından ödendiğinde uygulamayı açınca bildirim çıkar. Ödemeler’de aboneliğin yanında hangi karttan ödendiği yazar.',1]]},{v:'1.27.1',date:'Kasım 2026',title:'Gelecek aylarda fatura adları',items:[['🏷️','Faturalar kendi adlarıyla görünüyor','Gelecek sekmesinde “Annem Cep” gibi kaydettiğin isimler aynen görünür.',0]]},{v:'1.27',date:'Kasım 2026',title:'Kart ekstresini istediğin an öde',items:[['💳','Özet’teki “Kart ekstresi”ne dokununca kart bölümü açılır','Yaklaşan ödemelerde kart ekstresine dokun, doğrudan Kredi ve kartlar’daki ekstreye gidersin.',1],['📅','Son ödeme gününden önce ödersen sorar','“Bugün ödedim” dersen tutar bakiyenden hemen düşer, “son ödeme gününde düşsün” dersen o güne kadar bekler.',1]]},{v:'1.26.3',date:'Kasım 2026',title:'Ek gelirler yan menüde',items:[['✨','Ek gelirlerim yan menüye taşındı','Ödemeler üç sekme oldu, ek gelirler soldaki menüden açılıyor.',0]]},{v:'1.26.2',date:'Kasım 2026',title:'Gizlilik metnine iletişim adresi',items:[['✉️','İletişim e-postası eklendi','KVKK metninde iletişim için e-posta adresi yer alıyor.',0]]},{v:'1.26.1',date:'Kasım 2026',title:'KVKK gizlilik metni',items:[['📄','Gizlilik politikası ve KVKK aydınlatma metni','Ayarlar > Gizlilik ve veriler içinde tam metin.',0]]},{v:'1.26',date:'Kasım 2026',title:'Gizlilik ve hız',items:[['🛡️','Gizlilik ve veriler','Ayarlar’da yeni bölüm: verilerinin nerede durduğu, internete ne gittiği, şifre ve yedeklerle ilgili her şey sade dille yazıldı.',1],['⚡','Daha hızlı','Ay değiştirmek ve kayıt eklemek, çok kayıt olunca bile daha seri.',1],['💾','Dolu telefonda daha güvenli','Depolama dolarsa uygulama eski yedekleri küçültüp asıl kaydı korur, olmazsa seni uyarır.',1]]},{v:'1.25.1',date:'Kasım 2026',title:'Yenilikler listesi sadeleşti',items:[['🧹','Küçük düzeltmeler listeden kalktı','Yenilikler artık sadece önemli sürümleri gösteriyor.',0]]},{v:'1.25',date:'Kasım 2026',title:'Gelecek aylar',items:[['🗓️','Ödemeler > Gelecek','Önümüzdeki 6 ayın her biri için çıkacak ödemeleri tek ekranda gör: düzenli giderler, taksit/kredi/abonelikler ve fatura tahminleri, ay toplamıyla birlikte.',1]]},{v:'1.24.1',date:'Kasım 2026',title:'Gelecek aylarda kayıp ödeme düzeldi',items:[['🔧','“Her ay” ödemen gelecek aylarda görünüyor','Kredi kartı gibi adı kategoriyle aynı olan düzenli ödemeler, benzer isimli bir taksit varsa gelecek ay listesinden ve tahminden gizleniyordu. Artık hepsi görünüyor.',1]]},{v:'1.24',date:'Kasım 2026',title:'Yeni alt menü',items:[['➕','Artı düğmesi ortada ve yukarıda','Üç sekme eşit bölünüyor, artı ortada üstte duruyor, her yerden kolay ulaşılıyor.',1],['⚙️','Ayarlar yan menüde','Alt bardan kalktı, soldaki menüden (☰) açılıyor.',1],['🔐','Birikimlerim simgesi kasa oldu','Yan menüdeki garip madeni para yerine kasa çizimi geldi.',1]]},{v:'1.23.2',date:'Kasım 2026',title:'Kendi kalemin artık tam işlem',items:[['🔢','Şifre tuşları anında basılıyor','Tuşlara basınca küçülüp geri yaylanıyor, takılma yok.',1],['⏳','3 yanlışta 30 saniye bekleme','Geri sayım kendi kendine akar, süre dolunca hak sıfırlanır.',1],['✨','Açılış ve şifre ekranı animasyonlu','Açılış ekranı biraz daha uzun kalır, sonra şifre ekranı yumuşakça gelir.',1],['💵','Birikimde doğru para birimi','Dolar için $, Euro için €, Sterlin için £, altın için gr/adet yazar.',1],['✂️','Kendi kalemini oluştur = tam form','Gelir/gider, taksit, tek seferlik, her ay, ödeme şekli… hepsi var. Kaydedince işlem ana ekrana düşer, istersen kalem “Kendi kalemlerim”e de eklenir.',1]]},{v:'1.23.1',date:'Kasım 2026',title:'Kurlar Merkez Bankası’ndan',items:[
   ['🏛️','TCMB kuru öncelikli','Dolar, euro ve sterlin kuru önce Merkez Bankası’nın günlük kurundan alınıyor. Alınamazsa başka kaynak denenir. Merkez Bankası kuru iş günlerinde günde bir kez açıklanır, hafta sonu son açıklanan kur görünür.',1]]},
 {v:'1.23',date:'Kasım 2026',title:'Birikim, yan menü ve kendi kalemlerin',items:[
   ['☰','Yan menü','Sol üstteki düğmeye dokununca soldan bir menü açılıyor: Birikimlerim, Tatil planı, 12 aylık tahmin ve Ayarlar. Tatil kartı cüzdan kartlarından çıktı, menüye taşındı.',1],
@@ -2671,7 +2758,7 @@ function renderFut(){
   function row(e,sub,tag){var c=catInfo('out',e.cat);tot+=e.amt;return '<div class="frw"><div class="ico" style="background:'+(c.col||'#7c5cff')+'33">'+c.ico+'</div><div class="m"><b>'+esc(e.note||e.cat)+(tag?'<span class="ftg">'+tag+'</span>':'')+'</b><small>'+esc(sub)+'</small></div><span class="a">−'+esc(fmt(e.amt,true))+'</span></div>'}
   var g1='',g2='',g3='';
   rec.sort(function(a,b){return a.date<b.date?-1:1}).forEach(function(e){g1+=row(e,dd(e),'her ay')});
-  pl.sort(function(a,b){return a.date<b.date?-1:1}).forEach(function(e){var p=S.plans.filter(function(x){return x.id===e.planId})[0],sub=dd(e);if(p&&p.end){sub+=' · '+(ym(k)-ym(p.start)+1)+'/'+(ym(p.end)-ym(p.start)+1)+'. taksit'}else if(p&&p.sub)sub+=' · abonelik';g2+=row(e,sub)});
+  pl.sort(function(a,b){return a.date<b.date?-1:1}).forEach(function(e){var p=S.plans.filter(function(x){return x.id===e.planId})[0],sub=dd(e);if(p&&p.end){sub+=' · '+(ym(k)-ym(p.start)+1)+'/'+(ym(p.end)-ym(p.start)+1)+'. taksit'}else if(p&&p.sub)sub+=' · abonelik';if(p&&p.cardFrom&&p.cardId&&cdById(p.cardId)&&!p.cardTo)sub+=' · 💳 '+cdById(p.cardId).name;g2+=row(e,sub)});
   bil.sort(function(a,b){return a.date<b.date?-1:1}).forEach(function(e){g3+=row(e,'son ödemene göre tahmin')});
   h+='<div class="fsum"><div><small>'+esc(mlab(k))+'\'da çıkacak</small><span class="n">'+esc(fmt(tot))+'</span></div><div style="text-align:right"><small>Gelir tahmini</small><b class="num">'+esc(fmt(inc))+'</b></div></div>';
   if(g1)h+='<div class="fgh">🔁 DÜZENLİ GİDERLER</div>'+g1;
@@ -3140,9 +3227,9 @@ function stmtDate(key,cid){
   var d=cdById(cid),y=+key.slice(0,4),m=+key.slice(5,7),mx=new Date(y,m,0).getDate();
   return key+'-'+pad(Math.min((d&&d.due)||1,mx));
 }
-function addCardSpend(rec){
+function addCardSpend(rec,mode){
   var ov=0;
-  if(S.cardDefs.length){var av=cdAvail();if(av<rec.amt)ov=r2(rec.amt-Math.max(av,0))}
+  if(S.cardDefs.length&&mode!=='card'){var cd0=cdById(rec.cardId),av=cd0?r2(cd0.limit-cdUsed(rec.cardId)):cdAvail();if(av<rec.amt)ov=r2(rec.amt-Math.max(av,0))}
   var cp=r2(rec.amt-ov);
   if(cp>0){var r={id:uid(),paid:false},k;for(k in rec)r[k]=rec[k];r.amt=cp;if(rec.share!=null)r.share=r2(rec.share*cp/rec.amt);S.cards.push(r)}
   if(ov>0){
@@ -3156,6 +3243,17 @@ function limitNotice(res){
   if(!(res&&res.over>0))return false;
   askBox('Kart limiti aşıldı',res.card>0?('Toplam kart limitin yetmedi. <b>'+esc(fmt(res.card,true))+'</b> karta yazıldı, kalan <b>'+esc(fmt(res.over,true))+'</b> ana paradan kullanıldı ve bakiyenden düştü.'):('Toplam kart limitin doldu. Harcamanın tamamı (<b>'+esc(fmt(res.over,true))+'</b>) ana paradan kullanıldı ve bakiyenden düştü.'),[{t:'Tamam'}]);
   return true;
+}
+function limitAsk(cid,amt,proceed){
+  var c=cdById(cid);
+  if(!c||!S.cardDefs.length){proceed('card');return}
+  var rem=r2(c.limit-cdUsed(cid));
+  if(amt<=Math.max(rem,0)+0.004){proceed('card');return}
+  var ov=r2(amt-Math.max(rem,0));
+  askBox('Kart limiti yetmiyor','<b>'+esc(c.name)+'</b> kartının kalan limiti <b>'+esc(fmt(Math.max(rem,0),true))+'</b>, bu işlem <b>'+esc(fmt(amt,true))+'</b>. Aşan <b>'+esc(fmt(ov,true))+'</b> için ne yapalım?<br><br><small>İşlem gerçekten karttan yapıldıysa ilk seçenek doğrusudur: kartın borcu doğru görünür. Kartın limiti arttıysa Ödemeler > Kredi ve kartlar’dan güncelleyebilirsin.</small>',[
+    {t:'Karta yaz, limit aşılmış görünsün',f:function(){proceed('card')}},
+    {t:'Aşan kısmı ana bakiyemden düşür',c:'sec',f:function(){proceed('cash')}},
+    {t:'Vazgeç / başka kart seç',c:'sec'}]);
 }
 function cardSelHtml(){var h='';S.cardDefs.forEach(function(c){h+='<option value="'+esc(c.id)+'">💳 '+esc(c.name)+' · kalan '+esc(fmt(Math.max(0,c.limit-cdUsed(c.id))))+'</option>'});return h}
 function fillCardSel(id,show){var el=$(id);if(!el)return;if(!show||S.cardDefs.length<2){el.style.display='none';return}var v=el.value;el.innerHTML=cardSelHtml();if(v&&cdById(v))el.value=v;el.style.display=''}
