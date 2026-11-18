@@ -719,18 +719,22 @@ html.big body{zoom:1.12}
     </div>
     <div class="card">
       <h2>🕘 Otomatik yedekler</h2>
-      <div class="note" style="margin:0 0 8px">Uygulama, veriyi her gün kendiliğinden bu telefonda ayrıca saklar. Yanlışlıkla silme ya da bir hata olursa buradan geri dönebilirsin. (Telefon hafızası ya da tarayıcı verisi silinirse bunlar da gider; o yüzden Notlar'a yedek de al.)</div>
+      <div class="note" style="margin:0 0 8px">Uygulama, veriyi her gün kendiliğinden bu telefonda ayrıca saklar. Yanlışlıkla silme ya da bir hata olursa buradan geri dönebilirsin. (Telefon hafızası ya da tarayıcı verisi silinirse bunlar da gider; o yüzden iCloud Drive'a dosya yedeği de al.)</div>
       <div id="snapList"></div>
     </div>
     <div class="card">
       <h2>💾 Yedekle / Geri yükle</h2>
       <div class="note" id="bkStatus" style="margin:0 0 6px;font-weight:700"></div>
       <div class="note" style="margin:0 0 10px">Veriler bu telefonda, uygulamanın kendi hafızasında saklanır. Tarayıcı verisini silersen kaybolabilir; arada bir yedek al.</div>
-      <button class="btn" id="bShare">📝 Yedeği Notlar'a kaydet</button>
-      <div class="note" style="margin-top:6px">Açılan menüden <b>Notlar</b>'ı seç. Not, tarih ve gün başlığıyla kaydedilir (örn. “Bütçem yedeği — 18 Kasım 2026 Çarşamba”). Uygulama 7 günde bir hatırlatır.</div>
+      <button class="btn" id="bFile">☁️ Yedeği dosya olarak kaydet (iCloud Drive)</button>
+      <div class="note" style="margin-top:6px">Açılan menüden <b>Dosyalara Kaydet</b>'i seç, <b>iCloud Drive</b>'ı işaretle. Dosya telefon bozulsa bile iCloud'unda durur. Uygulama 3 günde bir hatırlatır.</div>
+      <button class="btn sec" id="bShare">📝 Yedeği Notlar'a kaydet</button>
+      <div class="note" style="margin-top:6px">Açılan menüden <b>Notlar</b>'ı seç. Not, tarih ve gün başlığıyla kaydedilir (örn. “Bütçem yedeği — 18 Kasım 2026 Çarşamba”).</div>
       <button class="btn sec" id="bCsv">📤 Excel (CSV) olarak dışa aktar</button>
       <button class="btn sec" id="bBackup">Yedeği kopyala</button>
       <div class="note">Notlar'daki yedek metnini kopyalayıp aşağıya yapıştırarak geri yükleyebilirsin (başlık satırı sorun olmaz):</div>
+      <button class="btn sec" id="bPick">📂 Yedek dosyasından geri yükle</button>
+      <input type="file" id="bPickIn" accept=".json,.txt,application/json,text/plain" style="display:none">
       <textarea class="fld" id="restoreTx" placeholder="Yedek metnini buraya yapıştır"></textarea>
       <button class="btn sec" id="bRestore">Yedekten geri yükle</button>
       <button class="btn del" id="bWipe">Tüm verileri sil</button>
@@ -1691,10 +1695,14 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.2.1';
+var APP_VER='1.3';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+ {v:'1.3',date:'Kasım 2026',title:'Yedeğin iCloud\'da güvende',items:[
+  ['☁️','Yedeği dosya olarak kaydet','Ayarlar\'dan tek dokunuşla yedeği dosya yap, Dosyalar > iCloud Drive\'a koy. Telefon bozulsa da verilerin kaybolmaz.',1],
+  ['📂','Dosyadan geri yükle','Yeni telefonda ya da silinince yedek dosyasını seçip tüm verilerini geri getirirsin.',1],
+  ['⏰','Daha sık hatırlatma','Yedek hatırlatması artık 3 günde bir çıkıyor.',0]]},
  {v:'1.2.1',date:'Kasım 2026',title:'Hata düzeltmeleri',items:[
   ['🛠','Pencereler üst üste binmiyor','Ay sonu devri penceresi açıkken Yenilikler beklemeye alınır, o kapanınca gelir.',0],
   ['🧯','Bozuk yedeğe karşı koruma','Eksik ya da hatalı kayıtlı bir yedek yüklense bile uygulama açılışta takılmaz.',0],
@@ -2457,6 +2465,29 @@ function shareBackup(){
   if(navigator.share){navigator.share({title:title,text:txt}).then(markBackup,function(err){if(err&&err.name==='AbortError')return;fb()})}
   else fb();
 }
+function fileName(){var n=new Date();return 'butcem-yedek-'+n.getFullYear()+'-'+pad(n.getMonth()+1)+'-'+pad(n.getDate())+'.json'}
+function fileBackup(){
+  var json=JSON.stringify(S),name=fileName();
+  function dl(){try{var u=URL.createObjectURL(new Blob([json],{type:'application/json'})),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(u)},500);markBackup();toast('Yedek dosyası indirildi ✓')}catch(e){shareBackup()}}
+  try{var f=new File([json],name,{type:'application/json'});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'Bütçem yedeği'}).then(function(){markBackup();toast('Yedek kaydedildi ✓')},function(err){if(err&&err.name==='AbortError')return;dl()});return}
+  }catch(e){}
+  dl();
+}
+function restoreText(v){
+  var i=v.indexOf('{'),j=v.lastIndexOf('}'),o=JSON.parse(v.slice(i,j+1));
+  if(!o||!Array.isArray(o.entries))throw 0;
+  snap('Geri yüklemeden önce');applyBackup(o);save();render();renderSnaps();
+}
+$('bFile').onclick=fileBackup;
+$('bPick').onclick=function(){$('bPickIn').value='';$('bPickIn').click()};
+$('bPickIn').onchange=function(){
+  var f=this.files&&this.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(){try{restoreText(String(r.result));toast('Dosyadan geri yüklendi ✓')}catch(e){toast('Yedek dosyası geçersiz')}};
+  r.onerror=function(){toast('Dosya okunamadı')};
+  r.readAsText(f);
+};
 $('bShare').onclick=shareBackup;
 $('bBackup').onclick=function(){
   var txt=backupText();
@@ -2496,14 +2527,14 @@ $('snapList').onclick=function(ev){
   try{var o=JSON.parse(a[i].d);if(!Array.isArray(o.entries))throw 0;snap('Geri yüklemeden önce');applyBackup(o);save();render();renderSnaps();toast('Otomatik yedekten geri yüklendi ✓')}catch(e){toast('Bu yedek açılamadı')}
 };
 function bkBanner(){
-  var bs=$('bkStatus');if(bs){var lb0=parseInt(lsGet(LBK)||'0',10),ag=lb0?Math.floor((Date.now()-lb0)/86400000):-1;bs.textContent=lb0?('Son yedek: '+(ag<=0?'bugün':ag+' gün önce')):'Henüz yedek almadın';bs.className='note '+(lb0&&ag<7?'pos':'wr');bs.style.cssText='margin:0 0 6px;font-weight:700'}
+  var bs=$('bkStatus');if(bs){var lb0=parseInt(lsGet(LBK)||'0',10),ag=lb0?Math.floor((Date.now()-lb0)/86400000):-1;bs.textContent=lb0?('Son yedek: '+(ag<=0?'bugün':ag+' gün önce')):'Henüz yedek almadın';bs.className='note '+(lb0&&ag<4?'pos':'wr');bs.style.cssText='margin:0 0 6px;font-weight:700'}
   var b=$('bkBanner'),now=Date.now(),first=parseInt(lsGet(FRK)||'0',10),lb=parseInt(lsGet(LBK)||'0',10),sz=parseInt(lsGet(SZK)||'0',10);
-  var DAY=86400000,ref=lb||first,age=ref?Math.floor((now-ref)/DAY):0,need=lb?age>=7:age>=3;
+  var DAY=86400000,ref=lb||first,age=ref?Math.floor((now-ref)/DAY):0,need=lb?age>=3:age>=2;
   var show=S.entries.length>0&&need&&now>sz&&tab==='ozet';
   b.classList.toggle('show',show);
-  if(show)$('bkTx').textContent=lb?('💾 Son yedek '+age+' gün önce. Notlar\'a kaydet?'):'💾 Henüz yedek almadın. Notlar\'a kaydet?';
+  if(show)$('bkTx').textContent=lb?('💾 Son yedek '+age+' gün önce. Dosyalara kaydet?'):'💾 Henüz yedek almadın. Dosyalara kaydet?';
 }
-$('bkGo').onclick=shareBackup;
+$('bkGo').onclick=fileBackup;
 $('bkLater').onclick=function(){lsSet(SZK,String(Date.now()+3*86400000));bkBanner()};
 if(!lsGet(FRK))lsSet(FRK,String(Date.now()));
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
