@@ -182,7 +182,7 @@ select.fld{appearance:none;-webkit-appearance:none}
 .step{display:flex;gap:12px;margin:11px 0;font-size:14px;line-height:1.5}
 .step i{font-style:normal;width:27px;height:27px;border-radius:50%;background:linear-gradient(135deg,var(--acc),#2c7be5);display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
 textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:16px}
-.toast{position:fixed;left:50%;bottom:118px;transform:translateX(-50%) translateY(8px);background:#fff;color:#111;padding:11px 18px;border-radius:14px;font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:all .25s;z-index:50;box-shadow:0 10px 30px #0006;white-space:nowrap}
+.toast{position:fixed;left:50%;bottom:118px;transform:translateX(-50%) translateY(8px);background:#fff;color:#111;padding:11px 18px;border-radius:14px;font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:all .25s;z-index:60;box-shadow:0 10px 30px #0006;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%)}
 .toast.act{pointer-events:auto;display:flex;align-items:center;gap:14px}.toast button{color:#6a4cf5;font-weight:800;font-size:14px;padding:4px 2px}
 .view{display:none}.view.on{display:block}
@@ -939,7 +939,8 @@ var cur=new Date();cur=new Date(cur.getFullYear(),cur.getMonth(),1);
 var tab='ozet',editId=null,sType='out',sCat='Market',wipeArm=false;
 var planEdit=null,tryMode=false,sVer='none',pVer='none',sArm=false,pArm=false,pDelArm=false;
 
-function load(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&Array.isArray(o.entries)){S={entries:o.entries,inited:o.inited||{},plans:Array.isArray(o.plans)?o.plans:[],bills:Array.isArray(o.bills)?o.bills:defBills(),rolled:o.rolled||{},trips:Array.isArray(o.trips)?o.trips:[],cards:Array.isArray(o.cards)?o.cards:[],limits:(o.limits&&typeof o.limits==='object'&&!Array.isArray(o.limits))?o.limits:{}};}}}catch(e){if(mem)S=mem;}}
+function oo(x){return(x&&typeof x==='object'&&!Array.isArray(x))?x:{}}
+function load(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&Array.isArray(o.entries)){S={entries:o.entries,inited:oo(o.inited),plans:Array.isArray(o.plans)?o.plans:[],bills:Array.isArray(o.bills)?o.bills:defBills(),rolled:oo(o.rolled),trips:Array.isArray(o.trips)?o.trips:[],cards:Array.isArray(o.cards)?o.cards:[],limits:(o.limits&&typeof o.limits==='object'&&!Array.isArray(o.limits))?o.limits:{}};}}}catch(e){if(mem)S=mem;}}
 function repair(){
   var n=0,seen={},okd=/^\d{4}-\d{2}-\d{2}$/;
   S.entries=S.entries.filter(function(e){
@@ -952,7 +953,7 @@ function repair(){
   S.cards.forEach(function(c){
     if(c.trip&&!tids[c.trip]){delete c.trip;n++}
     if(c.paid&&c.payId&&!eid[c.payId]){c.paid=false;delete c.payId;n++}});
-  S.plans.forEach(function(p){var d=parseInt(p.day,10);if(!(d>=1&&d<=31)){p.day=Math.min(31,Math.max(1,d||1));n++}});
+  S.plans.forEach(function(p){if(!p.cat){p.cat='Diğer';n++}var d=parseInt(p.day,10);if(!(d>=1&&d<=31)){p.day=Math.min(31,Math.max(1,d||1));n++}});
   if(!S.limits||typeof S.limits!=='object'||Array.isArray(S.limits)){S.limits={};n++}
   Object.keys(S.limits).forEach(function(k){if(!(S.limits[k]>0)){delete S.limits[k];n++}});
   S.trips.forEach(function(t){
@@ -1736,7 +1737,13 @@ function maybeWn(){
   if(lsGet('butcem_ver')===APP_VER)return;
   if($('obbg').classList.contains('show')||$('igbg').classList.contains('show'))return;
   if(!lsGet('butcem_ob'))return;
-  setTimeout(function(){if(!$('obbg').classList.contains('show')&&!$('igbg').classList.contains('show'))openWn(false)},700);
+  var tries=0;
+  (function wait(){
+    tries++;if(tries>80||lsGet('butcem_ver')===APP_VER)return;
+    var busy=document.querySelector('.sheet-bg.show,.cbg.show,.tscr.show');
+    if(busy){setTimeout(wait,700);return}
+    openWn(false);
+  })();
 }
 
 /* ---------- Olaylar ---------- */
@@ -2428,9 +2435,9 @@ function snap(label){
   try{localStorage.setItem(SNK,JSON.stringify(a))}catch(e){try{localStorage.setItem(SNK,JSON.stringify(a.slice(-3)))}catch(e2){}}
 }
 function applyBackup(o){
-  S={entries:o.entries.filter(function(e){return e&&e.date&&e.amt>0&&(e.type==='in'||e.type==='out')}),inited:o.inited||{},
+  S={entries:o.entries.filter(function(e){return e&&e.date&&e.amt>0&&(e.type==='in'||e.type==='out')}),inited:oo(o.inited),
      plans:Array.isArray(o.plans)?o.plans.filter(function(p){return p&&p.start&&p.amt>0&&p.day>=1}):[],
-     bills:Array.isArray(o.bills)?o.bills.filter(function(b){return b&&b.id&&b.name}):defBills(),rolled:o.rolled||{},
+     bills:Array.isArray(o.bills)?o.bills.filter(function(b){return b&&b.id&&b.name}):defBills(),rolled:oo(o.rolled),
      trips:Array.isArray(o.trips)?o.trips.filter(function(t){return t&&t.id}):[],cards:Array.isArray(o.cards)?o.cards.filter(function(c){return c&&c.id&&c.amt>0}):[],limits:(o.limits&&typeof o.limits==='object'&&!Array.isArray(o.limits))?o.limits:{}};
   repair();
 }
