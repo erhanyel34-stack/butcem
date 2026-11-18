@@ -385,6 +385,31 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
 .ofold{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .5s cubic-bezier(.2,.9,.25,1),opacity .3s}
 #outcard.open .ofold{grid-template-rows:1fr;opacity:1;transition-delay:0s,.08s}
 .ofold>.oin{min-height:0;overflow:hidden}#outcard.open .oin{padding-top:14px}
+
+/* ===== Tatil tanıtımı ===== */
+#tiBg{z-index:48;overflow-y:auto}
+.ti{position:relative;width:100%;max-width:370px;border-radius:28px;padding:18px;background:linear-gradient(170deg,#3a1a5e,#2a1450 45%,#16365a);border:1px solid #ffffff22;box-shadow:0 30px 70px #000a;overflow:hidden;margin:auto;color:#f3f5ff;animation:pop .5s cubic-bezier(.3,1.4,.5,1) backwards}
+.ti:before{content:"";position:absolute;width:240px;height:240px;border-radius:50%;background:#ff8a3d;opacity:.28;filter:blur(60px);right:-80px;top:-70px;pointer-events:none}
+.ti .dots{display:flex;gap:6px;justify-content:center;margin-bottom:10px;position:relative}.ti .dots i{width:7px;height:7px;border-radius:50%;background:#ffffff33;transition:all .3s}.ti .dots i.on{width:22px;border-radius:4px;background:#fff}
+.ti .emo{font-size:38px;position:relative;animation:bump .8s ease both}
+.ti h2{font-size:20px;letter-spacing:-.3px;margin:2px 0 6px;position:relative;color:#fff}.ti .sub{font-size:13.5px;color:#d9dcf7;line-height:1.5;margin-bottom:12px;position:relative;min-height:62px}
+.ti .vis{position:relative;display:flex;flex-direction:column;gap:9px;animation:rise .45s cubic-bezier(.2,.8,.2,1) backwards;min-height:290px;justify-content:center}
+.ti .bx{background:#ffffff14;border:1px solid #ffffff1f;border-radius:16px;padding:11px 13px;position:relative}
+.ti .rw{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ti .pl{display:inline-block;border-radius:11px;padding:5px 11px;font-size:12.5px;font-weight:700;background:#ffffff14}.ti .pl.on{background:linear-gradient(135deg,#ffb23e,#ff4f9a)}
+.ti .lb{font-size:11px;color:#b9bff0;font-weight:800;letter-spacing:.5px;margin-bottom:5px;text-transform:uppercase}
+.ti .bg2{font-size:21px;font-weight:800;font-family:var(--num)}
+.ti .tg{display:inline-block;border-radius:9px;padding:3px 9px;font-size:11.5px;font-weight:800}.ti .tg.g{background:#3ddc9722;color:#3ddc97}.ti .tg.v{background:#a37cff2e;color:#c9bbff}
+.ti .same{font-size:12.5px;color:#ffd35a;font-weight:700;text-align:center}
+.ti .wal{border-radius:14px;padding:9px 13px;background:linear-gradient(135deg,#3b2ea8,#6a4cf5);font-weight:800}.ti .kart{border-radius:14px;padding:9px 13px;background:linear-gradient(135deg,#1fb9b4,#2f6fe4);font-weight:800}
+.ti .go{margin-top:12px;padding:15px;border-radius:16px;text-align:center;font-weight:800;font-size:16px;background:linear-gradient(135deg,#ffb23e,#ff4f9a);position:relative;color:#fff;width:100%}
+.ti .sk{display:block;width:100%;text-align:center;color:#b9bff0;font-size:13px;margin-top:6px;padding:7px;position:relative}
+.thelp{display:inline-block;margin:0 0 10px 8px;padding:9px 14px;border-radius:14px;background:#ffffff1f;color:#fff;font-weight:700;font-size:14px;touch-action:manipulation}
+
+.scrow{display:flex;gap:6px;margin:4px 0 12px;flex-wrap:wrap}.scrow .ico{width:34px;height:34px;border-radius:10px;font-size:15px}
+.scr{display:flex;align-items:center;gap:11px;padding:9px 0;border-top:1px solid var(--line);width:100%;text-align:left}.scr:first-child{border:0}
+.scr .m{flex:1;min-width:0}.scr .m b{display:block;font-size:14.5px}.scr .m small{color:var(--mut);font-size:12px}.scr .go{color:#7ab8ff;font-weight:800;font-size:14px}
+.sclink{display:block;width:100%;text-align:center;color:var(--mut);font-size:13px;padding:10px 0 0}
 /* ===== Tatil ===== */
 .pc.c3{transform:scale(.93)}.pc.c1{transform:scale(.955)}.pc.c2{transform:scale(.975)}
 .pc.c3{background:linear-gradient(135deg,#ffcf5a,#ff8a3d 55%,#ff5d7a)}
@@ -554,6 +579,11 @@ html.big body{zoom:1.12}
         <div style="flex:1;min-width:0"><b id="billcardTx" class="num" style="font-size:18px"></b><div class="note" style="margin-top:4px" id="billcardSub"></div></div>
         <button class="btn sm" id="bBillGo" style="width:auto;margin:0;padding:12px 18px">Aç</button>
       </div>
+    </div>
+
+    <div class="card" id="subChk" style="display:none">
+      <h2>🔁 Abonelik kontrolü</h2>
+      <div id="subChkBody"></div>
     </div>
 
 
@@ -753,6 +783,20 @@ html.big body{zoom:1.12}
     </div>
   </div>
 </div>
+<div class="sheet-bg" id="scbg">
+  <div class="sheet">
+    <div class="sheet-top"><div class="grab"></div><button class="xbtn" id="scX" aria-label="Kapat">✕</button></div>
+    <div class="sheet-body">
+      <div style="display:flex;gap:12px;align-items:center;margin:4px 0 12px"><span id="scTile"></span><div><h3 id="scName" style="margin:0">Abonelik</h3><div class="note" style="margin:2px 0 0">Bu abonelikte ne oldu?</div></div></div>
+      <div class="paysg"><button type="button" class="on" id="scAmtB">💰 Tutar değişti</button><button type="button" id="scEndB">🚫 İptal ettim</button></div>
+      <div id="scAmtBox"><span class="lbl">Yeni aylık tutar</span><input class="fld" id="scAmt" inputmode="decimal" autocomplete="off"><div class="note" style="margin:-4px 0 10px">Bu aydan itibaren bu tutarla hesaplanır. Geçmiş aylar değişmez.</div></div>
+      <div id="scEndBox" class="note" style="display:none;margin:0 0 10px">Abonelik listeden kalkar, bu aydan sonra bakiyenden düşmez.</div>
+      <button class="btn" id="scSave">Kaydet</button>
+      <button class="btn sec sm" id="scCancel">Vazgeç</button>
+    </div>
+  </div>
+</div>
+
 <div class="sheet-bg" id="ubg">
   <div class="sheet">
     <div class="sheet-top"><div class="grab"></div><button class="xbtn" id="uX" aria-label="Kapat">✕</button></div>
@@ -800,7 +844,7 @@ html.big body{zoom:1.12}
   <i class="blob b1"></i><i class="blob b2"></i><div class="snowbox" id="snowbox"></div>
   <div class="thero" id="tHero"></div>
   <div class="tin">
-    <button type="button" class="thome" id="tHome">‹ Ana sayfa</button>
+    <button type="button" class="thome" id="tHome">‹ Ana sayfa</button><button type="button" class="thelp" id="tHelp">ℹ️ Nasıl çalışır?</button>
     <div class="tsw" id="tSwitch"></div>
     <div id="tBody"></div>
   </div>
@@ -842,6 +886,7 @@ html.big body{zoom:1.12}
   <button class="btn sec sm" id="obSkip" style="margin-top:6px">Atla</button>
 </div></div>
 <div class="cbg" id="igbg"><div class="ig" id="igBox"></div></div>
+<div class="cbg" id="tiBg"><div class="ti" id="tiBox"></div></div>
 <div class="toast" id="toast"></div>
 
 <nav class="nav">
@@ -1290,7 +1335,7 @@ function render(){
   banner();
   if(typeof bkBanner==='function')bkBanner();
   if(typeof renderSnaps==='function')renderSnaps();
-  if(typeof renderTripCard==='function'){renderTripCard();renderCards();tripBanner();renderLimits();renderYear();renderLimSettings();renderSearch()}
+  if(typeof renderTripCard==='function'){renderTripCard();renderCards();tripBanner();renderSubChk();renderLimits();renderYear();renderLimSettings();renderSearch()}
 }
 
 function renderPlans(es){
@@ -1573,6 +1618,58 @@ $('uDel').onclick=function(){
   S.plans=S.plans.filter(function(x){return x.id!==subEdit});subDelArm=false;save();closeSub();render();toast('Silindi');
 };
 
+
+/* ---------- Aylık abonelik kontrolü ---------- */
+var scMode='sum',scId=null,scType='amt';
+function scActive(){var nk=nowK();return subsActive().filter(function(p){return p.start<=nk&&subNext(p)!==null})}
+function renderSubChk(){
+  var c=$('subChk'),L=scActive(),nk=nowK(),snz=parseInt(lsGet('butcem_subsnz')||'0',10);
+  var show=L.length>0&&lsGet('butcem_subchk')!==nk&&snz<Date.now()&&mk(cur)===nk;
+  c.style.display=show?'':'none';if(!show){scMode='sum';return}
+  var tot=0;L.forEach(function(p){tot+=p.amt});var h='';
+  if(scMode==='sum'){
+    var tl='';L.slice(0,8).forEach(function(p){tl+=tile(brandOf(p.brand))});
+    h='<div class="scrow">'+tl+'</div><div style="font-size:15px;line-height:1.45;margin-bottom:12px">Bu ay <b>'+L.length+' aboneliğin</b> var, toplam <b class="num">'+esc(fmt(tot,true))+'</b>. Hepsi hâlâ geçerli mi, tutarlar doğru mu?</div>'+
+      '<button type="button" class="btn" id="scOk">✓ Hepsi geçerli</button><button type="button" class="btn sec sm" id="scChg">Bir şey değişti</button><button type="button" class="sclink" id="scLater">Sonra hatırlat</button>';
+  }else{
+    L.forEach(function(p){h+='<button type="button" class="scr" data-sc="'+esc(p.id)+'">'+tile(brandOf(p.brand))+'<span class="m"><b>'+esc(p.name)+'</b><small>'+esc(fmt(p.amt,true))+' · her ay '+p.day+'. gün</small></span><span class="go">Değiştir ›</span></button>'});
+    h+='<div class="note" style="margin:8px 0 0">Sadece değişeni seç. Diğerleri aynı kalır.</div><button type="button" class="btn" id="scDone">Bitti</button>';
+  }
+  $('subChkBody').innerHTML=h;
+}
+$('subChkBody').addEventListener('click',function(ev){
+  var b=ev.target.closest('button');if(!b)return;
+  if(b.id==='scOk'||b.id==='scDone'){lsSet('butcem_subchk',nowK());scMode='sum';renderSubChk();toast('Abonelikler kontrol edildi ✓');return}
+  if(b.id==='scChg'){scMode='list';renderSubChk();return}
+  if(b.id==='scLater'){lsSet('butcem_subsnz',String(Date.now()+3*86400000));renderSubChk();toast('3 gün sonra tekrar sorarım');return}
+  var id=b.getAttribute('data-sc');if(id)openSc(id);
+});
+function scSetType(t){scType=t;$('scAmtB').classList.toggle('on',t==='amt');$('scEndB').classList.toggle('on',t==='end');$('scAmtBox').style.display=t==='amt'?'':'none';$('scEndBox').style.display=t==='end'?'block':'none';$('scSave').textContent=t==='amt'?'Kaydet':'Aboneliği sonlandır'}
+function openSc(id){
+  var p=S.plans.filter(function(x){return x.id===id})[0];if(!p)return;
+  scId=id;$('scTile').innerHTML=tile(brandOf(p.brand),44);$('scName').textContent=p.name;$('scAmt').value=toIn(p.amt);scSetType('amt');$('scbg').classList.add('show');
+}
+function closeSc(){$('scbg').classList.remove('show');scId=null}
+bindAmt($('scAmt'));$('scAmt').oninput=fmtAmt;
+$('scAmtB').onclick=function(){scSetType('amt')};$('scEndB').onclick=function(){scSetType('end')};
+$('scX').onclick=closeSc;$('scCancel').onclick=closeSc;$('scbg').onclick=function(ev){if(ev.target===$('scbg'))closeSc()};
+$('scSave').onclick=function(){
+  var p=S.plans.filter(function(x){return x.id===scId})[0];if(!p){closeSc();return}
+  var nk=nowK();
+  if(scType==='amt'){
+    var a=Math.round(parseNum($('scAmt').value)*100)/100;if(!(a>0)){toast('Yeni tutarı yaz');return}
+    if(Math.abs(a-p.amt)<0.005){toast('Tutar aynı');return}
+    markUndo();
+    if(p.start>=nk)p.amt=a;
+    else{var cl={};Object.keys(p).forEach(function(k){cl[k]=p[k]});cl.id=uid();cl.amt=a;cl.start=nk;p.end=fromYm(ym(nk)-1);S.plans.push(cl)}
+    toast('Tutar güncellendi ✓',true);
+  }else{
+    markUndo();p.end=(payDate(p,nk)<today())?nk:fromYm(ym(nk)-1);if(p.end<p.start)p.end=p.start;
+    toast('Abonelik sonlandırıldı',true);
+  }
+  save();closeSc();render();
+};
+
 /* ---------- Olaylar ---------- */
 $('prev').onclick=function(){cur=new Date(cur.getFullYear(),cur.getMonth()-1,1);render()};
 $('next').onclick=function(){cur=new Date(cur.getFullYear(),cur.getMonth()+1,1);render()};
@@ -1712,6 +1809,33 @@ $('cardList').onclick=function(ev){
   cardArm=null;markUndo();S.cards=S.cards.filter(function(c){return c.id!==id});save();render();toast('Silindi',true);
 };
 
+
+/* ---------- Tatil tanıtımı ---------- */
+var tiI=0;
+var TI=[
+ ['🏖️','Tatilini burada planla','Tatil için ayrı bir bölümdesin. Hesapların ve bütçen burada ayrı tutulur ama ana bakiyen aynı kalır, ikisini karıştırmazsın.',
+  '<div class="bx"><div class="lb">☀️ Yaz tatili · Çeşme</div><div class="rw"><span class="bg2">37.000 ₺</span><span class="tg g">45 gün kaldı</span></div></div><div class="bx"><div class="lb">❄️ Kış tatili · Uludağ</div><div class="rw"><span class="bg2">22.000 ₺</span><span class="tg v">3 ay kaldı</span></div></div><div class="same">İstediğin kadar tatil ekleyebilirsin</div>'],
+ ['🧭','Planını ve bütçeni yap','Nereye gidiyorsun, kiminle, nasıl? Yaz ya da kış temasını seç, ekran ona göre renk değiştirir. Bütçe kalemlerini yaz, kişi başı payın otomatik hesaplanır.',
+  '<div class="bx"><div class="lb">Ulaşım</div><div class="rw" style="justify-content:flex-start;flex-wrap:wrap"><span class="pl">✈️ Uçak</span><span class="pl on">🚗 Araç</span><span class="pl">🚌 Otobüs</span></div></div><div class="bx"><div class="lb">Bütçe kalemleri</div><div class="rw"><span>⛽ Yakıt</span><b>8.000 ₺</b></div><div class="rw" style="margin-top:5px"><span>🏠 Konaklama</span><b>12.000 ₺</b></div><div class="rw" style="margin-top:5px"><span>🍽️ Yeme-içme</span><b>10.000 ₺</b></div></div><div class="bx rw"><div><div style="font-size:12px;color:#d9dcf7">4 kişi · eşit bölüşüm</div><div class="bg2">30.000 ₺</div></div><div style="text-align:right"><div style="font-size:12px;color:#d9dcf7">kişi başı</div><div class="bg2" style="color:#ffd35a">7.500 ₺</div></div></div>'],
+ ['🧮','Ayırabilir miyiz?','Gelirine ve giderlerine bakıp tatili ayırabilecek misin söyler: Rahat, Sıkışık ya da Ek destek gerekir. Sıkışıksa öneri de verir.',
+  '<div class="bx rw"><svg viewBox="0 0 80 80" width="84" height="84"><circle cx="40" cy="40" r="32" fill="none" stroke="#ffffff22" stroke-width="9"/><circle cx="40" cy="40" r="32" fill="none" stroke="#ffb23e" stroke-width="9" stroke-linecap="round" stroke-dasharray="120 201" transform="rotate(-90 40 40)"/><text x="40" y="45" text-anchor="middle" fill="#fff" font-size="15" font-weight="800">%60</text></svg><div style="flex:1;margin-left:10px"><span class="tg g">🟢 Rahat</span><div style="font-size:18px;font-weight:800;margin:5px 0 2px">4.500 / 7.500 ₺</div><div style="font-size:12px;color:#d9dcf7">senin payın için ayırdığın</div></div></div><div class="bx" style="font-size:13.5px;line-height:1.5">Ayda <b>1.500 ₺</b> ayırman yeter. Boş payının sadece <b>%12</b>’si.</div><div class="go" style="margin:0">✅ Ayırdım</div><div class="same">“Ayırdım” sadece ilerlemeni gösterir, bakiyene dokunmaz</div>'],
+ ['💳','Nakit mi, kart mı?','Tatilde yaptığın her harcamayı girerken ödeme şeklini seç. Bakiyen buna göre doğru kalır.',
+  '<div class="bx"><div class="rw"><b>💵 Nakit</b><span class="tg g">Nakit</span></div><div style="font-size:13px;color:#d9dcf7;margin:4px 0 8px">Girdiğin gün bakiyenden düşer</div><div class="wal rw"><span>Ana bakiye</span><span>−500 ₺</span></div></div><div class="bx"><div class="rw"><b>💳 Kredi kartı</b><span class="tg v">Kart</span></div><div style="font-size:13px;color:#d9dcf7;margin:4px 0 8px">Önce kart listesine yazılır. “Ekstreyi ödedim” deyince bakiyenden düşer</div><div class="kart rw"><span>Kart harcamaları</span><span>1.500 ₺</span></div></div><div class="same">🌍 Yurt dışı: para birimi ve kur gir · 👥 Bölüşünce “benim payım” ayrı hesaplanır</div>'],
+ ['🎉','Dönünce özetini gör','Dönüş tarihinden sonra harcamalarını girmeni hatırlatır. Girince bütçenin altında mı üstünde mi kaldığını ve kişi başı ne harcadığını gösterir.',
+  '<div class="bx" style="text-align:center"><div style="font-size:11.5px;letter-spacing:1px;color:#ffe9b8;font-weight:800">☀️ ÇEŞME · TATİL BİTTİ</div><div style="font-size:19px;font-weight:800;margin:6px 0">Bütçenin altında kaldın 🎉</div><div style="font-size:13px;color:#d9dcf7">Hedef 7.500 ₺ · Harcanan 6.200 ₺</div></div><div class="rw" style="gap:10px"><div class="bx" style="flex:1"><div class="lb">Toplam</div><div class="bg2">24.800 ₺</div></div><div class="bx" style="flex:1"><div class="lb">Kişi başı</div><div class="bg2">6.200 ₺</div></div></div><div class="same">🎯 Bütçeden artan: 1.300 ₺</div>']
+];
+function renderTi(){
+  var o=TI[tiI],last=tiI===TI.length-1,d='';TI.forEach(function(_,i){d+='<i class="'+(i===tiI?'on':'')+'"></i>'});
+  $('tiBox').innerHTML='<div class="dots">'+d+'</div><div class="emo">'+o[0]+'</div><h2>'+o[1]+'</h2><div class="sub">'+o[2]+'</div><div class="vis">'+o[3]+'</div><button type="button" class="go" id="tiNext">'+(last?'Hadi başlayalım 🏖️':'İleri')+'</button>'+(last?'':'<button type="button" class="sk" id="tiSkip">Atla</button>')+(tiI>0&&!last?'<button type="button" class="sk" id="tiPrev">‹ Geri</button>':'');
+}
+function endTi(){lsSet('butcem_ti','1');$('tiBg').classList.remove('show')}
+function openTi(){tiI=0;renderTi();$('tiBg').classList.add('show')}
+$('tiBox').addEventListener('click',function(ev){var b=ev.target.closest('button');if(!b)return;
+  if(b.id==='tiNext'){if(tiI<TI.length-1){tiI++;renderTi()}else endTi();return}
+  if(b.id==='tiPrev'){tiI=Math.max(0,tiI-1);renderTi();return}
+  if(b.id==='tiSkip')endTi()});
+$('tHelp').onclick=openTi;$('tHelp').addEventListener('touchend',function(e){e.preventDefault();openTi()},{passive:false});
+
 /* ---------- Tatil ---------- */
 var MODES=[['ucak','✈️','Uçak'],['arac','🚗','Araç'],['otobus','🚌','Otobüs'],['tren','🚆','Tren']];
 var WHOS=[['tek','👤','Tek'],['cift','💑','Çift'],['aile','👨‍👩‍👧','Aile'],['arkadas','🧑‍🤝‍🧑','Arkadaş']];
@@ -1813,6 +1937,7 @@ function openTripScreen(id){
   curTrip=t.id;tDelArm=false;
   $('tscr').classList.add('show');$('tClose').classList.add('on');document.body.style.overflow='hidden';
   $('tscr').scrollTop=0;renderTrip();
+  if(!lsGet('butcem_ti'))setTimeout(openTi,450);
 }
 function closeTripScreen(){
   if(!curTrip&&!$('tscr').classList.contains('show'))return;
