@@ -376,6 +376,15 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
 .ig .menu{position:absolute;right:10px;top:54px;width:200px;background:#2b3060;border-radius:14px;padding:6px 0;box-shadow:0 10px 30px #000a;color:#e6e9ff;font-size:13.5px;z-index:2}.ig .menu div{padding:10px 14px}.ig .menu .sel{background:#3a4086;color:#fff;font-weight:700}
 .ig .btn{margin-top:12px}.ig .skip{display:block;width:100%;text-align:center;color:#8f96c6;font-size:13px;margin-top:8px;padding:6px}
 .ig .tabs{display:flex;gap:6px;margin-bottom:12px}.ig .tabs button{flex:1;padding:8px 4px;border-radius:12px;font-size:12.5px;font-weight:700;background:#ffffff12;color:#b9bff0}.ig .tabs button.on{background:#ffffff26;color:#fff}
+
+#outcard{padding:14px 16px}
+.osum{display:flex;align-items:center;gap:12px;width:100%;text-align:left;color:inherit}
+.osum .oe{font-size:26px}.osum .om{flex:1;min-width:0}.osum small{display:block;font-size:12px;font-weight:800;letter-spacing:.6px;color:var(--mut)}.osum b{display:block;font-size:15px;margin-top:2px;font-weight:500}.osum b b{display:inline;font-weight:800}
+.osum .och{font-size:24px;color:var(--mut);transition:transform .35s cubic-bezier(.2,.9,.25,1)}
+#outcard.open .och{transform:rotate(90deg)}
+.ofold{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .5s cubic-bezier(.2,.9,.25,1),opacity .3s}
+#outcard.open .ofold{grid-template-rows:1fr;opacity:1;transition-delay:0s,.08s}
+.ofold>.oin{min-height:0;overflow:hidden}#outcard.open .oin{padding-top:14px}
 /* ===== Tatil ===== */
 .pc.c3{transform:scale(.93)}.pc.c1{transform:scale(.955)}.pc.c2{transform:scale(.975)}
 .pc.c3{background:linear-gradient(135deg,#ffcf5a,#ff8a3d 55%,#ff5d7a)}
@@ -547,12 +556,7 @@ html.big body{zoom:1.12}
       </div>
     </div>
 
-    <div class="card" id="outcard" style="display:none">
-      <h2>🔮 Önümüzdeki 6 ay</h2>
-      <div class="tiles" id="outrows"></div>
-      <div class="lg" id="outlg"></div>
-      <div class="note" id="outnote"></div>
-    </div>
+
 
     <div class="card">
       <h2>🍩 Nereye harcadım?</h2>
@@ -572,6 +576,15 @@ html.big body{zoom:1.12}
     <div class="card" id="limCard" style="display:none">
       <h2>🎯 Kategori limitleri</h2>
       <div id="limBody"></div>
+    </div>
+
+    <div class="card" id="outcard" style="display:none">
+      <button type="button" class="osum" id="outSum"><span class="oe">🔮</span><span class="om"><small>ÖNÜMÜZDEKİ 6 AY</small><b id="outSumTx"></b></span><span class="och">›</span></button>
+      <div class="ofold" id="outFold"><div class="oin">
+        <div class="tiles" id="outrows"></div>
+        <div class="lg" id="outlg"></div>
+        <div class="note" id="outnote"></div>
+      </div></div>
     </div>
 
     <div class="card" id="yrCard" style="display:none">
@@ -1235,6 +1248,9 @@ function render(){
     var rows=[];for(var i=0;i<6;i++)rows.push({k:fromYm(ym(nowK())+i),amt:0});
     var rs=simulate(rows),h='';rs.forEach(function(r){h+=monTile(r)});
     $('outrows').innerHTML=h;$('outlg').innerHTML=legendHtml(false);
+    var ov=0,tg=0,wr=null;rs.forEach(function(r){if(r.inc>0){if(r.lv==='over')ov++;else if(r.lv==='tight')tg++;if(!wr||r.after<wr.after)wr=r}});
+    var mn=wr?MONTHS[parseInt(wr.k.slice(5),10)-1]:'';
+    $('outSumTx').innerHTML=!wr?'Gelir ekleyince görünür':ov>0?'<b style="color:var(--out)">'+(ov===rs.length?rs.length+' ayda da aşıyor':ov+' ayda aşıyor')+'</b> · en sıkışık <b>'+esc(mn)+'</b>':tg>0?'<b style="color:var(--warn)">'+tg+' ay sıkışık</b> · en sıkışık <b>'+esc(mn)+'</b>':'<b style="color:var(--in)">'+rs.length+' ay da rahat</b> · en düşük boş pay <b>'+esc(fmt(wr.after))+'</b>';
     $('outnote').textContent='Kutucuktaki büyük rakam o ay sonunda kalacak boş payı, alttaki çizgi gelirinin nereye gittiğini gösterir. Ayrıntı için kutucuğa dokun. Gelecek aylar için gelirin son aydaki maaşınla aynı kabul edilir.';
     oc.style.display='';
   }else oc.style.display='none';
@@ -1633,6 +1649,8 @@ function ringsHtml(cats,byCat,subBy,out,es){
   });
   return '<div class="rings">'+h+'</div>'+det;
 }
+$('outSum').onclick=function(){var o=$('outcard').classList.toggle('open');lsSet('butcem_outopen',o?'1':'0')};
+$('outcard').classList.toggle('open',lsGet('butcem_outopen')==='1');
 $('outrows').onclick=function(ev){
   var b=ev.target.closest('.mt');if(!b)return;var k=b.getAttribute('data-k');
   openMon[k]=!openMon[k];b.classList.toggle('open',!!openMon[k]);
