@@ -480,6 +480,9 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
 .psg{display:flex;gap:4px;background:#ffffff0d;border-radius:14px;padding:4px;margin:0 0 12px}.psg button{flex:1;padding:10px 4px;border-radius:11px;font-weight:700;font-size:13px;color:var(--mut)}.psg button.on{background:#ffffff1f;color:#fff}
 #v-fatura[data-p="f"] [data-ps]:not([data-ps="f"]),#v-fatura[data-p="k"] [data-ps]:not([data-ps="k"]),#v-fatura[data-p="g"] [data-ps]:not([data-ps="g"]){display:none!important}
 #v-fatura>button.btn[data-ps],#moreBtn{margin:12px 0 0;width:100%}
+#v-ozet[data-duo="f"] #krCard,#v-ozet[data-duo="k"] #billcard{display:none!important}
+#v-ozet.duoOn #billcard>h2{display:none}#v-ozet.duoOn #krHead .citem{display:none}
+#v-ozet.duoOn #billcard,#v-ozet.duoOn #krCard{margin-top:8px}
 #attnHead{margin-top:12px;color:inherit;border-color:#ffcc4d66}
 #v-ozet:not(.attnOpen) #dupChk,#v-ozet:not(.attnOpen) #subChk{display:none!important}
 .grp{font-size:12px;font-weight:800;color:var(--mut);letter-spacing:.04em;text-transform:uppercase;margin:20px 6px 2px}
@@ -780,14 +783,18 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
       <div class="note" id="carryNote" style="margin:8px 0 0"></div>
     </div>
 
+    <div class="psg" id="duoSeg" style="display:none;margin:12px 0 0"><button type="button" class="on" data-d="f" id="duoF">Faturalar</button><button type="button" data-d="k" id="duoK">Krediler</button></div>
     <div class="card" id="billcard" style="display:none">
       <h2>💡 Bu ayın faturaları</h2>
       <div style="display:flex;align-items:center;gap:12px">
         <div style="flex:1;min-width:0"><b id="billcardTx" class="num" style="font-size:18px"></b><div class="note" style="margin-top:4px" id="billcardSub"></div></div>
         <button class="btn sm" id="bBillGo" style="width:auto;margin:0;padding:12px 18px">Aç</button>
       </div>
+      <div id="billcardList" style="margin-top:8px"></div>
+      <button type="button" class="btn sec sm" id="billMoreBtn" style="display:none;margin-top:6px">Daha fazla</button>
     </div>
 
+    <div class="card" id="krCard" style="display:none"><button type="button" id="krHead" style="width:100%;text-align:left;color:inherit;padding:0"><div class="citem" style="padding:0"><b>🏦 Kredi ve taksitlerim</b><span id="krCh">›</span></div><div class="note" id="krSum" style="margin:4px 0 0"></div></button><div id="krTop" style="margin-top:8px"></div><div id="krBody" style="display:none;margin-top:6px"></div><button type="button" class="btn sec sm" id="krMore" style="margin-top:6px"></button></div>
     <button type="button" class="card" id="attnHead" style="display:none;width:100%;text-align:left"><div class="citem" style="padding:0"><b>⚠️ Dikkat edilecekler (<span id="attnN">0</span>)</b><span id="attnCh">›</span></div></button>
     <div class="card" id="dupChk" style="display:none">
       <h2>⚠️ Muhtemel çift kayıt</h2>
@@ -1768,7 +1775,7 @@ function render(){
   if(typeof bkBanner==='function')bkBanner();
   if(typeof renderSnaps==='function')renderSnaps();
   if(typeof renderTripCard==='function'){renderTripCard();renderCards();renderVe();renderInCard();renderIncDonut();renderIncPlans();renderIpPend();renderZam();tripBanner();renderSubChk();renderDupChk();renderLimits();renderYear();renderLimSettings();renderSearch()}
-  try{refreshAttn();renderGuide()}catch(e){}
+  try{refreshAttn();renderGuide();renderKr();refreshDuo()}catch(e){}
 }
 
 function renderPlans(es){
@@ -1964,7 +1971,7 @@ $('pSave').onclick=function(){
     if(dupAsk(dl,name,amt,kd,function(nn){$('pName').value=nn;pDupGo=true;$('pSave').onclick();pDupGo=false}))return}
   var o={name:name,cat:$('pCat').value,amt:Math.round(amt*100)/100,start:st,end:en||'',day:day};
   if(planEdit){S.plans.forEach(function(x){if(x.id===planEdit){x.name=o.name;x.cat=o.cat;x.amt=o.amt;x.start=o.start;x.end=o.end;x.day=o.day}})}
-  else{markUndo();o.id=uid();if($('pOld').checked&&!$('pHist').checked)o.from=nowK();S.plans.push(o);if(moveBill){S.bills=S.bills.filter(function(x){return x.id!==moveBill});moveBill=null}}
+  else{markUndo();o.id=uid();o.added=Date.now();if($('pOld').checked&&!$('pHist').checked)o.from=nowK();S.plans.push(o);if(moveBill){S.bills=S.bills.filter(function(x){return x.id!==moveBill});moveBill=null}}
   save();closePlan();render();toast(planEdit?'✓ “'+o.name+'” güncellendi':'✓ “'+o.name+'” Ödemeler > Kredi ve kartlar bölümüne eklendi',!planEdit);
 };
 $('pDel').onclick=function(){
@@ -1974,7 +1981,7 @@ $('pDel').onclick=function(){
 };
 
 /* ---------- Faturalar ---------- */
-var billOpen=null,billRemoveArm=null,billPop=null,moveBill=null;
+var billOpen=null,billRemoveArm=null,billPop=null,moveBill=null,billsAll=false;
 function baseName(n){return String(n||'').replace(/\s+\d+$/,'').trim()}
 function dupFind(list,name){var b=nrm(baseName(name));return list.filter(function(x){return nrm(baseName(x.name))===b})}
 function nextName(list,name){var base=baseName(name),used={};list.forEach(function(x){used[nrm(x.name)]=1});var n=2;while(used[nrm(base+' '+n)])n++;return base+' '+n}
@@ -1986,10 +1993,10 @@ function dupAsk(list,name,newAmt,kind,onGo){
   return true;
 }
 function renderBills(){
-  var k=mk(cur),nk=nowK(),h='',paid=0,sum=0,unpaid=[];
+  var k=mk(cur),nk=nowK(),h='',paid=0,sum=0,unpaid=[],unpaidB=[],paidB=[];
   S.bills.forEach(function(b){
     var en=billEntry(b,k),ci=catInfo('out',b.cat),last=billLatest(b,k),open=(billOpen===b.id);
-    if(en){paid++;sum+=en.amt}else unpaid.push(b.name);
+    if(en){paid++;sum+=en.amt;paidB.push(b)}else{unpaid.push(b.name);unpaidB.push(b)}
     var st=en?('✓ Ödendi · '+en.date.slice(8,10)+'.'+en.date.slice(5,7)):(last>0?'Geçen ay: '+fmt(last,true):'Bekliyor');
     h+='<div class="bill'+(en?' paid':'')+'"><button class="bill-row" data-act="toggle" data-b="'+esc(b.id)+'"><span class="ck'+(en&&billPop===b.id?' pop':'')+'">'+(en?'✓':'')+'</span>'+
       '<span class="ico" style="background:'+ci.col+'33">'+ci.ico+'</span><span class="m"><b>'+esc(b.name)+'</b><small>'+esc(st)+'</small></span>'+
@@ -2013,7 +2020,12 @@ function renderBills(){
   var bc=$('billcard');
   if(S.bills.length&&mk(cur)===nk){
     bc.style.display='';$('billcardTx').textContent=paid+'/'+S.bills.length+' ödendi';
-    $('billcardSub').textContent=unpaid.length?('Bekleyen: '+unpaid.join(', ')):'Bu ayın tüm faturaları ödendi 🎉';
+    $('billcardSub').textContent=unpaid.length?'':'Bu ayın tüm faturaları ödendi 🎉';$('billcardSub').style.display=unpaid.length?'none':'';
+    var BL=unpaidB.slice().sort(function(a,b){return (b.added||0)-(a.added||0)}).concat(paidB),vis=billsAll?BL:BL.slice(0,3),bh='';
+    vis.forEach(function(b){var en=billEntry(b,k),ci=catInfo('out',b.cat),last=billLatest(b,k);
+      bh+='<button type="button" class="tx" data-bc="'+esc(b.id)+'"><span class="ico" style="background:'+ci.col+'33">'+ci.ico+'</span><span class="m"><b>'+esc(b.name)+'</b><small>'+(en?'✓ Ödendi · '+en.date.slice(8,10)+'.'+en.date.slice(5,7):(last>0?'Bekliyor · geçen ay '+esc(fmt(last,true)):'Bekliyor'))+'</small></span><span class="a'+(en?' neg':'')+'">'+(en?'−'+esc(fmt(en.amt,true)):'›')+'</span></button>'});
+    $('billcardList').innerHTML=bh;
+    var mb=$('billMoreBtn');if(BL.length>3){mb.style.display='';mb.textContent=billsAll?'Daha az göster ▴':'+'+(BL.length-3)+' fatura daha ▾'}else mb.style.display='none';
   }else bc.style.display='none';
 }
 function renderBillMove(){
@@ -2056,13 +2068,15 @@ $('nbAdd').onclick=function(){
   var nm=$('nbName').value.trim();
   if(!nm){toast('Bir ad yaz');$('nbName').focus();return}
   if(!nbDupGo&&dupAsk(S.bills,nm,0,'fatura',function(nn){$('nbName').value=nn;nbDupGo=true;$('nbAdd').onclick();nbDupGo=false}))return;
-  markUndo();var id=uid();S.bills.push({id:id,name:nm,cat:$('nbCat').value});billOpen=id;
+  markUndo();var id=uid();S.bills.push({id:id,name:nm,cat:$('nbCat').value,added:Date.now()});billOpen=id;
   $('nbName').value='';save();render();nbShow(false);
   toast('✓ “'+nm+'” Faturalar listesine eklendi',true);
   setTimeout(function(){var r=$('billList').querySelector('[data-b="'+id+'"]');if(r){var w=r.closest('.bill')||r;w.scrollIntoView({block:'center',behavior:'smooth'});w.classList.add('flash');setTimeout(function(){w.classList.remove('flash')},2200)}},150);
 };
 $('nbGoKr').onclick=function(){chooseInstall()};
 $('bBillGo').onclick=function(){goPay('f')};
+$('billMoreBtn').onclick=function(){billsAll=!billsAll;renderBills()};
+$('billcardList').onclick=function(ev){var b=ev.target.closest('[data-bc]');if(!b)return;billOpen=b.getAttribute('data-bc');gsGoTab('fatura','billList');renderBills()};
 ['sAmt','pTotal','pAmt'].forEach(function(id){bindAmt($(id))});
 
 /* ---------- Üyelikler & Abonelikler ---------- */
@@ -2282,10 +2296,20 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.19.2';
+var APP_VER='1.21';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
-var RELEASES=[{v:'1.19.2',date:'Kasım 2026',title:'Arama kapatma düzeltmesi',items:[
+var RELEASES=[{v:'1.21',date:'Kasım 2026',title:'Faturalar ve krediler tek kartta',items:[
+  ['🗂️','Tek kart, iki sekme','Özet’te Faturalar ve Krediler artık tek kartta, iki sekme olarak duruyor. Ekran kısaldı, her şey bir dokunuş uzakta.',1],
+  ['📅','Krediler bitişe göre','Krediler bitişi en yakın olan en üstte sıralanıyor. Her satırda kaç ay kaldığı yazıyor, örneğin “14/24 ay kaldı”.',1],
+  ['🧹','Tekrar eden satır kalktı','Faturalarda “ödendi” ve “bekleyen” bilgisi iki kez yazılmıyordu artık tek yerde.',1]]},
+{v:'1.20.1',date:'Kasım 2026',title:'Özet’te ilk üçü görünür',items:[
+  ['👀','İlk üç kalem hemen görünür','Özet’te Bu ayın faturaları ve Kredi ve taksitlerim kartlarında ilk üç kalem açılmadan görünüyor. Yeni eklediğin kalem en üste gelir, hemen orada görürsün.',1],
+  ['⬇️','Gerisi aşağıya doğru','“+N daha” düğmesine dokununca kalanlar aşağıya doğru açılıyor. Kredilerde gruplar ve tüm ayrıntılar da burada.',1]]},
+{v:'1.20',date:'Kasım 2026',title:'Kredilerim Özet’te',items:[
+  ['🏦','Tüm kredilerin tek kartta','Özet ekranında “Kredi ve taksitlerim” kartı var. Dokununca açılıyor, kredilerin türüne göre gruplanıyor: banka kredisi, kart taksidi, araç, diğer.',1],
+  ['📋','Her kredi tek tek','Her kredi için taksit tutarı, ödenen ve kalan taksit sayısı, kalan toplam ödeme ve bitiş ayı görünüyor. Dokununca düzenleme açılıyor.',1]]},
+{v:'1.19.2',date:'Kasım 2026',title:'Arama kapatma düzeltmesi',items:[
   ['👆','Kapat artık kolay','Aramadaki Kapat düğmesi büyüdü ve ilk dokunuşta kapanıyor. Klavye açıkken ekranın kayması da engellendi.',1]]},
 {v:'1.19.1',date:'Kasım 2026',title:'Arama düzeltmesi',items:[
   ['🔍','Yarım yazınca da bulur','Aramaya “fat” yazınca da faturalar çıkıyor. “kre”, “abo” gibi kısa yazımlar da artık sonuç veriyor.',1],
@@ -2544,6 +2568,43 @@ $('nbOpen').onclick=function(){nbShow(true)};
 function openMore(on){$('moreWrap').style.display=on?'':'none';$('moreBtn').textContent=on?'Daha az göster ▴':'Daha fazla: kategori detayı, limitler, 12 ay ▾'}
 $('moreBtn').onclick=function(){openMore($('moreWrap').style.display==='none')};
 $('attnHead').onclick=function(){var o=$('v-ozet').classList.toggle('attnOpen');$('attnCh').textContent=o?'⌄':'›'};
+var krOpen=false,duoCur='f';
+function refreshDuo(){
+  var b=$('billcard').style.display!=='none',k=$('krCard').style.display!=='none',v=$('v-ozet'),seg=$('duoSeg');
+  if(b&&k){seg.style.display='';if(duoCur!=='f'&&duoCur!=='k')duoCur='f'}
+  else{seg.style.display='none';duoCur=k?'k':'f'}
+  v.classList.toggle('duoOn',b&&k);v.setAttribute('data-duo',(b&&k)?duoCur:'');
+  $('duoF').textContent='Faturalar'+(b?' '+($('billcardTx').textContent||'').replace(' ödendi',''):'');
+  $('duoK').textContent='Krediler ('+S.plans.filter(function(p){return !p.sub}).length+')';
+  $('duoF').classList.toggle('on',duoCur==='f');$('duoK').classList.toggle('on',duoCur==='k');
+}
+$('duoSeg').onclick=function(ev){var x=ev.target.closest('[data-d]');if(x){duoCur=x.getAttribute('data-d');refreshDuo()}};
+function renderKr(){
+  var c=$('krCard');if(!c)return;
+  var L=S.plans.filter(function(p){return !p.sub});
+  if(!L.length){c.style.display='none';return}
+  c.style.display='';
+  var G=[['Kredi','🏦','Banka kredileri'],['Kredi Kartı','💳','Kredi kartı taksitleri'],['Araç','🚗','Araç taksitleri']],other={};
+  var mo=0,rm=0,h='',cnt=0;
+  function row(p){var inf=payInfo(p),rem=Math.max(0,inf.total-inf.done),ci=catInfo('out',p.cat);
+    return '<button type="button" class="tx" data-kr="'+esc(p.id)+'" style="display:block;width:100%"><div style="display:flex;align-items:center;gap:10px"><span class="ico" style="background:'+ci.col+'33">'+ci.ico+'</span><span class="m"><b>'+esc(p.name)+'</b><small>'+(inf.total?('Ödenen '+inf.done+' / '+inf.total+' · kalan '+rem+' taksit'):'Süresiz')+'</small></span><span class="a">'+esc(fmt(p.amt))+'<small style="display:block;font-weight:400;opacity:.7">/ ay</small></span></div>'+
+      (inf.total?'<div class="gsbar" style="margin:8px 0 6px"><i style="width:'+Math.min(100,Math.round(inf.done/inf.total*100))+'%"></i></div><div style="display:flex;justify-content:space-between;font-size:12.5px;opacity:.8"><span>Kalan ödeme '+esc(fmt(rem*p.amt))+'</span><span>Bitiş '+esc(mlab(p.end))+'</span></div>':'')+'</button>'}
+  function grp(title,ico,arr){
+    if(!arr.length)return '';var m=0,r=0;arr.forEach(function(p){var inf=payInfo(p);m+=p.amt;r+=Math.max(0,inf.total-inf.done)*p.amt});mo+=m;rm+=r;cnt+=arr.length;
+    return '<div class="gsg" style="margin:14px 2px 6px">'+ico+' '+esc(title)+' ('+arr.length+')<div style="text-transform:none;letter-spacing:0;font-weight:400;margin-top:2px">'+esc(fmt(m))+' / ay'+(r>0?' · kalan '+esc(fmt(r)):'')+'</div></div>'+arr.map(row).join('')}
+  var known={};G.forEach(function(g){known[g[0]]=1});
+  G.forEach(function(g){h+=grp(g[2],g[1],L.filter(function(p){return p.cat===g[0]}))});
+  h+=grp('Diğer taksitler','📦',L.filter(function(p){return !known[p.cat]}));
+  var SL=L.slice().sort(function(a,b){return (a.end||'9999-99')<(b.end||'9999-99')?-1:((a.end||'9999-99')>(b.end||'9999-99')?1:0)});
+  $('krTop').innerHTML=krOpen?'':SL.slice(0,3).map(function(p){var inf=payInfo(p),rem=Math.max(0,inf.total-inf.done),ci=catInfo('out',p.cat);
+    return '<button type="button" class="tx" data-kr="'+esc(p.id)+'"><span class="ico" style="background:'+ci.col+'33">'+ci.ico+'</span><span class="m"><b>'+esc(p.name)+'</b><small>'+(inf.total?(rem+'/'+inf.total+' ay kaldı · '+esc(mlab(p.end))):'Süresiz')+'</small></span><span class="a">'+esc(fmt(p.amt))+'<small style="display:block;font-weight:400;opacity:.7">/ ay</small></span></button>'}).join('');
+  $('krMore').textContent=krOpen?'Daha az göster ▴':(L.length>3?'+'+(L.length-3)+' kredi daha ve ayrıntılar ▾':'Ayrıntıları göster ▾');
+  $('krBody').innerHTML=h;
+  $('krSum').textContent=cnt+' kalem · aylık '+fmt(mo,true)+(rm>0?' · kalan toplam '+fmt(rm,true):'');
+  $('krBody').style.display=krOpen?'':'none';$('krCh').textContent=krOpen?'⌄':'›';
+}
+$('krHead').onclick=$('krMore').onclick=function(){krOpen=!krOpen;renderKr()};
+$('krCard').addEventListener('click',function(ev){var b=ev.target.closest('[data-kr]');if(b)openPlan(b.getAttribute('data-kr'))});
 function refreshAttn(){var n=0;['dupChk','subChk'].forEach(function(i){var e=$(i);if(e&&e.style.display!=='none')n++});$('attnN').textContent=n;$('attnHead').style.display=n?'':'none';if(!n)$('v-ozet').classList.remove('attnOpen')}
 document.querySelectorAll('#v-ayar .card.acc>h2').forEach(function(h){h.onclick=function(){h.parentNode.classList.toggle('open')}});
 (function(){var o=Element.prototype.scrollIntoView;Element.prototype.scrollIntoView=function(){try{var a=this.closest&&this.closest('.acc');if(a)a.classList.add('open');if(this.closest&&this.closest('#moreWrap'))openMore(true);if(this.closest&&this.closest('#nbCard'))$('nbCard').style.display=''}catch(e){}return o.apply(this,arguments)}})();
