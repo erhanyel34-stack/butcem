@@ -9,6 +9,43 @@
 <meta name="theme-color" content="#0b0e22">
 <title>Bütçem – Gelir Gider Takibi</title>
 <style>
+html{background:#0b0e22}
+#spl{--bg:#0b0e22;--acc:#7c5cff;--acc2:#27d3c3;--num:ui-rounded,"SF Pro Rounded",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;position:fixed;inset:0;z-index:9999;background:var(--bg);display:grid;place-items:center;overflow:hidden;animation:splFail .4s 6s forwards;-webkit-user-select:none;user-select:none}
+#spl *{box-sizing:border-box}
+#spl .glow{position:absolute;border-radius:50%;filter:blur(70px);opacity:0}
+#spl .g1{width:300px;height:300px;background:#7c5cff;left:-90px;top:-60px;animation:splGl 1.6s .1s ease-out forwards}
+#spl .g2{width:280px;height:280px;background:#27d3c3;right:-100px;bottom:-40px;animation:splGl 1.6s .25s ease-out forwards}
+@keyframes splGl{from{opacity:0;transform:scale(.6)}to{opacity:.38;transform:scale(1)}}
+#spl .mid{position:relative;display:flex;flex-direction:column;align-items:center;margin-top:-30px}
+#spl .ring{position:absolute;top:1px;left:50%;width:110px;height:110px;margin-left:-55px;border-radius:50%;border:2px solid #7c5cff;opacity:0;animation:splRg 1.8s ease-out infinite}
+#spl .ring.r2{animation-delay:.6s;border-color:#27d3c3}
+@keyframes splRg{0%{transform:scale(.8);opacity:0}15%{opacity:.55}100%{transform:scale(2.6);opacity:0}}
+#spl .logo{position:relative;width:112px;height:112px;border-radius:32px;background:linear-gradient(135deg,var(--acc),var(--acc2));display:grid;place-items:center;font-family:var(--num);font-size:64px;font-weight:800;color:#fff;box-shadow:0 20px 50px #6a4cf577,inset 0 1px 0 #ffffff55;overflow:hidden;opacity:0;transform:scale(.4) rotate(-12deg);animation:splLg .9s .15s cubic-bezier(.3,1.5,.5,1) forwards}
+#spl .logo:after{content:"";position:absolute;inset:0;border-radius:32px;background:linear-gradient(115deg,transparent 35%,#ffffff55 50%,transparent 65%);transform:translateX(-120%);animation:splSh 1s 1s ease-in-out forwards}
+@keyframes splLg{to{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes splSh{to{transform:translateX(120%)}}
+#spl .logo span{display:block;animation:splTl 2.4s 1s ease-in-out infinite}
+@keyframes splTl{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+#spl .name{margin-top:26px;font-family:var(--num);font-weight:800;font-size:38px;letter-spacing:-1px;color:#f3f5ff;display:flex}
+#spl .name i{font-style:normal;display:inline-block;opacity:0;transform:translateY(14px);animation:splCh .5s ease-out forwards}
+@keyframes splCh{to{opacity:1;transform:none}}
+#spl .tag{margin-top:8px;font-size:14.5px;color:#8f96c6;opacity:0;animation:splFi .7s 1.45s ease-out forwards}
+@keyframes splFi{to{opacity:1}}
+#spl .bar{position:absolute;left:50%;bottom:84px;width:120px;height:4px;margin-left:-60px;border-radius:4px;background:#ffffff14;overflow:hidden;opacity:0;animation:splFi .4s 1.2s forwards}
+#spl .bar b{display:block;height:100%;width:0;border-radius:4px;background:linear-gradient(90deg,var(--acc),var(--acc2));animation:splLd 1.1s 1.2s ease-in-out forwards}
+@keyframes splLd{to{width:100%}}
+#spl .credit{position:absolute;bottom:38px;left:0;right:0;text-align:center;font-size:11.5px;color:#8f96c688;opacity:0;animation:splFi .6s 1.7s forwards}
+#spl .coin{position:absolute;width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,#ffd27a,#ffb648);opacity:0;box-shadow:0 4px 10px #ffb64855}
+#spl .c1{left:18%;top:36%;animation:splFl 2.4s .9s ease-in-out forwards}
+#spl .c2{right:20%;top:41%;width:10px;height:10px;animation:splFl 2.4s 1.2s ease-in-out forwards}
+#spl .c3{left:28%;top:66%;width:9px;height:9px;animation:splFl 2.4s 1.05s ease-in-out forwards}
+@keyframes splFl{0%{opacity:0;transform:translateY(20px)}30%{opacity:.9}100%{opacity:0;transform:translateY(-40px)}}
+#spl.out{animation:splOut .45s ease-in forwards;pointer-events:none}
+@keyframes splOut{to{opacity:0;transform:scale(1.04);visibility:hidden}}
+@keyframes splFail{to{opacity:0;visibility:hidden;pointer-events:none}}
+@media (prefers-reduced-motion:reduce){#spl *{animation-duration:.01s!important;animation-delay:0s!important}}
+</style>
+<style>
 :root{
   --bg:#0b0e22;--card:#161a37;--card2:#1f2449;--line:#ffffff14;--txt:#f3f5ff;--mut:#8f96c6;
   --acc:#7c5cff;--acc2:#27d3c3;--in:#3ddc97;--out:#ff6b81;--warn:#ffb648;
@@ -532,6 +569,23 @@ html.big body{zoom:1.12}
 </style>
 </head>
 <body>
+<div id="spl" aria-hidden="true">
+ <div class="glow g1"></div><div class="glow g2"></div>
+ <div class="coin c1"></div><div class="coin c2"></div><div class="coin c3"></div>
+ <div class="mid">
+  <div class="ring"></div><div class="ring r2"></div>
+  <div class="logo"><span>₺</span></div>
+  <div class="name"><i style="animation-delay:.7s">B</i><i style="animation-delay:.76s">ü</i><i style="animation-delay:.82s">t</i><i style="animation-delay:.88s">ç</i><i style="animation-delay:.94s">e</i><i style="animation-delay:1s">m</i></div>
+  <div class="tag">Ay sonunu önceden gör</div>
+ </div>
+ <div class="bar"><b></b></div>
+ <div class="credit">Savaş Erhan Yel</div>
+</div>
+<script>(function(){var t0=Date.now(),el=document.getElementById('spl');if(!el)return;
+if(navigator.webdriver){el.parentNode.removeChild(el);return}
+var done=false;function kill(){if(done)return;done=true;el.classList.add('out');setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el)},520)}
+el.addEventListener('click',kill);el.addEventListener('touchend',function(e){e.preventDefault();kill()},{passive:false});
+window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0)))};})();</script>
 <div class="bgfx"><i></i><i></i></div>
 <div class="wrap">
   <div class="top">
@@ -1806,10 +1860,12 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.4.1';
+var APP_VER='1.5';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+ {v:'1.5',date:'Kasım 2026',title:'Açılış ekranı',items:[
+  ['🚀','Yeni açılış ekranı','Uygulama açılırken beyaz ekran yerine animasyonlu Bütçem ekranı görünür. İstersen dokunarak geçebilirsin.',1]]},
  {v:'1.4.1',date:'Kasım 2026',title:'Hata düzeltmeleri',items:[
   ['📈','Prim ve ek gelir tahmini şişirmiyor','Maaşını “her ay tekrarla” yapmadıysan ve bu ayın maaşı henüz girilmemişse, geçen ayki prim gibi tek seferlik gelirler gelecek aylara maaş gibi taşınıyordu. Artık maaş esas alınıyor.',0],
   ['💾','Yedekleme en üstte','Ayarlar’ı açınca ilk kart yedekleme. Yedek dosyasından geri yükle düğmesi de yerine oturdu.',0]]},
@@ -1874,7 +1930,7 @@ function maybeWn(){
   var tries=0;
   (function wait(){
     tries++;if(tries>80||seenVer()===APP_VER)return;
-    var busy=document.querySelector('.sheet-bg.show,.cbg.show,.tscr.show');
+    var busy=document.getElementById('spl')||document.querySelector('.sheet-bg.show,.cbg.show,.tscr.show');
     if(busy){setTimeout(wait,700);return}
     openWn(false);
   })();
@@ -2722,6 +2778,7 @@ $('rbg').onclick=function(ev){if(ev.target===$('rbg'))laterRoll()};
 document.addEventListener('visibilitychange',function(){if(!document.hidden){render();checkRollover()}});
 
 load();var rp=repair();if(rp>0)save();render();renderSnaps();checkRollover();if(rp>0)toast('Veriler kontrol edildi, '+rp+' kayıt düzeltildi');if(!startGuide())startOnboarding();
+try{if(window.__splashReady)window.__splashReady()}catch(e){}
 maybeWn();
 })();
 </script>
