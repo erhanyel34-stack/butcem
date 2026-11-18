@@ -852,11 +852,21 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
     <div class="card" id="cdCard">
       <h2>💳 Kartlarım</h2>
       <div id="cdSum"></div><div id="cdList"></div>
-      <div class="note" style="margin:8px 0 6px" id="cdHint">Kartlarını ekle: limitler toplanır. Limit dolunca harcama kartta değil, ana paranda yazılır ve haber verilir.</div>
+      <div id="mcList"></div>
+      <div class="paysg" style="margin:10px 0 8px"><button type="button" class="on" id="cdTK">💳 Kredi kartı</button><button type="button" id="cdTM">🍽️ Yemek kartı</button></div>
+      <div id="cdForm"><div class="note" style="margin:8px 0 6px" id="cdHint">Kartlarını ekle: limitler toplanır. Limit dolunca harcama kartta değil, ana paranda yazılır ve haber verilir.</div>
       <input class="fld" id="cdName" placeholder="Kart adı (örn. Garanti, Akbank)" maxlength="24">
       <div class="two"><input class="fld" id="cdLim" inputmode="decimal" placeholder="Kart limiti ₺" autocomplete="off"><div></div></div>
       <div class="two"><div><span class="lbl">Ekstre kesim günü</span><input class="fld" id="cdCut" type="number" min="1" max="31" placeholder="örn. 15"></div><div><span class="lbl">Son ödeme günü</span><input class="fld" id="cdDue" type="number" min="1" max="31" placeholder="örn. 25"></div></div>
-      <button class="btn sec sm" id="cdAdd">Kartı ekle</button>
+      <button class="btn sec sm" id="cdAdd">Kartı ekle</button></div>
+      <div id="mcForm" style="display:none">
+        <div class="note" style="margin:0 0 6px">Yemek kartı ana bakiyenden düşmez. Harcama eklerken ödeme şekli olarak kartın adını seçersin, tutar kartın bakiyesinden düşer.</div>
+        <input class="fld" id="mcName" placeholder="Kart adı (örn. Sodexo, Multinet)" maxlength="24">
+        <input class="fld" id="mcBal" inputmode="decimal" placeholder="Şu anki bakiye ₺" autocomplete="off">
+        <div class="two"><div><span class="lbl">Her ay yüklenen tutar</span><input class="fld" id="mcLoad" inputmode="decimal" placeholder="isteğe bağlı ₺" autocomplete="off"></div><div><span class="lbl">Yükleme günü</span><input class="fld" id="mcDay" type="number" min="1" max="31" placeholder="örn. 1"></div></div>
+        <button class="btn sec sm" id="mcAdd">Yemek kartını ekle</button>
+      </div>
+      <div id="mcTx"></div>
     </div>
     <div class="card" id="cardsCard">
       <h2>💳 Kart harcamaları</h2>
@@ -979,7 +989,7 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
     <input class="fld" id="sCustom" placeholder="Veya kendi kategorini yaz (isteğe bağlı)" maxlength="24">
     <div id="sPayWrap"><span class="lbl">Ödeme şekli</span>
       <div class="paysg"><button type="button" class="on" id="sPayN">💵 Nakit</button><button type="button" id="sPayK">💳 Kredi kartı</button></div>
-      <select class="fld" id="sCardSel" style="display:none"></select>
+      <div class="paysg" id="sPayM" style="display:none;flex-wrap:wrap"></div><select class="fld" id="sCardSel" style="display:none"></select>
       <div class="note" id="sPayNote" style="display:none;margin:-4px 0 10px">Kart harcamalarına yazılır, bakiyen şimdi düşmez. Ekstreyi ödediğinde düşer.</div><div class="note" id="sLimInfo" style="display:none;margin:-4px 0 10px"></div></div>
     <div class="two">
       <input class="fld" id="sDate" type="date">
@@ -1195,7 +1205,7 @@ var mem=null;
 function defBills(){return[
   {id:'b-elektrik',name:'Elektrik',cat:'Elektrik'},{id:'b-su',name:'Su',cat:'Su'},{id:'b-gaz',name:'Doğalgaz',cat:'Doğalgaz'},
   {id:'b-net',name:'Ev interneti',cat:'İnternet'},{id:'b-tel',name:'Cep telefonu',cat:'Telefon'},{id:'b-ulasim',name:'Ulaşım',cat:'Ulaşım'}]}
-var S={entries:[],inited:{},recDone:{},plans:[],bills:defBills(),rolled:{},trips:[],cards:[],cardDefs:[],incPlans:[],varOv:null,limits:{}};
+var S={entries:[],inited:{},recDone:{},plans:[],bills:defBills(),rolled:{},trips:[],cards:[],cardDefs:[],meals:[],mealTx:[],incPlans:[],varOv:null,limits:{}};
 var cur=new Date();cur=new Date(cur.getFullYear(),cur.getMonth(),1);
 var tab='ozet',editId=null,sType='out',sCat='Market',wipeArm=false;
 var planEdit=null,tryMode=false,sVer='none',pVer='none',sArm=false,pArm=false,pDelArm=false;
@@ -1213,7 +1223,7 @@ function migRec(inited,ents){
   });
   return r}
 function oo(x){return(x&&typeof x==='object'&&!Array.isArray(x))?x:{}}
-function load(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&Array.isArray(o.entries)){S={entries:o.entries,inited:oo(o.inited),recDone:o.recDone?oo(o.recDone):migRec(o.inited,o.entries),plans:Array.isArray(o.plans)?o.plans:[],bills:Array.isArray(o.bills)?o.bills:defBills(),rolled:oo(o.rolled),trips:Array.isArray(o.trips)?o.trips:[],cards:Array.isArray(o.cards)?o.cards:[],cardDefs:Array.isArray(o.cardDefs)?o.cardDefs:[],incPlans:Array.isArray(o.incPlans)?o.incPlans:[],varOv:(typeof o.varOv==='number'&&o.varOv>=0)?o.varOv:null,limits:(o.limits&&typeof o.limits==='object'&&!Array.isArray(o.limits))?o.limits:{}};}}}catch(e){if(mem)S=mem;}}
+function load(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&Array.isArray(o.entries)){S={entries:o.entries,inited:oo(o.inited),recDone:o.recDone?oo(o.recDone):migRec(o.inited,o.entries),plans:Array.isArray(o.plans)?o.plans:[],bills:Array.isArray(o.bills)?o.bills:defBills(),rolled:oo(o.rolled),trips:Array.isArray(o.trips)?o.trips:[],cards:Array.isArray(o.cards)?o.cards:[],cardDefs:Array.isArray(o.cardDefs)?o.cardDefs:[],meals:Array.isArray(o.meals)?o.meals:[],mealTx:Array.isArray(o.mealTx)?o.mealTx:[],incPlans:Array.isArray(o.incPlans)?o.incPlans:[],varOv:(typeof o.varOv==='number'&&o.varOv>=0)?o.varOv:null,limits:(o.limits&&typeof o.limits==='object'&&!Array.isArray(o.limits))?o.limits:{}};}}}catch(e){if(mem)S=mem;}}
 function repair(){
   var n=0,seen={},okd=/^\d{4}-\d{2}-\d{2}$/;
   S.entries=S.entries.filter(function(e){
@@ -1231,6 +1241,9 @@ function repair(){
   if(!Array.isArray(S.incPlans)){S.incPlans=[];n++}
   S.incPlans=S.incPlans.filter(function(c){if(!c||!c.id||!(c.amt>0)||!/^\d{4}-\d{2}$/.test(c.start||'')){n++;return false}c.conf=oo(c.conf);c.day=Math.min(31,Math.max(1,parseInt(c.day,10)||1));return true});
   if(!Array.isArray(S.cardDefs)){S.cardDefs=[];n++}
+  if(!Array.isArray(S.meals)){S.meals=[];n++}if(!Array.isArray(S.mealTx)){S.mealTx=[];n++}
+  S.meals=S.meals.filter(function(m){if(!m||!m.id||!m.name){n++;return false}m.bal=+m.bal||0;m.load=+m.load>0?+m.load:0;m.day=Math.min(31,Math.max(1,parseInt(m.day,10)||1));return true});
+  S.mealTx=S.mealTx.filter(function(t){var ok=t&&t.id&&t.amt>0&&/^\d{4}-\d{2}-\d{2}$/.test(t.date||'')&&S.meals.some(function(m){return m.id===t.mealId});if(!ok)n++;return ok});
   S.cardDefs=S.cardDefs.filter(function(c){if(!c||!c.id||!(c.limit>0)){n++;return false}c.name=c.name||'Kartım';return true});
   if(!S.limits||typeof S.limits!=='object'||Array.isArray(S.limits)){S.limits={};n++}
   Object.keys(S.limits).forEach(function(k){if(!(S.limits[k]>0)){delete S.limits[k];n++}});
@@ -1557,7 +1570,7 @@ function buildCheck(rows,opt){
 function entryCheck(){
   sArm=false;$('sSave').textContent='Kaydet';$('sSave').classList.remove('warn');
   var box=$('sCheck');sVer='none';try{if(sMode==='plan'&&!editId)$('sSave').textContent=(sType==='in')?'Devam: süreli gelir':'Devam: taksit ayarları'}catch(e){}
-  if(sType!=='out'){box.innerHTML='';return}
+  if(sType!=='out'||(typeof sPay!=='undefined'&&sPay.indexOf('m:')===0)){box.innerHTML='';return}
   var amt=parseNum($('sAmt').value),date=$('sDate').value;
   if(!(amt>0)||!date){box.innerHTML='';return}
   var d=new Date(date+'T00:00:00');if(isNaN(d)){box.innerHTML='';return}
@@ -1616,6 +1629,7 @@ function countTo(el,to){
 }
 
 function render(){
+  try{mcRoll()}catch(e){}
   var now=new Date();ensureMonth(new Date(now.getFullYear(),now.getMonth(),1));ensureMonth(cur);
   var isFutM=mk(cur)>nowK(),es=monthEntries(),inc=0,out=0,pend=0,byCat={},subBy={};
   es.forEach(function(e){
@@ -1811,6 +1825,11 @@ function saveSheet(){
   var cat=$('sCustom').value.trim()||sCat,date=$('sDate').value;
   if(!date){toast('Tarih seç');return}
   if(sType==='out'&&sVer==='over'&&!sArm){sArm=true;$('sSave').textContent='⚠️ Bütçeyi aşıyor — yine de kaydet';$('sSave').classList.add('warn');return}
+  if(sType==='out'&&sPay.indexOf('m:')===0&&!editId){
+    var mid=sPay.slice(2),mm=mcById(mid);if(!mm){setPay('n');toast('Yemek kartı bulunamadı');return}
+    var go=function(){var msg=mealSpend(mid,Math.round(amt*100)/100,cat,date,$('sNote').value.trim());save();closeSheet();render();toast(msg)};
+    if(mm.bal<amt){askBox('Yemek kartında bakiye yetmiyor','<b>'+esc(mm.name)+'</b> bakiyesi '+esc(fmt(Math.max(mm.bal,0),true))+', harcama '+esc(fmt(amt,true))+'. Yine de eklersen kart bakiyesi eksiye düşer. Ana bakiyen değişmez.',[{t:'Yine de ekle',f:go},{t:'Vazgeç',c:'sec'}]);return}
+    go();return}
   if(sType==='out'&&sPay==='k'&&!editId){
     var rs=addCardSpend({date:date,amt:Math.round(amt*100)/100,cat:cat,tcat:'',note:$('sNote').value.trim(),cardId:cardPick('sCardSel')});
     S.inited[date.slice(0,7)]=true;save();closeSheet();render();if(!limitNotice(rs))toast(limMsg(cat,date)||'Kart harcamalarına eklendi ✓ Ekstreyi ödeyince düşer');return}
@@ -2239,10 +2258,15 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.17';
+var APP_VER='1.18';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
-var RELEASES=[{v:'1.17',date:'Kasım 2026',title:'İkinci kredi kendiliğinden numaralanır',items:[
+var RELEASES=[{v:'1.18',date:'Kasım 2026',title:'Yemek kartları',items:[
+  ['🍽️','Yemek kartı ekle','Kartlarım bölümünden “Yemek kartı” seçip adını (Sodexo, Multinet…) ve şu anki bakiyeni yaz. Kaç kart istersen ekleyebilirsin.',1],
+  ['🔁','Her ay kendiliğinden yüklenir','Aylık yükleme tutarını ve gününü bir kez yaz, her ay o gün bakiyeye kendisi eklenir. Tutar değişirse kartın üstüne dokunup güncelleyebilirsin. Kalan bakiye ertesi aya devreder.',1],
+  ['🧾','Ana bakiyeden düşmez','Harcama eklerken ödeme şekli olarak yemek kartının adını seçersen tutar kartın bakiyesinden düşer, ana bakiyen değişmez. Altta kalan bakiyeyi görürsün.',1],
+  ['🔍','Aramadan da','Aramaya “yemek” ya da kartın adını yazınca kart ve harcama ekleme çıkar. Ödeme şekli olarak yemek kartını seçebilirsin.',1]]},
+{v:'1.17',date:'Kasım 2026',title:'İkinci kredi kendiliğinden numaralanır',items:[
   ['🔢','Aynı adı tekrar yazmana gerek yok','Zaten “QNB” varken bir daha QNB eklersen uygulama sorar: ikinci bir kredi mi? “Evet” dersen adı kendisi “QNB 2”, sonra “QNB 3” yapar. İstersen sonra adı değiştirebilirsin.',1],
   ['💬','Tutarı da gösterir','Soruda önceki kaydın tutarı yazar, böylece aynı kaydı yanlışlıkla iki kez eklemediğini hemen anlarsın.',1],
   ['🧾','Her yerde aynı','Banka kredisi, kart taksidi, araç ve diğer taksitlerde, ayrıca faturalarda çalışır.',1],
@@ -2445,7 +2469,7 @@ $('sChips').onclick=function(ev){var b=ev.target.closest('.chip');if(!b)return;i
 $('sCustom').oninput=function(){chips()};
 $('sAmt').oninput=function(ev){fmtAmt(ev);entryCheck()};$('sDate').onchange=entryCheck;$('sRec').onchange=entryCheck;
 function syncMode(){
-  var m=sMode||($('sRec').checked?'rec':'once'),isIn=sType==='in',k=(typeof sPay!=='undefined'&&sPay==='k');
+  var m=sMode||($('sRec').checked?'rec':'once'),isIn=sType==='in',k=(typeof sPay!=='undefined'&&sPay!=='n');
   $('sModeWrap').style.display=k?'none':'';
   $('sModeQ').textContent=isIn?'Bu gelir nasıl gelecek?':'Bu ödeme nasıl olacak?';
   var x=$('sMdX');x.textContent=isIn?'Süreli':'Taksitli';x.style.display=editId?'none':'';
@@ -2787,6 +2811,75 @@ $('cdList').onclick=function(ev){
   if(cdEdit===id){cdArm=id;renderCardDefs();setTimeout(function(){if(cdArm===id){cdArm=null;renderCardDefs()}},3000);return}
   cdEdit=id;$('cdName').value=d.name;$('cdLim').value=toIn(d.limit);$('cdCut').value=d.cut;$('cdDue').value=d.due;$('cdAdd').textContent='Kartı güncelle (silmek için listede tekrar dokun)';$('cdName').focus();
 };
+/* ---------- Yemek kartları ---------- */
+function mcById(id){return id?S.meals.filter(function(m){return m.id===id})[0]:null}
+function mcNext(k){var y=+k.slice(0,4),m=+k.slice(5,7)+1;if(m>12){m=1;y++}return y+'-'+pad(m)}
+function mcPrev(k){var y=+k.slice(0,4),m=+k.slice(5,7)-1;if(m<1){m=12;y--}return y+'-'+pad(m)}
+function mcRoll(){
+  var k0=nowK(),td=new Date().getDate(),msgs=[];
+  S.meals.forEach(function(m){
+    if(!(m.load>0))return;
+    var k=m.last||k0,g=0;
+    while(g++<36){
+      var nx=mcNext(k);if(nx>k0)break;
+      var dim=new Date(+nx.slice(0,4),+nx.slice(5,7),0).getDate(),dd=Math.min(m.day||1,dim);
+      if(nx===k0&&td<dd)break;
+      m.bal=r2((+m.bal||0)+m.load);m.last=nx;k=nx;msgs.push(m.name+' · +'+fmt(m.load,true)+' yüklendi');
+    }
+  });
+  if(msgs.length){save();setTimeout(function(){toast('🍽️ '+msgs[msgs.length-1]+(msgs.length>1?' (+'+(msgs.length-1)+' yükleme daha)':''))},600)}
+}
+function mcNote(id,a){var m=mcById(id);if(!m)return '';return 'Ana bakiyen değişmez. '+m.name+' bakiyesinden düşer: şu an '+fmt(m.bal,true)+(a>0?', harcamadan sonra '+fmt(r2(m.bal-a),true):'')+'.'}
+function mcPayBtns(){
+  var el=$('sPayM');if(!el)return;
+  if(!S.meals.length||sType!=='out'){el.style.display='none';el.innerHTML='';return}
+  el.innerHTML=S.meals.map(function(m){return '<button type="button" data-pm="'+esc(m.id)+'" class="'+(sPay==='m:'+m.id?'on':'')+'">🍽️ '+esc(m.name)+'</button>'}).join('');el.style.display='flex';
+}
+function mealSpend(id,amt,cat,date,note){
+  var m=mcById(id);m.bal=r2(m.bal-amt);
+  S.mealTx.push({id:uid(),mealId:id,amt:amt,cat:cat,date:date,note:note||''});
+  return '✓ '+cat+' · −'+fmt(amt,true)+' '+m.name+' kartından düştü. Kalan '+fmt(m.bal,true);
+}
+var mcEdit=null,mcArm=null,mcTxArm=null;
+function renderMeals(){
+  var el=$('mcList'),tx=$('mcTx');if(!el)return;
+  el.innerHTML=S.meals.map(function(m){
+    var cap=Math.max(m.load||0,m.bal,1),pc=Math.max(0,Math.min(100,m.bal/cap*100)),col=m.bal<=0?'var(--out)':(pc<=20?'var(--warn)':'var(--in)');
+    return '<button type="button" class="tx" data-mc="'+esc(m.id)+'"><span class="ico" style="background:#2ecc8f33">🍽️</span><span class="m"><b>'+esc(m.name)+'</b><small>'+(m.load>0?'Her ayın '+m.day+'. günü '+esc(fmt(m.load))+' yüklenir':'Yemek kartı')+(mcArm===m.id?' · silmek için tekrar dokun':' · dokun: düzenle')+'</small><span style="display:block;height:5px;border-radius:4px;background:#ffffff14;margin-top:5px;overflow:hidden"><span style="display:block;height:100%;width:'+pc.toFixed(0)+'%;background:'+col+'"></span></span></span><span class="a">'+esc(fmt(m.bal,true))+'</span></button>';
+  }).join('');
+  var list=S.mealTx.slice().sort(function(a,b){return a.date<b.date?1:(a.date>b.date?-1:0)}).slice(0,8);
+  tx.innerHTML=list.length?'<div class="gsg" style="margin:12px 0 4px">Son yemek kartı harcamaları</div>'+list.map(function(t){var m=mcById(t.mealId),ci=catInfo('out',t.cat);
+    return '<button type="button" class="tx" data-mt="'+esc(t.id)+'"><span class="ico" style="background:'+ci.col+'33">'+ci.ico+'</span><span class="m"><b>'+esc(t.note||t.cat)+'</b><small>'+t.date.slice(8,10)+'.'+t.date.slice(5,7)+' · '+esc(m?m.name:'')+(mcTxArm===t.id?' · silmek için tekrar dokun':'')+'</small></span><span class="a neg">−'+esc(fmt(t.amt,true))+'</span></button>'}).join(''):'';
+}
+function mcClear(){mcEdit=null;$('mcName').value='';$('mcBal').value='';$('mcLoad').value='';$('mcDay').value='';$('mcAdd').textContent='Yemek kartını ekle'}
+bindAmt($('mcBal'));$('mcBal').oninput=fmtAmt;bindAmt($('mcLoad'));$('mcLoad').oninput=fmtAmt;
+function cdType(t){$('cdTK').classList.toggle('on',t==='k');$('cdTM').classList.toggle('on',t==='m');$('cdForm').style.display=t==='k'?'':'none';$('mcForm').style.display=t==='m'?'':'none'}
+$('cdTK').onclick=function(){cdType('k')};$('cdTM').onclick=function(){cdType('m')};
+$('mcAdd').onclick=function(){
+  var nm=$('mcName').value.trim(),bal=parseNum($('mcBal').value),ld=parseNum($('mcLoad').value)||0,day=parseInt($('mcDay').value,10);
+  if(!nm){toast('Kart adını yaz');$('mcName').focus();return}
+  if(!(bal>=0)||$('mcBal').value.trim()===''){toast('Şu anki bakiyeyi yaz');$('mcBal').focus();return}
+  if(ld>0&&!(day>=1&&day<=31)){toast('Yükleme gününü yaz (1-31)');$('mcDay').focus();return}
+  var go=function(name){
+    markUndo();
+    if(mcEdit){var m=mcById(mcEdit);if(m){m.name=name;m.bal=r2(bal);m.load=ld>0?r2(ld):0;m.day=day>=1?day:(m.day||1)}}
+    else{var td=new Date().getDate(),dd=day>=1?day:1;S.meals.push({id:uid(),name:name,bal:r2(bal),load:ld>0?r2(ld):0,day:dd,last:(td>=dd?nowK():mcPrev(nowK()))})}
+    var ed=!!mcEdit;mcClear();save();render();toast(ed?'✓ Yemek kartı güncellendi':'✓ “'+name+'” Kartlarım bölümüne eklendi'+(ld>0?'. Her ayın '+day+'. günü '+fmt(ld,true)+' yüklenecek':''),true);
+  };
+  if(!mcEdit&&dupAsk(S.meals.map(function(m){return {name:m.name,amt:m.load}}),nm,ld,'yemek kartı',go))return;
+  go(nm);
+};
+$('mcList').onclick=function(ev){
+  var b=ev.target.closest('[data-mc]');if(!b)return;var id=b.getAttribute('data-mc'),m=mcById(id);if(!m)return;
+  if(mcArm===id){mcArm=null;markUndo();S.meals=S.meals.filter(function(x){return x.id!==id});S.mealTx=S.mealTx.filter(function(t){return t.mealId!==id});mcClear();save();render();toast('Yemek kartı silindi',true);return}
+  if(mcEdit===id){mcArm=id;renderMeals();setTimeout(function(){if(mcArm===id){mcArm=null;renderMeals()}},3000);return}
+  cdType('m');mcEdit=id;$('mcName').value=m.name;$('mcBal').value=toIn(m.bal);$('mcLoad').value=m.load>0?toIn(m.load):'';$('mcDay').value=m.day;$('mcAdd').textContent='Güncelle (silmek için listede tekrar dokun)';$('mcName').focus();
+};
+$('mcTx').onclick=function(ev){
+  var b=ev.target.closest('[data-mt]');if(!b)return;var id=b.getAttribute('data-mt'),t=S.mealTx.filter(function(x){return x.id===id})[0];if(!t)return;
+  if(mcTxArm!==id){mcTxArm=id;renderMeals();setTimeout(function(){if(mcTxArm===id){mcTxArm=null;renderMeals()}},2500);return}
+  mcTxArm=null;markUndo();var m=mcById(t.mealId);if(m)m.bal=r2(m.bal+t.amt);S.mealTx=S.mealTx.filter(function(x){return x.id!==id});save();render();toast('Harcama silindi, tutar karta geri eklendi',true);
+};
 /* ---------- Kart harcamaları ---------- */
 var cardArm=null,cardPayArm=null;
 function monthName(k){return MONTHS[parseInt(k.slice(5),10)-1]}
@@ -2801,7 +2894,7 @@ function renderCardSpend(){
   box.style.display='';var g=$('csGo');if(g)g.onclick=function(){document.querySelector('.nav .t[data-v="fatura"]').click()};
 }
 function renderCards(){
-  renderCardSpend();renderCardDefs();
+  renderCardSpend();renderCardDefs();renderMeals();
   var un=S.cards.filter(function(c){return !c.paid}),g={},keys=[];
   un.forEach(function(c){var k=stmtKey(c),gk=(cdById(c.cardId)?c.cardId:'')+'|'+k;if(!g[gk]){g[gk]=[];keys.push(gk)}g[gk].push(c)});
   keys.sort(function(a,b){var x=a.split('|')[1],y=b.split('|')[1];return x<y?-1:(x>y?1:(a<b?-1:1))});var h='';
@@ -3231,8 +3324,9 @@ $('wl').addEventListener('click',function(ev){
 });
 /* gider penceresi: nakit / kredi kartı */
 var sPay='n';
-function setPay(p){sPay=p;var rl=$('sRec').parentNode;rl.style.display=(p==='k')?'none':'';if(p==='k')$('sRec').checked=false;$('sPayN').classList.toggle('on',p==='n');$('sPayK').classList.toggle('on',p==='k');$('sPayNote').style.display=p==='k'?'block':'none';fillCardSel('sCardSel',p==='k');updLimInfo();if(p==='k')sMode='';syncMode()}
-$('sAmt').addEventListener('input',updLimInfo);
+function setPay(p){sPay=p;var nk=(p!=='n'),rl=$('sRec').parentNode;rl.style.display=nk?'none':'';if(nk)$('sRec').checked=false;mcPayBtns();$('sPayN').classList.toggle('on',p==='n');$('sPayK').classList.toggle('on',p==='k');$('sPayNote').style.display=nk?'block':'none';$('sPayNote').textContent=(p.indexOf('m:')===0)?mcNote(p.slice(2),parseNum($('sAmt').value)||0):'Kart harcamalarına yazılır, bakiyen şimdi düşmez. Ekstreyi ödediğinde düşer.';fillCardSel('sCardSel',p==='k');updLimInfo();if(nk)sMode='';syncMode()}
+$('sAmt').addEventListener('input',function(){updLimInfo();if(sPay.indexOf('m:')===0)$('sPayNote').textContent=mcNote(sPay.slice(2),parseNum($('sAmt').value)||0)});
+$('sPayM').onclick=function(ev){var b=ev.target.closest('[data-pm]');if(b)setPay('m:'+b.getAttribute('data-pm'))};
 $('sPayN').onclick=function(){setPay('n')};$('sPayK').onclick=function(){setPay('k')};
 
 
@@ -3311,7 +3405,7 @@ function gsActions(W){
 function gsFormHtml(a){
   var isIn=a.indexOf('inc:')===0,cat=a.split(':')[1],ci=catInfo(isIn?'in':'out',cat);
   var h='<div class="gsform"><h4>'+ci.ico+' '+esc(isIn?(cat==='Maaş'?'Maaş / gelir':cat):cat+' gideri')+'</h4><input class="fld" id="gsAmt" inputmode="decimal" placeholder="0 ₺" autocomplete="off" style="font-size:22px;font-weight:700">';
-  if(!isIn)h+='<div class="paysg"><button type="button" class="'+(gsPay==='n'?'on':'')+'" data-gp="n">💵 Nakit</button><button type="button" class="'+(gsPay==='k'?'on':'')+'" data-gp="k">💳 Kredi kartı</button></div><select class="fld" id="gsCardSel" style="display:none"></select>';
+  if(!isIn)h+='<div class="paysg"><button type="button" class="'+(gsPay==='n'?'on':'')+'" data-gp="n">💵 Nakit</button><button type="button" class="'+(gsPay==='k'?'on':'')+'" data-gp="k">💳 Kredi kartı</button></div>'+(S.meals.length?'<div class="paysg" style="flex-wrap:wrap">'+S.meals.map(function(m){return '<button type="button" class="'+(gsPay==='m:'+m.id?'on':'')+'" data-gp="m:'+esc(m.id)+'">🍽️ '+esc(m.name)+'</button>'}).join('')+'</div>':'')+'<select class="fld" id="gsCardSel" style="display:none"></select>';
   h+='<div class="two"><input class="fld" id="gsDate" type="date" value="'+esc(today())+'"><input class="fld" id="gsNote" placeholder="Not (isteğe bağlı)" maxlength="60"></div><button type="button" class="btn" id="gsSave">'+(isIn?'Kaydet, bakiyeme ekle':'Kaydet, bakiyeden düş')+'</button></div>';
   return h;
 }
@@ -3357,6 +3451,8 @@ function gsRender(){
   if(IP.length){h+='<div class="gsg">Ek gelirler</div>';IP.forEach(function(p){h+=gsRow('','✨','#27d3c333',p.name,'Ayın '+p.day+'. günü','+'+fmt(p.amt,true),'data-go="ip:'+esc(p.id)+'"');n++})}
   // kartlar
   var CD=S.cardDefs.filter(function(c){return /^(kart|kartlar|kartlarim|kredi karti)$/.test(W.core.join(' '))||gsHit(c.name,words)});
+  var MC=S.meals.filter(function(m){return /^(yemek|yemek karti|yemek kartlari|kart|kartlar|kartlarim)$/.test(W.core.join(' '))||gsHit(m.name,words)});
+  if(MC.length){h+='<div class="gsg">Yemek kartları</div>';MC.forEach(function(m){h+=gsRow('','🍽️','#2ecc8f33',m.name,'Kalan '+fmt(m.bal)+(m.load>0?' · her ay '+fmt(m.load)+' yüklenir':''),'','data-go="cd"');n++})}
   if(CD.length){h+='<div class="gsg">Kartlar</div>';CD.forEach(function(c){h+=gsRow('','💳','#ff6b8133',c.name,'Limit '+fmt(c.limit)+' · kullanılan '+fmt(cdUsed(c.id)),'','data-go="cd"');n++})}
   // işlemler
   var EN=S.entries.filter(function(e){return !e.carry&&gsHit(e.cat+' '+(e.note||'')+' '+toIn(e.amt)+' '+e.amt,W.onlyStop?W.ws.filter(function(w){return GS_STOP.indexOf(w)<0}):words)}).sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0});
@@ -3377,7 +3473,8 @@ function gsSave(){
   if(!(amt>0)){toast('Tutarı yaz');$('gsAmt').focus();return}
   if(!date){toast('Tarih seç');return}
   amt=Math.round(amt*100)/100;markUndo();var msg;
-  if(!isIn&&gsPay==='k'){var rs=addCardSpend({date:date,amt:amt,cat:cat,tcat:'',note:note,cardId:cardPick('gsCardSel')});S.inited[date.slice(0,7)]=true;msg=cat+' · −'+fmt(amt,true)+' kart harcamalarına eklendi'}
+  if(!isIn&&gsPay.indexOf('m:')===0){var gm0=mcById(gsPay.slice(2));if(!gm0){gsPay='n';toast('Yemek kartı bulunamadı');return}msg=mealSpend(gm0.id,amt,cat,date,note)}
+  else if(!isIn&&gsPay==='k'){var rs=addCardSpend({date:date,amt:amt,cat:cat,tcat:'',note:note,cardId:cardPick('gsCardSel')});S.inited[date.slice(0,7)]=true;msg=cat+' · −'+fmt(amt,true)+' kart harcamalarına eklendi'}
   else{S.entries.push({id:uid(),type:isIn?'in':'out',cat:cat,amt:amt,date:date,note:note});S.inited[date.slice(0,7)]=true;msg=cat+' · '+(isIn?'+':'−')+fmt(amt,true)+(isIn?' bakiyene eklendi':' bakiyenden düştü')}
   var m=new Date(date+'T00:00:00');if(!isNaN(m))cur=new Date(m.getFullYear(),m.getMonth(),1);
   save();render();gsRemember();gsDone={t:'✓ '+msg};gsRender();
@@ -3584,7 +3681,7 @@ function applyBackup(o){
   S={entries:o.entries.filter(function(e){return e&&e.date&&e.amt>0&&(e.type==='in'||e.type==='out')}),inited:oo(o.inited),recDone:o.recDone?oo(o.recDone):migRec(o.inited,o.entries),
      plans:Array.isArray(o.plans)?o.plans.filter(function(p){return p&&p.start&&p.amt>0&&p.day>=1}):[],
      bills:Array.isArray(o.bills)?o.bills.filter(function(b){return b&&b.id&&b.name}):defBills(),rolled:oo(o.rolled),
-     trips:Array.isArray(o.trips)?o.trips.filter(function(t){return t&&t.id}):[],cards:Array.isArray(o.cards)?o.cards.filter(function(c){return c&&c.id&&c.amt>0}):[],cardDefs:Array.isArray(o.cardDefs)?o.cardDefs.filter(function(c){return c&&c.id&&c.limit>0}):[],incPlans:Array.isArray(o.incPlans)?o.incPlans.filter(function(c){return c&&c.id&&c.amt>0&&/^\d{4}-\d{2}$/.test(c.start||'')}):[],varOv:(typeof o.varOv==='number'&&o.varOv>=0)?o.varOv:null,limits:(o.limits&&typeof o.limits==='object'&&!Array.isArray(o.limits))?o.limits:{}};
+     trips:Array.isArray(o.trips)?o.trips.filter(function(t){return t&&t.id}):[],cards:Array.isArray(o.cards)?o.cards.filter(function(c){return c&&c.id&&c.amt>0}):[],cardDefs:Array.isArray(o.cardDefs)?o.cardDefs.filter(function(c){return c&&c.id&&c.limit>0}):[],meals:Array.isArray(o.meals)?o.meals.filter(function(m){return m&&m.id&&m.name}):[],mealTx:Array.isArray(o.mealTx)?o.mealTx.filter(function(t){return t&&t.id&&t.mealId&&t.amt>0}):[],incPlans:Array.isArray(o.incPlans)?o.incPlans.filter(function(c){return c&&c.id&&c.amt>0&&/^\d{4}-\d{2}$/.test(c.start||'')}):[],varOv:(typeof o.varOv==='number'&&o.varOv>=0)?o.varOv:null,limits:(o.limits&&typeof o.limits==='object'&&!Array.isArray(o.limits))?o.limits:{}};
   repair();
 }
 var DAYS=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
@@ -3638,7 +3735,7 @@ $('bRestore').onclick=function(){
 $('bWipe').onclick=function(){
   if(!wipeArm){wipeArm=true;$('wipeNote').style.display='block';setTimeout(function(){wipeArm=false;$('wipeNote').style.display='none'},3000);return}
   snap('Silmeden önce');
-  S={entries:[],inited:{},recDone:{},plans:[],bills:defBills(),rolled:{},trips:[],cards:[],cardDefs:[],incPlans:[],varOv:null,limits:{}};save();wipeArm=false;$('wipeNote').style.display='none';render();renderSnaps();toast('Tüm veriler silindi');
+  S={entries:[],inited:{},recDone:{},plans:[],bills:defBills(),rolled:{},trips:[],cards:[],cardDefs:[],meals:[],mealTx:[],incPlans:[],varOv:null,limits:{}};save();wipeArm=false;$('wipeNote').style.display='none';render();renderSnaps();toast('Tüm veriler silindi');
 };
 var snapArm=null;
 function renderSnaps(){
