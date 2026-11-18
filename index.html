@@ -185,6 +185,15 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
 .toast{position:fixed;left:50%;bottom:118px;transform:translateX(-50%) translateY(8px);background:#fff;color:#111;padding:11px 18px;border-radius:14px;font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:all .25s;z-index:50;box-shadow:0 10px 30px #0006;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%)}
 .view{display:none}.view.on{display:block}
+.credit{text-align:center;color:var(--mut);font-size:12px;padding:22px 0 8px;line-height:1.6;opacity:.85}
+.credit b{display:block;color:#cfd3f5;font-size:13px;font-weight:700}
+.grp{display:block;width:100%;text-align:left;padding:0;margin:0;background:none;border:0;color:inherit;font:inherit}
+.grp .chev{display:inline-block;color:var(--mut);font-size:13px;margin-left:2px;transition:transform .2s}
+.grp.open .chev{transform:rotate(90deg)}
+.subc{display:none;margin:8px 0 2px 29px;padding-left:12px;border-left:2px solid #ffffff14}
+.grp.open+.subc{display:block}
+.subc div{display:flex;justify-content:space-between;gap:10px;padding:5px 0;font-size:13.5px;color:#c3c8ee}
+.subc div span:last-child{font-family:var(--num);font-variant-numeric:tabular-nums;color:var(--mut)}
 .brand{color:#fff;font-weight:800;font-size:15px;letter-spacing:-.3px;text-shadow:0 1px 2px #0004}
 .bgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
 .bgrid button{display:flex;flex-direction:column;align-items:center;gap:5px;padding:9px 2px;border-radius:14px;border:1.5px solid transparent;background:#ffffff0a;font-size:10.5px;color:var(--mut);min-width:0}
@@ -259,12 +268,6 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
       </div>
     </div>
 
-    <div class="card cta">
-      <h3>🧮 Alabilir miyim?</h3>
-      <p>Yeni bir taksit ya da büyük bir harcama yapmadan önce bütçene yetip yetmediğini ay ay gör. Burada denediğin hiçbir şey kaydedilmez.</p>
-      <button class="btn" id="bSim">Alışverişi dene</button>
-    </div>
-
     <div class="card" id="outcard" style="display:none">
       <h2>🔮 Önümüzdeki 6 ay</h2>
       <div id="outrows"></div>
@@ -280,6 +283,12 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
     <div class="card">
       <h2>📊 Kategori detayı</h2>
       <div class="catbars" id="catbars"></div>
+    </div>
+
+    <div class="card cta">
+      <h3>🧮 Büyük bir alışveriş mi düşünüyorsun?</h3>
+      <p>Yeni bir taksit ya da büyük bir harcama yapmadan önce bütçene yetip yetmediğini ay ay gör. Burada denediğin hiçbir şey kaydedilmez.</p>
+      <button class="btn" id="bSim">Alışverişi dene</button>
     </div>
   </div>
 
@@ -308,9 +317,9 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
   <!-- İŞLEMLER -->
   <div class="view" id="v-islem">
     <div class="card" style="margin-top:0">
-      <h2>🗓️ Taksit &amp; abonelikler</h2>
+      <h2>🗓️ Taksitler</h2>
       <div id="plist"></div>
-      <button class="btn sec sm" id="bNewPlan">+ Taksit / abonelik ekle</button>
+      <button class="btn sec sm" id="bNewPlan">+ Taksit ekle</button>
     </div>
     <div class="card">
       <h2>🧾 Bu ayın işlemleri</h2>
@@ -343,6 +352,7 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
       <div class="note" id="wipeNote" style="display:none;color:var(--out)">Emin misin? Silmek için bir kez daha dokun.</div>
     </div>
   </div>
+  <div class="credit"><b>Savaş Erhan Yel</b>kişisel bütçe uygulaması · Claude ile birlikte hazırlandı</div>
 </div>
 
 <!-- Gelir/gider penceresi -->
@@ -362,7 +372,7 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
     </div>
     <label class="chk"><input type="checkbox" id="sRec"> Her ay otomatik tekrarla (maaş, kredi, fatura gibi)</label>
     <button class="btn" id="sSave">Kaydet</button>
-    <button class="btn sec sm" id="sPlan">🗓️ Taksit / abonelik mi? Düzenli ödeme ekle</button>
+    <button class="btn sec sm" id="sPlan">🗓️ Taksit mi? Taksit ekle</button>
     <button class="btn del" id="sDel" style="display:none">Sil</button>
     <button class="btn sec sm" id="sCancel">Vazgeç</button>
     </div>
@@ -375,10 +385,10 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
     <div class="sheet-top"><div class="grab"></div><button class="xbtn" data-close="p" aria-label="Kapat">✕</button></div>
     <div class="sheet-body">
     <div class="stickypill" id="pPillWrap" style="display:none"><div class="vp" id="pPill"></div></div>
-    <h3 id="pTitle">Düzenli ödeme</h3>
+    <h3 id="pTitle">Yeni taksit</h3>
     <div class="note" id="pTryNote" style="display:none;margin:-4px 0 12px">Burada denediğin hiçbir şey kaydedilmez. Tek seferlik alışveriş için taksit sayısına 1 yaz.</div>
-    <span class="lbl">Ödemenin adı</span>
-    <input class="fld" id="pName" placeholder="Örn. Özel sağlık sigortası, Telefon taksiti" maxlength="40">
+    <span class="lbl">Taksidin adı</span>
+    <input class="fld" id="pName" placeholder="Örn. Telefon taksiti, Buzdolabı, Sigorta" maxlength="40">
     <div class="two">
       <div><span class="lbl">Toplam tutar (isteğe bağlı)</span><input class="fld" id="pTotal" inputmode="decimal" placeholder="30.000 ₺" autocomplete="off"></div>
       <div><span class="lbl">Kaç taksit / ay?</span><input class="fld" id="pCount" type="number" min="1" max="600" inputmode="numeric" placeholder="3"></div>
@@ -394,7 +404,7 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
     <span class="lbl">Son ödeme ayı (boşsa süresiz)</span>
     <input class="fld" id="pEnd" type="month">
     <div id="pCheck"></div>
-    <div class="note" style="margin:0 0 12px">Toplam tutarı ve taksit sayısını yazarsan aylık tutarı ve son ayı kendim hesaplarım. İkisini de boş bırakırsan ödeme süresiz sürer (spor salonu gibi). Ödeme günü gelince tutar bakiyenden otomatik düşer.</div>
+    <div class="note" style="margin:0 0 12px">Toplam tutarı ve taksit sayısını yazarsan aylık tutarı ve son ayı kendim hesaplarım. Kredi kartı ya da elden aldığın bir ürünün taksiti için kullan. Netflix gibi üyelikler Düzenli sekmesinde. Ödeme günü gelince tutar bakiyenden otomatik düşer.</div>
     <button class="btn" id="pSave">Kaydet</button>
     <button class="btn del" id="pDel" style="display:none">Sil</button>
     <button class="btn sec sm" id="pCancel">Vazgeç</button>
@@ -500,7 +510,17 @@ function bindAmt(el){
   el.addEventListener('click',clamp);el.addEventListener('keyup',clamp);el.addEventListener('touchend',clamp);
 }
 
+var GROUPS={'Faturalar':{ico:'💡',col:'#ff9f43'},'Abonelikler':{ico:'📺',col:'#c06cff'}};
+var BILLCATS=['Elektrik','Su','Doğalgaz','İnternet','Telefon'];
+function grpOf(e){
+  if(e.bill&&e.cat!=='Ulaşım')return'Faturalar';
+  if(e.cat==='Abonelik')return'Abonelikler';
+  if(BILLCATS.indexOf(e.cat)>-1)return'Faturalar';
+  return e.cat;
+}
+var openGrp={};
 function catInfo(type,name){
+  if(type==='out'&&GROUPS[name])return GROUPS[name];
   var l=CATS[type];for(var i=0;i<l.length;i++)if(l[i][0]===name)return{ico:l[i][1],col:l[i][2]};
   var h=0;for(var j=0;j<name.length;j++)h=(h*31+name.charCodeAt(j))>>>0;
   return{ico:type==='in'?'📥':'🏷️',col:EXTRA[h%EXTRA.length]};
@@ -709,11 +729,11 @@ function countTo(el,to){
 
 function render(){
   var now=new Date();ensureMonth(new Date(now.getFullYear(),now.getMonth(),1));ensureMonth(cur);
-  var es=monthEntries(),inc=0,out=0,pend=0,byCat={};
+  var es=monthEntries(),inc=0,out=0,pend=0,byCat={},subBy={};
   es.forEach(function(e){
     if(e.type==='in')inc+=e.amt;
     else if(e.pending)pend+=e.amt;
-    else{out+=e.amt;byCat[e.cat]=(byCat[e.cat]||0)+e.amt}
+    else{out+=e.amt;var g=grpOf(e);byCat[g]=(byCat[g]||0)+e.amt;var sn=e.note||e.cat;(subBy[g]=subBy[g]||{})[sn]=((subBy[g]||{})[sn]||0)+e.amt}
   });
   var bal=inc-out,ck=mk(cur),isCur=ck===nowK(),isPast=ck<nowK(),n=dim(cur);
   $('mlabel').textContent=MONTHS[cur.getMonth()]+' '+cur.getFullYear();
@@ -774,8 +794,12 @@ function render(){
     requestAnimationFrame(function(){requestAnimationFrame(function(){
       box.querySelectorAll('circle[data-da]').forEach(function(c){c.style.strokeDasharray=c.getAttribute('data-da')})})});
     var bh='';
-    cats.forEach(function(c){var ci=catInfo('out',c),p=byCat[c]/out*100;
-      bh+='<div class="cat"><div class="top2"><span style="font-size:19px">'+ci.ico+'</span><span class="n">'+esc(c)+'</span><span class="v">'+esc(fmt(byCat[c]))+'</span></div><div class="mini"><i style="width:'+p+'%;background:'+ci.col+'"></i></div></div>'});
+    cats.forEach(function(c){var ci=catInfo('out',c),p=byCat[c]/out*100,isG=!!GROUPS[c],sm=subBy[c]||{},sk=Object.keys(sm).sort(function(a,b){return sm[b]-sm[a]});
+      var hasSub=isG&&sk.length>0;
+      bh+='<div class="cat">'+(hasSub?'<button type="button" class="grp'+(openGrp[c]?' open':'')+'" data-g="'+esc(c)+'">':'<div>')+
+        '<div class="top2"><span style="font-size:19px">'+ci.ico+'</span><span class="n">'+esc(c)+(hasSub?' <span class="chev">›</span>':'')+'</span><span class="v">'+esc(fmt(byCat[c]))+'</span></div><div class="mini"><i style="width:'+p+'%;background:'+ci.col+'"></i></div>'+(hasSub?'</button>':'</div>');
+      if(hasSub){bh+='<div class="subc'+'">';sk.forEach(function(n){bh+='<div><span>'+esc(n)+'</span><span>'+esc(fmt(sm[n],true))+'</span></div>'});bh+='</div>'}
+      bh+='</div>'});
     bars.innerHTML=bh;
   }
 
@@ -868,7 +892,7 @@ function openPlan(id,isTry){
   var p=id?S.plans.filter(function(x){return x.id===id})[0]:null;
   if(p&&p.sub&&!isTry){openSub(id);return}
   planEdit=id||null;tryMode=!!isTry;pArm=false;pDelArm=false;
-  $('pTitle').textContent=isTry?'🧮 Alabilir miyim?':(p?'Düzenli ödemeyi düzenle':'Yeni düzenli ödeme');
+  $('pTitle').textContent=isTry?'🧮 Alabilir miyim?':(p?'Taksiti düzenle':'Yeni taksit');
   $('pTryNote').style.display=isTry?'block':'none';
   $('pDel').style.display=p?'block':'none';$('pDel').textContent='Sil';
   $('pSave').textContent=isTry?'Plana ekle':'Kaydet';$('pSave').classList.remove('warn');
@@ -914,7 +938,7 @@ $('pSave').onclick=function(){
   var o={name:name,cat:$('pCat').value,amt:Math.round(amt*100)/100,start:st,end:en||'',day:day};
   if(planEdit){S.plans.forEach(function(x){if(x.id===planEdit){x.name=o.name;x.cat=o.cat;x.amt=o.amt;x.start=o.start;x.end=o.end;x.day=o.day}})}
   else{o.id=uid();S.plans.push(o)}
-  save();closePlan();render();toast('Düzenli ödeme kaydedildi ✓');
+  save();closePlan();render();toast('Taksit kaydedildi ✓');
 };
 $('pDel').onclick=function(){
   if(!planEdit)return;
@@ -1089,6 +1113,7 @@ $('sDel').onclick=function(){
   S.entries=S.entries.filter(function(x){return x.id!==editId});delete b.dataset.arm;b.textContent='Sil';save();closeSheet();render();toast('Silindi');
 };
 $('txlist').onclick=function(ev){var b=ev.target.closest('.tx');if(!b)return;var id=b.getAttribute('data-id');if(id.indexOf('p:')===0)openPlan(id.split(':')[1]);else openSheet(id)};
+$('catbars').onclick=function(ev){var b=ev.target.closest('[data-g]');if(!b)return;var g=b.getAttribute('data-g');openGrp[g]=!openGrp[g];b.classList.toggle('open',!!openGrp[g])};
 $('plist').onclick=function(ev){var b=ev.target.closest('.tx');if(b)openPlan(b.getAttribute('data-pid'))};
 document.querySelectorAll('.nav .t').forEach(function(b){b.onclick=function(){
   tab=b.getAttribute('data-v');
