@@ -575,6 +575,27 @@ html.big body{zoom:1.12}
 @keyframes sheet{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media (max-width:360px){.hero .big{font-size:36px}.donut svg{width:120px;height:120px}}
+/* v1.11 banka kartı görünümü + deri dikiş */
+.dnhint{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.dnadd{background:#ffffff1a;color:#fff;border:0;border-radius:10px;padding:6px 12px;font-size:12.5px;font-weight:700;white-space:nowrap;flex:none}
+.pc{border-radius:16px;padding:12px 16px 26px;box-shadow:0 -2px 14px #0005,inset 0 1px 0 #ffffff40,inset 0 0 0 1px #ffffff1f}
+.pc::before{content:"";position:absolute;right:-30px;top:-44px;width:140px;height:140px;border-radius:50%;background:#ffffff1c;pointer-events:none}
+.pc::after{content:"";position:absolute;right:34px;bottom:-70px;width:120px;height:120px;border-radius:50%;background:#ffffff12;pointer-events:none}
+.pc>*{position:relative;z-index:1}
+.pc .hd{justify-content:flex-start;gap:10px;font-size:13px;letter-spacing:.3px;text-transform:none;font-weight:700}
+.pc .hd::before{content:"";flex:none;width:30px;height:22px;border-radius:5px;background:linear-gradient(135deg,#f6d98f,#e0a93f);border:.5px solid #0004;
+  background-image:linear-gradient(#0000 9px,#0004 9px,#0004 10px,#0000 10px),linear-gradient(90deg,#0000 9px,#0004 9px,#0004 10px,#0000 10px),linear-gradient(135deg,#f6d98f,#e0a93f)}
+.pc .hd>span{flex:1}
+.pc .hd b{margin-left:auto}
+.pc .dt>div::before{display:block;padding-top:12px;font-size:12px;letter-spacing:2.5px;opacity:.85;font-family:var(--num)}
+.pc.c3 .dt>div::before{content:"•••• •••• •••• 2026"}
+.pc.c1 .dt>div::before{content:"•••• •••• •••• 1124"}
+.pc.c2 .dt>div::before{content:"•••• •••• •••• 3011"}
+.pc .dt>div>*:first-child{margin-top:8px}
+.wl.open .pc{padding-bottom:16px}
+.wbody{background:radial-gradient(260px 160px at 100% 0%,#ffffff14,transparent 70%),repeating-linear-gradient(45deg,#ffffff06 0 2px,#0000 2px 5px),repeating-linear-gradient(-45deg,#0000001a 0 2px,#0000 2px 5px),linear-gradient(160deg,#3b2f8f,#241c63 60%,#1b1650);
+  border:1px solid #0006;box-shadow:0 -6px 22px #0007,0 22px 40px #0008,inset 0 1px 0 #ffffff30,inset 0 0 0 3px #0000002e}
+.wbody::before{inset:7px;border-radius:22px;border:2px dashed #f0cf8fa8;filter:drop-shadow(0 1px 0 #0006)}
 </style>
 </head>
 <body>
@@ -611,15 +632,15 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
   <div class="view on" id="v-ozet">
     <div class="wl" id="wl">
       <div class="pc c3" id="tripcard">
-        <div class="hd"><span id="tripHead">🏖️ Tatil planı ekle</span><b class="num" id="tripRight">＋</b></div>
+        <div class="hd"><span id="tripHead">Tatil planı ekle</span><b class="num" id="tripRight">＋</b></div>
         <div class="dt"><div><div id="tripMini"></div></div></div>
       </div>
       <div class="pc c1" id="upcard" style="display:none">
-        <div class="hd"><span>⏳ Yaklaşan ödemeler · <span id="upCnt">0</span></span><b class="num" id="upTot"></b></div>
+        <div class="hd"><span>Yaklaşan ödemeler · <span id="upCnt">0</span></span><b class="num" id="upTot"></b></div>
         <div class="dt"><div><div id="uplist"></div></div></div>
       </div>
       <div class="pc c2" id="fcard">
-        <div class="hd"><span>📈 Ay sonu tahmini</span><b class="num" id="fcHead">–</b></div>
+        <div class="hd"><span>Ay sonu tahmini</span><b class="num" id="fcHead">–</b></div>
         <div class="dt"><div>
           <div class="fc">
             <div><small>Tahmini ay sonu kalan</small><b id="fc1">–</b></div>
@@ -629,10 +650,6 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
           </div>
           <div class="note" id="fcnote"></div>
         </div></div>
-      </div>
-      <div class="pc c4" id="incard">
-        <div class="hd"><span>💰 Gelirlerin</span><b class="num" id="inTot"></b></div>
-        <div class="dt"><div><div id="inList"></div></div></div>
       </div>
       <div class="wbody" id="wbody">
         <span class="clasp"><i>₺</i></span>
@@ -2047,10 +2064,14 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.10.1';
+var APP_VER='1.11';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
-var RELEASES=[{v:'1.10.1',date:'Kasım 2026',title:'Ek gelir düzeltmeleri',items:[
+var RELEASES=[{v:'1.11',date:'Kasım 2026',title:'Cüzdan banka kartı gibi',items:[
+  ['💳','Banka kartı görünümü','Cüzdanın arkasındaki Tatil, Yaklaşan ödemeler ve Ay sonu tahmini kartları artık altın çipli, yuvarlak desenli banka kartları gibi.',1],
+  ['🧵','Deri dikiş','Cüzdanın kenarına dikilmiş gibi altın renkli dikiş ve hafif deri dokusu eklendi.',1],
+  ['🧹','Gelirlerin kartı kaldırıldı','Gelir zaten aşağıdaki Gider/Gelir çubuğunda. Yan gelir eklemek için Gelir çubuğundaki “+ Yan gelir” düğmesini kullan.',1]]},
+{v:'1.10.1',date:'Kasım 2026',title:'Ek gelir düzeltmeleri',items:[
   ['🛠','Ek gelir bilgisi netleşti','Ek gelirlerim listesinde artık başlangıç, bitiş, kaç ay olduğu ve bitti mi diye yazıyor. Bitmiş olanlar soluk görünür.',1],
   ['❓','Geldi mi? kartı','Kart hangi ay için sorduğunu açıkça yazıyor. Cevaplanmadan 2 ayı geçen eski sorular artık kartta kalmıyor.',1],
   ['🛠','Kaydedilmeyen ek gelir','Tarih ya da tutar eksikse ek gelir sessizce kaydedilmiyordu, artık nedenini yazıyor.',1]]},
@@ -2368,7 +2389,7 @@ function renderInCard(){
   h+='<button type="button" class="tbtn" id="inAdd" style="margin:10px 0 0">+ Yan gelir ekle</button>';
   box.innerHTML=h;
 }
-$('inList').addEventListener('click',function(ev){
+if($('inList'))$('inList').addEventListener('click',function(ev){
   if(ev.target.closest('#inAdd')){openSheet();setType('in');return}
   var r=ev.target.closest('[data-ie]');if(!r)return;var id=r.getAttribute('data-ie'),m=id.match(/^x:i:(.+):(\d{4}-\d{2})$/);
   if(m){var p=S.incPlans.filter(function(x){return x.id===m[1]})[0];if(!p)return;
@@ -2392,7 +2413,7 @@ function renderIncDonut(){
     monthEntries().forEach(function(e){if(e.type!=='out')return;if(e.pending&&!fut)return;var n=grpOf(e);g[n]=(g[n]||0)+e.amt;tot+=e.amt});
   }
   var names=Object.keys(g).sort(function(a,b){return g[b]-g[a]});
-  if(!names.length){box.innerHTML='<div class="empty"><em>🌱</em>'+(isI?'Bu ay henüz gelir yok.':'Henüz gider yok.<br>+ düğmesiyle ilk harcamanı ekle.')+'</div>';hint.style.display='none';return}
+  if(!names.length){box.innerHTML='<div class="empty"><em>🌱</em>'+(isI?'Bu ay henüz gelir yok.':'Henüz gider yok.<br>+ düğmesiyle ilk harcamanı ekle.')+'</div>';if(isI){hint.innerHTML='<span>Maaş dışı gelirini buradan ekle.</span><button type="button" class="dnadd" id="inAdd2">+ Yan gelir</button>';hint.style.display=''}else hint.style.display='none';return}
   var col=function(n,i){return isI?DN_COL[i%DN_COL.length]:catInfo('out',n).col};
   var segs='',lg='',max=6,shown=names.slice(0,max),rest=0;
   names.slice(max).forEach(function(n){rest+=g[n]});
@@ -2400,9 +2421,10 @@ function renderIncDonut(){
   if(rest>0){segs+='<i data-w="'+(rest/tot*100).toFixed(2)+'" style="background:#8f95c2"></i>';lg+='<div><span class="dot" style="background:#8f95c2"></span><span class="n">+'+(names.length-max)+(isI?' kaynak':' kategori')+'</span><span class="p">%'+Math.round(rest/tot*100)+'</span></div>'}
   box.innerHTML='<div class="dnt"><span>'+(isI?'Toplam gelir':'Toplam gider')+'</span><b class="num">'+esc(fmt(tot))+'</b></div><div class="dnbar">'+segs+'</div><div class="dnlg">'+lg+'</div>';
   requestAnimationFrame(function(){requestAnimationFrame(function(){box.querySelectorAll('.dnbar i').forEach(function(x){x.style.width=x.getAttribute('data-w')+'%'})})});
-  hint.textContent=isI?(side>0?'Yan gelirler gelirinin %'+Math.round(side/tot*100)+'’i · '+fmt(side,true):'Henüz yan gelir yok. Cüzdanından “Yan gelir ekle” ile ekleyebilirsin.'):('En çok harcadığın: '+names[0]+' · %'+Math.round(g[names[0]]/tot*100));
+  hint.innerHTML=isI?('<span>'+(side>0?'Yan gelirler gelirinin %'+Math.round(side/tot*100)+'’i · '+esc(fmt(side,true)):'Henüz yan gelir yok.')+'</span><button type="button" class="dnadd" id="inAdd2">+ Yan gelir</button>'):esc('En çok harcadığın: '+names[0]+' · %'+Math.round(g[names[0]]/tot*100));
   hint.style.display='';
 }
+$('dnHint').addEventListener('click',function(ev){if(ev.target.closest('#inAdd2')){openSheet();setType('in')}});
 $('dnSeg').onclick=function(ev){var b=ev.target.closest('[data-m]');if(!b)return;dnMode=b.getAttribute('data-m');render()};
 function renderIpPend(){
   var card=$('ipPend');if(!card)return;var d=ipDue();
@@ -2720,9 +2742,9 @@ function tDateLabel(d){var a=d.split('-');return parseInt(a[2],10)+' '+MONTHS[pa
 function renderTripCard(){
   var t=pickTrip(),c=$('tripcard');
   c.classList.toggle('win',!!t&&t.season==='kis');
-  if(!t){$('tripHead').textContent='🏖️ Tatil planı ekle';$('tripRight').textContent='＋';$('tripMini').innerHTML='<div class="note" style="color:#fff">Dokun: tatilini planla, bütçeni gör, ayırabilir miyiz diye bak.</div>';return}
+  if(!t){$('tripHead').textContent='Tatil planı ekle';$('tripRight').textContent='＋';$('tripMini').innerHTML='<div class="note" style="color:#fff">Dokun: tatilini planla, bütçeni gör, ayırabilir miyiz diye bak.</div>';return}
   var dd=daysTo(t.start),de=daysTo(t.end),right=dd>0?dd+' gün kaldı':(de>=0?'Tatildesin':'Tatil bitti');
-  $('tripHead').textContent=(t.season==='kis'?'❄️ ':'🏖️ ')+'Tatil · '+(t.dest||'Yeni tatil');
+  $('tripHead').textContent='Tatil · '+(t.dest||'Yeni tatil');
   $('tripRight').textContent=right;
   var f=tripFeas(t),lab={ok:'Rahat',wr:'Sıkışık',bd:'Ek destek',none:'—'}[f.lv];
   $('tripMini').innerHTML='<div class="mini3"><div><small>Senin payın</small><b>'+esc(fmt(tripShare(t)))+'</b></div><div><small>Ayırdığın</small><b>'+esc(fmt(t.saved||0))+'</b></div><div><small>Durum</small><b>'+lab+'</b></div></div><div class="note" style="color:#fff;margin-top:8px">Tatil ekranını açmak için dokun →</div>';
@@ -2960,7 +2982,6 @@ $('teSave').onclick=function(){
 };
 /* cüzdan: tatil kartına dokununca tatil ekranı, diğerlerine dokununca açılır */
 $('wl').addEventListener('click',function(ev){
-  if(ev.target.closest('#incard .dt')&&$('wl').classList.contains('open'))return;
   if(ev.target.closest('#tripcard')){openTripScreen();return}
   $('wl').classList.toggle('open');
 });
