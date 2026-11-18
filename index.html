@@ -341,6 +341,41 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
 .bill-ed{animation:rise .35s cubic-bezier(.2,.8,.2,1) backwards}
 
 
+
+/* ===== Kurulum rehberi ===== */
+#igbg{align-items:center;overflow-y:auto}
+.ig{position:relative;width:100%;max-width:380px;border-radius:28px;padding:18px 18px 18px;background:linear-gradient(160deg,#1c2150,#141838);border:1px solid #ffffff1c;box-shadow:0 30px 70px #000a;overflow:hidden;animation:pop .5s cubic-bezier(.3,1.4,.5,1) backwards;margin:auto}
+.ig .dots{display:flex;gap:6px;justify-content:center;margin-bottom:12px}.ig .dots i{width:7px;height:7px;border-radius:50%;background:#ffffff33;transition:all .3s}.ig .dots i.on{width:22px;border-radius:4px;background:#fff}
+.ig .n{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7c5cff,#27d3c3);font-weight:800;font-size:14px}
+.ig h2{font-size:20px;margin:8px 0 4px;letter-spacing:-.3px;color:#fff}.ig .sub{font-size:13.5px;color:#b9bff0;line-height:1.45;margin-bottom:12px;min-height:60px}
+.ig .phone{height:300px;border-radius:30px;background:#05070f;border:5px solid #2a2f5a;position:relative;overflow:hidden;animation:rise .45s cubic-bezier(.2,.8,.2,1) backwards}
+.ig .tag{position:absolute;background:#ffd35a;color:#2a1d00;font-weight:800;font-size:12.5px;padding:5px 10px;border-radius:11px;box-shadow:0 6px 16px #0007;z-index:5;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.ig .glow{outline:3px solid #ffd35a;outline-offset:3px;box-shadow:0 0 0 9px #ffd35a2e,0 0 26px #ffd35a99;animation:gl 1.6s ease-in-out infinite;position:relative}
+@keyframes gl{50%{box-shadow:0 0 0 14px #ffd35a11,0 0 32px #ffd35acc}}
+.ig .safbar{position:absolute;left:10px;right:10px;bottom:10px;height:56px;border-radius:21px;background:#1b1f45;display:flex;justify-content:space-around;align-items:center}
+.ig svg.i{width:25px;height:25px;stroke:#cfd3f5;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ig .safbar .glow{border-radius:15px;width:40px;height:40px;display:grid;place-items:center}
+.ig .urlp{position:absolute;left:10px;right:10px;bottom:72px;height:38px;border-radius:15px;background:#242955;display:flex;align-items:center;justify-content:center;font-size:12px;color:#cfd3f5}
+.ig .page{position:absolute;inset:0 0 118px 0;padding:16px;background:linear-gradient(180deg,#232063,#0e1230)}
+.ig .mini{height:74px;border-radius:17px;background:linear-gradient(135deg,#3b2ea8,#6a4cf5);margin-top:36px;padding:12px;font-weight:800;font-size:21px;color:#fff}.ig .mini2{height:42px;border-radius:13px;background:#ffffff14;margin-top:9px}
+.ig .sheetp{position:absolute;left:0;right:0;bottom:0;top:34px;background:#202448;border-radius:22px 22px 0 0;padding:13px}
+.ig .sheetp .g{width:40px;height:5px;border-radius:3px;background:#ffffff40;margin:0 auto 11px}
+.ig .hd{display:flex;gap:10px;align-items:center;background:#2b3060;border-radius:14px;padding:9px;margin-bottom:9px;color:#fff}
+.ig .ic{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#7c5cff,#27d3c3);display:grid;place-items:center;font-weight:800;color:#fff}
+.ig .rows{background:#2b3060;border-radius:14px;overflow:hidden}.ig .row{display:flex;justify-content:space-between;align-items:center;padding:12px 13px;font-size:14.5px;border-top:1px solid #ffffff14;color:#e6e9ff}.ig .row:first-child{border:0}.ig .row.sel{background:#3a4086;color:#fff;font-weight:700}
+.ig .dlg{position:absolute;inset:0;background:#202448;padding:14px}
+.ig .dtop{display:flex;justify-content:space-between;align-items:center;font-size:15px;margin-bottom:20px;color:#cfd3f5}.ig .dtop b{color:#fff}.ig .dtop .add{color:#7ab8ff;font-weight:800;padding:4px 12px;border-radius:12px}
+.ig .fld2{background:#2b3060;border-radius:14px;padding:12px;display:flex;gap:12px;align-items:center;color:#fff}
+.ig .home{position:absolute;inset:0;background:linear-gradient(180deg,#3b2b7a,#1a2f5f 60%,#0e3a4a);padding:24px 14px}
+.ig .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 8px;text-align:center;font-size:10.5px;color:#e6e9ff}
+.ig .app{width:52px;height:52px;border-radius:14px;background:#ffffff26;margin:0 auto 5px}
+.ig .me{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#6a4cf5,#27d3c3);margin:0 auto 5px;display:grid;place-items:center;font-size:28px;font-weight:800;color:#fff}
+.ig .dock{position:absolute;left:12px;right:12px;bottom:12px;height:62px;border-radius:24px;background:#ffffff26}
+.ig .abar{position:absolute;left:0;right:0;top:0;height:50px;background:#1b1f45;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:12px;color:#cfd3f5}
+.ig .menu{position:absolute;right:10px;top:54px;width:200px;background:#2b3060;border-radius:14px;padding:6px 0;box-shadow:0 10px 30px #000a;color:#e6e9ff;font-size:13.5px;z-index:2}.ig .menu div{padding:10px 14px}.ig .menu .sel{background:#3a4086;color:#fff;font-weight:700}
+.ig .btn{margin-top:12px}.ig .skip{display:block;width:100%;text-align:center;color:#8f96c6;font-size:13px;margin-top:8px;padding:6px}
+.ig .tabs{display:flex;gap:6px;margin-bottom:12px}.ig .tabs button{flex:1;padding:8px 4px;border-radius:12px;font-size:12.5px;font-weight:700;background:#ffffff12;color:#b9bff0}.ig .tabs button.on{background:#ffffff26;color:#fff}
 /* ===== Tatil ===== */
 .pc.c3{transform:scale(.93)}.pc.c1{transform:scale(.955)}.pc.c2{transform:scale(.975)}
 .pc.c3{background:linear-gradient(135deg,#ffcf5a,#ff8a3d 55%,#ff5d7a)}
@@ -615,6 +650,7 @@ html.big body{zoom:1.12}
       <h2>🎨 Görünüm</h2>
       <span class="lbl">Yazı boyutu</span>
       <div class="paysg"><button type="button" id="fsN" class="on">Normal</button><button type="button" id="fsB">Büyük</button></div>
+      <button class="btn sec sm" id="igAgain">📲 Ana ekrana ekleme rehberi</button>
       <button class="btn sec sm" id="obAgain">👋 Tanıtımı tekrar göster</button>
     </div>
     <div class="card">
@@ -792,6 +828,7 @@ html.big body{zoom:1.12}
   <button class="btn" id="obNext">İleri</button>
   <button class="btn sec sm" id="obSkip" style="margin-top:6px">Atla</button>
 </div></div>
+<div class="cbg" id="igbg"><div class="ig" id="igBox"></div></div>
 <div class="toast" id="toast"></div>
 
 <nav class="nav">
@@ -2098,6 +2135,55 @@ function setBig(on){document.documentElement.classList.toggle('big',on);$('fsN')
 $('fsN').onclick=function(){setBig(false)};$('fsB').onclick=function(){setBig(true)};
 setBig(lsGet('butcem_big')==='1');
 
+
+/* ---------- Kurulum rehberi ---------- */
+var igI=0,igP='ios';
+var IGI={share:'<svg class="i" viewBox="0 0 24 24"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M6 10H5a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2h-1"/></svg>',
+ back:'<svg class="i" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>',fwd:'<svg class="i" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>',
+ book:'<svg class="i" viewBox="0 0 24 24"><path d="M5 4h14v17l-7-4-7 4z"/></svg>',tabs:'<svg class="i" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/></svg>',
+ plus:'<svg class="i" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg>'};
+function igPage(){return '<div class="page"><div class="mini">₺ Bütçem</div><div class="mini2"></div><div class="mini2"></div></div>'}
+function igHomeGrid(glow){return '<div class="home"><div class="grid"><div><div class="app"></div>Mesajlar</div><div><div class="app"></div>Fotoğraflar</div><div><div class="app"></div>Kamera</div><div><div class="app"></div>Saat</div><div><div class="app"></div>Harita</div><div><div class="me'+(glow?' glow':'')+'">₺</div><b>Bütçem</b></div><div><div class="app"></div>Notlar</div><div><div class="app"></div>Ayarlar</div></div><div class="dock"></div></div>'}
+function igSlides(p){
+ if(p==='android')return [
+  ['Menüye dokun','Chrome’da uygulamayı açtın. Sağ üstteki üç nokta (⋮) simgesine dokun.',
+   '<div class="phone">'+igPage().replace('class="page"','class="page" style="inset:50px 0 0 0"')+'<div class="abar"><span>🔒 erhanyel34-stack.github.io</span><span class="glow" style="font-size:20px;padding:0 10px;border-radius:12px;color:#fff">⋮</span></div><div class="tag" style="right:14px;top:98px">Buna dokun ↑</div></div>'],
+  ['“Ana ekrana ekle”yi seç','Açılan menüde “Ana ekrana ekle” ya da “Uygulamayı yükle” satırına dokun.',
+   '<div class="phone">'+igPage().replace('class="page"','class="page" style="inset:50px 0 0 0"')+'<div class="abar"><span>🔒 erhanyel34-stack.github.io</span><span style="font-size:20px;color:#fff">⋮</span></div><div class="menu"><div>Yeni sekme</div><div class="sel glow">Ana ekrana ekle</div><div>Paylaş…</div><div>Ayarlar</div></div><div class="tag" style="left:12px;top:140px">Bu satır →</div></div>'],
+  ['“Ekle” ya da “Yükle”ye bas','Adı “Bütçem” olarak bırakabilirsin. Açılan pencerede onay düğmesine dokun.',
+   '<div class="phone"><div class="dlg" style="display:flex;flex-direction:column;justify-content:center"><div class="fld2"><div class="ic" style="width:50px;height:50px;border-radius:13px;font-size:24px">₺</div><div><b style="font-size:16px">Bütçem</b><div style="font-size:11.5px;color:#b9bff0;margin-top:3px">erhanyel34-stack.github.io</div></div></div><div style="display:flex;gap:10px;justify-content:flex-end;margin-top:22px;color:#7ab8ff;font-weight:800"><span style="padding:8px 14px">İptal</span><span class="glow" style="padding:8px 16px;border-radius:12px">Ekle</span></div></div></div>'],
+  ['Hazır! Ana ekranda','Bütçem simgesi ana ekranında. Bundan sonra oradan aç; tam ekran bir uygulama gibi açılır.','<div class="phone">'+igHomeGrid(true)+'<div class="tag" style="left:104px;top:196px">Burada 🎉</div></div>']];
+ return [
+  ['Paylaş düğmesine dokun','Safari’de uygulamayı açtın. Alttaki çubukta kare ve yukarı ok simgesine dokun.',
+   '<div class="phone">'+igPage()+'<div class="urlp">🔒 erhanyel34-stack.github.io</div><div class="safbar">'+IGI.back+IGI.fwd+'<span class="glow">'+IGI.share+'</span>'+IGI.book+IGI.tabs+'</div><div class="tag" style="left:108px;bottom:120px">Buna dokun ↓</div></div>'],
+  ['“Ana Ekrana Ekle”yi seç','Açılan menüyü yukarı kaydır. “Ana Ekrana Ekle” satırını bulup dokun.',
+   '<div class="phone"><div class="sheetp"><div class="g"></div><div class="hd"><div class="ic">₺</div><div><b>Bütçem</b><div style="font-size:11.5px;color:#b9bff0">erhanyel34-stack.github.io</div></div></div><div class="rows"><div class="row"><span>Kopyala</span></div><div class="row sel glow"><span>Ana Ekrana Ekle</span>'+IGI.plus+'</div><div class="row"><span>Sık Kullanılanlara Ekle</span></div><div class="row"><span>Yer İmi Ekle</span></div></div></div><div class="tag" style="right:14px;top:206px">Bu satır ↑</div></div>'],
+  ['Sağ üstten “Ekle”ye bas','Adı “Bütçem” olarak bırakabilirsin. Sağ üstteki “Ekle” düğmesine dokun.',
+   '<div class="phone"><div class="dlg"><div class="dtop"><span>İptal</span><b>Ana Ekrana Ekle</b><span class="add glow">Ekle</span></div><div class="fld2"><div class="ic" style="width:50px;height:50px;border-radius:13px;font-size:24px">₺</div><div><b style="font-size:16px">Bütçem</b><div style="font-size:11.5px;color:#b9bff0;margin-top:3px">erhanyel34-stack.github.io/butcem</div></div></div><div style="font-size:12px;color:#9aa1d1;margin:12px 4px">Bu uygulamayı ana ekranına simge olarak ekler.</div></div><div class="tag" style="right:14px;top:58px">Dokun ↑</div></div>'],
+  ['Hazır! Ana ekranda','Bütçem simgesi ana ekranında. Bundan sonra oradan aç; adres çubuğu olmadan tam ekran açılır.','<div class="phone">'+igHomeGrid(true)+'<div class="tag" style="left:104px;top:196px">Burada 🎉</div></div>']];
+}
+function renderIg(){
+  var sl=igSlides(igP),o=sl[igI],last=igI===sl.length-1,d='';
+  sl.forEach(function(_,i){d+='<i class="'+(i===igI?'on':'')+'"></i>'});
+  $('igBox').innerHTML='<div class="tabs"><button type="button" data-p="ios" class="'+(igP==='ios'?'on':'')+'">📱 iPhone</button><button type="button" data-p="android" class="'+(igP==='android'?'on':'')+'">🤖 Android</button></div><div class="dots">'+d+'</div><span class="n">'+(last?'✓':igI+1)+'</span><h2>'+o[0]+'</h2><div class="sub">'+o[1]+'</div>'+o[2]+
+    '<button type="button" class="btn" id="igNext">'+(last?'Başlayalım 💰':'İleri')+'</button>'+(igI>0&&!last?'<button type="button" class="skip" id="igPrev">‹ Geri</button>':'')+(last?'':'<button type="button" class="skip" id="igSkip">Atla</button>');
+}
+function endIg(){lsSet('butcem_ig','1');$('igbg').classList.remove('show');startOnboarding()}
+$('igBox').addEventListener('click',function(ev){
+  var t=ev.target.closest('button');if(!t)return;
+  if(t.getAttribute('data-p')){igP=t.getAttribute('data-p');igI=0;renderIg();return}
+  if(t.id==='igNext'){var n=igSlides(igP).length;if(igI<n-1){igI++;renderIg()}else endIg();return}
+  if(t.id==='igPrev'){igI=Math.max(0,igI-1);renderIg();return}
+  if(t.id==='igSkip'){endIg()}
+});
+function isStandalone(){try{return !!(window.navigator.standalone||(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches))}catch(e){return false}}
+function isMobileUA(){return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent||'')}
+function startGuide(force){
+  if(!force&&(isStandalone()||!isMobileUA()||lsGet('butcem_ig')))return false;
+  igP=/Android/i.test(navigator.userAgent||'')?'android':'ios';igI=0;renderIg();$('igbg').classList.add('show');return true;
+}
+$('igAgain').onclick=function(){igP=/Android/i.test(navigator.userAgent||'')?'android':'ios';igI=0;renderIg();$('igbg').classList.add('show')};
+
 /* ---------- İlk açılış tanıtımı ---------- */
 var OB=[['👋','Bütçem’e hoş geldin','Gelirini ve giderini gir; ay sonunun nasıl biteceğini önceden gör.'],
  ['🔁','Önce sabitleri ekle','Maaşını ve her ay tekrarlayan giderlerini (kira, fatura, abonelik) bir kez gir. Geri kalanı ben tahmin ederim.'],
@@ -2259,7 +2345,7 @@ $('rLater').onclick=laterRoll;$('rX').onclick=laterRoll;
 $('rbg').onclick=function(ev){if(ev.target===$('rbg'))laterRoll()};
 document.addEventListener('visibilitychange',function(){if(!document.hidden){render();checkRollover()}});
 
-load();var rp=repair();if(rp>0)save();render();renderSnaps();checkRollover();if(rp>0)toast('Veriler kontrol edildi, '+rp+' kayıt düzeltildi');startOnboarding();
+load();var rp=repair();if(rp>0)save();render();renderSnaps();checkRollover();if(rp>0)toast('Veriler kontrol edildi, '+rp+' kayıt düzeltildi');if(!startGuide())startOnboarding();
 })();
 </script>
 </body>
