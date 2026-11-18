@@ -383,7 +383,9 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
 .nav .ind{position:absolute;left:0;top:6px;bottom:6px;width:0;border-radius:26px;pointer-events:none;z-index:0;
   background:linear-gradient(180deg,#ffffff40,#ffffff14);box-shadow:inset 0 1.5px 0 #ffffff77,inset 0 -1px 0 #ffffff22,0 5px 16px #0005;
   transition:transform .5s cubic-bezier(.3,1.3,.4,1),width .5s cubic-bezier(.3,1.3,.4,1)}
-.nav .plus{position:relative;z-index:2;border:2px solid #ffffff66;margin-top:-26px;box-shadow:0 10px 26px #6a4cf599,inset 0 1.5px 0 #ffffff77}
+.nav .plus{position:absolute;left:calc(50% - 30px);top:-68px;z-index:2;border:2px solid #ffffff66;margin-top:0;box-shadow:0 10px 26px #6a4cf599,inset 0 1.5px 0 #ffffff77}
+.nav .t[data-v=ayar]{display:none}
+.nav .t{padding:7px 2px}
 .bill-ed{animation:rise .35s cubic-bezier(.2,.8,.2,1) backwards}
 
 
@@ -1032,7 +1034,7 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,4000-(Date.now()-t0))
 </div>
 
 <div id="dr"><div class="dp" id="drp"><div class="dh">Bütçem</div>
-  <button type="button" class="di" data-dr="sv"><span class="e">🪙</span><span>Birikimlerim<small>Altın, döviz, gümüş</small></span></button>
+  <button type="button" class="di" data-dr="sv"><span class="e"><svg viewBox="0 0 28 28" width="28" height="28" aria-hidden="true"><rect x="3" y="4" width="22" height="19" rx="4" fill="#4a3fc4" stroke="#8f7cff" stroke-width="1.4"/><rect x="6" y="7" width="16" height="13" rx="2.5" fill="#171a46"/><circle cx="12.5" cy="13.5" r="3.6" fill="#23277a" stroke="#ffd34d" stroke-width="1.5"/><circle cx="12.5" cy="13.5" r=".9" fill="#ffd34d"/><rect x="18" y="11.5" width="2.6" height="4" rx="1" fill="#ffd34d"/><rect x="6" y="23" width="3" height="2" rx=".8" fill="#4a3fc4"/><rect x="19" y="23" width="3" height="2" rx=".8" fill="#4a3fc4"/></svg></span><span>Birikimlerim<small>Altın, döviz, gümüş</small></span></button>
   <button type="button" class="di" data-dr="trip"><span class="e">🏖️</span><span>Tatil planı<small id="drTripSub">Tatilini planla</small></span></button>
   <button type="button" class="di" data-dr="year"><span class="e">🔮</span><span>12 aylık tahmin<small>Önümüzdeki aylar</small></span></button>
   <button type="button" class="di" data-dr="set" style="margin-top:auto"><span class="e">⚙️</span><span>Ayarlar</span></button>
@@ -2346,10 +2348,10 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.23.2';
+var APP_VER='1.24';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
-var RELEASES=[{v:'1.23.2',date:'Kasım 2026',title:'Kendi kalemin artık tam işlem',items:[['🔢','Şifre tuşları anında basılıyor','Tuşlara basınca küçülüp geri yaylanıyor, takılma yok.',1],['⏳','3 yanlışta 30 saniye bekleme','Geri sayım kendi kendine akar, süre dolunca hak sıfırlanır.',1],['✨','Açılış ve şifre ekranı animasyonlu','Açılış ekranı biraz daha uzun kalır, sonra şifre ekranı yumuşakça gelir.',1],['💵','Birikimde doğru para birimi','Dolar için $, Euro için €, Sterlin için £, altın için gr/adet yazar.',1],['✂️','Kendi kalemini oluştur = tam form','Gelir/gider, taksit, tek seferlik, her ay, ödeme şekli… hepsi var. Kaydedince işlem ana ekrana düşer, istersen kalem “Kendi kalemlerim”e de eklenir.',1]]},{v:'1.23.1',date:'Kasım 2026',title:'Kurlar Merkez Bankası’ndan',items:[
+var RELEASES=[{v:'1.24',date:'Kasım 2026',title:'Yeni alt menü',items:[['➕','Artı düğmesi ortada ve yukarıda','Üç sekme eşit bölünüyor, artı ortada üstte duruyor, her yerden kolay ulaşılıyor.',1],['⚙️','Ayarlar yan menüde','Alt bardan kalktı, soldaki menüden (☰) açılıyor.',1],['🔐','Birikimlerim simgesi kasa oldu','Yan menüdeki garip madeni para yerine kasa çizimi geldi.',1]]},{v:'1.23.2',date:'Kasım 2026',title:'Kendi kalemin artık tam işlem',items:[['🔢','Şifre tuşları anında basılıyor','Tuşlara basınca küçülüp geri yaylanıyor, takılma yok.',1],['⏳','3 yanlışta 30 saniye bekleme','Geri sayım kendi kendine akar, süre dolunca hak sıfırlanır.',1],['✨','Açılış ve şifre ekranı animasyonlu','Açılış ekranı biraz daha uzun kalır, sonra şifre ekranı yumuşakça gelir.',1],['💵','Birikimde doğru para birimi','Dolar için $, Euro için €, Sterlin için £, altın için gr/adet yazar.',1],['✂️','Kendi kalemini oluştur = tam form','Gelir/gider, taksit, tek seferlik, her ay, ödeme şekli… hepsi var. Kaydedince işlem ana ekrana düşer, istersen kalem “Kendi kalemlerim”e de eklenir.',1]]},{v:'1.23.1',date:'Kasım 2026',title:'Kurlar Merkez Bankası’ndan',items:[
   ['🏛️','TCMB kuru öncelikli','Dolar, euro ve sterlin kuru önce Merkez Bankası’nın günlük kurundan alınıyor. Alınamazsa başka kaynak denenir. Merkez Bankası kuru iş günlerinde günde bir kez açıklanır, hafta sonu son açıklanan kur görünür.',1]]},
 {v:'1.23',date:'Kasım 2026',title:'Birikim, yan menü ve kendi kalemlerin',items:[
   ['☰','Yan menü','Sol üstteki düğmeye dokununca soldan bir menü açılıyor: Birikimlerim, Tatil planı, 12 aylık tahmin ve Ayarlar. Tatil kartı cüzdan kartlarından çıktı, menüye taşındı.',1],
@@ -2883,7 +2885,7 @@ document.addEventListener('touchstart',function(){},{passive:true});
 /* cam gibi alt menü: kayan gösterge */
 function moveInd(){
   var nav=document.querySelector('.nav'),on=nav.querySelector('.t.on'),ind=nav.querySelector('.ind');
-  if(!on||!ind||!on.offsetWidth)return;
+  if(!ind)return;if(!on||!on.offsetWidth){ind.style.opacity='0';return}ind.style.opacity='1';
   ind.style.width=on.offsetWidth+'px';ind.style.transform='translateX('+on.offsetLeft+'px)';
 }
 window.addEventListener('resize',moveInd);window.addEventListener('orientationchange',moveInd);
