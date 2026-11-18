@@ -410,6 +410,19 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
 .scr{display:flex;align-items:center;gap:11px;padding:9px 0;border-top:1px solid var(--line);width:100%;text-align:left}.scr:first-child{border:0}
 .scr .m{flex:1;min-width:0}.scr .m b{display:block;font-size:14.5px}.scr .m small{color:var(--mut);font-size:12px}.scr .go{color:#7ab8ff;font-weight:800;font-size:14px}
 .sclink{display:block;width:100%;text-align:center;color:var(--mut);font-size:13px;padding:10px 0 0}
+
+/* ===== Yenilikler ===== */
+#wnBg{z-index:50}
+.wn{position:relative;width:100%;max-width:380px;max-height:84vh;display:flex;flex-direction:column;border-radius:28px;background:linear-gradient(160deg,#27206b,#1a1f55 55%,#0f3a4f);border:1px solid #ffffff26;box-shadow:0 30px 70px #000a;overflow:hidden;animation:pop .5s cubic-bezier(.3,1.4,.5,1) backwards;color:#f3f5ff}
+.wn:before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:#7c5cff;opacity:.3;filter:blur(55px);right:-70px;top:-70px;pointer-events:none}
+.wn .wh{padding:20px 18px 6px;position:relative}.wn .sp{font-size:32px}.wn h2{font-size:22px;margin:2px 0 2px;letter-spacing:-.3px;color:#fff}.wn .ws{font-size:13px;color:#b9bff0}
+.wn .wb{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 18px 4px;position:relative;overscroll-behavior:contain}
+.wn .wr{margin:12px 0 4px;display:flex;align-items:center;gap:8px}.wn .wv{font-size:12px;font-weight:800;background:#ffffff1f;border-radius:10px;padding:3px 10px}.wn .wt{font-weight:800;font-size:15px}
+.wn .it{display:flex;gap:11px;padding:9px 0;border-top:1px solid #ffffff14}
+.wn .e{width:36px;height:36px;border-radius:12px;background:#ffffff14;display:grid;place-items:center;font-size:18px;flex:none}
+.wn .it b{display:block;font-size:14.5px;margin-bottom:1px}.wn .it small{font-size:12.5px;color:#b9bff0;line-height:1.38}
+.wn .nw{font-size:10px;font-weight:800;border-radius:7px;padding:2px 6px;background:#3ddc9722;color:#3ddc97;margin-left:6px;vertical-align:1px}
+.wn .wf{padding:8px 18px 18px;position:relative}.wn .wf .btn{margin:0}
 /* ===== Tatil ===== */
 .pc.c3{transform:scale(.93)}.pc.c1{transform:scale(.955)}.pc.c2{transform:scale(.975)}
 .pc.c3{background:linear-gradient(135deg,#ffcf5a,#ff8a3d 55%,#ff5d7a)}
@@ -690,6 +703,10 @@ html.big body{zoom:1.12}
       <div id="limList"></div>
     </div>
     <div class="card">
+      <h2>✨ Yenilikler</h2>
+      <button type="button" class="btn sec sm" id="wnOpen" style="display:flex;justify-content:space-between;align-items:center;margin:0 0 14px"><span>Neler eklendi, neler değişti?</span><b id="wnVer" style="color:#7ab8ff">v0.2 ›</b></button>
+    </div>
+    <div class="card">
       <h2>🎨 Görünüm</h2>
       <span class="lbl">Yazı boyutu</span>
       <div class="paysg"><button type="button" id="fsN" class="on">Normal</button><button type="button" id="fsB">Büyük</button></div>
@@ -887,6 +904,7 @@ html.big body{zoom:1.12}
 </div></div>
 <div class="cbg" id="igbg"><div class="ig" id="igBox"></div></div>
 <div class="cbg" id="tiBg"><div class="ti" id="tiBox"></div></div>
+<div class="cbg" id="wnBg"><div class="wn" id="wnBox"></div></div>
 <div class="toast" id="toast"></div>
 
 <nav class="nav">
@@ -1669,6 +1687,57 @@ $('scSave').onclick=function(){
   }
   save();closeSc();render();
 };
+
+
+/* ---------- Yenilikler ---------- */
+var APP_VER='0.2';
+var RELEASES=[
+ {v:'0.2',date:'Kasım 2026',title:'Daha derli toplu',items:[
+  ['🏠','Yeni ana ekran sırası','Faturalar cüzdanın hemen altında, harcamaların öne geldi. Önümüzdeki 6 ay tek satıra küçüldü, dokununca açılıyor.',0],
+  ['🔁','Aylık abonelik kontrolü','Ayda bir “hepsi geçerli mi?” diye sorar. Zam ya da iptali kolayca yakalarsın.',1],
+  ['📲','Ana ekrana ekleme rehberi','Telefonda ilk kez açan kişiye iPhone ve Android için adım adım gösterir.',1],
+  ['ℹ️','Tatilde “Nasıl çalışır?”','Tatil ekranındaki anlatımı istediğin zaman tekrar açabilirsin.',1],
+  ['✨','Yenilikler ekranı','Güncellemelerde ne değiştiğini buradan görürsün.',1],
+  ['🛠','İyileştirmeler','Tutara dokununca ekranın büyümesi, tatil ekranının kapanmaması ve ekstre ödemesinin tahmini şişirmesi düzeltildi.',0]]},
+ {v:'0.1',date:'Kasım 2026',title:'Tatil güncellemesi',items:[
+  ['🏖️','Tatil bölümü','Cüzdanın en arkasındaki karta dokun. Plan, bütçe, kişi başı pay, yaz ve kış temaları.',0],
+  ['🧮','Ayırabilir miyiz?','Gelirine bakıp tatili ayırabilir misin söyler. “Ayırdım” dersen ilerlemen görünür, bakiyene dokunmaz.',0],
+  ['💳','Kredi kartı harcamaları','Kartla yaptıkların ayrı listede durur, ekstreyi ödeyince bakiyenden düşer. Normal giderlerde de var.',0],
+  ['🌍','Yurt dışı ve bölüşme','Para birimi ve kur girebilir, arkadaşlarla bölüşünce “benim payım”ı ayrı görürsün.',0]]},
+ {v:'0',date:'',title:'Temel sürüm',items:[
+  ['💰','Gelir, gider ve ay sonu tahmini','Ay bitmeden nasıl biteceğini gösterir. Önümüzdeki 6 ay ve son 12 ay görünümü.',0],
+  ['💡','Faturalar','Her ay hangi faturanın ödendiğini işaretlersin.',0],
+  ['📺','Üyelikler ve abonelikler','Netflix, YouTube gibi aboneliklerin aylık toplamı.',0],
+  ['🗓️','Taksitler ve “Alabilir miyim?”','Yeni taksit almadan önce bütçene sığıp sığmadığını gör.',0],
+  ['🌙','Ay sonu devri','Kalan parayı yeni aya devret ya da harcadığını işle.',0],
+  ['🎯','Kategori limitleri','Bir kategori için aylık sınır koy, yaklaşınca uyarsın.',0],
+  ['💾','Otomatik yedekler ve geri al','Veriler günlük yedeklenir, yanlışlıkla silinen geri alınabilir.',0]]}
+];
+function relIdx(v){for(var i=0;i<RELEASES.length;i++)if(RELEASES[i].v===v)return i;return -1}
+function renderWn(list,fresh){
+  var h='<div class="wh"><div class="sp">✨</div><h2>'+(fresh?'Neler yeni?':'Yenilikler')+'</h2><div class="ws">'+(fresh?'Bütçem güncellendi · v'+APP_VER:'Bütçem v'+APP_VER+' · tüm sürümler')+'</div></div><div class="wb">';
+  list.forEach(function(r){
+    h+='<div class="wr"><span class="wv">v'+esc(r.v)+'</span><span class="wt">'+esc(r.title)+'</span></div>';
+    r.items.forEach(function(it){h+='<div class="it"><div class="e">'+it[0]+'</div><div><b>'+esc(it[1])+(it[3]?'<span class="nw">YENİ</span>':'')+'</b><small>'+esc(it[2])+'</small></div></div>'});
+  });
+  h+='</div><div class="wf"><button type="button" class="btn" id="wnOk">Harika, anladım 👍</button></div>';
+  $('wnBox').innerHTML=h;$('wnBg').classList.add('show');
+}
+function openWn(all){
+  var seen=lsGet('butcem_ver'),i=relIdx(seen),list=all?RELEASES:(i>0?RELEASES.slice(0,i):RELEASES);
+  if(!all&&seen===APP_VER)return;
+  renderWn(list,!all);
+}
+function endWn(){lsSet('butcem_ver',APP_VER);$('wnBg').classList.remove('show')}
+$('wnBox').addEventListener('click',function(ev){if(ev.target.closest('#wnOk'))endWn()});
+$('wnOpen').onclick=function(){renderWn(RELEASES,false)};
+$('wnVer').textContent='v'+APP_VER+' ›';
+function maybeWn(){
+  if(lsGet('butcem_ver')===APP_VER)return;
+  if($('obbg').classList.contains('show')||$('igbg').classList.contains('show'))return;
+  if(!lsGet('butcem_ob'))return;
+  setTimeout(function(){if(!$('obbg').classList.contains('show')&&!$('igbg').classList.contains('show'))openWn(false)},700);
+}
 
 /* ---------- Olaylar ---------- */
 $('prev').onclick=function(){cur=new Date(cur.getFullYear(),cur.getMonth()-1,1);render()};
@@ -2489,6 +2558,7 @@ $('rbg').onclick=function(ev){if(ev.target===$('rbg'))laterRoll()};
 document.addEventListener('visibilitychange',function(){if(!document.hidden){render();checkRollover()}});
 
 load();var rp=repair();if(rp>0)save();render();renderSnaps();checkRollover();if(rp>0)toast('Veriler kontrol edildi, '+rp+' kayıt düzeltildi');if(!startGuide())startOnboarding();
+maybeWn();
 })();
 </script>
 </body>
