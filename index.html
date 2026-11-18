@@ -500,6 +500,9 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
 @keyframes wav{from{transform:translateX(-12px)}to{transform:translateX(12px)}}
 .art .plane{animation:fly 9s linear infinite}
 @keyframes fly{from{transform:translate(-60px,12px)}to{transform:translate(420px,-12px)}}
+.cf{width:100%;max-width:360px;border-radius:24px;padding:20px;background:linear-gradient(160deg,#1c2150,#141838);border:1px solid #ffffff1c;box-shadow:0 30px 70px #000a}
+.cf h3{margin:0 0 8px;font-size:18px;color:#fff}.cf .cfm{font-size:14.5px;line-height:1.5;color:#cfd3f5;margin-bottom:10px}.cf .btn{margin:6px 0 0}
+#cfBg{z-index:52}
 .cbg{position:fixed;inset:0;z-index:45;background:#02030acc;display:none;align-items:center;justify-content:center;padding:20px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .cbg.show{display:flex;animation:fade .25s both}
 .cbox{position:relative;overflow:hidden;width:100%;max-width:360px;text-align:center;border-radius:28px;padding:26px 20px 20px;background:linear-gradient(135deg,#ff9a5c,#ff4f9a 60%,#7a5cff);box-shadow:0 30px 70px #000a;animation:pop .5s cubic-bezier(.3,1.4,.5,1) backwards}
@@ -592,6 +595,11 @@ html.big body{zoom:1.12}
         <div style="flex:1;min-width:0"><b id="billcardTx" class="num" style="font-size:18px"></b><div class="note" style="margin-top:4px" id="billcardSub"></div></div>
         <button class="btn sm" id="bBillGo" style="width:auto;margin:0;padding:12px 18px">Aç</button>
       </div>
+    </div>
+
+    <div class="card" id="dupChk" style="display:none">
+      <h2>⚠️ Muhtemel çift kayıt</h2>
+      <div id="dupBody"></div>
     </div>
 
     <div class="card" id="subChk" style="display:none">
@@ -908,6 +916,7 @@ html.big body{zoom:1.12}
 </div></div>
 <div class="cbg" id="igbg"><div class="ig" id="igBox"></div></div>
 <div class="cbg" id="tiBg"><div class="ti" id="tiBox"></div></div>
+<div class="cbg" id="cfBg"><div class="cf" id="cfBox"></div></div>
 <div class="cbg" id="wnBg"><div class="wn" id="wnBox"></div></div>
 <div class="toast" id="toast"></div>
 
@@ -1047,6 +1056,7 @@ function sE(){return S.entries.filter(function(e){return e.id!==EX})}
 function monthIn(k){var t=0;sE().forEach(function(e){if(e.type==='in'&&e.date.slice(0,7)===k)t+=e.amt});return t}
 function monthInR(k){var t=0;sE().forEach(function(e){if(e.type==='in'&&!e.carry&&!e.trip&&e.date.slice(0,7)===k)t+=e.amt});return t}
 function recIn(k){var t=0;sE().forEach(function(e){if(e.type==='in'&&e.rec&&e.date.slice(0,7)===k)t+=e.amt});return t}
+function recOutND(k){var t=0;sE().forEach(function(e){if(e.type==='out'&&e.rec&&e.date.slice(0,7)===k&&!dupSub(e))t+=e.amt});return t}
 function recOut(k){var t=0;sE().forEach(function(e){if(e.type==='out'&&e.rec&&e.date.slice(0,7)===k)t+=e.amt});return t}
 function varSpend(k){var t=0;sE().forEach(function(e){if(e.type==='out'&&!e.rec&&!e.bill&&!e.adj&&!e.trip&&!e.cardpay&&e.date.slice(0,7)===k)t+=e.amt});return t}
 function anyOut(k){var t=0;sE().forEach(function(e){if(e.type==='out'&&!e.bill&&!e.adj&&!e.trip&&!e.cardpay&&e.date.slice(0,7)===k)t+=e.amt});return t}
@@ -1083,7 +1093,7 @@ function carry(){
   for(var i=0;i<=12&&(!fI||!fF);i++){
     var k=fromYm(i0-i);
     if(!fI){var r=recIn(k),v=r>0?r:monthInR(k);if(v>0){inc=v;fI=true}}
-    if(!fF){var f=recOut(k);if(f>0){fix=f;fF=true}}
+    if(!fF){var f=recOutND(k);if(f>0){fix=f;fF=true}}
   }
   return{inc:inc,fix:fix};
 }
@@ -1358,7 +1368,7 @@ function render(){
   banner();
   if(typeof bkBanner==='function')bkBanner();
   if(typeof renderSnaps==='function')renderSnaps();
-  if(typeof renderTripCard==='function'){renderTripCard();renderCards();tripBanner();renderSubChk();renderLimits();renderYear();renderLimSettings();renderSearch()}
+  if(typeof renderTripCard==='function'){renderTripCard();renderCards();tripBanner();renderSubChk();renderDupChk();renderLimits();renderYear();renderLimSettings();renderSearch()}
 }
 
 function renderPlans(es){
@@ -1429,12 +1439,29 @@ function saveSheet(){
     S.cards.push({id:uid(),date:date,amt:Math.round(amt*100)/100,cat:cat,tcat:'',note:$('sNote').value.trim(),paid:false});
     S.inited[date.slice(0,7)]=true;save();closeSheet();render();toast(limMsg(cat,date)||'Kart harcamalarına eklendi ✓ Ekstreyi ödeyince düşer');return}
   var o={type:sType,cat:cat,amt:Math.round(amt*100)/100,date:date,note:$('sNote').value.trim(),rec:$('sRec').checked},wasEdit=!!editId;
+  if(!editId&&o.type==='out'&&o.rec){
+    var cx={t:'Vazgeç',c:'sec'};
+    var chk2=function(){
+      var nm=o.note||o.cat,sb=subsActive().filter(function(p){return nameHit(nm,p.name)||nameHit(p.name,nm)})[0];
+      if(sb){askBox('Abonelikte zaten var','<b>'+esc(sb.name)+'</b> abonelik olarak kayıtlı ('+esc(fmt(sb.amt,true))+', her ayın '+sb.day+'. günü) ve her ay otomatik düşüyor. Düzenli gider olarak da eklersen aynı ödeme <b>iki kez</b> sayılır.',[cx,{t:'Yine de ekle',c:'sec',f:commit}]);return}
+      var rc=S.entries.filter(function(e){return e.type==='out'&&e.rec&&!e.plan&&nrm(e.note||e.cat)===nrm(nm)&&nrm(nm).length>=3})[0];
+      if(rc){askBox('Düzenli giderde zaten var','<b>'+esc(rc.note||rc.cat)+'</b> · '+esc(fmt(rc.amt,true))+' zaten düzenli gider olarak kayıtlı. Bir tane daha eklersen her ay <b>iki kez</b> sayılır.',[cx,{t:'Yine de ekle',c:'sec',f:commit}]);return}
+      commit();
+    };
+    var gs=brandGuess(o.note||'');
+    if(gs){askBox('Şunu mu demek istedin?','<b>'+esc(o.note)+'</b> yazdın. <b>'+esc(gs)+'</b> mi demek istedin?',[
+      {t:'Evet, '+gs,f:function(){o.note=gs;chk2()}},{t:'Hayır, böyle kalsın',c:'sec',f:chk2},cx]);return}
+    chk2();return;
+  }
+  commit();
+  function commit(){
   if(editId){S.entries.forEach(function(x){if(x.id===editId){x.type=o.type;x.cat=o.cat;if(x.trip&&x.share!=null&&x.amt>0)x.share=Math.round(x.share/x.amt*o.amt*100)/100;x.amt=o.amt;x.date=o.date;x.note=o.note;x.rec=o.rec}})}
   else{o.id=uid();S.entries.push(o)}
   var m=new Date(date+'T00:00:00');
   if(!isNaN(m))cur=new Date(m.getFullYear(),m.getMonth(),1);
   S.inited[mk(cur)]=true;
   save();closeSheet();render();toast((sType==='out'&&limMsg(cat,date))||(wasEdit?'Güncellendi ✓':'Kaydedildi ✓'));
+  }
 }
 
 /* ---------- Taksit penceresi ---------- */
@@ -1575,6 +1602,66 @@ var BRANDS=[
 function brandOf(n){for(var i=0;i<BRANDS.length;i++)if(BRANDS[i][0]===n)return BRANDS[i];return BRANDS[BRANDS.length-1]}
 function tile(b,sz){return '<span class="ico brand" style="background:linear-gradient(145deg,'+b[2]+','+b[3]+');'+(sz?'width:'+sz+'px;height:'+sz+'px;':'')+(b[1].length>2?'font-size:20px':'')+'">'+esc(b[1])+'</span>'}
 function subsActive(){return S.plans.filter(function(x){return x.sub})}
+/* Çift kayıt: eski "düzenli gider" ile aynı aboneliğin Abonelikler bölümündeki hâli */
+var DUP_STOP={apple:1,google:1,microsoft:1,amazon:1,premium:1,prime:1,disney:1};
+function nrm(s){return String(s||'').toLocaleLowerCase('tr').replace(/ı/g,'i').replace(/[^a-z0-9çğöşü ]/g,' ').replace(/\s+/g,' ').trim()}
+function subToks(p){var t=[];nrm(p.name).split(' ').forEach(function(w){if(w.length>=4&&!DUP_STOP[w])t.push(w)});if(!t.length&&nrm(p.name).length>=4)t.push(nrm(p.name));return t}
+function dupSub(e){
+  if(!e||e.type!=='out'||!e.rec||e.plan)return null;
+  var h=nrm(e.note||e.cat);if(h.length<3)return null;var L=subsActive();
+  for(var i=0;i<L.length;i++){var T=subToks(L[i]);
+    for(var j=0;j<T.length;j++)if(h.indexOf(T[j])>-1)return L[i];
+    var pn=nrm(L[i].name);if(h.length>=4&&pn.indexOf(h)>-1)return L[i]}
+  return null;
+}
+function lev(a,b){var m=a.length,n=b.length,d=[],i,j;for(i=0;i<=m;i++){d[i]=[i]}for(j=1;j<=n;j++)d[0][j]=j;
+  for(i=1;i<=m;i++)for(j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[m][n]}
+function brandGuess(name){
+  var T=nrm(name).split(' ').filter(function(w){return w.length>=5&&!DUP_STOP[w]});if(!T.length)return null;
+  var best=null,bd=9,i,j,k;
+  for(i=0;i<BRANDS.length;i++){var bn=BRANDS[i][0];if(bn==='Diğer')continue;
+    var bt=nrm(bn).split(' ').filter(function(w){return w.length>=5&&!DUP_STOP[w]});
+    for(j=0;j<bt.length;j++)for(k=0;k<T.length;k++)if(T[k]===bt[j])return null}
+  for(i=0;i<BRANDS.length;i++){var bn2=BRANDS[i][0];if(bn2==='Diğer')continue;
+    var bt2=nrm(bn2).split(' ').filter(function(w){return w.length>=5&&!DUP_STOP[w]});
+    for(j=0;j<bt2.length;j++)for(k=0;k<T.length;k++){var d=lev(T[k],bt2[j]),lim=bt2[j].length>=7?2:1;if(d<=lim&&d<bd){bd=d;best=bn2}}}
+  return best;
+}
+function nameHit(h,name){h=nrm(h);if(h.length<3)return false;var T=subToks({name:name});
+  for(var j=0;j<T.length;j++)if(h.indexOf(T[j])>-1)return true;var pn=nrm(name);return h.length>=4&&pn.indexOf(h)>-1}
+function askBox(title,msg,btns){
+  var h='<h3>'+esc(title)+'</h3><div class="cfm">'+msg+'</div>';
+  btns.forEach(function(b,i){h+='<button type="button" class="btn '+(b.c||'')+'" data-cf="'+i+'">'+esc(b.t)+'</button>'});
+  $('cfBox').innerHTML=h;$('cfBg').classList.add('show');
+  $('cfBox').onclick=function(ev){var b=ev.target.closest('[data-cf]');if(!b)return;$('cfBg').classList.remove('show');var f=btns[+b.getAttribute('data-cf')].f;if(f)f()};
+}
+function recMatches(name,fromK){return S.entries.filter(function(e){return e.type==='out'&&e.rec&&!e.plan&&e.date.slice(0,7)>=(fromK||'0000-00')&&nameHit(e.note||e.cat,name)})}
+function dupList(){
+  var ok=[];try{ok=JSON.parse(lsGet('butcem_dupok')||'[]')}catch(e){}
+  var g={};
+  S.entries.forEach(function(e){var p=dupSub(e);if(!p||ok.indexOf(p.id)>-1)return;
+    if(e.date.slice(0,7)<p.start)return;
+    (g[p.id]=g[p.id]||{p:p,ents:[]}).ents.push(e)});
+  return Object.keys(g).map(function(k){var o=g[k];o.ents.sort(function(a,b){return a.date<b.date?1:-1});o.amt=o.ents[0].amt;return o});
+}
+function renderDupChk(){
+  var c=$('dupChk');if(!c)return;var L=dupList();
+  c.style.display=(L.length&&mk(cur)===nowK())?'':'none';if(!L.length)return;
+  var h='<div style="font-size:14.5px;line-height:1.45;margin-bottom:6px">Bu abonelikler hem <b>düzenli gider</b> hem <b>abonelik</b> olarak kayıtlı görünüyor. Aynı ödeme iki kez sayılıyor olabilir.</div>';
+  L.forEach(function(o){
+    h+='<div class="scr" style="align-items:flex-start;flex-wrap:wrap">'+tile(brandOf(o.p.brand))+'<span class="m" style="flex:1;min-width:150px"><b>'+esc(o.p.name)+'</b><small>Düzenli: '+esc(fmt(o.amt,true))+' · Abonelik: '+esc(fmt(o.p.amt,true))+' · '+o.ents.length+' eski kayıt</small></span>'+
+      '<span style="display:flex;gap:6px;width:100%;margin-top:6px"><button type="button" class="btn sm" data-dup="'+esc(o.p.id)+'" style="margin:0;flex:1">Eski kaydı sil</button><button type="button" class="btn sec sm" data-dupok="'+esc(o.p.id)+'" style="margin:0;flex:1">Çift değil</button></span></div>'});
+  $('dupBody').innerHTML=h;
+}
+$('dupBody').addEventListener('click',function(ev){
+  var b=ev.target.closest('button');if(!b)return;
+  var id=b.getAttribute('data-dup'),ok=b.getAttribute('data-dupok');
+  if(ok){var a=[];try{a=JSON.parse(lsGet('butcem_dupok')||'[]')}catch(e){}a.push(ok);lsSet('butcem_dupok',JSON.stringify(a));renderDupChk();return}
+  if(id){var o=dupList().filter(function(x){return x.p.id===id})[0];if(!o)return;
+    markUndo();var kill={};o.ents.forEach(function(e){kill[e.id]=1});
+    S.entries=S.entries.filter(function(e){return!kill[e.id]});
+    save();render();toast('Eski kayıt silindi, çift sayım kalktı ✓',true)}
+});
 function subNext(p){var nk=nowK(),t=today(),d=payDate(p,nk<p.start?p.start:nk);
   if(nk>=p.start&&d<t)d=payDate(p,fromYm(ym(nk)+1));
   if(p.end&&d.slice(0,7)>p.end)return null;return d}
@@ -1627,9 +1714,32 @@ $('uSave').onclick=function(){
   if(!(day>=1&&day<=31)){toast('Ödeme günü 1-31 arası olmalı');return}
   if(!st){toast('Başlangıç ayını seç');return}
   amt=Math.round(amt*100)/100;
-  if(subEdit){S.plans.forEach(function(x){if(x.id===subEdit){x.name=name;x.brand=subBrand;x.amt=amt;x.day=day;x.start=st;if(x.end&&x.end<st)x.end=st}})}
-  else S.plans.push({id:uid(),name:name,cat:'Abonelik',amt:amt,start:st,end:'',day:day,sub:true,brand:subBrand});
-  save();closeSub();render();toast('Kaydedildi ✓ Her ay otomatik düşecek');
+  function fin(nm){
+    if(subEdit){S.plans.forEach(function(x){if(x.id===subEdit){x.name=nm;x.brand=subBrand;x.amt=amt;x.day=day;x.start=st;if(x.end&&x.end<st)x.end=st}})}
+    else S.plans.push({id:uid(),name:nm,cat:'Abonelik',amt:amt,start:st,end:'',day:day,sub:true,brand:subBrand});
+    save();closeSub();render();toast('Kaydedildi ✓ Her ay otomatik düşecek');
+  }
+  if(subEdit){fin(name);return}
+  var cancel={t:'Vazgeç',c:'sec'};
+  function s3(nm){
+    var rm=recMatches(nm,st);
+    if(!rm.length){fin(nm);return}
+    var ra=rm[0].amt;rm.forEach(function(e){if(e.date>rm[0].date)ra=e.amt});
+    askBox('Düzenli giderde de var','Bunu <b>düzenli gider</b> olarak da girmişsin ('+esc(fmt(ra,true))+'). Aboneliği de eklersen aynı ödeme <b>iki kez</b> sayılır.',[
+      {t:'Eski kaydı sil, aboneliği ekle',f:function(){markUndo();var kill={};rm.forEach(function(e){kill[e.id]=1});S.entries=S.entries.filter(function(e){return!kill[e.id]});fin(nm)}},
+      {t:'İkisi de kalsın',c:'sec',f:function(){fin(nm)}},cancel]);
+  }
+  function s2(nm){
+    var ex=subsActive().filter(function(p){return nameHit(p.name,nm)||nameHit(nm,p.name)})[0];
+    if(!ex){s3(nm);return}
+    askBox('Bu abonelik zaten ekli','<b>'+esc(ex.name)+'</b> · '+esc(fmt(ex.amt,true))+' · her ayın '+ex.day+'. günü zaten kayıtlı. Bir tane daha eklersen her ay <b>iki kez</b> düşer.',[
+      cancel,{t:'Yine de ekle (ikinci hesap/plan)',c:'sec',f:function(){s3(nm)}}]);
+  }
+  var g=brandGuess(name);
+  if(g){askBox('Şunu mu demek istedin?','<b>'+esc(name)+'</b> yazdın. <b>'+esc(g)+'</b> mi demek istedin?',[
+    {t:'Evet, '+g,f:function(){subBrand=g;$('uName').value=g;s2(g)}},
+    {t:'Hayır, böyle kalsın',c:'sec',f:function(){s2(name)}},cancel]);return}
+  s2(name);
 };
 $('uEndBtn').onclick=function(){
   S.plans.forEach(function(x){if(x.id===subEdit){var nk=nowK();x.end=(payDate(x,nk)<today())?nk:fromYm(ym(nk)-1);if(x.end<x.start)x.end=x.start}});
@@ -1695,10 +1805,16 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.3';
+var APP_VER='1.4';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+ {v:'1.4',date:'Kasım 2026',title:'Akıllı uyarılar',items:[
+  ['🧐','“Şunu mu demek istedin?”','Bir platformu yanlış ya da farklı yazarsan (örn. “Netfliks”) doğrusunu önerir, istersen yazdığın gibi bırakırsın.',1],
+  ['🛑','İki kez ödeme uyarısı','Aynı aboneliği ikinci kez eklerken ya da hem düzenli gider hem abonelik olarak girerken seni uyarır. İstersen eski kaydı oradan silebilirsin.',1]]},
+ {v:'1.3.1',date:'Kasım 2026',title:'Hata düzeltmesi',items:[
+  ['⚠️','Çift kayıt kontrolü','Bir aboneliği hem düzenli gider hem abonelik olarak girdiysen uygulama bunu fark eder. “Eski kaydı sil” ile tek dokunuşta çift sayım kalkar, istersen geri alırsın.',1],
+  ['📈','Doğru ay tahminleri','Gelecek ayların tahmini artık eski düzenli abonelik kayıtlarını ikinci kez saymıyor.',0]]},
  {v:'1.3',date:'Kasım 2026',title:'Yedeğin iCloud\'da güvende',items:[
   ['☁️','Yedeği dosya olarak kaydet','Ayarlar\'dan tek dokunuşla yedeği dosya yap, Dosyalar > iCloud Drive\'a koy. Telefon bozulsa da verilerin kaybolmaz.',1],
   ['📂','Dosyadan geri yükle','Yeni telefonda ya da silinince yedek dosyasını seçip tüm verilerini geri getirirsin.',1],
