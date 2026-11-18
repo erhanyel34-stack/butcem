@@ -696,6 +696,24 @@ html.big body{zoom:1.12}
   <!-- AYARLAR -->
   <div class="view" id="v-ayar">
     <div class="card" style="margin-top:0">
+      <h2>💾 Yedekle / Geri yükle</h2>
+      <div class="note" id="bkStatus" style="margin:0 0 6px;font-weight:700"></div>
+      <div class="note" style="margin:0 0 10px">Veriler bu telefonda, uygulamanın kendi hafızasında saklanır. Tarayıcı verisini silersen kaybolabilir; arada bir yedek al.</div>
+      <button class="btn" id="bFile">☁️ Yedeği dosya olarak kaydet (iCloud Drive)</button>
+      <div class="note" style="margin-top:6px">Açılan menüden <b>Dosyalara Kaydet</b>'i seç, <b>iCloud Drive</b>'ı işaretle. Dosya telefon bozulsa bile iCloud'unda durur. Uygulama 3 günde bir hatırlatır.</div>
+      <button class="btn sec" id="bShare">📝 Yedeği Notlar'a kaydet</button>
+      <div class="note" style="margin-top:6px">Açılan menüden <b>Notlar</b>'ı seç. Not, tarih ve gün başlığıyla kaydedilir (örn. “Bütçem yedeği — 18 Kasım 2026 Çarşamba”).</div>
+      <button class="btn sec" id="bCsv">📤 Excel (CSV) olarak dışa aktar</button>
+      <button class="btn sec" id="bBackup">Yedeği kopyala</button>
+      <button class="btn sec" id="bPick">📂 Yedek dosyasından geri yükle</button>
+      <input type="file" id="bPickIn" accept=".json,.txt,application/json,text/plain" style="display:none">
+      <div class="note">Notlar'daki yedek metnini kopyalayıp aşağıya yapıştırarak geri yükleyebilirsin (başlık satırı sorun olmaz):</div>
+      <textarea class="fld" id="restoreTx" placeholder="Yedek metnini buraya yapıştır"></textarea>
+      <button class="btn sec" id="bRestore">Yedekten geri yükle</button>
+      <button class="btn del" id="bWipe">Tüm verileri sil</button>
+      <div class="note" id="wipeNote" style="display:none;color:var(--out)">Emin misin? Silmek için bir kez daha dokun.</div>
+    </div>
+    <div class="card">
       <h2>🔔 Günlük hatırlatma kur</h2>
       <div class="note" style="margin-top:0">Web uygulamaları iPhone'da kendi kendine bildirim gönderemez. En güvenilir yol, iPhone'un kendi Hatırlatıcılar uygulamasıdır:</div>
       <div class="step"><i>1</i><div><b>Hatırlatıcılar</b> uygulamasını aç → <b>+ Yeni</b></div></div>
@@ -729,24 +747,6 @@ html.big body{zoom:1.12}
       <h2>🕘 Otomatik yedekler</h2>
       <div class="note" style="margin:0 0 8px">Uygulama, veriyi her gün kendiliğinden bu telefonda ayrıca saklar. Yanlışlıkla silme ya da bir hata olursa buradan geri dönebilirsin. (Telefon hafızası ya da tarayıcı verisi silinirse bunlar da gider; o yüzden iCloud Drive'a dosya yedeği de al.)</div>
       <div id="snapList"></div>
-    </div>
-    <div class="card">
-      <h2>💾 Yedekle / Geri yükle</h2>
-      <div class="note" id="bkStatus" style="margin:0 0 6px;font-weight:700"></div>
-      <div class="note" style="margin:0 0 10px">Veriler bu telefonda, uygulamanın kendi hafızasında saklanır. Tarayıcı verisini silersen kaybolabilir; arada bir yedek al.</div>
-      <button class="btn" id="bFile">☁️ Yedeği dosya olarak kaydet (iCloud Drive)</button>
-      <div class="note" style="margin-top:6px">Açılan menüden <b>Dosyalara Kaydet</b>'i seç, <b>iCloud Drive</b>'ı işaretle. Dosya telefon bozulsa bile iCloud'unda durur. Uygulama 3 günde bir hatırlatır.</div>
-      <button class="btn sec" id="bShare">📝 Yedeği Notlar'a kaydet</button>
-      <div class="note" style="margin-top:6px">Açılan menüden <b>Notlar</b>'ı seç. Not, tarih ve gün başlığıyla kaydedilir (örn. “Bütçem yedeği — 18 Kasım 2026 Çarşamba”).</div>
-      <button class="btn sec" id="bCsv">📤 Excel (CSV) olarak dışa aktar</button>
-      <button class="btn sec" id="bBackup">Yedeği kopyala</button>
-      <div class="note">Notlar'daki yedek metnini kopyalayıp aşağıya yapıştırarak geri yükleyebilirsin (başlık satırı sorun olmaz):</div>
-      <button class="btn sec" id="bPick">📂 Yedek dosyasından geri yükle</button>
-      <input type="file" id="bPickIn" accept=".json,.txt,application/json,text/plain" style="display:none">
-      <textarea class="fld" id="restoreTx" placeholder="Yedek metnini buraya yapıştır"></textarea>
-      <button class="btn sec" id="bRestore">Yedekten geri yükle</button>
-      <button class="btn del" id="bWipe">Tüm verileri sil</button>
-      <div class="note" id="wipeNote" style="display:none;color:var(--out)">Emin misin? Silmek için bir kez daha dokun.</div>
     </div>
   </div>
   <div class="credit"><b>Savaş Erhan Yel</b>tarafından geliştirildi ve tasarlandı</div>
@@ -1055,6 +1055,7 @@ var EX=null,EXP=null; // simülasyonda hariç tutulan işlem / plan
 function sE(){return S.entries.filter(function(e){return e.id!==EX})}
 function monthIn(k){var t=0;sE().forEach(function(e){if(e.type==='in'&&e.date.slice(0,7)===k)t+=e.amt});return t}
 function monthInR(k){var t=0;sE().forEach(function(e){if(e.type==='in'&&!e.carry&&!e.trip&&e.date.slice(0,7)===k)t+=e.amt});return t}
+function salIn(k){var t=0;sE().forEach(function(e){if(e.type==='in'&&e.cat==='Maaş'&&!e.carry&&!e.trip&&e.date.slice(0,7)===k)t+=e.amt});return t}
 function recIn(k){var t=0;sE().forEach(function(e){if(e.type==='in'&&e.rec&&e.date.slice(0,7)===k)t+=e.amt});return t}
 function recOutND(k){var t=0;sE().forEach(function(e){if(e.type==='out'&&e.rec&&e.date.slice(0,7)===k&&!dupSub(e))t+=e.amt});return t}
 function recOut(k){var t=0;sE().forEach(function(e){if(e.type==='out'&&e.rec&&e.date.slice(0,7)===k)t+=e.amt});return t}
@@ -1092,7 +1093,7 @@ function carry(){
   var i0=ym(nowK()),inc=0,fix=0,fI=false,fF=false;
   for(var i=0;i<=12&&(!fI||!fF);i++){
     var k=fromYm(i0-i);
-    if(!fI){var r=recIn(k),v=r>0?r:monthInR(k);if(v>0){inc=v;fI=true}}
+    if(!fI){var r=recIn(k),v=r>0?r:(salIn(k)>0?salIn(k):monthInR(k));if(v>0){inc=v;fI=true}}
     if(!fF){var f=recOutND(k);if(f>0){fix=f;fF=true}}
   }
   return{inc:inc,fix:fix};
@@ -1805,10 +1806,13 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.4';
+var APP_VER='1.4.1';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+ {v:'1.4.1',date:'Kasım 2026',title:'Hata düzeltmeleri',items:[
+  ['📈','Prim ve ek gelir tahmini şişirmiyor','Maaşını “her ay tekrarla” yapmadıysan ve bu ayın maaşı henüz girilmemişse, geçen ayki prim gibi tek seferlik gelirler gelecek aylara maaş gibi taşınıyordu. Artık maaş esas alınıyor.',0],
+  ['💾','Yedekleme en üstte','Ayarlar’ı açınca ilk kart yedekleme. Yedek dosyasından geri yükle düğmesi de yerine oturdu.',0]]},
  {v:'1.4',date:'Kasım 2026',title:'Akıllı uyarılar',items:[
   ['🧐','“Şunu mu demek istedin?”','Bir platformu yanlış ya da farklı yazarsan (örn. “Netfliks”) doğrusunu önerir, istersen yazdığın gibi bırakırsın.',1],
   ['🛑','İki kez ödeme uyarısı','Aynı aboneliği ikinci kez eklerken ya da hem düzenli gider hem abonelik olarak girerken seni uyarır. İstersen eski kaydı oradan silebilirsin.',1]]},
