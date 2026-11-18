@@ -589,6 +589,25 @@ html.big body{zoom:1.12}
 .mdseg button{flex:1;padding:11px 2px;border-radius:12px;font-weight:700;font-size:13.5px;background:#ffffff0d;border:1.5px solid transparent;color:var(--mut)}
 .mdseg button.on{border-color:var(--acc);background:#2d2768;color:#fff}
 .mdlink{display:block;width:100%;text-align:left;background:none;border:0;color:var(--mut);font-size:12.5px;padding:10px 0 0;text-decoration:underline}
+/* v1.13 uygulama şifresi */
+#cfBg{z-index:9100}
+#lk{position:fixed;inset:0;z-index:9000;background:radial-gradient(500px 360px at 80% 0%,#3b2f8f55,transparent 70%),#0b0e22;display:none;align-items:center;justify-content:center;color:#fff;overflow:auto}
+#lk.show{display:flex}
+.lkin{width:100%;max-width:340px;padding:24px 20px;text-align:center}
+.lkic{font-size:40px;margin-bottom:6px}
+.lkin h2{font-size:21px;margin:0 0 4px}
+.lkS{min-height:18px;font-size:13px;color:#9aa0cf;margin-bottom:14px}
+.lkd{display:flex;justify-content:center;gap:14px;margin:6px 0 22px;height:16px}
+.lkd i{width:14px;height:14px;border-radius:50%;border:2px solid #7c5cff;box-sizing:border-box}
+.lkd i.f{background:#7c5cff}
+.lkd.shk{animation:lkshk .4s}
+@keyframes lkshk{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-7px)}80%{transform:translateX(7px)}}
+.lkp{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:280px;margin:0 auto}
+.lkp button{height:62px;border-radius:50%;background:#ffffff12;border:1px solid #ffffff1a;color:#fff;font-size:24px;font-weight:600;font-family:var(--num)}
+.lkp button:active{background:#ffffff2a}
+.lkp button.ok{background:linear-gradient(135deg,var(--acc),#2c7be5);border:0}
+.lkp button.ph{visibility:hidden}
+.lkl{display:block;margin:16px auto 0;background:none;border:0;color:#9aa0cf;font-size:14px;text-decoration:underline}
 /* v1.11 banka kartı görünümü + deri dikiş */
 .dnhint{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .dnadd{background:#ffffff1a;color:#fff;border:0;border-radius:10px;padding:6px 12px;font-size:12.5px;font-weight:700;white-space:nowrap;flex:none}
@@ -613,6 +632,9 @@ html.big body{zoom:1.12}
 </style>
 </head>
 <body>
+<div id="lk"><div class="lkin"><div class="lkic">🔒</div><h2 id="lkT">Şifreni gir</h2><div class="lkS" id="lkS"></div><div class="lkd" id="lkD"></div>
+<div class="lkp" id="lkPad"></div><button type="button" class="lkl" id="lkForgot">Şifremi unuttum</button><button type="button" class="lkl" id="lkCancel" style="display:none">Vazgeç</button></div></div>
+<script>try{if(localStorage.getItem('butcem_pin'))document.getElementById('lk').classList.add('show')}catch(e){}</script>
 <div id="spl" aria-hidden="true">
  <div class="glow g1"></div><div class="glow g2"></div>
  <div class="coin c1"></div><div class="coin c2"></div><div class="coin c3"></div>
@@ -814,6 +836,14 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,2300-(Date.now()-t0))
 
   <!-- AYARLAR -->
   <div class="view" id="v-ayar">
+    <div class="card" style="margin-top:0"><h2>🔒 Uygulama şifresi</h2>
+      <div class="note" id="pinStat" style="margin:0 0 10px;font-weight:700"></div>
+      <button class="btn" id="pinSet">Şifre oluştur</button>
+      <div id="pinOpts" style="display:none"><span class="lbl">Kilit ne zaman devreye girsin?</span>
+        <select class="fld" id="pinAuto"><option value="0">Uygulamadan her çıkışta</option><option value="60">1 dakika sonra</option><option value="300">5 dakika sonra</option></select>
+        <button class="btn sec" id="pinChg">Şifreyi değiştir</button><button class="btn sec" id="pinRc">🔑 Yeni kurtarma kodu oluştur</button><button class="btn del" id="pinOff">Şifreyi kaldır</button></div>
+      <div class="note" style="margin-top:8px">Uygulama açılırken bu şifre sorulur, böylece telefonunu eline alan biri gelir gider bilgilerini göremez. Şifre sadece bu telefonda saklanır, bize ya da bir yere gönderilmez. Şifreyi koyarken sana bir kurtarma kodu verilir, onu Notlar’a kaydet. Unutursan bu kodla verilerini kaybetmeden yeni şifre koyarsın.</div>
+    </div>
     <div class="card" style="margin-top:0">
       <h2>💾 Yedekle / Geri yükle</h2>
       <div class="note" id="bkStatus" style="margin:0 0 6px;font-weight:700"></div>
@@ -2091,10 +2121,19 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.12.1';
+var APP_VER='1.13.1';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
-var RELEASES=[{v:'1.12.1',date:'Kasım 2026',title:'Yeni üyelik simgeleri',items:[
+var RELEASES=[{v:'1.13.1',date:'Kasım 2026',title:'Şifre için kurtarma kodu',items:[
+  ['🔑','Kurtarma kodu','Şifre koyarken sana bir kurtarma kodu veriliyor. “Notlar’a kaydet” ile Notlar’a kaydedebilirsin.',1],
+  ['🛟','Şifreni unutursan','Açılışta “Şifremi unuttum” > “Kurtarma kodum var” diyip kodu girersen verilerin silinmeden yeni şifre koyarsın.',1],
+  ['🔄','Yeni kod','Ayarlar’dan şifreni doğrulayıp istediğin zaman yeni bir kurtarma kodu oluşturabilirsin. Eskisi geçersiz olur.',1]]},
+{v:'1.13',date:'Kasım 2026',title:'Uygulama şifresi',items:[
+  ['🔒','Giriş şifresi','Ayarlar’dan 4-6 haneli bir şifre koyabilirsin. Uygulama açılırken ve bir süre dışarıda kalınca şifre sorulur, gelir gider bilgilerin sadece sana açık olur.',1],
+  ['⏱','Kilit zamanı','Kilidin ne zaman devreye gireceğini seçebilirsin: her çıkışta, 1 dakika ya da 5 dakika sonra.',1],
+  ['🛡','Yanlış deneme koruması','Art arda 5 yanlış denemeden sonra bir süre beklemen gerekir.',1],
+  ['⚠️','Şifreni unutma','Şifre sadece bu telefonda saklanır ve geri getirilemez. Unutursan veriler sıfırlanır, bu yüzden yedek almayı unutma.',1]]},
+{v:'1.12.1',date:'Kasım 2026',title:'Yeni üyelik simgeleri',items:[
   ['📸','Instagram Plus eklendi','Üyelikler listesine Instagram Plus için kendi butonu eklendi.',1],
   ['🎬','Harfler yerine simgeler','Platformların baş harfleri yerine türünü anlatan simgeler (film, müzik, bulut, paket…) kullanılıyor. Resmî logolar ticari marka olduğu için kullanılamıyor, her platform kendi rengini koruyor.',1]]},
 {v:'1.12',date:'Kasım 2026',title:'Yeni işlem ekranı sadeleşti',items:[
@@ -3404,9 +3443,130 @@ $('rLater').onclick=laterRoll;$('rX').onclick=laterRoll;
 $('rbg').onclick=function(ev){if(ev.target===$('rbg'))laterRoll()};
 document.addEventListener('visibilitychange',function(){if(!document.hidden){render();checkRollover()}});
 
+/* ---------- Uygulama şifresi (PIN) ---------- */
+var PINKEY='butcem_pin',lkMode='unlock',lkBuf='',lkTmp='',lkCb=null,lkHid=0;
+function rcGen(){
+  var A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',o='',i,r=new Uint32Array(12);
+  try{crypto.getRandomValues(r)}catch(e){for(i=0;i<12;i++)r[i]=Math.floor(Math.random()*4294967295)}
+  for(i=0;i<12;i++){o+=A[r[i]%A.length];if(i%4===3&&i<11)o+='-'}return o}
+function rcNorm(x){return String(x||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}
+var rcSaved=false;
+function rcText(code){var d=new Date();return 'Bütçem kurtarma kodu\n'+code+'\n\nTarih: '+d.getDate()+'.'+(d.getMonth()+1)+'.'+d.getFullYear()+'\nŞifreni unutursan: açılış ekranında “Şifremi unuttum” > “Kurtarma kodum var” de ve bu kodu gir. Verilerin silinmez.'}
+function showRecovery(code,saved){
+  var msg='<div style="font-family:ui-monospace,Menlo,monospace;font-size:24px;font-weight:700;letter-spacing:1.5px;text-align:center;background:#ffffff12;border-radius:14px;padding:16px 6px;margin:0 0 12px">'+esc(code)+'</div>'+
+    '<div style="font-size:14px;line-height:1.5">Şifreni unutursan verilerini <b>silmeden</b> yeni şifre koymak için bu kod gerekir. Kod bir daha gösterilmez; <b>Notlar’a kaydet</b>’e basıp açılan menüden <b>Notlar</b>’ı seç.'+(saved?'<br><br><b>Kaydettiysen devam edebilirsin.</b>':'')+'</div>';
+  var share=function(){
+    var tx=rcText(code);
+    var after=function(ok){if(ok)rcSaved=true;showRecovery(code,rcSaved)};
+    if(navigator.share){navigator.share({title:'Bütçem kurtarma kodu',text:tx}).then(function(){after(true)},function(){after(false)})}
+    else{try{navigator.clipboard.writeText(tx).then(function(){toast('Kopyalandı, Notlar’a yapıştır');after(true)},function(){after(false)})}catch(e){after(false)}}
+  };
+  askBox('🔑 Kurtarma kodun',msg,[
+    {t:'📝 Notlar’a kaydet',f:share},
+    {t:'Kopyala',c:'sec',f:function(){try{navigator.clipboard.writeText(rcText(code)).then(function(){rcSaved=true;toast('Kopyalandı ✓');showRecovery(code,true)},function(){showRecovery(code,saved)})}catch(e){showRecovery(code,saved)}}},
+    {t:saved?'Kaydettim, devam et':'Kaydetmeden devam et',c:'sec',f:function(){rcSaved=false;if(!saved)toast('Kodu kaydetmediysen şifreni unutursan verilerin silinir')}}]);
+}
+function rcAsk(err){
+  askBox('Kurtarma kodunu gir','<div style="font-size:14px;margin-bottom:8px">Şifre koyarken Notlar’a kaydettiğin kodu yaz.'+(err?'<br><b style="color:#ff7a8c">'+esc(err)+'</b>':'')+'</div><input class="fld" id="rcIn" placeholder="XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters" style="text-align:center;letter-spacing:2px;font-size:18px">',[
+    {t:'Devam et',f:function(){
+      var v=rcNorm($('rcIn').value),cfg=pinCfg();
+      if(!cfg||!cfg.r){rcAsk('Bu telefonda kurtarma kodu tanımlı değil.');return}
+      sha(cfg.rs+':'+v).then(function(h){
+        if(h===cfg.r){lsSet('butcem_pinfail','{}');lkShow('new1')}
+        else rcAsk('Kod yanlış, tekrar dene.')})}},
+    {t:'Vazgeç',c:'sec'}]);
+  setTimeout(function(){var e=$('rcIn');if(e)e.focus()},200);
+}
+function pinCfg(){try{var o=JSON.parse(lsGet(PINKEY)||'null');return(o&&o.h&&o.s)?o:null}catch(e){return null}}
+function sha(str){
+  try{if(window.crypto&&crypto.subtle&&window.TextEncoder)return crypto.subtle.digest('SHA-256',new TextEncoder().encode(str)).then(function(b){return[].map.call(new Uint8Array(b),function(x){return('0'+x.toString(16)).slice(-2)}).join('')})}catch(e){}
+  var h=5381,i;for(i=0;i<str.length;i++)h=((h<<5)+h+str.charCodeAt(i))>>>0;
+  for(i=0;i<5000;i++)h=((h<<5)+h+(i^h))>>>0;
+  return Promise.resolve('f'+h.toString(16));
+}
+function pinHash(pin,salt){return sha(salt+':'+pin)}
+function lkFail(){try{return JSON.parse(lsGet('butcem_pinfail')||'{}')}catch(e){return{}}}
+function lkDraw(){
+  var cfg=pinCfg(),set=(lkMode==='new1'||lkMode==='new2'),n=set?6:(cfg?cfg.n:4),h='',i;
+  var T={unlock:'Şifreni gir',verify:'Önce mevcut şifreni gir',new1:'Yeni şifre belirle',new2:'Şifreyi tekrar gir'};
+  $('lkT').textContent=T[lkMode];
+  var fl=lkFail(),wait=fl.u&&fl.u>Date.now()?Math.ceil((fl.u-Date.now())/1000):0;
+  $('lkS').textContent=wait?('Çok fazla yanlış deneme. '+wait+' sn sonra tekrar dene.'):(set?(lkMode==='new1'?'4 ile 6 rakam arası, sonra ✓ tuşuna bas':'Aynı şifreyi bir kez daha yaz'):'');
+  if(set){for(i=0;i<Math.max(4,lkBuf.length);i++)h+='<i class="'+(i<lkBuf.length?'f':'')+'"></i>'}
+  else for(i=0;i<n;i++)h+='<i class="'+(i<lkBuf.length?'f':'')+'"></i>';
+  $('lkD').innerHTML=h;
+  var pd='';[1,2,3,4,5,6,7,8,9].forEach(function(k){pd+='<button type="button" data-k="'+k+'">'+k+'</button>'});
+  pd+=set?'<button type="button" class="ok" data-k="ok">✓</button>':'<button type="button" class="ph"></button>';
+  pd+='<button type="button" data-k="0">0</button><button type="button" data-k="del" aria-label="Sil">⌫</button>';
+  $('lkPad').innerHTML=pd;
+  $('lkForgot').style.display=(lkMode==='unlock'||lkMode==='verify')?'':'none';
+  $('lkCancel').style.display=(lkMode==='unlock')?'none':'';
+}
+function lkShow(mode,cb){lkMode=mode;lkCb=cb||null;lkBuf='';lkTmp='';lkDraw();$('lk').classList.add('show')}
+function lkHide(){$('lk').classList.remove('show');lkBuf='';lkTmp=''}
+function lkWrong(){
+  var fl=lkFail(),c=(fl.c||0)+1,o={c:c};if(c>=5){o.u=Date.now()+30000*Math.pow(2,Math.min(4,c-5));}lsSet('butcem_pinfail',JSON.stringify(o));
+  var d=$('lkD');d.classList.remove('shk');void d.offsetWidth;d.classList.add('shk');
+  try{if(navigator.vibrate)navigator.vibrate(120)}catch(e){}
+  lkBuf='';setTimeout(lkDraw,380);
+}
+function lkSubmit(){
+  var cfg=pinCfg(),pin=lkBuf;
+  if(lkMode==='unlock'||lkMode==='verify'){
+    var fl=lkFail();if(fl.u&&fl.u>Date.now()){lkBuf='';lkDraw();return}
+    if(!cfg){lkHide();return}
+    pinHash(pin,cfg.s).then(function(h){
+      if(h===cfg.h){lsSet('butcem_pinfail','{}');var cb=lkCb,m=lkMode;lkHide();if(m==='verify'&&cb)cb();render()}
+      else lkWrong();
+    });return}
+  if(lkMode==='new1'){if(pin.length<4){toast('En az 4 rakam gir');return}lkTmp=pin;lkMode='new2';lkBuf='';lkDraw();return}
+  if(lkMode==='new2'){
+    if(pin!==lkTmp){toast('Şifreler aynı değil, baştan dene');lkMode='new1';lkBuf='';lkTmp='';lkDraw();return}
+    var salt=uid()+uid();
+    var rc=rcGen(),rs=uid();
+    Promise.all([pinHash(pin,salt),sha(rs+':'+rcNorm(rc))]).then(function(a){lsSet(PINKEY,JSON.stringify({s:salt,h:a[0],n:pin.length,rs:rs,r:a[1]}));lsSet('butcem_pinfail','{}');lkHide();renderPin();toast('Şifre oluşturuldu 🔒');showRecovery(rc,false)});
+  }
+}
+$('lkPad').addEventListener('click',function(ev){
+  var b=ev.target.closest('[data-k]');if(!b)return;var k=b.getAttribute('data-k'),cfg=pinCfg();
+  if(k==='del'){lkBuf=lkBuf.slice(0,-1);lkDraw();return}
+  if(k==='ok'){lkSubmit();return}
+  if(lkBuf.length>=6)return;
+  var fl=lkFail();if((lkMode==='unlock'||lkMode==='verify')&&fl.u&&fl.u>Date.now()){lkDraw();return}
+  lkBuf+=k;lkDraw();
+  if((lkMode==='unlock'||lkMode==='verify')&&cfg&&lkBuf.length===cfg.n)lkSubmit();
+});
+$('lkCancel').onclick=function(){lkHide()};
+$('lkForgot').onclick=function(){
+  var cfg=pinCfg(),btns=[];
+  if(cfg&&cfg.r)btns.push({t:'🔑 Kurtarma kodum var',f:function(){rcAsk()}});
+  btns.push({t:'Sıfırla ve verileri sil',c:'del',f:function(){
+    askBox('Emin misin?','Bu telefondaki <b>tüm bütçe verileri silinecek</b>. Yedeğin varsa sonra geri yükleyebilirsin.',[
+      {t:'Evet, hepsini sil',c:'del',f:function(){try{Object.keys(localStorage).forEach(function(k){if(k.indexOf('butcem_')===0&&k!=='butcem_ob'&&k!=='butcem_ig')localStorage.removeItem(k)})}catch(e){}location.reload()}},
+      {t:'Vazgeç',c:'sec'}])}});
+  btns.push({t:'Vazgeç',c:'sec'});
+  askBox('Şifreni mi unuttun?','Kurtarma kodun varsa verilerin silinmeden yeni şifre koyabilirsin. Kodun yoksa tek yol sıfırlamaktır: bu telefondaki veriler silinir, yedeğin varsa sonra geri yüklersin.',btns);
+};
+function renderPin(){
+  var c=pinCfg();$('pinStat').textContent=c?'Şifre açık ✓ ('+c.n+' haneli)'+(c.r?' · Kurtarma kodu var':' · Kurtarma kodu yok, yeni oluştur'):'Şifre kapalı: uygulamayı açan herkes bilgilerini görebilir.';
+  $('pinSet').style.display=c?'none':'';$('pinOpts').style.display=c?'':'none';
+  $('pinAuto').value=lsGet('butcem_pinauto')||'60';
+}
+$('pinSet').onclick=function(){lkShow('new1')};
+$('pinChg').onclick=function(){lkShow('verify',function(){lkShow('new1')})};
+$('pinRc').onclick=function(){lkShow('verify',function(){var c=pinCfg();if(!c)return;var rc=rcGen(),rs=uid();sha(rs+':'+rcNorm(rc)).then(function(h){c.rs=rs;c.r=h;lsSet(PINKEY,JSON.stringify(c));showRecovery(rc,false)})})};
+$('pinOff').onclick=function(){lkShow('verify',function(){localStorage.removeItem(PINKEY);lsSet('butcem_pinfail','{}');renderPin();toast('Şifre kaldırıldı')})};
+$('pinAuto').onchange=function(){lsSet('butcem_pinauto',$('pinAuto').value)};
+document.addEventListener('visibilitychange',function(){
+  if(!pinCfg())return;
+  if(document.hidden){lkHid=Date.now();if((lsGet('butcem_pinauto')||'60')==='0'&&!$('lk').classList.contains('show'))lkShow('unlock')}
+  else{var d=parseInt(lsGet('butcem_pinauto')||'60',10);if(lkHid&&Date.now()-lkHid>=d*1000&&!$('lk').classList.contains('show'))lkShow('unlock')}
+});
 load();var rp=repair();if(rp>0)save();render();renderSnaps();checkRollover();if(rp>0)toast('Veriler kontrol edildi, '+rp+' kayıt düzeltildi');if(!startGuide())startOnboarding();
 try{if(window.__splashReady)window.__splashReady()}catch(e){}
 maybeWn();
+renderPin();if(pinCfg())lkShow('unlock');
+setTimeout(function(){try{if(!pinCfg()&&!lsGet('butcem_pinask')&&lsGet('butcem_ob')&&!$('wnBg').classList.contains('show')&&!$('lk').classList.contains('show')){lsSet('butcem_pinask','1');askBox('Uygulamana şifre koy','Gelir gider bilgilerin özel. Uygulama açılırken şifre sorulmasını ister misin? Ayarlar’dan istediğin zaman değiştirebilir ya da kaldırabilirsin.',[{t:'Şifre oluştur',f:function(){lkShow('new1')}},{t:'Şimdi değil',c:'sec'}])}}catch(e){}},2500);
 })();
 </script>
 </body>
