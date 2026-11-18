@@ -185,6 +185,15 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
 .toast{position:fixed;left:50%;bottom:118px;transform:translateX(-50%) translateY(8px);background:#fff;color:#111;padding:11px 18px;border-radius:14px;font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:all .25s;z-index:50;box-shadow:0 10px 30px #0006;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%)}
 .view{display:none}.view.on{display:block}
+.brand{color:#fff;font-weight:800;font-size:15px;letter-spacing:-.3px;text-shadow:0 1px 2px #0004}
+.bgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.bgrid button{display:flex;flex-direction:column;align-items:center;gap:5px;padding:9px 2px;border-radius:14px;border:1.5px solid transparent;background:#ffffff0a;font-size:10.5px;color:var(--mut);min-width:0}
+.bgrid button span.ico{width:40px;height:40px}
+.bgrid button b{font-weight:600;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bgrid button.on{border-color:var(--acc,#7c5cff);background:#7c5cff22;color:#fff}
+.subtot{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding:14px;border-radius:16px;background:linear-gradient(135deg,#7c5cff33,#27d3c322)}
+.subtot small{display:block;color:var(--mut);font-size:12px;margin-top:2px}
+.subtot .num{font-size:20px;font-weight:800}
 .bill{border-bottom:1px solid #ffffff0d}.bill:last-child{border-bottom:0}
 .bill-row{display:flex;align-items:center;gap:12px;padding:11px 0;width:100%;text-align:left}
 .bill-row .m{flex:1;min-width:0}.bill-row .m b{display:block;font-size:15px;font-weight:600}
@@ -281,6 +290,12 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
       <div class="bill-sum" id="billSum"></div>
       <div class="note" style="margin:0 0 6px">Ödediğin kaleme dokun, bu ayki tutarı yaz ve kaydet. Tutar bakiyenden hemen düşer. Ulaşım gibi birden çok ödeme yaptığın kalemlerde ayın toplamını yazabilirsin.</div>
       <div id="billList"></div>
+    </div>
+    <div class="card">
+      <h2>📺 Üyelikler &amp; Abonelikler</h2>
+      <div id="subList"></div>
+      <div class="subtot" id="subTot" style="display:none"><div><b>Toplam (aylık)</b><small id="subYear"></small></div><span class="num neg" id="subSum"></span></div>
+      <button class="btn sec sm" id="bNewSub" style="margin-top:12px">+ Üyelik / abonelik ekle</button>
     </div>
     <div class="card">
       <h2>➕ Yeni düzenli gider ekle</h2>
@@ -386,11 +401,34 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
     </div>
   </div>
 </div>
+<div class="sheet-bg" id="ubg">
+  <div class="sheet">
+    <div class="sheet-top"><div class="grab"></div><button class="xbtn" id="uX" aria-label="Kapat">✕</button></div>
+    <div class="sheet-body">
+    <h3 id="uTitle">Yeni üyelik</h3>
+    <span class="lbl">Platform</span>
+    <div class="bgrid" id="uBrands"></div>
+    <span class="lbl">Adı</span>
+    <input class="fld" id="uName" placeholder="Örn. Netflix Standart" maxlength="40">
+    <div class="two">
+      <div><span class="lbl">Aylık tutar</span><input class="fld" id="uAmt" inputmode="decimal" placeholder="99,99 ₺" autocomplete="off"></div>
+      <div><span class="lbl">Ayın kaçında?</span><input class="fld" id="uDay" type="number" min="1" max="31" inputmode="numeric" placeholder="24"></div>
+    </div>
+    <span class="lbl">Başlangıç ayı</span>
+    <input class="fld" id="uStart" type="month">
+    <div class="note" style="margin:0 0 12px">Ödeme günü gelince tutar bakiyenden her ay otomatik düşer.</div>
+    <button class="btn" id="uSave">Kaydet</button>
+    <button class="btn sec sm" id="uEndBtn" style="display:none">Aboneliği bitir (bu aydan sonra düşmesin)</button>
+    <button class="btn del" id="uDel" style="display:none">Sil</button>
+    <button class="btn sec sm" id="uCancel">Vazgeç</button>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <nav class="nav">
   <button class="t on" data-v="ozet"><span>🏠</span>Özet</button>
-  <button class="t" data-v="fatura"><span>💡</span>Faturalar</button>
+  <button class="t" data-v="fatura"><span>💡</span>Düzenli</button>
   <button class="t" data-v="islem"><span>🧾</span>İşlemler</button>
   <button class="plus" id="fab" aria-label="Ekle">+</button>
   <button class="t" data-v="ayar"><span>⚙️</span>Ayarlar</button>
@@ -403,7 +441,7 @@ var KEY='butcem_v1';
 var CATS={
   out:[['Kredi','🏦','#7c5cff'],['Kredi Kartı','💳','#ff6b81'],['Doğalgaz','🔥','#ff9f43'],['Su','💧','#2c9cf0'],['Elektrik','⚡','#ffd23f'],
        ['İnternet','🌐','#27d3c3'],['Telefon','📱','#a37cff'],['Market','🛒','#3ddc97'],['Ulaşım','🚌','#5f8bff'],['Yemek','🍽️','#ff7eb6'],
-       ['Sağlık','💊','#4dd6a3'],['Eğlence','🎬','#ffb648'],['Diğer','📦','#8f95c2']],
+       ['Sağlık','💊','#4dd6a3'],['Eğlence','🎬','#ffb648'],['Abonelik','🔁','#c06cff'],['Diğer','📦','#8f95c2']],
   'in':[['Maaş','💼','#3ddc97'],['Ek gelir','✨','#27d3c3'],['Diğer','📥','#8f95c2']]
 };
 var EXTRA=['#e056fd','#f78fb3','#badc58','#22a6b3','#f0932b','#6ab04c'];
@@ -752,6 +790,7 @@ function render(){
   }
   renderPlans(es);
   renderBills();
+  renderSubs();
   banner();
 }
 
@@ -765,9 +804,10 @@ function renderPlans(es){
     $('uplist').innerHTML=h;uc.style.display='';
   }
   var pl=$('plist');
-  if(!S.plans.length){pl.innerHTML='<div class="empty" style="padding:14px 8px"><em>🗓️</em>Henüz düzenli ödeme yok.<br>Sigorta taksiti, spor salonu üyeliği, abonelik gibi belli aralıklarla giden ödemeleri ekle.</div>';return}
+  var PL=S.plans.filter(function(x){return !x.sub});
+  if(!PL.length){pl.innerHTML='<div class="empty" style="padding:14px 8px"><em>🗓️</em>Henüz taksit yok.<br>Sigorta taksiti, telefon taksiti gibi belli aralıklarla giden ödemeleri ekle. Netflix gibi üyelikler için Düzenli sekmesini kullan.</div>';return}
   var ph='',nk=nowK();
-  S.plans.slice().sort(function(a,b){return a.day-b.day}).forEach(function(p){
+  PL.slice().sort(function(a,b){return a.day-b.day}).forEach(function(p){
     var ci=catInfo('out',p.cat),inf=payInfo(p),st;
     if(p.end)st=(inf.done>=inf.total)?'<span class="done">✅ Tamamlandı</span>':(inf.done===0&&p.start>nk?esc(mlab(p.start))+' ayında başlıyor · '+inf.total+' taksit':inf.done+'/'+inf.total+' taksit ödendi · son: '+esc(mlab(p.end)));
     else st=p.start>nk?'Süresiz · '+esc(mlab(p.start))+' ayında başlıyor':'Süresiz';
@@ -825,8 +865,9 @@ function saveSheet(){
 /* ---------- Taksit penceresi ---------- */
 (function(){var o='';CATS.out.forEach(function(c){o+='<option value="'+esc(c[0])+'">'+c[1]+' '+esc(c[0])+'</option>'});$('pCat').innerHTML=o})();
 function openPlan(id,isTry){
-  planEdit=id||null;tryMode=!!isTry;pArm=false;pDelArm=false;
   var p=id?S.plans.filter(function(x){return x.id===id})[0]:null;
+  if(p&&p.sub&&!isTry){openSub(id);return}
+  planEdit=id||null;tryMode=!!isTry;pArm=false;pDelArm=false;
   $('pTitle').textContent=isTry?'🧮 Alabilir miyim?':(p?'Düzenli ödemeyi düzenle':'Yeni düzenli ödeme');
   $('pTryNote').style.display=isTry?'block':'none';
   $('pDel').style.display=p?'block':'none';$('pDel').textContent='Sil';
@@ -945,6 +986,85 @@ $('nbAdd').onclick=function(){
 };
 $('bBillGo').onclick=function(){document.querySelector('.nav .t[data-v="fatura"]').click()};
 ['sAmt','pTotal','pAmt'].forEach(function(id){bindAmt($(id))});
+
+/* ---------- Üyelikler & Abonelikler ---------- */
+// Not: Marka logoları telif/ticari marka kapsamında olduğundan, her platform kendi renginde ve baş harfli bir simgeyle gösterilir.
+var BRANDS=[
+ ['Netflix','NF','#e50914','#7a0510',99.99],['YouTube Premium','YT','#ff2d2d','#a01010',119.99],['Spotify','SP','#1ed760','#0b7a35',39.99],
+ ['Amazon Prime','PR','#1aa7ec','#0b5d8c',39],['Apple iCloud+','iC','#5e8cf5','#2d4fa8',12.99],['Apple Music','AM','#fc3c5a','#a0142d',39.99],
+ ['Apple TV+','TV','#555a66','#1c1e24',99.99],['Disney+','D+','#1b4fd8','#0a1f6b',134.99],['HBO Max','HB','#7b2cf0','#3a0f8c',149.99],
+ ['BluTV','BL','#1c9bff','#0a4a8c',149],['Exxen','EX','#ffcc00','#a87d00',199],['TOD','TO','#ff5a1f','#a02a00',199],
+ ['Gain','GA','#9b5cff','#4a1e9c',99],['ChatGPT','GP','#10a37f','#075c47',null],['Claude','CL','#d97757','#8a3a1f',null],
+ ['Google One','G1','#4285f4','#1a4aa0',29.99],['Microsoft 365','M3','#e8590c','#8a2a00',null],['Duolingo','DU','#58cc02','#2d6b00',null],
+ ['Spor salonu','🏋️','#ff7a45','#a03a10',null],['Diğer','＋','#8f95c2','#4a4f78',null]];
+function brandOf(n){for(var i=0;i<BRANDS.length;i++)if(BRANDS[i][0]===n)return BRANDS[i];return BRANDS[BRANDS.length-1]}
+function tile(b,sz){return '<span class="ico brand" style="background:linear-gradient(145deg,'+b[2]+','+b[3]+');'+(sz?'width:'+sz+'px;height:'+sz+'px;':'')+(b[1].length>2?'font-size:20px':'')+'">'+esc(b[1])+'</span>'}
+function subsActive(){return S.plans.filter(function(x){return x.sub})}
+function subNext(p){var nk=nowK(),t=today(),d=payDate(p,nk<p.start?p.start:nk);
+  if(nk>=p.start&&d<t)d=payDate(p,fromYm(ym(nk)+1));
+  if(p.end&&d.slice(0,7)>p.end)return null;return d}
+function renderSubs(){
+  var L=subsActive(),h='',tot=0;
+  L.slice().sort(function(a,b){var x=subNext(a),y=subNext(b);return (x||'9')<(y||'9')?-1:1}).forEach(function(p){
+    var b=brandOf(p.brand),nx=subNext(p),act=nx!==null;
+    if(act)tot+=p.amt;
+    var st=act?(nx.slice(8,10)+'.'+nx.slice(5,7)+' tarihinde düşecek'):'Sona erdi';
+    h+='<button class="tx" data-sid="'+esc(p.id)+'" style="'+(act?'':'opacity:.5')+'">'+tile(b)+'<span class="m"><b>'+esc(p.name)+'</b><small>'+esc(st)+'</small></span><span class="a neg">−'+esc(fmt(p.amt,true))+'</span></button>';
+  });
+  $('subList').innerHTML=h||'<div class="empty" style="padding:14px 8px"><em>📺</em>Henüz üyelik yok.<br>Netflix, YouTube, Spotify gibi abonelikleri ekle.</div>';
+  $('subTot').style.display=tot>0?'flex':'none';
+  $('subSum').textContent=tot>0?'−'+fmt(tot,true):'';
+  $('subYear').textContent=tot>0?'Yılda yaklaşık '+fmt(tot*12,true):'';
+}
+var subEdit=null,subBrand='Netflix',subDelArm=false;
+function drawBrands(){
+  var h='';BRANDS.forEach(function(b){h+='<button type="button" data-br="'+esc(b[0])+'"'+(b[0]===subBrand?' class="on"':'')+'>'+tile(b)+'<b>'+esc(b[0])+'</b></button>'});
+  $('uBrands').innerHTML=h;
+}
+function openSub(id){
+  subEdit=id||null;subDelArm=false;
+  var p=id?S.plans.filter(function(x){return x.id===id})[0]:null,now=new Date();
+  $('uTitle').textContent=p?'Üyeliği düzenle':'Yeni üyelik / abonelik';
+  $('uDel').style.display=p?'block':'none';$('uDel').textContent='Sil';
+  $('uEndBtn').style.display=(p&&!p.end)?'block':'none';
+  if(p){subBrand=p.brand;$('uName').value=p.name;$('uAmt').value=toIn(p.amt);$('uDay').value=p.day;$('uStart').value=p.start}
+  else{subBrand='Netflix';$('uName').value='Netflix';$('uAmt').value=toIn(99.99);$('uDay').value=now.getDate();$('uStart').value=mk(now)}
+  drawBrands();$('ubg').classList.add('show');$('ubg').querySelector('.sheet-body').scrollTop=0;
+}
+function closeSub(){$('ubg').classList.remove('show');subEdit=null}
+$('uBrands').onclick=function(ev){
+  var t=ev.target.closest('[data-br]');if(!t)return;
+  var old=brandOf(subBrand),nm=$('uName').value.trim();
+  subBrand=t.getAttribute('data-br');var b=brandOf(subBrand);
+  if(!nm||nm===old[0]||nm==='Netflix'&&old[0]==='Netflix')$('uName').value=(b[0]==='Diğer')?'':b[0];
+  if(b[4]&&!subEdit&&!parseNum($('uAmt').value))$('uAmt').value=toIn(b[4]);
+  drawBrands();
+};
+bindAmt($('uAmt'));$('uAmt').oninput=fmtAmt;
+$('uX').onclick=closeSub;$('uCancel').onclick=closeSub;
+$('ubg').onclick=function(ev){if(ev.target===$('ubg'))closeSub()};
+$('bNewSub').onclick=function(){openSub()};
+$('subList').onclick=function(ev){var b=ev.target.closest('[data-sid]');if(b)openSub(b.getAttribute('data-sid'))};
+$('uSave').onclick=function(){
+  var amt=parseNum($('uAmt').value),day=parseInt($('uDay').value,10),st=$('uStart').value,name=$('uName').value.trim();
+  if(!name){toast('Bir ad yaz');$('uName').focus();return}
+  if(!(amt>0)){toast('Aylık tutarı yaz');$('uAmt').focus();return}
+  if(!(day>=1&&day<=31)){toast('Ödeme günü 1-31 arası olmalı');return}
+  if(!st){toast('Başlangıç ayını seç');return}
+  amt=Math.round(amt*100)/100;
+  if(subEdit){S.plans.forEach(function(x){if(x.id===subEdit){x.name=name;x.brand=subBrand;x.amt=amt;x.day=day;x.start=st;if(x.end&&x.end<st)x.end=st}})}
+  else S.plans.push({id:uid(),name:name,cat:'Abonelik',amt:amt,start:st,end:'',day:day,sub:true,brand:subBrand});
+  save();closeSub();render();toast('Kaydedildi ✓ Her ay otomatik düşecek');
+};
+$('uEndBtn').onclick=function(){
+  S.plans.forEach(function(x){if(x.id===subEdit){var nk=nowK();x.end=(payDate(x,nk)<today())?nk:fromYm(ym(nk)-1);if(x.end<x.start)x.end=x.start}});
+  save();closeSub();render();toast('Abonelik sonlandırıldı');
+};
+$('uDel').onclick=function(){
+  if(!subEdit)return;
+  if(!subDelArm){subDelArm=true;$('uDel').textContent='Silmek için tekrar dokun';setTimeout(function(){subDelArm=false;$('uDel').textContent='Sil'},2500);return}
+  S.plans=S.plans.filter(function(x){return x.id!==subEdit});subDelArm=false;save();closeSub();render();toast('Silindi');
+};
 
 /* ---------- Olaylar ---------- */
 $('prev').onclick=function(){cur=new Date(cur.getFullYear(),cur.getMonth()-1,1);render()};
