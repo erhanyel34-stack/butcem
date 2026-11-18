@@ -373,7 +373,8 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
 .thero h1{margin:2px 0 0;font-size:32px;letter-spacing:-.8px;line-height:1.1;word-break:break-word}.thero .sub{font-size:14px;opacity:.95}
 .thero .cdb{position:absolute;right:16px;bottom:26px;z-index:3;text-align:center;background:#00000040;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border-radius:18px;padding:8px 12px;min-width:84px}
 .thero .cdb b{font-size:26px;display:block;line-height:1.05;font-family:var(--num)}.thero .cdb span{font-size:11px;opacity:.92}
-.tclose{position:fixed;right:max(14px,calc(50% - 246px));top:calc(env(safe-area-inset-top) + 12px);width:38px;height:38px;border-radius:50%;background:#00000050;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:none;place-items:center;font-weight:700;z-index:27;color:#fff;font-size:16px}
+.tclose{position:fixed;right:max(14px,calc(50% - 246px));top:calc(env(safe-area-inset-top) + 12px);width:38px;height:38px;border-radius:50%;background:#00000050;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:none;place-items:center;font-weight:700;z-index:30;color:#fff;font-size:18px;touch-action:manipulation}
+.thome{display:inline-block;margin:0 0 10px;padding:9px 16px;border-radius:14px;background:#ffffff1f;color:#fff;font-weight:700;font-size:14px;touch-action:manipulation}
 .tscr.show~.tclose,.tclose.on{display:grid}
 .tin{position:relative;z-index:1;max-width:520px;margin:0 auto;padding:12px 14px calc(env(safe-area-inset-bottom) + 40px)}
 .tsw{display:flex;gap:8px;overflow-x:auto;margin:0 -14px 12px;padding:0 14px 4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}.tsw::-webkit-scrollbar{display:none}
@@ -749,12 +750,14 @@ html.big body{zoom:1.12}
 <div class="tscr sum" id="tscr">
   <i class="blob b1"></i><i class="blob b2"></i><div class="snowbox" id="snowbox"></div>
   <div class="thero" id="tHero"></div>
-  <button class="tclose" id="tClose" aria-label="Kapat">✕</button>
   <div class="tin">
+    <button type="button" class="thome" id="tHome">‹ Ana sayfa</button>
     <div class="tsw" id="tSwitch"></div>
     <div id="tBody"></div>
   </div>
 </div>
+
+<button class="tclose" id="tClose" aria-label="Kapat">✕</button>
 
 <div class="sheet-bg" id="tebg">
   <div class="sheet">
@@ -1757,11 +1760,13 @@ function openTripScreen(id){
   $('tscr').scrollTop=0;renderTrip();
 }
 function closeTripScreen(){
+  if(!curTrip&&!$('tscr').classList.contains('show'))return;
   var t=tripById(curTrip);
   if(t&&!t.dest&&tripBudget(t)===0&&tripSpent(t).list.length===0&&!(t.saved>0)){S.trips=S.trips.filter(function(x){return x.id!==t.id});save()}
   curTrip=null;$('tscr').classList.remove('show');$('tClose').classList.remove('on');document.body.style.overflow='';snowInit(false);render();
 }
-$('tClose').onclick=closeTripScreen;
+function bindClose(el){el.onclick=closeTripScreen;el.addEventListener('touchend',function(e){e.preventDefault();closeTripScreen()},{passive:false})}
+bindClose($('tClose'));bindClose($('tHome'));
 function themeTrip(t){
   var sc=$('tscr');sc.classList.toggle('sum',t.season!=='kis');sc.classList.toggle('win',t.season==='kis');
   snowInit(t.season==='kis');
