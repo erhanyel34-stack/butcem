@@ -2619,10 +2619,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.0';
+var APP_VER='2.0.1';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+  {v:'2.0.1',date:'Kasım 2026',title:'Ek gelir ve Sade plan düzeltmeleri',items:[['✨','Ek gelirleri kolay yönet','Gelir kutusuna dokununca Ek gelirlerim açılır. Geldi, Gelmedi, Düzenle ve Sil düğmeleri satırda hep görünür. Gelen tutar farklıysa yazabilirsin.',1],['🌱','Sade plan düzeni','Gelir, sabit gider ve her ay kalan üstte üç kutuda, giderler kalem kalem altında.',1]]},
   {v:'2.0',big:1,b:1,date:'Kasım 2026',title:'Bütçem 2.0 · Sade ve Detaylı plan',items:[
     ['📦','İki plan geldi: Sade ve Detaylı','Sade: sadece gelirini, faturalarını, aboneliklerini ve kredi taksitlerini yazarsın, her ay sana ne kaldığını sistem hesaplar. Detaylı: kartlar, günlük harcamalar, tahmin ve birikim hedefleri, her şey olduğu gibi duruyor.',1],
     ['🌱','Sade plan, sadece ihtiyacın olan','Tek bakışta “her ay sana kalan” rakamı, gelir ve sabit giderlerin dağılımı, önümüzdeki 3 ay. Kart, ekstre ya da taksit hesabı yapmana gerek yok.',1],
