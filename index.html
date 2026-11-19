@@ -941,6 +941,7 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,4000-(Date.now()-t0))
       <button class="btn sec sm" id="bNewSub" style="margin-top:12px">+ Üyelik / abonelik ekle</button>
     </div>
     <div class="card" id="futCard" data-ps="u" style="margin-top:0"><h2>🗓️ Gelecek aylar</h2><div class="fch" id="futCh"></div><div id="futBody"></div></div>
+    <button type="button" class="btn sec" id="gBack" data-ps="g" style="margin:0 0 10px;width:100%">‹ Ana sayfaya dön</button>
     <div class="card" id="inCard" data-ps="g" style="margin-top:0"><div style="display:flex;justify-content:space-between;align-items:baseline;margin:0 0 8px"><h2 style="margin:0">💰 Bu ayın gelirleri</h2><b class="num" id="inTot" style="color:var(--in)">–</b></div><div class="note" style="margin:0 0 8px">Satıra dokununca tutarı değiştirebilir ya da silebilirsin.</div><div id="inList"></div></div>
     <div class="card" id="ipCard" data-ps="g" style="margin-top:0">
       <h2>✨ Ek gelirlerim</h2>
@@ -2620,10 +2621,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.0.2';
+var APP_VER='2.0.3';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+  {v:'2.0.3',date:'Kasım 2026',title:'Gelirler sayfasında geri dönüş',items:[['↩️','Ana sayfaya dön düğmesi','Gelir kutusundan açılan sayfanın üstünde artık Ana sayfaya dön düğmesi var.',1]]},
   {v:'2.0.2',date:'Kasım 2026',title:'Bu ayın gelirleri listesi',items:[['💰','Bu ayın gelirleri','Gelir kutusuna dokununca maaşın, Can’dan ya da Annem’den gelenler gibi tek seferlik ek gelirlerin ve beklediklerin tek listede çıkar. Satıra dokunup tutarı değiştirebilir ya da silebilirsin.',1]]},
   {v:'2.0.1',date:'Kasım 2026',title:'Ek gelir ve Sade plan düzeltmeleri',items:[['✨','Ek gelirleri kolay yönet','Gelir kutusuna dokununca Ek gelirlerim açılır. Geldi, Gelmedi, Düzenle ve Sil düğmeleri satırda hep görünür. Gelen tutar farklıysa yazabilirsin.',1],['🌱','Sade plan düzeni','Gelir, sabit gider ve her ay kalan üstte üç kutuda, giderler kalem kalem altında.',1]]},
   {v:'2.0',big:1,b:1,date:'Kasım 2026',title:'Bütçem 2.0 · Sade ve Detaylı plan',items:[
@@ -2954,6 +2956,7 @@ function renderFut(){
 }
 $('futCh').onclick=function(ev){var b=ev.target.closest('[data-fk]');if(b){futCur=b.getAttribute('data-fk');renderFut()}};
 function setPs(p){if(p==='u')renderFut();psCur=p;$('v-fatura').setAttribute('data-p',p);[].forEach.call($('psSeg').querySelectorAll('button'),function(b){b.classList.toggle('on',b.getAttribute('data-p')===p)})}
+$('gBack').onclick=function(){setPs('f');document.querySelector('.nav .t[data-v="'+(isBasic()?'bhome':'ozet')+'"]').click();window.scrollTo(0,0)};
 $('psSeg').onclick=function(ev){var b=ev.target.closest('[data-p]');if(b){setPs(b.getAttribute('data-p'));window.scrollTo(0,0)}};
 function goPay(p){document.querySelector('.nav .t[data-v="fatura"]').click();setPs(p||'f')}
 function nbShow(on){$('nbCard').style.display=on?'':'none';$('nbOpen').style.display=on?'none':'';if(on){setTimeout(function(){$('nbCard').scrollIntoView({block:'center',behavior:'smooth'});$('nbName').focus()},120)}}
