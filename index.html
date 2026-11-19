@@ -2634,10 +2634,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.2.1';
+var APP_VER='2.2.2';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+  {v:'2.2.2',date:'Kasım 2026',title:'Yeni sürüm uyarısı',items:[['🔄','Yeni sürüm uyarısı','Yeni bir sürüm yayınlanınca uygulama açılışta haber verir; Yenile’ye dokunman yeter. Verilerin silinmez.',1]]},
   {v:'2.2.1',date:'Kasım 2026',title:'Yer adı önerileri',items:[['🔎','Yazarken öneri','Nereden ve Nereye alanına birkaç harf yazınca eşleşen yerler altında çıkar; dokunman yeter.',1]]},
   {v:'2.2',date:'Kasım 2026',title:'Tatil bitince kapanış ve daha fazla yer',items:[['🏖️','Tatil dönüşü özeti','Tatil bitince Ana sayfada hatırlatma çıkar. Tahminin ile gerçek harcamanı karşılaştırır, tamamsa Tatili kapat dersin; tatil arşive geçer.',1],['🗺️','Daha fazla şehir','Tatil planlayıcıya yaklaşık 50 yeni yer eklendi: Datça, Göcek, Belek, Uzungöl, Venedik, Münih, Mekke ve daha fazlası.',1]]},
   {v:'2.1',big:1,b:1,date:'Kasım 2026',title:'Yeni Tatil planlayıcı',items:[
@@ -5041,6 +5042,20 @@ var bipEv=null;
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();bipEv=e;try{var b=$('tdInst');if(b)b.style.display='';if($('igbg').classList.contains('show'))renderIg()}catch(_){}});
 window.addEventListener('appinstalled',function(){bipEv=null;try{lsSet('butcem_inst','1')}catch(_){};try{var b=$('tdInst');if(b)b.style.display='none'}catch(_){}});
 function bipRun(){if(!bipEv)return;var e=bipEv;bipEv=null;try{e.prompt();if(e.userChoice)e.userChoice.then(function(r){if(r&&r.outcome==='accepted'){showDone()}else{bipEv=null}})}catch(_){}}
+/* yeni sürüm kontrolü */
+var updAsked=false;
+function verNum(v){return String(v||'0').split('.').map(function(x){return parseInt(x,10)||0})}
+function verGt(a,b){var x=verNum(a),y=verNum(b);for(var i=0;i<3;i++){if((x[i]||0)!==(y[i]||0))return (x[i]||0)>(y[i]||0)}return false}
+function updCheck(){
+  if(updAsked||!/^https?:/.test(location.protocol))return;
+  fetch('index.html?c='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():''}).then(function(x){
+    var m=/var APP_VER='([0-9.]+)'/.exec(x||'');if(!m||!verGt(m[1],APP_VER)||updAsked)return;
+    updAsked=true;
+    askBox('Yeni sürüm hazır','Bütçem '+m[1]+' yayında. Yenilersen yeni özellikler gelir; verilerin silinmez.',[{t:'Yenile',f:function(){location.replace(location.pathname+'?u='+Date.now())}},{t:'Sonra',c:'sec'}]);
+  }).catch(function(){});
+}
+setTimeout(updCheck,4000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden)setTimeout(updCheck,1500)});
 try{if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(function(){})}catch(_){}
 function isMobileUA(){return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent||'')}
 function isAndroid(){return /Android/i.test(navigator.userAgent||'')}
