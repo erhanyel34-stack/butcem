@@ -1,0 +1,23 @@
+{
+  "guncelleme": "2026-11-20",
+  "kaynak": "KGM tarifesi 1 Temmuz 2026, akaryakıt 19 Kasım 2026, TCDD Ağustos 2026, bilet siteleri Kasım 2026",
+  "yakit": { "benzin": 71.30, "motorin": 95.30, "lpg": 50.70 },
+  "gecis": {
+    "İstanbul|İzmir": 2525, "İstanbul|Çeşme": 2580, "İstanbul|Kuşadası": 2590, "İstanbul|Didim": 2620,
+    "İstanbul|Aydın": 2580, "İstanbul|Muğla": 2620, "İstanbul|Bodrum": 2640, "İstanbul|Marmaris": 2640,
+    "İstanbul|Dalaman": 2640, "İstanbul|Fethiye": 2640, "İstanbul|Denizli": 2650, "İstanbul|Pamukkale": 2650,
+    "İstanbul|Bursa": 1290, "İstanbul|Uludağ": 1290, "İstanbul|Balıkesir": 2230, "İstanbul|Ayvalık": 2230,
+    "İstanbul|Çanakkale": 1540, "İstanbul|Ankara": 400, "İstanbul|Bolu": 250, "İstanbul|Sapanca": 140,
+    "İstanbul|Antalya": 1350, "İstanbul|Kemer": 1350, "İstanbul|Side": 1350, "İstanbul|Alanya": 1350, "İstanbul|Kaş": 1350,
+    "İstanbul|Kapadokya": 1000, "Ankara|Kapadokya": 600, "Ankara|Adana": 925, "Ankara|Mersin": 925
+  },
+  "gecisKm": 1.0,
+  "yurtdisiGecisKmEur": 0.07,
+  "ucak": { "taban": 1700, "km": 1.4, "yazCarpan": 1.25, "disTaban": 3000, "disKm": 1.9 },
+  "otobus": { "km": 1.5 },
+  "tren": {
+    "İstanbul|Ankara": [990, 4.5], "İstanbul|Eskişehir": [639, 2.75], "Ankara|Eskişehir": [511, 1.5],
+    "Ankara|Konya": [458, 1.9], "İstanbul|Konya": [1442, 4.8], "Ankara|Sivas": [1001, 2.9]
+  },
+  "yemek": { "ic": 1100, "EUR": 50, "USD": 50, "GBP": 45 }
+}
