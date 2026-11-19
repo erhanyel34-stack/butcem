@@ -15,7 +15,7 @@
 <style>
 #tgate.an .st,#tgate.an .warn,#tgate.an #tgMove{display:none!important}
 html{background:#0b0e22}
-#spl{--bg:#0b0e22;--acc:#7c5cff;--acc2:#27d3c3;--num:ui-rounded,"SF Pro Rounded",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;position:fixed;inset:0;z-index:9999;background:var(--bg);display:grid;place-items:center;overflow:hidden;animation:splFail .4s 6s forwards;-webkit-user-select:none;user-select:none}
+#spl{--bg:#0b0e22;--acc:#7c5cff;--acc2:#27d3c3;--num:ui-rounded,"SF Pro Rounded",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;position:fixed;inset:0;z-index:9999;background:radial-gradient(circle at 50% 42%,#26327a 0%,#141a4d 45%,#0b0e22 100%);display:grid;place-items:center;overflow:hidden;animation:splFail .4s 6s forwards;-webkit-user-select:none;user-select:none}
 #spl *{box-sizing:border-box}
 #spl .glow{position:absolute;border-radius:50%;filter:blur(70px);opacity:0}
 #spl .g1{width:300px;height:300px;background:#7c5cff;left:-90px;top:-60px;animation:splGl 1.6s .1s ease-out forwards}
@@ -48,16 +48,28 @@ html{background:#0b0e22}
 #spl .logo{width:124px;height:124px;border-radius:30px;background:none;font-size:0;box-shadow:0 20px 50px #3f86ea66}
 #spl .logo svg{display:block;width:100%;height:100%}
 #spl .logo:after{border-radius:30px}
-#spl .sa{animation:splIn .7s .35s cubic-bezier(.2,1.3,.4,1) both,splSw 1.5s 1.05s ease-in-out infinite alternate;transform-origin:60px 60px}
-#spl .sa2{animation-delay:.42s,1.15s;animation-direction:normal,alternate-reverse}
-#spl .sa3{animation-delay:.49s,1.25s}
-#spl .sa4{animation-delay:.56s,1.35s;animation-direction:normal,alternate-reverse}
-@keyframes splIn{from{opacity:0;transform:rotate(-220deg) scale(.5)}to{opacity:1;transform:none}}
-@keyframes splSw{from{transform:rotate(-16deg)}to{transform:rotate(16deg)}}
-#spl .scn{animation:splGw 1.4s 1s ease-in-out infinite;transform-origin:60px 60px}
+#spl .sa{animation:splIn 1.5s .3s both;transform-origin:60px 60px}
+#spl .sa1{--d:1;--s0:1.45}#spl .sa2{--d:-1;--s0:1.18}#spl .sa3{--d:1;--s0:.82}#spl .sa4{--d:-1;--s0:.58}
+@keyframes splIn{0%{opacity:0;transform:rotate(calc(var(--d)*420deg)) scale(var(--s0))}12%{opacity:1}70%{opacity:1;transform:rotate(calc(var(--d)*-24deg)) scale(calc(2 - var(--s0)))}100%{opacity:1;transform:none}}
+#spl .scn{animation:splPop .5s .25s cubic-bezier(.3,1.6,.5,1) both,splSpin 1.3s .95s linear forwards,splGw 1.4s 2.3s ease-in-out infinite;transform-origin:60px 60px}
+@keyframes splPop{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:none}}
+@keyframes splSpin{0.0%{transform:scaleX(1.000)}3.6%{transform:scaleX(0.121)}7.1%{transform:scaleX(-0.954)}10.7%{transform:scaleX(-0.525)}14.3%{transform:scaleX(0.651)}17.9%{transform:scaleX(0.943)}21.4%{transform:scaleX(0.093)}25.0%{transform:scaleX(-0.834)}28.6%{transform:scaleX(-0.907)}32.1%{transform:scaleX(-0.177)}35.7%{transform:scaleX(0.662)}39.3%{transform:scaleX(1.000)}42.9%{transform:scaleX(0.711)}46.4%{transform:scaleX(0.062)}50.0%{transform:scaleX(-0.573)}53.6%{transform:scaleX(-0.942)}57.1%{transform:scaleX(-0.976)}60.7%{transform:scaleX(-0.746)}64.3%{transform:scaleX(-0.377)}67.9%{transform:scaleX(0.019)}71.4%{transform:scaleX(0.364)}75.0%{transform:scaleX(0.627)}78.6%{transform:scaleX(0.804)}82.1%{transform:scaleX(0.911)}85.7%{transform:scaleX(0.966)}89.3%{transform:scaleX(0.990)}92.9%{transform:scaleX(0.998)}96.4%{transform:scaleX(1.000)}100.0%{transform:scaleX(1.000)}}
 @keyframes splGw{0%,100%{filter:brightness(1) drop-shadow(0 0 0 #fff0)}50%{filter:brightness(1.12) drop-shadow(0 0 7px #ffffffcc)}}
-#spl.out{animation:splOut .45s ease-in forwards;pointer-events:none}
-@keyframes splOut{to{opacity:0;transform:scale(1.04);visibility:hidden}}
+#spl .glow{display:none}
+#spl .coin{width:3px;height:3px;background:#fff;box-shadow:0 0 8px #ffffffaa;animation:splTwF .6s calc(.3s + var(--dl,0s)) 3 ease-in-out both,splTw 2.6s 2.4s ease-in-out infinite}
+#spl .c1{left:18%;top:22%;--dl:0.07s}#spl .c2{right:16%;top:18%;width:2px;height:2px;--dl:0.28s}#spl .c3{left:14%;top:60%;width:2px;height:2px;--dl:0.17s}
+#spl .c4{right:20%;top:64%;--dl:0.4s}#spl .c5{left:32%;top:82%;width:2px;height:2px;--dl:0.05s}#spl .c6{right:34%;top:86%;--dl:0.33s}#spl .c7{left:48%;top:12%;width:2px;height:2px;--dl:0.23s}#spl .c8{right:8%;top:42%;width:2px;height:2px;--dl:0.12s}
+@keyframes splTwF{0%{opacity:0;transform:scale(.4)}45%{opacity:1;transform:scale(2.2);box-shadow:0 0 14px #fff}100%{opacity:0;transform:scale(.4)}}
+@keyframes splTw{0%,100%{opacity:0;transform:scale(.6)}50%{opacity:.9;transform:scale(1.3)}}
+#spl.out{animation:splOut .5s .12s ease-in forwards;pointer-events:none}
+#spl.out .logo{overflow:visible}#spl.out .logo svg{overflow:visible}
+#spl.out .scn{animation:splZoom .55s cubic-bezier(.65,0,.25,1) forwards}
+#spl.out .sring{animation:splArcOut .35s ease-in forwards}
+#spl.out .name,#spl.out .tag,#spl.out .bar,#spl.out .credit,#spl.out .coin,#spl.out .ring{animation:splFo .2s forwards}
+@keyframes splZoom{to{transform:scale(26)}}
+@keyframes splArcOut{to{opacity:0;transform:rotate(200deg) scale(1.9)}}
+@keyframes splFo{to{opacity:0}}
+@keyframes splOut{to{opacity:0;visibility:hidden}}
 @keyframes splFail{to{opacity:0;visibility:hidden;pointer-events:none}}
 @media (prefers-reduced-motion:reduce){#spl *{animation-duration:.01s!important;animation-delay:0s!important}}
 </style>
@@ -818,10 +830,10 @@ input[type=month].fld,input[type=date].fld{min-width:0;max-width:100%;width:100%
 <script>try{if(localStorage.getItem('butcem_pin'))document.getElementById('lk').classList.add('show')}catch(e){}</script>
 <div id="spl" aria-hidden="true">
  <div class="glow g1"></div><div class="glow g2"></div>
- <div class="coin c1"></div><div class="coin c2"></div><div class="coin c3"></div>
+ <div class="coin c1"></div><div class="coin c2"></div><div class="coin c3"></div><div class="coin c4"></div><div class="coin c5"></div><div class="coin c6"></div><div class="coin c7"></div><div class="coin c8"></div>
  <div class="mid">
   <div class="ring"></div><div class="ring r2"></div>
-  <div class="logo"><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="spg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a4cff"/><stop offset=".55" stop-color="#3f86ea"/><stop offset="1" stop-color="#22d3c5"/></linearGradient><radialGradient id="sph" cx=".22" cy=".12" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset=".7" stop-color="#fff" stop-opacity="0"/></radialGradient><linearGradient id="spc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#d6defa"/></linearGradient><linearGradient id="spt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a4fe8"/><stop offset="1" stop-color="#3a63d0"/></linearGradient><filter id="sps" x="-40%" y="-40%" width="180%" height="190%"><feDropShadow dx="0" dy="2.6" stdDeviation="2.4" flood-color="#0b1445" flood-opacity=".5"/></filter></defs><rect width="120" height="120" rx="27" fill="url(#spg)"/><rect width="120" height="120" rx="27" fill="url(#sph)"/><g class="sa sa1"><circle cx="60" cy="60" r="36" fill="none" stroke="#ffd35a" stroke-width="11" stroke-linecap="round" stroke-dasharray="87.5 138.7" stroke-dashoffset="0.0" transform="rotate(-90 60 60)"/></g><g class="sa sa2"><circle cx="60" cy="60" r="36" fill="none" stroke="#ff9a4d" stroke-width="11" stroke-linecap="round" stroke-dasharray="60.3 165.9" stroke-dashoffset="-90.5" transform="rotate(-90 60 60)"/></g><g class="sa sa3"><circle cx="60" cy="60" r="36" fill="none" stroke="#ffffffcc" stroke-width="11" stroke-linecap="round" stroke-dasharray="42.2 184.0" stroke-dashoffset="-153.8" transform="rotate(-90 60 60)"/></g><g class="sa sa4"><circle cx="60" cy="60" r="36" fill="none" stroke="#7ee0c3" stroke-width="11" stroke-linecap="round" stroke-dasharray="24.1 202.1" stroke-dashoffset="-199.1" transform="rotate(-90 60 60)"/></g><g filter="url(#sps)"><g class="scn"><circle cx="60" cy="60" r="23" fill="url(#spc)"/><circle cx="60" cy="60" r="20.4" fill="none" stroke="#c4cff5" stroke-width="1.1"/><text x="60" y="73" font-size="35" text-anchor="middle" fill="url(#spt)" font-family="Helvetica,Arial,sans-serif" font-weight="700">₺</text></g></g></svg></div>
+  <div class="logo"><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="spg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a4cff"/><stop offset=".55" stop-color="#3f86ea"/><stop offset="1" stop-color="#22d3c5"/></linearGradient><radialGradient id="sph" cx=".22" cy=".12" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset=".7" stop-color="#fff" stop-opacity="0"/></radialGradient><linearGradient id="spc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#d6defa"/></linearGradient><linearGradient id="spt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a4fe8"/><stop offset="1" stop-color="#3a63d0"/></linearGradient><filter id="sps" x="-40%" y="-40%" width="180%" height="190%"><feDropShadow dx="0" dy="2.6" stdDeviation="2.4" flood-color="#0b1445" flood-opacity=".5"/></filter></defs><rect width="120" height="120" rx="27" fill="url(#spg)"/><rect width="120" height="120" rx="27" fill="url(#sph)"/><g class="sring"><g class="sa sa1"><circle cx="60" cy="60" r="36" fill="none" stroke="#ffd35a" stroke-width="11" stroke-linecap="round" stroke-dasharray="87.5 138.7" stroke-dashoffset="0.0" transform="rotate(-90 60 60)"/></g><g class="sa sa2"><circle cx="60" cy="60" r="36" fill="none" stroke="#ff9a4d" stroke-width="11" stroke-linecap="round" stroke-dasharray="60.3 165.9" stroke-dashoffset="-90.5" transform="rotate(-90 60 60)"/></g><g class="sa sa3"><circle cx="60" cy="60" r="36" fill="none" stroke="#ffffffcc" stroke-width="11" stroke-linecap="round" stroke-dasharray="42.2 184.0" stroke-dashoffset="-153.8" transform="rotate(-90 60 60)"/></g><g class="sa sa4"><circle cx="60" cy="60" r="36" fill="none" stroke="#7ee0c3" stroke-width="11" stroke-linecap="round" stroke-dasharray="24.1 202.1" stroke-dashoffset="-199.1" transform="rotate(-90 60 60)"/></g></g><g filter="url(#sps)"><g class="scn"><circle cx="60" cy="60" r="23" fill="url(#spc)"/><circle cx="60" cy="60" r="20.4" fill="none" stroke="#c4cff5" stroke-width="1.1"/><text x="60" y="73" font-size="35" text-anchor="middle" fill="url(#spt)" font-family="Helvetica,Arial,sans-serif" font-weight="700">₺</text></g></g></svg></div>
   <div class="name"><i style="animation-delay:.7s">B</i><i style="animation-delay:.76s">ü</i><i style="animation-delay:.82s">t</i><i style="animation-delay:.88s">ç</i><i style="animation-delay:.94s">e</i><i style="animation-delay:1s">m</i></div>
   <div class="tag">Ay sonunu önceden gör</div>
  </div>
@@ -830,9 +842,9 @@ input[type=month].fld,input[type=date].fld{min-width:0;max-width:100%;width:100%
 </div>
 <script>(function(){var t0=Date.now(),el=document.getElementById('spl');if(!el)return;
 if(navigator.webdriver){el.parentNode.removeChild(el);return}
-var done=false;function kill(){if(done)return;done=true;el.classList.add('out');setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el)},520)}
+var done=false;function kill(){if(done)return;done=true;el.classList.add('out');setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el)},760)}
 el.addEventListener('click',kill);el.addEventListener('touchend',function(e){e.preventDefault();kill()},{passive:false});
-window.__splashReady=function(){setTimeout(kill,Math.max(0,2800-(Date.now()-t0)))};})();</script>
+window.__splashReady=function(){setTimeout(kill,Math.max(0,2700-(Date.now()-t0)))};})();</script>
 <div class="bgfx"><i></i><i></i></div>
 <div class="wrap">
   <div class="top">
@@ -2667,11 +2679,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.4.1';
+var APP_VER='2.4.4';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
-  {v:'2.4.1',date:'Kasım 2026',title:'Yeni logo ve açılış animasyonu',items:[['✨','Yeni logo','Uygulamanın yeni ikonu: ortada parlayan ₺ parası, çevresinde renkli bütçe halkası.',1],['🎬','Yeni açılış animasyonu','Logo ekrana zıplayarak gelir, halka dilimleri dönüp yerine oturur ve sağa sola salınır, ₺ hafifçe parlar.',1]]},
+  {v:'2.4.4',date:'Kasım 2026',title:'Yeni logo ve açılış animasyonu',items:[['✨','Yeni logo','Uygulamanın yeni ikonu: ortada parlayan ₺ parası, çevresinde renkli bütçe halkası.',1],['🎬','Yeni açılış animasyonu','Renkli halkalar bir sola bir sağa dönüp birbirinin içinden geçerek kapanır, ₺ parası dönüp durur ve ekrana büyüyerek uygulamayı açar.',1]]},
 {v:'2.4',date:'Kasım 2026',title:'Tatil kartı paylaş, tarih ipucu',items:[['📤','Tatil kartını paylaş','Tatil ekranındaki Paylaş düğmesiyle şehir silüetli, rota, tarih ve kişi başı tutarı gösteren kartı arkadaşlarına gönderebilirsin.',1],['📅','Tarih ipucu','Yoğun sezona denk gelen tarihlerde daha uygun bir haftayı önerir, tek dokunuşla tarihleri kaydırabilirsin. Sezon dışıysa bunu da söyler.',1]]},
 {v:'2.3.1',date:'Kasım 2026',title:'Şehir silüetleri ve canlı gökyüzü',items:[['🏙️','Şehir silüetleri','Tatil kartında çıkış şehri solda soluk, varış şehri sağda belirgin: İstanbul köprü ve Galata, Antalya saat kulesi ve Hadrian Kapısı, İzmir saat kulesi, Ankara Anıtkabir ve daha fazlası.',1],['☀️','Parlayan güneş, yanıp sönen ay','Yaz tatilinde güneş ışınlarıyla parlıyor, kış tatilinde ay nefes alır gibi yanıp sönüyor, yıldızlar göz kırpıyor.',1],['🏔️','Trabzon düzeldi','Sümela Manastırı artık sissiz, kayalığın içinde net görünüyor.',0]]},
 {v:'2.3',date:'Kasım 2026',title:'Tatil ekranı sadeleşti',items:[
