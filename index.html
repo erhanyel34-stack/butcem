@@ -45,6 +45,17 @@ html{background:#0b0e22}
 #spl .c2{right:20%;top:41%;width:10px;height:10px;animation:splFl 2.4s 1.2s ease-in-out forwards}
 #spl .c3{left:28%;top:66%;width:9px;height:9px;animation:splFl 2.4s 1.05s ease-in-out forwards}
 @keyframes splFl{0%{opacity:0;transform:translateY(20px)}30%{opacity:.9}100%{opacity:0;transform:translateY(-40px)}}
+#spl .logo{width:124px;height:124px;border-radius:30px;background:none;font-size:0;box-shadow:0 20px 50px #3f86ea66}
+#spl .logo svg{display:block;width:100%;height:100%}
+#spl .logo:after{border-radius:30px}
+#spl .sa{animation:splIn .7s .35s cubic-bezier(.2,1.3,.4,1) both,splSw 1.5s 1.05s ease-in-out infinite alternate;transform-origin:60px 60px}
+#spl .sa2{animation-delay:.42s,1.15s;animation-direction:normal,alternate-reverse}
+#spl .sa3{animation-delay:.49s,1.25s}
+#spl .sa4{animation-delay:.56s,1.35s;animation-direction:normal,alternate-reverse}
+@keyframes splIn{from{opacity:0;transform:rotate(-220deg) scale(.5)}to{opacity:1;transform:none}}
+@keyframes splSw{from{transform:rotate(-16deg)}to{transform:rotate(16deg)}}
+#spl .scn{animation:splGw 1.4s 1s ease-in-out infinite;transform-origin:60px 60px}
+@keyframes splGw{0%,100%{filter:brightness(1) drop-shadow(0 0 0 #fff0)}50%{filter:brightness(1.12) drop-shadow(0 0 7px #ffffffcc)}}
 #spl.out{animation:splOut .45s ease-in forwards;pointer-events:none}
 @keyframes splOut{to{opacity:0;transform:scale(1.04);visibility:hidden}}
 @keyframes splFail{to{opacity:0;visibility:hidden;pointer-events:none}}
@@ -810,7 +821,7 @@ input[type=month].fld,input[type=date].fld{min-width:0;max-width:100%;width:100%
  <div class="coin c1"></div><div class="coin c2"></div><div class="coin c3"></div>
  <div class="mid">
   <div class="ring"></div><div class="ring r2"></div>
-  <div class="logo"><span>₺</span></div>
+  <div class="logo"><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="spg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a4cff"/><stop offset=".55" stop-color="#3f86ea"/><stop offset="1" stop-color="#22d3c5"/></linearGradient><radialGradient id="sph" cx=".22" cy=".12" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset=".7" stop-color="#fff" stop-opacity="0"/></radialGradient><linearGradient id="spc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#d6defa"/></linearGradient><linearGradient id="spt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a4fe8"/><stop offset="1" stop-color="#3a63d0"/></linearGradient><filter id="sps" x="-40%" y="-40%" width="180%" height="190%"><feDropShadow dx="0" dy="2.6" stdDeviation="2.4" flood-color="#0b1445" flood-opacity=".5"/></filter></defs><rect width="120" height="120" rx="27" fill="url(#spg)"/><rect width="120" height="120" rx="27" fill="url(#sph)"/><g class="sa sa1"><circle cx="60" cy="60" r="36" fill="none" stroke="#ffd35a" stroke-width="11" stroke-linecap="round" stroke-dasharray="87.5 138.7" stroke-dashoffset="0.0" transform="rotate(-90 60 60)"/></g><g class="sa sa2"><circle cx="60" cy="60" r="36" fill="none" stroke="#ff9a4d" stroke-width="11" stroke-linecap="round" stroke-dasharray="60.3 165.9" stroke-dashoffset="-90.5" transform="rotate(-90 60 60)"/></g><g class="sa sa3"><circle cx="60" cy="60" r="36" fill="none" stroke="#ffffffcc" stroke-width="11" stroke-linecap="round" stroke-dasharray="42.2 184.0" stroke-dashoffset="-153.8" transform="rotate(-90 60 60)"/></g><g class="sa sa4"><circle cx="60" cy="60" r="36" fill="none" stroke="#7ee0c3" stroke-width="11" stroke-linecap="round" stroke-dasharray="24.1 202.1" stroke-dashoffset="-199.1" transform="rotate(-90 60 60)"/></g><g filter="url(#sps)"><g class="scn"><circle cx="60" cy="60" r="23" fill="url(#spc)"/><circle cx="60" cy="60" r="20.4" fill="none" stroke="#c4cff5" stroke-width="1.1"/><text x="60" y="73" font-size="35" text-anchor="middle" fill="url(#spt)" font-family="Helvetica,Arial,sans-serif" font-weight="700">₺</text></g></g></svg></div>
   <div class="name"><i style="animation-delay:.7s">B</i><i style="animation-delay:.76s">ü</i><i style="animation-delay:.82s">t</i><i style="animation-delay:.88s">ç</i><i style="animation-delay:.94s">e</i><i style="animation-delay:1s">m</i></div>
   <div class="tag">Ay sonunu önceden gör</div>
  </div>
@@ -821,7 +832,7 @@ input[type=month].fld,input[type=date].fld{min-width:0;max-width:100%;width:100%
 if(navigator.webdriver){el.parentNode.removeChild(el);return}
 var done=false;function kill(){if(done)return;done=true;el.classList.add('out');setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el)},520)}
 el.addEventListener('click',kill);el.addEventListener('touchend',function(e){e.preventDefault();kill()},{passive:false});
-window.__splashReady=function(){setTimeout(kill,Math.max(0,4000-(Date.now()-t0)))};})();</script>
+window.__splashReady=function(){setTimeout(kill,Math.max(0,2800-(Date.now()-t0)))};})();</script>
 <div class="bgfx"><i></i><i></i></div>
 <div class="wrap">
   <div class="top">
@@ -2656,11 +2667,12 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.4';
+var APP_VER='2.4.1';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
-  {v:'2.4',date:'Kasım 2026',title:'Tatil kartı paylaş, tarih ipucu',items:[['📤','Tatil kartını paylaş','Tatil ekranındaki Paylaş düğmesiyle şehir silüetli, rota, tarih ve kişi başı tutarı gösteren kartı arkadaşlarına gönderebilirsin.',1],['📅','Tarih ipucu','Yoğun sezona denk gelen tarihlerde daha uygun bir haftayı önerir, tek dokunuşla tarihleri kaydırabilirsin. Sezon dışıysa bunu da söyler.',1]]},
+  {v:'2.4.1',date:'Kasım 2026',title:'Yeni logo ve açılış animasyonu',items:[['✨','Yeni logo','Uygulamanın yeni ikonu: ortada parlayan ₺ parası, çevresinde renkli bütçe halkası.',1],['🎬','Yeni açılış animasyonu','Logo ekrana zıplayarak gelir, halka dilimleri dönüp yerine oturur ve sağa sola salınır, ₺ hafifçe parlar.',1]]},
+{v:'2.4',date:'Kasım 2026',title:'Tatil kartı paylaş, tarih ipucu',items:[['📤','Tatil kartını paylaş','Tatil ekranındaki Paylaş düğmesiyle şehir silüetli, rota, tarih ve kişi başı tutarı gösteren kartı arkadaşlarına gönderebilirsin.',1],['📅','Tarih ipucu','Yoğun sezona denk gelen tarihlerde daha uygun bir haftayı önerir, tek dokunuşla tarihleri kaydırabilirsin. Sezon dışıysa bunu da söyler.',1]]},
 {v:'2.3.1',date:'Kasım 2026',title:'Şehir silüetleri ve canlı gökyüzü',items:[['🏙️','Şehir silüetleri','Tatil kartında çıkış şehri solda soluk, varış şehri sağda belirgin: İstanbul köprü ve Galata, Antalya saat kulesi ve Hadrian Kapısı, İzmir saat kulesi, Ankara Anıtkabir ve daha fazlası.',1],['☀️','Parlayan güneş, yanıp sönen ay','Yaz tatilinde güneş ışınlarıyla parlıyor, kış tatilinde ay nefes alır gibi yanıp sönüyor, yıldızlar göz kırpıyor.',1],['🏔️','Trabzon düzeldi','Sümela Manastırı artık sissiz, kayalığın içinde net görünüyor.',0]]},
 {v:'2.3',date:'Kasım 2026',title:'Tatil ekranı sadeleşti',items:[
     ['✂️','Daha sade Tatil ekranı','Ayırabilir miyiz ve Tatil birikimim kutuları kaldırıldı. Üstte sadece senin payın, harcanan ve kalan görünür.',1],
