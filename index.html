@@ -605,6 +605,7 @@ body.pl-basic #dr [data-dr]:not([data-dr=set]):not([data-dr=plan]){display:none!
 .tmt{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .tlink{display:block;width:100%;text-align:center;color:var(--mut);font-size:13px;padding:14px 0 0}
 .newb{font-size:9.5px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;border-radius:8px;padding:2px 6px;margin-left:6px;letter-spacing:.4px;vertical-align:1px}
+.tsug{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 10px}.tsug:empty{display:none}.tsug button{background:#ffffff14;border:1px solid #ffffff22;border-radius:12px;padding:8px 11px;font-size:13px;font-weight:700;color:inherit}.tsug button small{font-weight:500;color:#aeb4e6;margin-left:5px;font-size:11px}
 .trhead{display:flex;flex-direction:column;gap:2px;margin-bottom:10px}.trhead b{font-size:17px}.trhead span{font-size:12.5px;color:#aeb4e6}
 .trlist{display:flex;flex-direction:column;gap:7px;margin-bottom:10px}
 .trm{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#ffffff0d;border:1.5px solid transparent;border-radius:16px;padding:10px 12px;color:inherit;font:inherit}
@@ -2633,10 +2634,12 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.1';
+var APP_VER='2.2.1';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+  {v:'2.2.1',date:'Kasım 2026',title:'Yer adı önerileri',items:[['🔎','Yazarken öneri','Nereden ve Nereye alanına birkaç harf yazınca eşleşen yerler altında çıkar; dokunman yeter.',1]]},
+  {v:'2.2',date:'Kasım 2026',title:'Tatil bitince kapanış ve daha fazla yer',items:[['🏖️','Tatil dönüşü özeti','Tatil bitince Ana sayfada hatırlatma çıkar. Tahminin ile gerçek harcamanı karşılaştırır, tamamsa Tatili kapat dersin; tatil arşive geçer.',1],['🗺️','Daha fazla şehir','Tatil planlayıcıya yaklaşık 50 yeni yer eklendi: Datça, Göcek, Belek, Uzungöl, Venedik, Münih, Mekke ve daha fazlası.',1]]},
   {v:'2.1',big:1,b:1,date:'Kasım 2026',title:'Yeni Tatil planlayıcı',items:[
     ['🧭','Nereden–nereye tahmini','Çıkış şehrini ve gideceğin yeri yaz; mesafe, yol süresi ve arabayla, uçakla, otobüsle ya da trenle tahmini maliyet yan yana çıksın. En uygun seçenek işaretlenir.',1],
     ['⛽','Yakıt, otoyol ve köprü','Arabayla gidersen güncel yakıt fiyatı ve otoyol/köprü ücretleri tahmini hesaplanır. Yakıt türünü ve tüketimini değiştirebilirsin.',1],
@@ -4273,11 +4276,11 @@ function renderTripCard(){
 function tripBanner(){
   var b=$('tripBanner'),t=today(),show=false,tr=null;
   activeTrips().forEach(function(x){
-    if(x.end<t&&daysTo(x.end)>=-21&&!(x.snooze&&x.snooze>Date.now())&&tripSpent(x).list.length===0)tr=x;
+    if(x.end<t&&daysTo(x.end)>=-21&&!(x.snooze&&x.snooze>Date.now())&&(tripSpent(x).list.length===0||!x.closed))tr=x;
   });
   show=!!tr&&tab==='ozet'&&mk(cur)===nowK();
   b.classList.toggle('show',show);
-  if(show){b._t=tr.id;$('tripBnTx').textContent='🏖️ '+(tr.dest||'Tatil')+' bitti. Harcamalarını girelim mi?'}
+  if(show){b._t=tr.id;$('tripBnTx').textContent='🏖️ '+(tr.dest||'Tatil')+' bitti. '+(tripSpent(tr).list.length?'Tahmin ile harcamanı karşılaştır, tatili kapat.':'Harcamalarını girelim mi?')}
 }
 $('tripBnGo').onclick=function(){openTripScreen($('tripBanner')._t)};
 $('tripBnLater').onclick=function(){var t=tripById($('tripBanner')._t);if(t){t.snooze=Date.now()+3*86400000;save()}tripBanner()};
@@ -4308,11 +4311,11 @@ function themeTrip(t){
   snowInit(t.season==='kis');
 }
 /* ===== Tatil 2.1: yol & maliyet tahmini ===== */
-var PL_TR={'İstanbul':[41.01,28.98],'Ankara':[39.93,32.86],'İzmir':[38.42,27.14],'Bursa':[40.19,29.06],'Antalya':[36.90,30.70],'Bodrum':[37.04,27.43],'Çeşme':[38.32,26.30],'Marmaris':[36.85,28.27],'Dalaman':[36.76,28.80],'Fethiye':[36.62,29.12],'Kaş':[36.20,29.64],'Kemer':[36.60,30.56],'Alanya':[36.54,32.00],'Side':[36.77,31.39],'Kuşadası':[37.86,27.26],'Didim':[37.38,27.27],'Ayvalık':[39.32,26.69],'Balıkesir':[39.65,27.89],'Çanakkale':[40.15,26.41],'Edirne':[41.68,26.56],'Tekirdağ':[40.98,27.51],'Bolu':[40.73,31.61],'Sapanca':[40.69,30.27],'Uludağ':[40.07,29.22],'Kapadokya':[38.64,34.83],'Konya':[37.87,32.49],'Eskişehir':[39.78,30.52],'Trabzon':[41.00,39.72],'Rize':[41.02,40.52],'Samsun':[41.29,36.33],'Safranbolu':[41.25,32.69],'Mardin':[37.31,40.74],'Gaziantep':[37.07,37.38],'Diyarbakır':[37.91,40.22],'Van':[38.49,43.38],'Erzurum':[39.90,41.27],'Muğla':[37.22,28.36],'Aydın':[37.85,27.84],'Denizli':[37.78,29.09],'Pamukkale':[37.92,29.12],'Kayseri':[38.73,35.49],'Adana':[37.00,35.32],'Mersin':[36.81,34.64],'Sivas':[39.75,37.02],'Hatay':[36.20,36.16],'Şanlıurfa':[37.16,38.79]};
-var PL_AP={'Çeşme':'İzmir','Kuşadası':'İzmir','Didim':'İzmir','Aydın':'İzmir','Marmaris':'Dalaman','Fethiye':'Dalaman','Muğla':'Dalaman','Kaş':'Antalya','Kemer':'Antalya','Side':'Antalya','Alanya':'Antalya','Ayvalık':'Balıkesir','Pamukkale':'Denizli','Mersin':'Adana','Hatay':'Adana'};
-var PL_NOAP=['Bursa','Uludağ','Sapanca','Bolu','Safranbolu','Edirne','Tekirdağ','Rize'];
+var PL_TR={'İstanbul':[41.01,28.98],'Ankara':[39.93,32.86],'İzmir':[38.42,27.14],'Bursa':[40.19,29.06],'Antalya':[36.90,30.70],'Bodrum':[37.04,27.43],'Çeşme':[38.32,26.30],'Marmaris':[36.85,28.27],'Dalaman':[36.76,28.80],'Fethiye':[36.62,29.12],'Kaş':[36.20,29.64],'Kemer':[36.60,30.56],'Alanya':[36.54,32.00],'Side':[36.77,31.39],'Kuşadası':[37.86,27.26],'Didim':[37.38,27.27],'Ayvalık':[39.32,26.69],'Balıkesir':[39.65,27.89],'Çanakkale':[40.15,26.41],'Edirne':[41.68,26.56],'Tekirdağ':[40.98,27.51],'Bolu':[40.73,31.61],'Sapanca':[40.69,30.27],'Uludağ':[40.07,29.22],'Kapadokya':[38.64,34.83],'Konya':[37.87,32.49],'Eskişehir':[39.78,30.52],'Trabzon':[41.00,39.72],'Rize':[41.02,40.52],'Samsun':[41.29,36.33],'Safranbolu':[41.25,32.69],'Mardin':[37.31,40.74],'Gaziantep':[37.07,37.38],'Diyarbakır':[37.91,40.22],'Van':[38.49,43.38],'Erzurum':[39.90,41.27],'Muğla':[37.22,28.36],'Aydın':[37.85,27.84],'Denizli':[37.78,29.09],'Pamukkale':[37.92,29.12],'Kayseri':[38.73,35.49],'Adana':[37.00,35.32],'Mersin':[36.81,34.64],'Sivas':[39.75,37.02],'Hatay':[36.20,36.16],'Şanlıurfa':[37.16,38.79],'Yalova':[40.65,29.27],'Kocaeli':[40.77,29.94],'Sakarya':[40.76,30.40],'Abant':[40.60,31.28],'Bozcaada':[39.84,26.07],'Gökçeada':[40.19,25.89],'Assos':[39.49,26.34],'Edremit':[39.60,27.02],'Akyaka':[37.05,28.32],'Datça':[36.73,27.68],'Dalyan':[36.83,28.64],'Göcek':[36.75,28.93],'Kalkan':[36.26,29.41],'Belek':[36.86,31.05],'Manavgat':[36.79,31.44],'Isparta':[37.76,30.55],'Afyon':[38.75,30.54],'Kütahya':[39.42,29.98],'Göreme':[38.64,34.83],'Uzungöl':[40.62,40.29],'Ordu':[40.98,37.88],'Giresun':[40.91,38.39],'Sinop':[42.03,35.15],'Kastamonu':[41.39,33.78],'Amasya':[40.65,35.83],'Zonguldak':[41.45,31.79],'Kars':[40.60,43.10],'Malatya':[38.35,38.31],'Adıyaman':[37.76,38.28],'Elazığ':[38.67,39.22]};
+var PL_AP={'Çeşme':'İzmir','Kuşadası':'İzmir','Didim':'İzmir','Aydın':'İzmir','Marmaris':'Dalaman','Fethiye':'Dalaman','Muğla':'Dalaman','Kaş':'Antalya','Kemer':'Antalya','Side':'Antalya','Alanya':'Antalya','Ayvalık':'Balıkesir','Pamukkale':'Denizli','Mersin':'Adana','Hatay':'Adana','Akyaka':'Dalaman','Datça':'Dalaman','Dalyan':'Dalaman','Göcek':'Dalaman','Kalkan':'Dalaman','Belek':'Antalya','Manavgat':'Antalya','Edremit':'Balıkesir','Uzungöl':'Trabzon','Göreme':'Kapadokya','Kocaeli':'İstanbul','Sakarya':'İstanbul','Yalova':'İstanbul','Amasya':'Samsun','Ordu':'Trabzon','Giresun':'Trabzon','Adıyaman':'Malatya'};
+var PL_NOAP=['Bursa','Uludağ','Sapanca','Bolu','Safranbolu','Edirne','Tekirdağ','Rize','Abant','Bozcaada','Gökçeada','Assos','Afyon','Kütahya','Zonguldak'];
 // yurt dışı: [enlem,boylam,ülke,para birimi,karayolu var mı]
-var PL_DIS={'Atina':[37.98,23.73,'Yunanistan','EUR',1],'Selanik':[40.64,22.94,'Yunanistan','EUR',1],'Sofya':[42.70,23.32,'Bulgaristan','EUR',1],'Belgrad':[44.79,20.45,'Sırbistan','EUR',1],'Budapeşte':[47.50,19.04,'Macaristan','EUR',1],'Viyana':[48.21,16.37,'Avusturya','EUR',1],'Prag':[50.08,14.44,'Çekya','EUR',1],'Berlin':[52.52,13.40,'Almanya','EUR',1],'Roma':[41.90,12.50,'İtalya','EUR',1],'Paris':[48.86,2.35,'Fransa','EUR',1],'Amsterdam':[52.37,4.90,'Hollanda','EUR',1],'Saraybosna':[43.86,18.41,'Bosna Hersek','EUR',1],'Tiflis':[41.72,44.78,'Gürcistan','USD',1],'Barselona':[41.39,2.17,'İspanya','EUR',0],'Madrid':[40.42,-3.70,'İspanya','EUR',0],'Lizbon':[38.72,-9.14,'Portekiz','EUR',0],'Londra':[51.51,-0.13,'İngiltere','GBP',0],'Dublin':[53.35,-6.26,'İrlanda','GBP',0],'Zürih':[47.38,8.54,'İsviçre','EUR',0],'Dubai':[25.20,55.27,'BAE','USD',0],'Bakü':[40.41,49.87,'Azerbaycan','USD',0],'Şarm el-Şeyh':[27.91,34.33,'Mısır','USD',0],'Kahire':[30.04,31.24,'Mısır','USD',0],'Maldivler':[4.18,73.51,'Maldivler','USD',0],'New York':[40.71,-74.00,'ABD','USD',0],'Tokyo':[35.68,139.69,'Japonya','USD',0],'Bangkok':[13.76,100.50,'Tayland','USD',0],'Bali':[-8.41,115.19,'Endonezya','USD',0]};
+var PL_DIS={'Atina':[37.98,23.73,'Yunanistan','EUR',1],'Selanik':[40.64,22.94,'Yunanistan','EUR',1],'Sofya':[42.70,23.32,'Bulgaristan','EUR',1],'Belgrad':[44.79,20.45,'Sırbistan','EUR',1],'Budapeşte':[47.50,19.04,'Macaristan','EUR',1],'Viyana':[48.21,16.37,'Avusturya','EUR',1],'Prag':[50.08,14.44,'Çekya','EUR',1],'Berlin':[52.52,13.40,'Almanya','EUR',1],'Roma':[41.90,12.50,'İtalya','EUR',1],'Paris':[48.86,2.35,'Fransa','EUR',1],'Amsterdam':[52.37,4.90,'Hollanda','EUR',1],'Saraybosna':[43.86,18.41,'Bosna Hersek','EUR',1],'Tiflis':[41.72,44.78,'Gürcistan','USD',1],'Barselona':[41.39,2.17,'İspanya','EUR',0],'Madrid':[40.42,-3.70,'İspanya','EUR',0],'Lizbon':[38.72,-9.14,'Portekiz','EUR',0],'Londra':[51.51,-0.13,'İngiltere','GBP',0],'Dublin':[53.35,-6.26,'İrlanda','GBP',0],'Zürih':[47.38,8.54,'İsviçre','EUR',0],'Dubai':[25.20,55.27,'BAE','USD',0],'Bakü':[40.41,49.87,'Azerbaycan','USD',0],'Şarm el-Şeyh':[27.91,34.33,'Mısır','USD',0],'Kahire':[30.04,31.24,'Mısır','USD',0],'Maldivler':[4.18,73.51,'Maldivler','USD',0],'New York':[40.71,-74.00,'ABD','USD',0],'Tokyo':[35.68,139.69,'Japonya','USD',0],'Bangkok':[13.76,100.50,'Tayland','USD',0],'Bali':[-8.41,115.19,'Endonezya','USD',0],'Venedik':[45.44,12.32,'İtalya','EUR',1],'Floransa':[43.77,11.26,'İtalya','EUR',1],'Milano':[45.46,9.19,'İtalya','EUR',1],'Napoli':[40.85,14.27,'İtalya','EUR',1],'Münih':[48.14,11.58,'Almanya','EUR',1],'Brüksel':[50.85,4.35,'Belçika','EUR',1],'Zagreb':[45.81,15.98,'Hırvatistan','EUR',1],'Dubrovnik':[42.65,18.09,'Hırvatistan','EUR',1],'Bükreş':[44.43,26.10,'Romanya','EUR',1],'Varşova':[52.23,21.01,'Polonya','EUR',1],'Kopenhag':[55.68,12.57,'Danimarka','EUR',0],'Stockholm':[59.33,18.07,'İsveç','EUR',0],'Santorini':[36.39,25.46,'Yunanistan','EUR',0],'Mykonos':[37.45,25.33,'Yunanistan','EUR',0],'Girit':[35.34,25.14,'Yunanistan','EUR',0],'Malta':[35.90,14.51,'Malta','EUR',0],'Marakeş':[31.63,-8.01,'Fas','EUR',0],'Mekke':[21.39,39.86,'Suudi Arabistan','USD',0],'Medine':[24.47,39.61,'Suudi Arabistan','USD',0],'Singapur':[1.35,103.82,'Singapur','USD',0],'Seul':[37.57,126.98,'Güney Kore','USD',0]};
 var PL_ROAD={'İstanbul|Ankara':450,'İstanbul|İzmir':480,'İstanbul|Bursa':150,'İstanbul|Antalya':710,'İstanbul|Bodrum':850,'İstanbul|Çeşme':470,'İstanbul|Marmaris':800,'İstanbul|Çanakkale':330,'İstanbul|Kapadokya':740,'İstanbul|Trabzon':1050,'İstanbul|Fethiye':900,'İstanbul|Alanya':870,'İstanbul|Uludağ':160,'İstanbul|Sapanca':140};
 var PRICE_DEF={guncelleme:'2026-11-20',yakit:{benzin:71.3,motorin:95.3,lpg:50.7},gecis:{'İstanbul|İzmir':2525,'İstanbul|Bursa':1290,'İstanbul|Ankara':400,'İstanbul|Çanakkale':1540,'İstanbul|Antalya':1350,'İstanbul|Bodrum':2640,'İstanbul|Çeşme':2580,'İstanbul|Marmaris':2640,'İstanbul|Kapadokya':1000},gecisKm:1.0,yurtdisiGecisKmEur:0.07,ucak:{taban:1700,km:1.4,yazCarpan:1.25,disTaban:3000,disKm:1.9},otobus:{km:1.5},tren:{'İstanbul|Ankara':[990,4.5],'İstanbul|Eskişehir':[639,2.75],'Ankara|Eskişehir':[511,1.5],'Ankara|Konya':[458,1.9],'İstanbul|Konya':[1442,4.8],'Ankara|Sivas':[1001,2.9]},yemek:{ic:1100,EUR:50,USD:50,GBP:45}};
 var PRICES=null;
@@ -4473,6 +4476,16 @@ function rtAddToBudget(t){
 }
 
 loadPrices();
+var sugFor=null;
+function showSug(id){
+  var el=$('tSug'),inp=$(id);if(!el||!inp)return;
+  var q=nrm(inp.value);sugFor=id;
+  if(!q){el.innerHTML='';return}
+  var I=plIndex(),pre=[],mid=[];
+  Object.keys(I).forEach(function(k){var v=I[k];if(id==='tFrom'&&v.dis)return;if(k===q)return;if(k.indexOf(q)===0)pre.push(v);else if(k.indexOf(' '+q)>=0)mid.push(v)});
+  var m=pre.concat(mid).slice(0,6);
+  el.innerHTML=m.map(function(v){return '<button type="button" data-sug="'+esc(v.name)+'">'+(v.dis?'🌍 ':'📍 ')+esc(v.name)+(v.dis?'<small>'+esc(v.country)+'</small>':'')+'</button>'}).join('');
+}
 function segHtml(field,arr,val){var h='<div class="tseg">';arr.forEach(function(a){h+='<button type="button" data-tf="'+field+'" data-v="'+a[0]+'" class="'+(val===a[0]?'on':'')+'">'+a[1]+' '+a[2]+'</button>'});return h+'</div>'}
 function renderTrip(){
   var t=tripById(curTrip);if(!t)return;
@@ -4482,7 +4495,8 @@ function renderTrip(){
   sw+='<button type="button" data-tsw="new">＋ Yeni tatil</button>';$('tSwitch').innerHTML=sw;
   var h='<div id="tPrompt"></div>';
   h+='<div class="tbox" id="tPlanBox"><h2>🧭 Plan</h2>'+
-    '<datalist id="tPlaces">'+plOptions()+'</datalist><div class="two"><div><span class="lbl">Nereden</span><input class="fld" id="tFrom" list="tPlaces" value="'+esc(t.from||'')+'" placeholder="Örn. İstanbul" maxlength="40" autocomplete="off"></div><div><span class="lbl">Nereye</span><input class="fld" id="tDest" list="tPlaces" value="'+esc(t.dest)+'" placeholder="Örn. Bodrum, Roma" maxlength="40" autocomplete="off"></div></div>'+
+    '<div class="two"><div><span class="lbl">Nereden</span><input class="fld" id="tFrom" value="'+esc(t.from||'')+'" placeholder="Örn. İstanbul" maxlength="40" autocomplete="off"></div><div><span class="lbl">Nereye</span><input class="fld" id="tDest" value="'+esc(t.dest)+'" placeholder="Örn. Bodrum, Roma" maxlength="40" autocomplete="off"></div></div>'+
+    '<div id="tSug" class="tsug"></div>'+
     '<span class="lbl">Mevsim</span>'+segHtml('season',[['yaz','☀️','Yaz'],['kis','❄️','Kış']],t.season)+
     '<span class="lbl">Nerede</span>'+segHtml('scope',[['ic','🇹🇷','Yurt içi'],['dis','🌍','Yurt dışı']],t.scope)+
     '<span class="lbl">Kiminle</span>'+segHtml('who',WHOS,t.who)+
@@ -4538,7 +4552,7 @@ function renderTripDyn(){
     var diff=share-sp.share;
     sm='<div class="tbox"><div class="sumhd"><small>'+(t.season==='kis'?'❄️':'☀️')+' '+esc((t.dest||'TATİL').toLocaleUpperCase('tr-TR'))+' · TATİL BİTTİ</small><h3>'+(diff>=0?'Bütçenin altında kaldın 🎉':'Bütçeyi biraz aştın')+'</h3><div style="color:#e1e4fa;font-size:13.5px">Hedef '+esc(fmt(share))+' · Harcanan '+esc(fmt(sp.share))+'</div></div>'+
       '<div class="tmt"><div style="background:#ffffff10;border-radius:16px;padding:12px"><small style="color:#aeb4e6">Toplam harcama</small><div class="num" style="font-size:20px;font-weight:800">'+esc(fmt(sp.tot))+'</div></div><div style="background:#ffffff10;border-radius:16px;padding:12px"><small style="color:#aeb4e6">Kişi başı</small><div class="num" style="font-size:20px;font-weight:800">'+esc(fmt(p>1?sp.tot/p:sp.tot))+'</div></div></div>'+
-      '<div class="tnote" style="margin-top:10px">'+(diff>=0?'🎯 Bütçeden artan: <b>'+esc(fmt(diff))+'</b>':'Bütçenin <b>'+esc(fmt(-diff))+'</b> üstüne çıktın')+'</div></div>';
+      '<div class="tnote" style="margin-top:10px">'+(diff>=0?'🎯 Bütçeden artan: <b>'+esc(fmt(diff))+'</b>':'Bütçenin <b>'+esc(fmt(-diff))+'</b> üstüne çıktın')+'</div><div class="tnote">Tahmin ile gerçek arasındaki fark bir sonraki tatil tahminlerini düzeltmene yardım eder. Eksik harcaman varsa yukarıdan ekle, tamamsa tatili kapat.</div><button type="button" class="tbtn" id="tClose2" style="margin-top:10px">✅ Tatili kapat</button></div>';
   }
   $('tSum').innerHTML=sm;
   var pr='';
@@ -4593,6 +4607,11 @@ $('tBody').addEventListener('click',function(ev){
     else{t[f]=v;if(f==='scope'){t.exitOff=false;ensureExit(t);if(v==='dis'&&t.mode!=='arac'&&t.mode!=='ucak'){var em=(t.items||[]).every(function(i){return !(i.total>0)});t.mode='arac';if(em)t.items=seedItems('arac')}}}
     if(f==='who'){if(v==='tek')t.people=1;else if(v==='cift')t.people=2;else if(t.people<2)t.people=(v==='aile'?4:4)}
     save();renderTrip();renderTripCard();return}
+  var sgb=ev.target.closest('[data-sug]');
+  if(sgb&&sugFor){var inp=$(sugFor),nmv=sgb.getAttribute('data-sug');inp.value=nmv;$('tSug').innerHTML='';
+    if(sugFor==='tFrom'){t.from=nmv;lsSet('butcem_from',nmv);save();renderRouteRes();var d0=$('tDest');if(d0&&!d0.value)d0.focus()}
+    else{t.dest=nmv;save();inp.dispatchEvent(new Event('change',{bubbles:true}));renderTripDyn();renderTripCard();var sb2=document.querySelector('#tSwitch .on');if(sb2)sb2.textContent=(t.season==='kis'?'❄️':'☀️')+' '+(t.dest||'Yeni tatil')}
+    return}
   var rmd=ev.target.closest('[data-rmode]');
   if(rmd){var nm=rmd.getAttribute('data-rmode'),em2=(t.items||[]).every(function(i){return !(i.total>0)});t.mode=nm;if(em2)t.items=seedItems(nm);save();renderTrip();renderTripCard();return}
   if(ev.target.closest('#tRtAdd')){rtAddToBudget(t);return}
@@ -4620,6 +4639,7 @@ $('tBody').addEventListener('click',function(ev){
     if(teArm!==id){teArm=id;renderTripDyn();setTimeout(function(){if(teArm===id){teArm=null;renderTripDyn()}},2500);return}
     teArm=null;markUndo();if(k==='n')S.entries=S.entries.filter(function(e){return e.id!==id});else S.cards=S.cards.filter(function(c){return c.id!==id});
     save();render();renderTripDyn();toast('Silindi',true);return}
+  if(ev.target.closest('#tClose2')){t.archived=true;t.closed=true;t.draft=false;save();closeTripScreen(true);toast('Tatil kapatıldı, arşivde');return}
   if(ev.target.closest('#tArch')){t.archived=true;t.draft=false;save();closeTripScreen(true);toast('Tatil arşive alındı');return}
   if(ev.target.closest('#tDel')){
     var d=$('tDel');if(!tDelArm){tDelArm=true;d.textContent='Silmek için tekrar dokun';setTimeout(function(){tDelArm=false;if($('tDel'))$('tDel').textContent='Tatili sil'},2500);return}
@@ -4635,9 +4655,9 @@ $('tBody').addEventListener('change',function(ev){
 $('tBody').addEventListener('input',function(ev){
   var t=tripById(curTrip);if(!t)return;
   if(ev.target.id==='tBackN'){var tt=tripById(curTrip),ss=tripSettle(tt,tripSpent(tt)),nn=parseInt(ev.target.value,10)||0,ba=$('tBackAmt');if(ba&&nn>0&&bkKind==='kon'&&ss.konPer>0&&!ba.value)ba.placeholder='Önerilen: '+fmt(nn*ss.konPer)}
-  if(ev.target.id==='tFrom'){t.from=ev.target.value;lsSet('butcem_from',t.from);save();renderRouteRes();return}
+  if(ev.target.id==='tFrom'){showSug('tFrom');t.from=ev.target.value;lsSet('butcem_from',t.from);save();renderRouteRes();return}
   if(ev.target.id==='tCons'){var cv=parseNum(ev.target.value);if(cv>0){t.cons=cv;save();renderRouteRes()}return}
-  if(ev.target.id==='tDest'){t.dest=ev.target.value;save();renderTripDyn();renderTripCard();var sb=document.querySelector('#tSwitch .on');if(sb)sb.textContent=(t.season==='kis'?'❄️':'☀️')+' '+(t.dest||'Yeni tatil')}
+  if(ev.target.id==='tDest'){showSug('tDest');t.dest=ev.target.value;save();renderTripDyn();renderTripCard();var sb=document.querySelector('#tSwitch .on');if(sb)sb.textContent=(t.season==='kis'?'❄️':'☀️')+' '+(t.dest||'Yeni tatil')}
   if(ev.target.id==='tStart'||ev.target.id==='tEnd'){
     var s1=$('tStart').value,e1=$('tEnd').value;
     if(s1){t.start=s1;if(!e1||e1<s1){t.end=s1;$('tEnd').value=s1}}
