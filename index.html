@@ -2445,7 +2445,28 @@ bindAmt($('uAmt'));$('uAmt').oninput=fmtAmt;
 $('uX').onclick=closeSub;$('uCancel').onclick=closeSub;
 $('ubg').onclick=function(ev){if(ev.target===$('ubg'))closeSub()};
 $('bNewSub').onclick=function(){openSub()};
-$('subList').onclick=function(ev){var b=ev.target.closest('[data-sid]');if(b)openSub(b.getAttribute('data-sid'))};
+function subCardInfo(id){
+  var p=S.plans.filter(function(x){return x.id===id})[0];
+  if(!p||!(p.cardFrom&&!p.cardTo&&cdById(p.cardId)))return false;
+  var k=mk(cur),nk=nowK(),t=today(),cd=cdById(p.cardId),date=payDate(p,k),rec=subCardRec(p,k);
+  if(k<p.start||(p.end&&k>p.end)||k<p.cardFrom)return false;
+  var key=stmtKey(rec||{cardId:p.cardId,date:date}),cu=stmtCut(key,p.cardId),du=stmtDue(key,p.cardId),h='';
+  var done=!!(rec||date<=t);
+  h+='<div style="line-height:1.7;text-align:left">💳 <b>'+esc(cd.name)+'</b> kartından'+(done?' çekildi':' çekilecek')+': <b>'+esc(dmName(date))+'</b><br>';
+  if(rec&&rec.paid)h+='✅ Bu ekstre ödendi, bakiyenden düştü.';
+  else if(cu&&du){
+    h+='✂️ Ekstre <b>'+esc(dmName(cu))+'</b> günü '+(cu<=t?'kesildi':'kesilecek')+'<br>';
+    var po=rec&&rec.payOn;
+    h+='📅 Son ödeme günü: <b>'+esc(dmName(po||du))+'</b><br>';
+    h+='💵 Paran <b>'+esc(key===nk?'bu ayki ekstrende':monthName(key)+' ekstresinde')+'</b> bakiyenden çıkar.';
+    var g=stmtGroups().filter(function(x){return x.cid===p.cardId&&x.k===key})[0];
+    if(g)h+='<br><span style="color:var(--mut)">Bu ekstrenin toplamı: '+esc(fmt(g.sum,true))+'</span>';
+  }else h+='<span style="color:var(--mut)">Kartın kesim ve son ödeme günü girilmemiş. Yan menüdeki Kartlarım’dan ekleyebilirsin.</span>';
+  h+='</div>';
+  askBox(p.name+' · '+fmt(p.amt,true),h,[{t:'Düzenle',c:'sec',f:function(){openSub(id)}},{t:'Kapat'}]);
+  return true;
+}
+$('subList').onclick=function(ev){var b=ev.target.closest('[data-sid]');if(!b)return;var id=b.getAttribute('data-sid');if(!subCardInfo(id))openSub(id)};
 $('uSave').onclick=function(){
   var amt=parseNum($('uAmt').value),day=parseInt($('uDay').value,10),st=$('uStart').value,name=$('uName').value.trim();
   if(!name){toast('Bir ad yaz');$('uName').focus();return}
@@ -2564,10 +2585,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='1.45';
+var APP_VER='1.46';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+  {v:'1.46',date:'Kasım 2026',title:'Kartlı aboneliğe dokununca bilgi',items:[['💳','Kartla ödenen aboneliğe dokununca ekstre bilgisi','Hangi karttan çekildiği, ekstrenin kesim günü, son ödeme günü ve paranın hangi ekstrede çıkacağı hemen görünüyor. Düzenlemek için pencerede “Düzenle” var. Nakit ödenen abonelikler eskisi gibi doğrudan düzenlemeye gidiyor.',1]]},
   {v:'1.45',date:'Kasım 2026',title:'Kart ekstreleri daha akıllı',items:[['📆','Tahmin ekstre gününe göre hesaplanıyor','Kartla yaptığın harcamalar artık bu ay değil, ekstrenin gerçekten çıkacağı ay giderine sayılıyor. Ay sonu kesilen kartlarda “bu ay sıkışık” uyarısı gereksiz çıkmıyor.',1],['🔔','Ekstre hatırlatması','Ekstrenin son ödeme gününe 3 gün kala uygulama açılınca ödenecek tutarı hatırlatıyor. Bir gün içinde bir kez sorar.',1],['💳','Kartla mı ödüyorsun?','Kartın ekliyse ve bir aboneliği karta bağlamadıysan, uygulama bir kere sorar. Evet dersen karttan çekilir, nakit bakiyen düşmez. Hayır dersen bir daha sormaz.',1]]},
   {v:'1.44',date:'Kasım 2026',title:'Kartla ödenenler net görünüyor',items:[['💳','Kartla ödenen faturalar ve abonelikler','Faturalar ve abonelik satırlarında hangi kartla ödendiği ve paranın hangi ekstrede çıkacağı yazıyor. Örneğin “Aralık ekstresinde çıkar”. Ay sonu ve ay ortası kesilen kartlar ayrı ayrı doğru hesaplanıyor.',1],['🧾','Kartla ödediklerin kutusu','Ödemeler > Faturalar’ın en üstünde, bu ay kartla ödediklerinin hangi ekstrede çıkacağını gösteren küçük bir kutu var. Bakiyenden bir şey düşmez, sadece bilgi.',1],['💡','Faturalar dökümü tamamlandı','Özet’te Faturalar’a dokununca kartla ödenen faturalar da 💳 simgesiyle listede. Toplama eklenmiyor, çünkü zaten kart ekstresinde sayılıyor. Ödenmemiş faturalar da “bekliyor” olarak görünüyor.',1]]},
   {v:'1.43.2',date:'Kasım 2026',title:'Android’de tarayıcıdan devam',items:[['🤖','Android’de tarayıcıdan devam edebilirsin','Test uyarısında artık iPhone’da ana ekrana eklemenin şart, Android’de ise tarayıcı üzerinden devam etmenin serbest olduğu yazıyor. Uyarı Android’de bir kere çıkıyor.',1]]},
