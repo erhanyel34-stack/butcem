@@ -606,6 +606,13 @@ body.pl-basic #dr [data-dr]:not([data-dr=set]):not([data-dr=plan]){display:none!
 .tlink{display:block;width:100%;text-align:center;color:var(--mut);font-size:13px;padding:14px 0 0}
 .newb{font-size:9.5px;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;border-radius:8px;padding:2px 6px;margin-left:6px;letter-spacing:.4px;vertical-align:1px}
 .tsug{display:flex;flex-wrap:wrap;gap:6px;margin:-4px 0 10px}.tsug:empty{display:none}.tsug button{background:#ffffff14;border:1px solid #ffffff22;border-radius:12px;padding:8px 11px;font-size:13px;font-weight:700;color:inherit}.tsug button small{font-weight:500;color:#aeb4e6;margin-left:5px;font-size:11px}
+#tFeas,#tMoti{display:none!important}
+.nt{display:flex;align-items:center;gap:6px}
+.rts{display:flex;align-items:center;gap:8px;margin-top:9px;font-size:13px;font-weight:800}.rts>span:not(.rtl){white-space:nowrap}
+.rtl{position:relative;flex:1;min-width:30px;height:20px;border-top:2px dashed #ffffff80;top:-2px}.rtl b{position:absolute;top:-14px;left:0;font-size:19px;animation:rtmv 4.5s ease-in-out infinite alternate}.rtl b.flip{transform:scaleX(-1)}
+@keyframes rtmv{from{left:0}to{left:calc(100% - 20px)}}
+.thero .lmk{position:absolute;left:0;right:0;top:44px;width:100%;height:120px;z-index:2;pointer-events:none;filter:drop-shadow(0 3px 8px #0005)}
+.lmf{animation:lmfl 5s ease-in-out infinite alternate}@keyframes lmfl{from{transform:translateY(0)}to{transform:translateY(-4px)}}
 .trhead{display:flex;flex-direction:column;gap:2px;margin-bottom:10px}.trhead b{font-size:17px}.trhead span{font-size:12.5px;color:#aeb4e6}
 .trlist{display:flex;flex-direction:column;gap:7px;margin-bottom:10px}
 .trm{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#ffffff0d;border:1.5px solid transparent;border-radius:16px;padding:10px 12px;color:inherit;font:inherit}
@@ -619,8 +626,22 @@ body.pl-basic #dr [data-dr]:not([data-dr=set]):not([data-dr=plan]){display:none!
 
 .tnote{font-size:12.5px;color:#aeb4e6;margin-top:8px;line-height:1.45}
 .sumhd{text-align:center;padding:4px 0 12px}.sumhd small{font-size:12px;font-weight:800;letter-spacing:1px;color:#ffe9b8}.sumhd h3{margin:6px 0;font-size:22px}
-.art .sunc{animation:sunp 4s ease-in-out infinite;transform-origin:215px 112px}
-@keyframes sunp{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.art .sunc{animation:sunp 3.6s ease-in-out infinite;transform-origin:215px 112px}
+@keyframes sunp{0%,100%{transform:scale(.96)}50%{transform:scale(1.1)}}
+.art .sung{animation:sung 3.6s ease-in-out infinite}
+@keyframes sung{0%,100%{opacity:.25}50%{opacity:1}}
+.art .sunr{animation:sunrot 40s linear infinite;transform-origin:215px 112px}
+@keyframes sunrot{to{transform:rotate(360deg)}}
+.art .spk circle{animation:tw 2.4s ease-in-out infinite}.art .spk circle:nth-child(2n){animation-delay:.8s}.art .spk circle:nth-child(3n){animation-delay:1.5s}
+.art .moonc{animation:moonp 5s ease-in-out infinite}
+@keyframes moonp{0%,100%{opacity:.55}50%{opacity:1}}
+.art .moong{animation:moong 5s ease-in-out infinite}
+@keyframes moong{0%,100%{opacity:.1;transform:scale(.85)}50%{opacity:1;transform:scale(1.08)}}
+.art .moong{transform-origin:318px 56px}
+.art .stw circle{animation:tw 2.8s ease-in-out infinite}.art .stw circle:nth-child(2n){animation-delay:.9s}.art .stw circle:nth-child(3n){animation-delay:1.7s}
+@keyframes tw{0%,100%{opacity:.15}50%{opacity:1}}
+.art .aur{animation:aur 7s ease-in-out infinite alternate}
+@keyframes aur{from{opacity:.5;transform:translateX(-10px)}to{opacity:1;transform:translateX(10px)}}
 .art .wv1{animation:wav 5s ease-in-out infinite alternate}.art .wv2{animation:wav 7s ease-in-out infinite alternate-reverse}
 @keyframes wav{from{transform:translateX(-12px)}to{transform:translateX(12px)}}
 .art .plane{animation:fly 9s linear infinite}
@@ -639,7 +660,7 @@ body.pl-basic #dr [data-dr]:not([data-dr=set]):not([data-dr=plan]){display:none!
 .confetti i{position:absolute;top:-20px;width:9px;height:14px;border-radius:3px;opacity:.95;animation:confall 2.4s ease-in forwards}
 @keyframes confall{to{transform:translateY(520px) rotate(540deg);opacity:0}}
 
-.mini3tx{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}.mini3tx small{display:block;font-size:10.5px;color:#aeb4e6}.mini3tx b{font-size:12.5px;font-family:var(--num);white-space:nowrap}
+.mini3tx{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center}.mini3tx small{display:block;font-size:10.5px;color:#aeb4e6}.mini3tx b{font-size:12.5px;font-family:var(--num);white-space:nowrap}
 .cspw{display:flex;flex-wrap:wrap;gap:6px}.cspc{font-size:12.5px;background:#a37cff22;color:#d8ccff;border-radius:10px;padding:4px 10px;font-weight:600}
 
 .obdots{display:flex;gap:6px;justify-content:center;margin:2px 0 14px}.obdots i{width:7px;height:7px;border-radius:50%;background:#ffffff55;transition:all .25s}.obdots i.on{width:20px;background:#fff;border-radius:4px}
@@ -2634,10 +2655,16 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.2.2';
+var APP_VER='2.3.1';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+  {v:'2.3.1',date:'Kasım 2026',title:'Şehir silüetleri ve canlı gökyüzü',items:[['🏙️','Şehir silüetleri','Tatil kartında çıkış şehri solda soluk, varış şehri sağda belirgin: İstanbul köprü ve Galata, Antalya saat kulesi ve Hadrian Kapısı, İzmir saat kulesi, Ankara Anıtkabir ve daha fazlası.',1],['☀️','Parlayan güneş, yanıp sönen ay','Yaz tatilinde güneş ışınlarıyla parlıyor, kış tatilinde ay nefes alır gibi yanıp sönüyor, yıldızlar göz kırpıyor.',1],['🏔️','Trabzon düzeldi','Sümela Manastırı artık sissiz, kayalığın içinde net görünüyor.',0]]},
+{v:'2.3',date:'Kasım 2026',title:'Tatil ekranı sadeleşti',items:[
+    ['✂️','Daha sade Tatil ekranı','Ayırabilir miyiz ve Tatil birikimim kutuları kaldırıldı. Üstte sadece senin payın, harcanan ve kalan görünür.',1],
+    ['⚡','Kendiliğinden tahmin','Nereden ve Nereye seçince ya da ulaşımı değiştirince yakıt, otoyol ve bilet tahmini bütçeye kendiliğinden yazılır. Elle düzelttiğin kaleme dokunulmaz.',1],
+    ['🏰','Şehir resimleri','Tatil ekranının üstünde gideceğin yerin simgesi çıkar: Antalya’da Yivli Minare, Bodrum’da kale, İzmir’de Saat Kulesi, Roma’da Kolezyum. Çıkış şehrin de solda küçük görünür; arada yolun ve aracın gider.',1],
+    ['🍽️','Yeme-içme tahmini yok','Yeme-içmeyi herkes kendi bilir; artık tahmin yazmıyoruz. Havalimanı ulaşımı da kaldırıldı, çünkü çok değişken.',1]]},
   {v:'2.2.2',date:'Kasım 2026',title:'Yeni sürüm uyarısı',items:[['🔄','Yeni sürüm uyarısı','Yeni bir sürüm yayınlanınca uygulama açılışta haber verir; Yenile’ye dokunman yeter. Verilerin silinmez.',1]]},
   {v:'2.2.1',date:'Kasım 2026',title:'Yer adı önerileri',items:[['🔎','Yazarken öneri','Nereden ve Nereye alanına birkaç harf yazınca eşleşen yerler altında çıkar; dokunman yeter.',1]]},
   {v:'2.2',date:'Kasım 2026',title:'Tatil bitince kapanış ve daha fazla yer',items:[['🏖️','Tatil dönüşü özeti','Tatil bitince Ana sayfada hatırlatma çıkar. Tahminin ile gerçek harcamanı karşılaştırır, tamamsa Tatili kapat dersin; tatil arşive geçer.',1],['🗺️','Daha fazla şehir','Tatil planlayıcıya yaklaşık 50 yeni yer eklendi: Datça, Göcek, Belek, Uzungöl, Venedik, Münih, Mekke ve daha fazlası.',1]]},
@@ -4255,8 +4282,8 @@ function tripFeas(t){
   return r;
 }
 /* tatil resimleri */
-function artSummer(){return '<svg class="art" viewBox="0 0 390 250" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="skS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a4d"/><stop offset=".55" stop-color="#ff5f7a"/><stop offset="1" stop-color="#b44fc9"/></linearGradient><linearGradient id="seaS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#27d3c3"/><stop offset="1" stop-color="#0e6f9a"/></linearGradient><radialGradient id="sunS"><stop offset="0" stop-color="#fff6c8"/><stop offset=".5" stop-color="#ffd35a"/><stop offset="1" stop-color="#ffd35a00"/></radialGradient></defs><rect width="390" height="250" fill="url(#skS)"/><g class="sunc"><circle cx="215" cy="112" r="92" fill="url(#sunS)"/><circle cx="215" cy="112" r="40" fill="#fff0a8"/></g><g fill="#ffffffb0"><path d="M40 70c10-12 24-12 32 0 12-6 24 2 22 12H28c-6-4-2-10 12-12z"/><path d="M150 46c8-9 18-9 25 0 9-4 17 2 16 9h-52c-4-3-1-7 11-9z" opacity=".7"/></g><path d="M0 150 Q 40 140 80 150 T 160 150 T 240 150 T 320 150 T 390 148 V250H0Z" fill="url(#seaS)"/><g class="wv1"><path d="M-20 175 Q 30 165 80 175 T 180 175 T 280 175 T 380 172 T 420 172 V250H-20Z" fill="#1aa3ae" opacity=".8"/></g><g class="wv2"><path d="M-20 205 Q 40 192 100 205 T 220 205 T 340 202 T 420 202 V250H-20Z" fill="#0b5f86"/></g><g transform="translate(300 34) scale(.9)"><path d="M10 150 C 14 110 22 80 40 50" stroke="#3a1f2e" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#1f6b4a"><path d="M40 50 C 10 38 -4 52 -8 66 C 14 52 26 52 40 50z"/><path d="M40 50 C 62 30 84 36 94 50 C 70 44 56 48 40 50z"/><path d="M40 50 C 40 20 56 6 76 8 C 58 20 52 34 40 50z"/><path d="M40 50 C 24 24 6 20 -6 30 C 12 32 28 38 40 50z"/></g></g><g transform="translate(292 126) scale(.8)"><path d="M0 28 H46 L38 40 H8Z" fill="#fff"/><path d="M22 28 V-6 L42 24Z" fill="#ffe3a0"/><path d="M20 28 V0 L4 24Z" fill="#ff9ab0"/></g><g stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" opacity=".9"><path d="M200 60 q5-6 10 0 q5-6 10 0"/><path d="M228 84 q4-5 8 0 q4-5 8 0"/></g></svg>'}
-function artWinter(){return '<svg class="art" viewBox="0 0 390 250" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="nkW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#101a52"/><stop offset=".6" stop-color="#2d58b8"/><stop offset="1" stop-color="#8cc8ff"/></linearGradient><linearGradient id="auW" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3ddc97" stop-opacity="0"/><stop offset=".5" stop-color="#7affd0" stop-opacity=".55"/><stop offset="1" stop-color="#9a7dff" stop-opacity="0"/></linearGradient></defs><rect width="390" height="250" fill="url(#nkW)"/><path d="M0 70 C 90 20 180 110 260 50 S 360 40 390 60 V100 C 300 80 220 150 140 100 S 40 110 0 110Z" fill="url(#auW)"/><circle cx="320" cy="56" r="24" fill="#fff6dc"/><circle cx="330" cy="50" r="22" fill="#2a4aa8"/><g fill="#fff" opacity=".9"><circle cx="40" cy="36" r="1.6"/><circle cx="96" cy="60" r="1.2"/><circle cx="160" cy="28" r="1.8"/><circle cx="230" cy="70" r="1.2"/><circle cx="270" cy="30" r="1.5"/><circle cx="60" cy="100" r="1.2"/></g><path d="M-10 190 L60 110 L100 150 L150 80 L210 160 L250 120 L310 170 L400 100 V250H-10Z" fill="#cfe5ff"/><path d="M150 80 L172 108 L158 104 L150 116 L140 100 L128 106Z" fill="#fff"/><path d="M60 110 L80 134 L68 130 L60 140 L50 128 L40 134Z" fill="#fff"/><path d="M-10 215 L70 165 L130 205 L200 160 L280 210 L350 170 L400 200 V250H-10Z" fill="#5d86d1"/><path d="M0 232 Q 100 214 200 230 T 390 224 V250H0Z" fill="#eaf4ff"/><g fill="#1a4d4a"><path d="M330 236 l14 -42 l14 42z"/><path d="M352 236 l10 -30 l10 30z"/></g><g fill="#fff"><path d="M336 214 l8-22 l8 22z" opacity=".85"/></g><g class="plane"><g transform="translate(0 54) rotate(-14)"><path d="M0 8 L34 4 L38 0 L40 5 L48 6 L40 9 L38 14 L34 10 L0 12Z" fill="#fff"/></g></g></svg>'}
+function artSummer(){return '<svg class="art" viewBox="0 0 390 250" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="skS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a4d"/><stop offset=".55" stop-color="#ff5f7a"/><stop offset="1" stop-color="#b44fc9"/></linearGradient><linearGradient id="seaS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#27d3c3"/><stop offset="1" stop-color="#0e6f9a"/></linearGradient><radialGradient id="sunS"><stop offset="0" stop-color="#fff6c8"/><stop offset=".5" stop-color="#ffd35a"/><stop offset="1" stop-color="#ffd35a00"/></radialGradient></defs><rect width="390" height="250" fill="url(#skS)"/><g class="sunr" fill="#fff4b8" opacity=".55"><rect x="213" y="6" width="4" height="30" rx="2" transform="rotate(0 215 112)"/><rect x="213" y="6" width="4" height="30" rx="2" transform="rotate(30 215 112)"/><rect x="213" y="6" width="4" height="30" rx="2" transform="rotate(60 215 112)"/><rect x="213" y="6" width="4" height="30" rx="2" transform="rotate(90 215 112)"/><rect x="213" y="6" width="4" height="30" rx="2" transform="rotate(120 215 112)"/><rect x="213" y="6" width="4" height="30" rx="2" transform="rotate(150 215 112)"/><rect x="213" y="6" width="4" height="30" rx="2" transform="rotate(180 215 112)"/><rect x="213" y="6" width="4" height="30" rx="2" transform="rotate(210 215 112)"/><rect x="213" y="6" width="4" height="30" rx="2" transform="rotate(240 215 112)"/><rect x="213" y="6" width="4" height="30" rx="2" transform="rotate(270 215 112)"/><rect x="213" y="6" width="4" height="30" rx="2" transform="rotate(300 215 112)"/><rect x="213" y="6" width="4" height="30" rx="2" transform="rotate(330 215 112)"/></g><g class="sunc"><circle cx="215" cy="112" r="110" fill="url(#sunS)" class="sung"/><circle cx="215" cy="112" r="92" fill="url(#sunS)"/><circle cx="215" cy="112" r="40" fill="#fff0a8"/></g><g fill="#fff" class="spk"><circle cx="150" cy="170" r="1.8"/><circle cx="215" cy="160" r="2"/><circle cx="270" cy="176" r="1.6"/><circle cx="110" cy="192" r="1.5"/><circle cx="330" cy="190" r="1.8"/></g><g fill="#ffffffb0"><path d="M40 70c10-12 24-12 32 0 12-6 24 2 22 12H28c-6-4-2-10 12-12z"/><path d="M150 46c8-9 18-9 25 0 9-4 17 2 16 9h-52c-4-3-1-7 11-9z" opacity=".7"/></g><path d="M0 150 Q 40 140 80 150 T 160 150 T 240 150 T 320 150 T 390 148 V250H0Z" fill="url(#seaS)"/><g class="wv1"><path d="M-20 175 Q 30 165 80 175 T 180 175 T 280 175 T 380 172 T 420 172 V250H-20Z" fill="#1aa3ae" opacity=".8"/></g><g class="wv2"><path d="M-20 205 Q 40 192 100 205 T 220 205 T 340 202 T 420 202 V250H-20Z" fill="#0b5f86"/></g><g transform="translate(300 34) scale(.9)"><path d="M10 150 C 14 110 22 80 40 50" stroke="#3a1f2e" stroke-width="7" fill="none" stroke-linecap="round"/><g fill="#1f6b4a"><path d="M40 50 C 10 38 -4 52 -8 66 C 14 52 26 52 40 50z"/><path d="M40 50 C 62 30 84 36 94 50 C 70 44 56 48 40 50z"/><path d="M40 50 C 40 20 56 6 76 8 C 58 20 52 34 40 50z"/><path d="M40 50 C 24 24 6 20 -6 30 C 12 32 28 38 40 50z"/></g></g><g transform="translate(292 126) scale(.8)"><path d="M0 28 H46 L38 40 H8Z" fill="#fff"/><path d="M22 28 V-6 L42 24Z" fill="#ffe3a0"/><path d="M20 28 V0 L4 24Z" fill="#ff9ab0"/></g><g stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" opacity=".9"><path d="M200 60 q5-6 10 0 q5-6 10 0"/><path d="M228 84 q4-5 8 0 q4-5 8 0"/></g></svg>'}
+function artWinter(){return '<svg class="art" viewBox="0 0 390 250" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="nkW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#101a52"/><stop offset=".6" stop-color="#2d58b8"/><stop offset="1" stop-color="#8cc8ff"/></linearGradient><linearGradient id="auW" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3ddc97" stop-opacity="0"/><stop offset=".5" stop-color="#7affd0" stop-opacity=".55"/><stop offset="1" stop-color="#9a7dff" stop-opacity="0"/></linearGradient><radialGradient id="mnW"><stop offset="0" stop-color="#fff6dc" stop-opacity=".9"/><stop offset=".45" stop-color="#cfe0ff" stop-opacity=".35"/><stop offset="1" stop-color="#cfe0ff" stop-opacity="0"/></radialGradient></defs><rect width="390" height="250" fill="url(#nkW)"/><path class="aur" d="M0 70 C 90 20 180 110 260 50 S 360 40 390 60 V100 C 300 80 220 150 140 100 S 40 110 0 110Z" fill="url(#auW)"/><g class="moong"><circle cx="318" cy="56" r="56" fill="url(#mnW)"/></g><g class="moonc"><circle cx="320" cy="56" r="24" fill="#fff6dc"/><circle cx="330" cy="50" r="22" fill="#2a4aa8"/></g><g fill="#fff" class="stw"><circle cx="40" cy="36" r="1.6"/><circle cx="96" cy="60" r="1.2"/><circle cx="160" cy="28" r="1.8"/><circle cx="230" cy="70" r="1.2"/><circle cx="270" cy="30" r="1.5"/><circle cx="60" cy="100" r="1.2"/></g><path d="M-10 190 L60 110 L100 150 L150 80 L210 160 L250 120 L310 170 L400 100 V250H-10Z" fill="#cfe5ff"/><path d="M150 80 L172 108 L158 104 L150 116 L140 100 L128 106Z" fill="#fff"/><path d="M60 110 L80 134 L68 130 L60 140 L50 128 L40 134Z" fill="#fff"/><path d="M-10 215 L70 165 L130 205 L200 160 L280 210 L350 170 L400 200 V250H-10Z" fill="#5d86d1"/><path d="M0 232 Q 100 214 200 230 T 390 224 V250H0Z" fill="#eaf4ff"/><g fill="#1a4d4a"><path d="M330 236 l14 -42 l14 42z"/><path d="M352 236 l10 -30 l10 30z"/></g><g fill="#fff"><path d="M336 214 l8-22 l8 22z" opacity=".85"/></g><g class="plane"><g transform="translate(0 54) rotate(-14)"><path d="M0 8 L34 4 L38 0 L40 5 L48 6 L40 9 L38 14 L34 10 L0 12Z" fill="#fff"/></g></g></svg>'}
 function snowInit(on){
   var b=$('snowbox');if(!on){b.innerHTML='';return}
   var h='';for(var i=0;i<22;i++){var sz=3+Math.random()*4;h+='<i style="left:'+(Math.random()*100).toFixed(1)+'%;width:'+sz.toFixed(1)+'px;height:'+sz.toFixed(1)+'px;animation-duration:'+(7+Math.random()*9).toFixed(1)+'s;animation-delay:-'+(Math.random()*12).toFixed(1)+'s"></i>'}
@@ -4272,7 +4299,7 @@ function renderTripCard(){
   $('tripHead').textContent='Tatil · '+(t.dest||'Yeni tatil');
   $('tripRight').textContent=right;
   var f=tripFeas(t),lab={ok:'Rahat',wr:'Sıkışık',bd:'Ek destek',none:'—'}[f.lv];
-  $('tripMini').innerHTML='<div class="mini3"><div><small>Senin payın</small><b>'+esc(fmt(tripShare(t)))+'</b></div><div><small>Ayırdığın</small><b>'+esc(fmt(t.saved||0))+'</b></div><div><small>Durum</small><b>'+lab+'</b></div></div><div class="note" style="color:#fff;margin-top:8px">Tatil ekranını açmak için dokun →</div>';
+  $('tripMini').innerHTML='<div class="mini3"><div><small>Senin payın</small><b>'+esc(fmt(tripShare(t)))+'</b></div><div><small>Harcanan</small><b>'+esc(fmt(tripSpent(t).share))+'</b></div><div><small>Kalan</small><b>'+esc(fmt(Math.max(0,tripShare(t)-tripSpent(t).share)))+'</b></div></div><div class="note" style="color:#fff;margin-top:8px">Tatil ekranını açmak için dokun →</div>';
 }
 function tripBanner(){
   var b=$('tripBanner'),t=today(),show=false,tr=null;
@@ -4372,9 +4399,9 @@ function rtCalc(t){
   else{
     var a1=plIndex()[nrm(apA)],b1=plIndex()[nrm(apB)],fl=hav(a1,b1),pr=dis?(P.ucak.disTaban+P.ucak.disKm*fl):(P.ucak.taban+P.ucak.km*fl);
     if(summer)pr*=P.ucak.yazCarpan;
-    var viaB=(!dis&&apB!==B.name),tr=(apA!==A.name||viaB)?600:300,ft=0.6+fl/720;
-    var tot2=(pr*2+tr)*p;
-    M.ucak={ok:true,time:ft,total:tot2,pp:tot2/p,lines:[['✈️ Uçak biletleri · gidiş-dönüş × '+p+' kişi',pr*2*p],['🚕 Havalimanı ulaşımı',tr*p]],note:(viaB?apB+' havalimanına uçulur, '+B.name+'\'a yol ile geçilir. ':'')+'Uçuş süresi, havalimanı bekleme dahil değil.',parts:{pp:pr*2,tr:tr}};
+    var viaB=(!dis&&apB!==B.name),ft=0.6+fl/720;
+    var tot2=pr*2*p;
+    M.ucak={ok:true,time:ft,total:tot2,pp:tot2/p,lines:[['✈️ Uçak biletleri · gidiş-dönüş × '+p+' kişi',tot2]],note:(viaB?apB+' havalimanına uçulur, '+B.name+'\'a yol ile geçilir. ':'')+'Havalimanı ulaşımı ve bagaj dahil değil.',parts:{pp:pr*2}};
   }
   // otobüs & tren (yalnız yurt içi)
   if(dis){M.otobus={ok:false,why:'Yurt dışında yok'};M.tren={ok:false,why:'Yurt dışında yok'}}
@@ -4417,20 +4444,19 @@ function renderRouteRes(){
   [['arac','🚗','Araba'],['ucak','✈️','Uçak'],['otobus','🚌','Otobüs'],['tren','🚆','Tren']].forEach(function(m){
     if(R.dis&&(m[0]==='otobus'||m[0]==='tren'))return;
     var x=R.M[m[0]];
-    if(!x.ok){h+='<div class="trm off"><span class="ic">'+m[1]+'</span><span class="nm">'+m[2]+'<small>'+esc(x.why)+'</small></span></div>';return}
-    h+='<button type="button" class="trm'+(m[0]===sel?' on':'')+'" data-rmode="'+m[0]+'"><span class="ic">'+m[1]+'</span><span class="nm">'+m[2]+(R.best===m[0]?' <i class="trb">En uygun</i>':'')+'<small>'+durTxt(x.time)+(m[0]==='ucak'?' uçuş':'')+'</small></span><span class="pr"><b>'+esc(fmt(r50(x.pp)))+'</b><small>kişi başı'+(R.p>1?' · toplam '+esc(fmt(r50(x.total))):'')+'</small></span></button>';
+    if(!x.ok){h+='<div class="trm off"><span class="ic">'+m[1]+'</span><span class="nm"><span class="nt">'+m[2]+'</span><small>'+esc(x.why)+'</small></span></div>';return}
+    h+='<button type="button" class="trm'+(m[0]===sel?' on':'')+'" data-rmode="'+m[0]+'"><span class="ic">'+m[1]+'</span><span class="nm"><span class="nt">'+m[2]+(R.best===m[0]?'<i class="trb">En uygun</i>':'')+'</span><small>'+durTxt(x.time)+(m[0]==='ucak'?' uçuş':'')+'</small></span><span class="pr"><b>'+esc(fmt(r50(x.pp)))+'</b><small>kişi başı'+(R.p>1?' · toplam '+esc(fmt(r50(x.total))):'')+'</small></span></button>';
   });
   h+='</div>';
   if(S0&&S0.ok){
     h+='<div class="trdet">';
-    S0.lines.forEach(function(l){h+='<div><span>'+l[0]+'</span><b>'+esc(fmt(r50(l[1])))+'</b></div>'});
-    h+='<div><span>🍽️ Yeme-içme · '+R.days+' gün × '+R.p+' kişi</span><b>'+esc(fmt(r50(R.mealPP*R.p)))+'</b></div>';
-    var tt=r50(S0.total)+r50(R.mealPP*R.p);
-    h+='<div class="trsum"><span>Tahmini toplam<small>konaklama hariç · kişi başı '+esc(fmt(r50(tt/R.p)))+'</small></span><b>'+esc(fmt(tt))+(cur?'<small>≈ '+esc(fmtC(tt,cur))+'</small>':'')+'</b></div></div>';
+    S0.lines.forEach(function(l){h+='<div><span>'+l[0]+'</span><b>'+esc(fmt(r50(l[1])))+(cur?'<small>≈ '+esc(fmtC(l[1],cur))+'</small>':'')+'</b></div>'});
+    if(S0.lines.length>1)h+='<div class="trsum"><span>Toplam</span><b>'+esc(fmt(r50(S0.total)))+(cur?'<small>≈ '+esc(fmtC(S0.total,cur))+'</small>':'')+'</b></div>';
+    h+='</div>';
     if(S0.note)h+='<div class="tnote">'+esc(S0.note)+'</div>';
   }
-  if(cur){var cr=curRate(cur);h+='<div class="trcur">💱 1 '+CSYM[cur]+' = '+cr.v.toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2})+' ₺'+(cr.live?'':' · kur alınamadı, yaklaşık')+' · günlük yeme-içme ≈ '+esc(fmtC(R.mealDay*1,cur))+'/kişi</div>'}
-  h+='<button type="button" class="tbtn" id="tRtAdd" style="margin-top:10px">➕ Bütçeye ekle</button><div class="tnote">Tahmin fiyatlar '+esc(dtxt)+' itibarıyladır; gerçek fiyatlar farklı olabilir. Bütçe kalemlerinden istediğin gibi düzeltebilirsin.</div>';
+  if(cur){var cr=curRate(cur);h+='<div class="trcur">💱 1 '+CSYM[cur]+' = '+cr.v.toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2})+' ₺'+(cr.live?'':' · kur alınamadı, yaklaşık')+'</div>'}
+  h+='<button type="button" class="tbtn" id="tRtAdd" style="margin-top:10px">➕ Bütçeye yaz</button><div class="tnote">Fiyatlar '+esc(dtxt)+' itibarıyla tahmindir.</div>';
   el.innerHTML=h;
   renderLodge();
 }
@@ -4451,29 +4477,94 @@ function renderLodge(){
   }
   el.innerHTML=h;
 }
-function rtAddToBudget(t){
-  var R=rtCalc(t);if(!R.ok){toast('Önce nereden–nereye yaz');return}
-  var sel=rtMode(t,R),S0=R.M[sel];if(!S0||!S0.ok){toast('Bu ulaşım seçeneği yok');return}
+function rtWrite(t,force){
+  var R=rtCalc(t);if(!R.ok)return false;
+  var sel=rtMode(t,R),S0=R.M[sel];if(!S0||!S0.ok)return false;
   t.mode=sel;t.items=t.items||[];
-  var set=[],trLabels=['Yakıt','Otoyol & köprü','Uçak biletleri','Havalimanı ulaşımı','Otobüs bileti','Tren bileti'];
+  var set=[],trLabels=['Yakıt','Otoyol & köprü','Uçak biletleri','Havalimanı ulaşımı','Otobüs bileti','Tren bileti'],ch=false;
   if(sel==='arac'){set.push(['Yakıt','⛽',r50(S0.parts.yakit),false]);set.push(['Otoyol & köprü','🛣️',r50(S0.parts.toll),false])}
-  else if(sel==='ucak'){set.push(['Uçak biletleri','✈️',r50(S0.parts.pp),true]);set.push(['Havalimanı ulaşımı','🚕',r50(S0.parts.tr),true])}
+  else if(sel==='ucak')set.push(['Uçak biletleri','✈️',r50(S0.parts.pp),true]);
   else if(sel==='otobus')set.push(['Otobüs bileti','🚌',r50(S0.parts.pp),true]);
   else set.push(['Tren bileti','🚆',r50(S0.parts.pp),true]);
-  set.push(['Yeme-içme','🍽️',r50(R.mealPP),true]);
-  var names=set.map(function(x){return x[0]});
-  t.items=t.items.filter(function(i){return !(trLabels.indexOf(i.label)>=0&&names.indexOf(i.label)<0&&!(i.total>0)&&!(i.ppAmt>0))});
-  // eski adlarla gelen (seed) kalemleri eşle
-  var alias={'Yakıt':['Yakıt'],'Otoyol & köprü':['Otoyol & köprü','Otoyol & köprü'],'Uçak biletleri':['Uçak biletleri'],'Otobüs bileti':['Otobüs bileti'],'Tren bileti':['Tren bileti'],'Yeme-içme':['Yeme-içme']};
+  var names=set.map(function(x){return x[0]}),n0=t.items.length;
+  t.items=t.items.filter(function(i){return !(trLabels.indexOf(i.label)>=0&&names.indexOf(i.label)<0&&(force||i.auto||(!(i.total>0)&&!(i.ppAmt>0))))});
+  if(t.items.length!==n0)ch=true;
   set.forEach(function(x){
-    var it=t.items.filter(function(i){return i.label===x[0]||(x[0]==='Otoyol & köprü'&&i.label==='Otoyol & köprü')})[0];
+    var it=t.items.filter(function(i){return i.label===x[0]})[0];
     if(!it){it={id:uid(),label:x[0],ico:x[1],total:0};
       var ki=-1;t.items.forEach(function(i,ix){if(i.label==='Konaklama'&&ki<0)ki=ix});
-      if(ki>=0)t.items.splice(ki,0,it);else t.items.push(it)}
-    if(x[3]){it.perPerson=true;it.ppAmt=x[2];it.total=x[2]*Math.max(1,t.people||1)}else{it.perPerson=false;delete it.ppAmt;it.total=x[2]}
+      if(ki>=0)t.items.splice(ki,0,it);else t.items.push(it);ch=true}
+    var cur=it.perPerson?(it.ppAmt||0):(it.total||0);
+    if(!force&&cur>0&&!it.auto)return;
+    var np=Math.max(1,t.people||1);
+    if(x[3]){if(it.ppAmt!==x[2]||!it.perPerson)ch=true;it.perPerson=true;it.ppAmt=x[2];it.total=x[2]*np}
+    else{if(it.total!==x[2]||it.perPerson)ch=true;it.perPerson=false;delete it.ppAmt;it.total=x[2]}
+    it.auto=true;
   });
-  var hasKon=t.items.some(function(i){return i.label==='Konaklama'});if(!hasKon)t.items.push({id:uid(),label:'Konaklama',ico:'🏠',total:0});
-  t.est=true;save();renderTrip();renderTripCard();toast('Bütçeye eklendi ✓');
+  if(!t.items.some(function(i){return i.label==='Konaklama'})){t.items.push({id:uid(),label:'Konaklama',ico:'🏠',total:0});ch=true}
+  return ch;
+}
+function rtAddToBudget(t){
+  if(!rtCalc(t).ok){toast('Önce nereden–nereye yaz');return}
+  rtWrite(t,true);t.est=true;save();renderTrip();renderTripCard();toast('Bütçeye yazıldı ✓');
+}
+function rtAuto(t){if(rtWrite(t,false)){save();renderTrip();renderTripCard();return true}return false}
+var PL_ICON={'İstanbul':'🕌','Ankara':'🏛️','İzmir':'🌅','Bursa':'🌲','Antalya':'🏖️','Bodrum':'⛵','Çeşme':'🏄','Marmaris':'⛵','Dalaman':'🌴','Fethiye':'🪂','Kaş':'🤿','Kemer':'🏖️','Alanya':'🏰','Side':'🏛️','Kuşadası':'🏖️','Didim':'🏖️','Ayvalık':'🌇','Çanakkale':'🏛️','Uludağ':'⛷️','Kapadokya':'🎈','Göreme':'🎈','Trabzon':'🏔️','Rize':'🍃','Uzungöl':'🏞️','Pamukkale':'♨️','Mardin':'🕌','Erzurum':'⛷️','Kars':'❄️','Bolu':'🌳','Abant':'🌳','Sapanca':'🌿','Safranbolu':'🏘️','Konya':'🕌','Datça':'🌊','Göcek':'⛵','Kalkan':'🌊','Belek':'⛳','Bozcaada':'🍇','Gökçeada':'🌊','Roma':'🏛️','Paris':'🗼','Londra':'🎡','Berlin':'🧱','Atina':'🏛️','Venedik':'🚤','Barselona':'⛪','Amsterdam':'🌷','Prag':'🏰','Viyana':'🎻','Budapeşte':'🏰','Dubai':'🏙️','Tokyo':'🗼','New York':'🗽','Maldivler':'🏝️','Mekke':'🕋','Medine':'🕌','Bali':'🌴','Bangkok':'🛕','Kahire':'🔺','Şarm el-Şeyh':'🤿','Santorini':'🏝️','Mykonos':'🏝️','Girit':'🏝️','Malta':'🏝️','Lizbon':'🚋','Madrid':'💃','Marakeş':'🕌','Singapur':'🌆','Seul':'🏙️','Milano':'👗','Floransa':'🎨','Münih':'🍺','Dubrovnik':'🏰'};
+var LM={
+'hadrian':'<path fill-rule="evenodd" d="M6 94V38h88v56zM38 94V66a12 12 0 0 1 24 0v28zM13 94V74a8 8 0 0 1 16 0v20zM71 94V74a8 8 0 0 1 16 0v20z"/><path d="M2 31h96v7H2zM10 20h80v11H10z"/><path d="M16 22h9v7h-9zM45 22h10v7H45zM75 22h9v7h-9z" fill="#0003"/><path d="M33 38v56M67 38v56" stroke="#0003" stroke-width="2.4"/><path d="M42 92h16M16 92h10M74 92h10" stroke="#fff" stroke-width="2"/>',
+'izsaat':'<path fill-rule="evenodd" d="M26 94V72h48v22H56V82a6 6 0 0 0-12 0v12z"/><rect x="29" y="64" width="42" height="8"/><rect x="33" y="40" width="34" height="24"/><rect x="30" y="36" width="40" height="5" rx="1.5"/><rect x="37" y="26" width="26" height="10"/><path d="M36 26a14 14 0 0 1 28 0z"/><rect x="49.2" y="4" width="1.6" height="9"/><circle cx="50" cy="3.8" r="2.2"/><circle cx="50" cy="52" r="10.5" fill="#0004"/><circle cx="50" cy="52" r="8.6" fill="#fff"/><path d="M50 52V45.5M50 52l4.6 3" stroke="#0008" stroke-width="1.7" stroke-linecap="round" fill="none"/><circle cx="50" cy="31" r="3.6" fill="#0004"/><path d="M31 66v28M69 66v28M38 40v24M62 40v24" stroke="#0002" stroke-width="2"/><path d="M22 94h56" stroke="#fff" stroke-width="3"/>',
+'anit':'<rect x="2" y="88" width="96" height="6"/><rect x="8" y="82" width="84" height="6"/><rect x="2" y="42" width="14" height="40"/><rect x="84" y="42" width="14" height="40"/><rect x="0" y="38" width="18" height="5"/><rect x="82" y="38" width="18" height="5"/><rect x="18" y="52" width="64" height="30"/><rect x="16" y="45" width="68" height="8"/><rect x="24" y="39" width="52" height="6"/><path d="M23 54h5v28h-5zM34 54h5v28h-5zM45 54h10v28H45zM61 54h5v28h-5zM72 54h5v28h-5z" fill="#0003"/><path d="M6 48h6v6H6zM88 48h6v6h-6z" fill="#0003"/>',
+'sehit':'<rect x="2" y="88" width="96" height="6"/><rect x="8" y="83" width="84" height="5"/><rect x="14" y="40" width="11" height="43"/><rect x="34" y="40" width="11" height="43"/><rect x="55" y="40" width="11" height="43"/><rect x="75" y="40" width="11" height="43"/><rect x="10" y="30" width="80" height="10"/><rect x="6" y="22" width="88" height="8" rx="1"/><path d="M10 22v-5h6v5zM24 22v-5h6v5zM38 22v-5h6v5zM56 22v-5h6v5zM70 22v-5h6v5zM84 22v-5h6v5z"/><path d="M18 46v30M39 46v30M60 46v30M80 46v30" stroke="#0003" stroke-width="2"/>',
+'sumela':'<path d="M2 94V20l9-6 8 7 9-10 11 8 9-6 8 5v6l8 4 8-4v66z"/><rect x="48" y="58" width="32" height="14"/><path d="M46 58l18-10 18 10z"/><rect x="52" y="48" width="9" height="10"/><path d="M51 48l5.5-7 5.5 7z"/><path d="M52 72v-6a2.5 2.5 0 0 1 5 0v6zM60 72v-6a2.5 2.5 0 0 1 5 0v6zM68 72v-6a2.5 2.5 0 0 1 5 0v6z" fill="#0003"/><path d="M44 74h40v4H44z"/><path d="M10 94l6-22 6 22zM24 94l5-16 5 16zM90 94l5-20 5 20z"/>',
+'kap':'<path d="M6 94L19 40Q23 33 27 40L40 94z"/><path d="M17 42q6-9 12 0z" fill="#fff" fill-opacity=".6"/><path d="M36 94L46 28Q50 20 54 28L64 94z"/><path d="M44 30q6-10 12 0z" fill="#fff" fill-opacity=".6"/><path d="M60 94L71 52Q74 46 77 52L92 94z"/><path d="M69 54q5-8 10 0z" fill="#fff" fill-opacity=".6"/><path d="M72 4a11 11 0 0 1 9 17l-4 6h-10l-4-6a11 11 0 0 1 9-17z" fill="#fff"/><path d="M72 4v23M66 8q-3 8 1 16M78 8q3 8-1 16" stroke="#0003" stroke-width="1.2" fill="none"/><rect x="69" y="29" width="6" height="4" rx="1"/><path d="M20 12a7 7 0 0 1 6 11l-3 4h-6l-3-4a7 7 0 0 1 6-11z"/><path d="M20 12v15" stroke="#0003" stroke-width="1" fill="none"/>',
+'eiffel':'<path d="M50 1l1.6 14 3 16 4 22 6 26L70 94H59l-3-12Q50 66 44 82l-3 12H30l5.4-15 6-26 4-22 3-16z"/><rect x="39" y="52" width="22" height="3.2" rx="1"/><rect x="43.5" y="30" width="13" height="2.8" rx="1"/><rect x="32" y="74" width="36" height="3.4" rx="1"/><path d="M46 36l8 14M54 36l-8 14M42 58l16 16M58 58L42 74" stroke="#0003" stroke-width="1.2" fill="none"/>',
+'bigben':'<rect x="38" y="36" width="22" height="58"/><rect x="36" y="27" width="26" height="10" rx="1.5"/><path d="M35 27L49 3 63 27z"/><path d="M36 27v-6l2-3 2 3v6zM58 27v-6l2-3 2 3v6z"/><circle cx="49" cy="49" r="9.5" fill="#0004"/><circle cx="49" cy="49" r="7.8" fill="#fff"/><path d="M49 49v-5.5M49 49l4 2.4" stroke="#0008" stroke-width="1.6" stroke-linecap="round" fill="none"/><path d="M41 66v28M57 66v28" stroke="#0002" stroke-width="2"/><rect x="0" y="72" width="36" height="22"/><rect x="62" y="72" width="38" height="22"/><path d="M5 72v-8l3-3 3 3v8zM88 72v-8l3-3 3 3v8z"/><path d="M6 82h4v6H6zM15 82h4v6h-4zM24 82h4v6h-4zM68 82h4v6h-4zM77 82h4v6h-4zM86 82h4v6h-4z" fill="#0003"/>',
+'burj':'<rect x="34" y="72" width="32" height="22"/><rect x="38" y="58" width="24" height="15"/><rect x="41" y="46" width="18" height="13"/><rect x="43.5" y="35" width="13" height="12"/><rect x="45.5" y="25" width="9" height="11"/><rect x="47" y="17" width="6" height="9"/><rect x="48.4" y="9" width="3.2" height="9"/><rect x="49.3" y="1" width="1.4" height="9"/><path d="M44 72v22M50 58v36M56 72v22" stroke="#0003" stroke-width="1.6"/><rect x="6" y="66" width="13" height="28"/><rect x="80" y="58" width="14" height="36"/><path d="M10 72h5M10 78h5M10 84h5M84 66h6M84 72h6M84 78h6M84 84h6" stroke="#0003" stroke-width="1.8"/>',
+'ams':'<path d="M3 94V52h3.6v-4h3.6v-4h4.4v4h3.6v4H22V94z"/><path d="M24 94V44Q34 28 44 44V94z"/><path d="M46 94V50h4v-5h3.6v-5h4.4v5H62v5h4V94z"/><path d="M67 94V46h4q4.5-9 9 0h4V94z"/><path d="M86 94V56h3v-4h3v-4h3v4h3v4h2V94z"/><path d="M8 60h3.6v6H8zM14.5 60H18v6h-3.5zM8 74h3.6v6H8zM14.5 74H18v6h-3.5zM30 52h8v7h-8zM30 66h8v7h-8zM30 80h8v7h-8zM51 56h3.6v6H51zM57.4 56H61v6h-3.6zM51 72h3.6v6H51zM57.4 72H61v6h-3.6zM72 54h6v7h-6zM72 68h6v7h-6zM72 82h6v7h-6zM90 62h3v6h-3zM90 76h3v6h-3z" fill="#0003"/><path d="M0 95h100" stroke="#fff" stroke-width="2.4" stroke-dasharray="5 4"/>',
+'kolezyum':'<path fill-rule="evenodd" d="M6 94V40q44-14 88 0v54zM14 82v-8a4.5 4.5 0 0 1 9 0v8zM30 82v-8a4.5 4.5 0 0 1 9 0v8zM46 82v-8a4.5 4.5 0 0 1 9 0v8zM62 82v-8a4.5 4.5 0 0 1 9 0v8zM78 82v-8a4.5 4.5 0 0 1 9 0v8zM14 62v-8a4.5 4.5 0 0 1 9 0v8zM30 62v-8a4.5 4.5 0 0 1 9 0v8zM46 62v-8a4.5 4.5 0 0 1 9 0v8zM62 62v-8a4.5 4.5 0 0 1 9 0v8zM78 62v-8a4.5 4.5 0 0 1 9 0v8z"/>',
+'parthenon':'<rect x="8" y="86" width="84" height="8"/><rect x="12" y="80" width="76" height="6"/><rect x="16" y="46" width="5" height="34"/><rect x="26" y="46" width="5" height="34"/><rect x="36" y="46" width="5" height="34"/><rect x="46" y="46" width="5" height="34"/><rect x="56" y="46" width="5" height="34"/><rect x="66" y="46" width="5" height="34"/><rect x="76" y="46" width="5" height="34"/><rect x="12" y="40" width="76" height="6"/><path d="M10 40L50 20l40 20z"/>',
+'kale':'<rect x="8" y="44" width="22" height="50"/><path d="M8 39h5v5H8zM15.5 39h5v5h-5zM23 39h5v5h-5z"/><rect x="64" y="26" width="28" height="68"/><path d="M64 21h5v5h-5zM72 21h5v5h-5zM80 21h5v5h-5zM88 21h4v5h-4z"/><rect x="30" y="64" width="34" height="30"/><path d="M31 59h5v5h-5zM39 59h5v5h-5zM47 59h5v5h-5zM55 59h5v5h-5z"/><rect x="40" y="46" width="14" height="18"/><path d="M38 46h18l-9-11z"/><path d="M15 54h3v12h-3zM22 54h3v12h-3zM71 40v-6a3 3 0 0 1 6 0v6zM81 40v-6a3 3 0 0 1 6 0v6zM71 62v-6a3 3 0 0 1 6 0v6zM81 62v-6a3 3 0 0 1 6 0v6zM35 84v-8a3.5 3.5 0 0 1 7 0v8zM52 84v-8a3.5 3.5 0 0 1 7 0v8zM45 54h4v7h-4z" fill="#0003"/><path d="M0 95h100" stroke="#fff" stroke-width="2.4" stroke-dasharray="5 4"/>',
+'kiz':'<path d="M28 94c4-9 40-9 44 0z"/><rect x="45" y="56" width="10" height="34" rx="1"/><rect x="41.5" y="52" width="17" height="4" rx="1.5"/><rect x="45" y="40" width="10" height="12"/><path d="M44 40a6 6 0 0 1 12 0z"/><rect x="49.2" y="26" width="1.6" height="10"/><circle cx="50" cy="25.6" r="2"/><path d="M49 64h2v10h-2z" fill="#0003"/><path d="M20 95h60" stroke="#fff" stroke-width="2.4" stroke-dasharray="5 4"/>',
+'aya':'<rect x="18" y="70" width="64" height="24"/><path d="M18 70a12 12 0 0 1 12-12v12zM82 70a12 12 0 0 0-12-12v12z"/><rect x="30" y="60" width="40" height="10"/><path d="M30 60a20 20 0 0 1 40 0z"/><rect x="49" y="34" width="2" height="7"/><path d="M24 82v-6a3 3 0 0 1 6 0v6zM36 82v-6a3 3 0 0 1 6 0v6zM47 82v-6a3 3 0 0 1 6 0v6zM58 82v-6a3 3 0 0 1 6 0v6zM70 82v-6a3 3 0 0 1 6 0v6zM36 66h3v4h-3zM43 66h3v4h-3zM54 66h3v4h-3zM61 66h3v4h-3z" fill="#0003"/><rect x="5.3" y="30" width="3.4" height="64"/><rect x="3.9" y="28" width="6.2" height="3" rx="1"/><path d="M4.9 28l2.1-10 2.1 10z"/><rect x="4.1" y="46" width="5.8" height="2.2"/><rect x="91.3" y="30" width="3.4" height="64"/><rect x="89.9" y="28" width="6.2" height="3" rx="1"/><path d="M90.9 28l2.1-10 2.1 10z"/><rect x="90.1" y="46" width="5.8" height="2.2"/><rect x="18.3" y="42" width="3" height="52"/><rect x="17" y="40" width="5.6" height="2.6" rx="1"/><path d="M18 40l1.8-8 1.8 8z"/><rect x="78.7" y="42" width="3" height="52"/><rect x="77.4" y="40" width="5.6" height="2.6" rx="1"/><path d="M78.4 40l1.8-8 1.8 8z"/>',
+'galata':'<path d="M34 94l2-46h28l2 46z"/><rect x="31" y="40" width="38" height="9" rx="1.5"/><rect x="36" y="28" width="28" height="13"/><path d="M33 28L50 2 67 28z"/><path d="M40 36h3v5h-3zM48.5 36h3v5h-3zM57 36h3v5h-3zM46 62h8v14h-8zM42 54h3v5h-3zM55 54h3v5h-3z" fill="#0003"/><rect x="29" y="92" width="42" height="3" rx="1"/>',
+'bridge':'<rect x="16" y="6" width="5.5" height="88"/><rect x="78.5" y="6" width="5.5" height="88"/><rect x="14" y="34" width="9.5" height="3"/><rect x="76.5" y="34" width="9.5" height="3"/><rect x="0" y="68" width="100" height="4.5"/><path d="M0 64Q14 56 18.7 10Q50 70 81.3 10Q86 56 100 64" fill="none" stroke="#fff" stroke-width="2"/><path d="M26 56V68M33 62V68M40 66V68M60 66V68M67 62V68M74 56V68M8 61V68M92 61V68" stroke="#fff" stroke-width="1" fill="none"/>',
+'mosque':'<rect x="22" y="70" width="56" height="24"/><path d="M22 70a28 28 0 0 1 56 0z"/><path d="M22 82a8 8 0 0 1 8-8v8zM78 82a8 8 0 0 0-8-8v8z"/><rect x="49.2" y="36" width="1.6" height="9"/><path d="M12 94V36h3.4v58zM84.6 94V36H88v58z"/><path d="M10.6 36h6.2l-3.1-14zM83.2 36h6.2l-3.1-14z"/><rect x="10.8" y="52" width="5.8" height="2.2"/><rect x="83.4" y="52" width="5.8" height="2.2"/><path d="M28 86v-6a3 3 0 0 1 6 0v6zM48 86v-8a3 3 0 0 1 6 0v8zM66 86v-6a3 3 0 0 1 6 0v6z" fill="#0003"/>',
+'yivli':'<rect x="34" y="80" width="32" height="14" rx="1"/><rect x="42" y="34" width="16" height="47"/><rect x="38" y="28" width="24" height="6" rx="1.5"/><rect x="44" y="18" width="12" height="10"/><path d="M43 18L50 2 57 18z"/><path d="M45 36v44M48 36v44M51 36v44M54 36v44" stroke="#0003" stroke-width="1"/>',
+'kaleici':'<rect x="28" y="50" width="44" height="44"/><rect x="31" y="30" width="38" height="20"/><path d="M31 24h6v6h-6zM41 24h6v6h-6zM53 24h6v6h-6zM63 24h6v6h-6z"/><rect x="26" y="48" width="48" height="4" rx="1"/><circle cx="50" cy="40" r="7.6" fill="#0004"/><circle cx="50" cy="40" r="6" fill="#fff"/><path d="M50 40v-4.2M50 40l3 1.8" stroke="#0008" stroke-width="1.4" stroke-linecap="round" fill="none"/><path d="M44 94V76a6 6 0 0 1 12 0v18z" fill="#0003"/><path d="M38 60h3v8h-3zM59 60h3v8h-3z" fill="#0003"/>',
+'atakule':'<rect x="45" y="26" width="10" height="68"/><rect x="36" y="84" width="28" height="10"/><ellipse cx="50" cy="26" rx="28" ry="6.5"/><path d="M33 24a17 17 0 0 1 34 0z"/><rect x="49.3" y="2" width="1.4" height="10"/><path d="M40 22h20" stroke="#0003" stroke-width="1.6"/>',
+'windmill':'<path d="M36 94L41 46h18l5 48z"/><path d="M38 46L50 30 62 46z"/><g transform="rotate(28 50 38)"><rect x="48.4" y="2" width="3.2" height="72"/><rect x="14" y="36.4" width="72" height="3.2"/><path d="M50 4h9v13h-9zM50 59h-9v13h9zM16 36v9h13v-9zM71 40v-9h13v9z" fill-opacity=".75"/></g><path d="M44 94v-14a6 6 0 0 1 12 0v14z" fill="#0003"/>',
+'sail':'<path d="M12 84h76l-10 10H22z"/><rect x="49" y="12" width="2.4" height="72"/><path d="M53 16V80H86z"/><path d="M47 28V80H18z"/>',
+'asansor':'<rect x="42" y="22" width="18" height="72"/><rect x="39" y="18" width="24" height="5" rx="1"/><rect x="44" y="8" width="14" height="10"/><path d="M43 8h16l-8-8z"/><rect x="0" y="50" width="42" height="4"/><rect x="4" y="54" width="4" height="40"/><rect x="26" y="54" width="4" height="40"/><path d="M46 36h3v10h-3zM53 36h3v10h-3zM46 60h3v10h-3zM53 60h3v10h-3z" fill="#0003"/>',
+'uchisar':'<path d="M6 94L22 56 30 30 44 8 56 24 68 18 80 50 94 94z"/><path d="M36 52h4v8h-4zM46 40h4v8h-4zM56 48h4v8h-4zM64 62h4v8h-4zM30 72h4v8h-4zM48 66h4v8h-4zM72 78h4v8h-4zM46 84h4v6h-4zM42 24h4v7h-4z" fill="#0003"/>',
+'arc':'<path fill-rule="evenodd" d="M14 94V38h72v56zM36 94V62a14 14 0 0 1 28 0v32z"/><rect x="10" y="26" width="80" height="12" rx="1.5"/><path d="M18 30h64v4H18z" fill="#0003"/><path d="M20 46h10v12H20zM70 46h10v12H70z" fill="#0003"/>',
+'towerbridge':'<rect x="12" y="28" width="18" height="66"/><rect x="70" y="28" width="18" height="66"/><path d="M12 28L21 6 30 28zM70 28L79 6 88 28z"/><rect x="30" y="38" width="40" height="5"/><rect x="0" y="72" width="100" height="5"/><path d="M30 38Q50 62 70 38" fill="none" stroke="#fff" stroke-width="2"/><path d="M16 44h4v8h-4zM74 44h4v8h-4zM16 58h4v8h-4zM74 58h4v8h-4z" fill="#0003"/>',
+'eye':'<circle cx="50" cy="46" r="36" fill="none" stroke="#fff" stroke-width="3"/><circle cx="50" cy="46" r="3.4"/><path d="M50 10V82M14 46H86M24.5 20.5L75.5 71.5M75.5 20.5L24.5 71.5" stroke="#fff" stroke-width="1.1"/><path d="M50 46L36 94M50 46L64 94" stroke="#fff" stroke-width="3.4" fill="none"/><circle cx="50" cy="10" r="2.4"/><circle cx="86" cy="46" r="2.4"/><circle cx="14" cy="46" r="2.4"/><circle cx="50" cy="82" r="2.4"/><circle cx="75.5" cy="20.5" r="2.4"/><circle cx="24.5" cy="71.5" r="2.4"/>',
+'pantheon':'<path d="M30 54a20 20 0 0 1 40 0z"/><rect x="28" y="54" width="44" height="12"/><rect x="18" y="66" width="64" height="28"/><path d="M14 66L50 52 86 66z"/><path d="M26 70h4v24h-4zM36 70h4v24h-4zM46 70h4v24h-4zM56 70h4v24h-4zM66 70h4v24h-4z" fill="#0003"/>',
+'dome':'<rect x="12" y="72" width="76" height="22"/><rect x="30" y="60" width="40" height="12"/><path d="M28 60a22 22 0 0 1 44 0z"/><rect x="49" y="30" width="2" height="8"/><path d="M46 38h8l-4-8z"/><path d="M12 72a8 8 0 0 1 8-8v8zM88 72a8 8 0 0 0-8-8v8z"/><path d="M34 66h3v6h-3zM42 66h3v6h-3zM55 66h3v6h-3zM63 66h3v6h-3z" fill="#0003"/>',
+'burjarab':'<path d="M48 2C82 28 78 70 64 94H40C48 72 48 36 48 2z"/><path d="M50 10C70 34 68 62 58 90" stroke="#0003" stroke-width="1.4" fill="none"/><rect x="30" y="88" width="46" height="6" rx="2"/>',
+'dutchmill':'<path d="M32 94L38 52h24l6 42z"/><path d="M36 52L50 34 64 52z"/><g transform="rotate(20 50 44)"><rect x="48.4" y="6" width="3.2" height="76"/><rect x="12" y="42.4" width="76" height="3.2"/><path d="M50 8h10v14H50zM50 66h-10v14h10zM14 42v10h14V42zM72 46V36h14v10z" fill-opacity=".75"/></g><path d="M44 94v-12a6 6 0 0 1 12 0v12z" fill="#0003"/>'
+};
+var SKY={"İstanbul": [["bridge", -24, 0.8], ["galata", 48, 0.75], ["aya", 84, 0.95], ["kiz", 164, 0.72]], "Antalya": [["kaleici", -4, 0.82], ["hadrian", 46, 0.9], ["yivli", 130, 0.85], ["mosque", 164, 0.6]], "Bodrum": [["kale", 0, 1.0], ["windmill", 96, 0.75], ["sail", 146, 0.6], ["sail", 182, 0.42]], "İzmir": [["izsaat", 0, 0.95], ["asansor", 70, 0.85], ["mosque", 108, 0.62], ["sail", 160, 0.5], ["sail", 190, 0.38]], "Ankara": [["anit", -8, 1.0], ["atakule", 92, 0.9], ["mosque", 130, 0.72]], "Kapadokya": [["uchisar", -4, 0.95], ["kap", 72, 1.0]], "Çanakkale": [["sehit", -6, 0.95], ["bridge", 88, 0.8], ["sail", 170, 0.5]], "Trabzon": [["sumela", -4, 1.0], ["mosque", 100, 0.7]], "Roma": [["kolezyum", -8, 0.95], ["pantheon", 90, 0.78], ["dome", 144, 0.75]], "Paris": [["arc", -8, 0.7], ["eiffel", 52, 1.0], ["dome", 134, 0.7]], "Londra": [["bigben", 0, 0.95], ["eye", 72, 0.85], ["towerbridge", 148, 0.78]], "Atina": [["parthenon", 10, 1.0], ["parthenon", 130, 0.5]], "Dubai": [["burj", 40, 1.0], ["burjarab", 110, 0.8]], "Amsterdam": [["ams", -4, 0.9], ["dutchmill", 92, 0.85], ["ams", 150, 0.6]]};
+function lmSvg(name,ox,sc,op,fb){
+  var sk=SKY[name];
+  if(sk){
+    var g='';sk.forEach(function(c){var s=c[2];g+='<g transform="translate('+c[1]+' '+(94*(1-s)).toFixed(1)+') scale('+s+')">'+(LM[c[0]]||'')+'</g>'});
+    return '<g class="'+(op>.7?'lmf':'')+'"><g transform="translate('+ox+' '+(122-94*sc).toFixed(1)+') scale('+sc+')" fill="url(#lmg)" opacity="'+op+'">'+g+'</g></g>';
+  }
+  return '<text x="'+(ox+20)+'" y="118" font-size="'+Math.round(70*sc)+'" opacity="'+op+'">'+fb+'</text>';
+}
+function lmkHtml(t){
+  var A=plFind(t.from),B=plFind(t.dest);if(!B)return '';
+  var ib=PL_ICON[B.name]||(B.dis?'🌍':'📍');
+  var h='<svg class="lmk" viewBox="0 0 390 130" preserveAspectRatio="xMidYMax meet"><defs><linearGradient id="lmg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#ffe7d2"/></linearGradient><radialGradient id="lmh"><stop offset="0" stop-color="#fff" stop-opacity=".38"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><ellipse cx="290" cy="70" rx="110" ry="60" fill="url(#lmh)"/>';
+  if(A&&!A.dis&&A.name!==B.name)h+=lmSvg(A.name,0,.6,.5,PL_ICON[A.name]||'📍');
+  h+=lmSvg(B.name,166,.92,.94,ib);
+  return h+'</svg>';
+}
+function rtStrip(t){
+  var A=plFind(t.from),B=plFind(t.dest);if(!A||!B||A.name===B.name)return '';
+  var R=rtCalc(t),m=R.ok?rtMode(t,R):t.mode,mi={arac:'🚗',ucak:'✈️',otobus:'🚌',tren:'🚆'}[m]||'🚗';
+  return '<div class="rts"><span>'+esc(A.name)+'</span><span class="rtl"><b class="'+(m==='ucak'?'':'flip')+'">'+mi+'</b></span><span>'+esc(B.name)+' '+(PL_ICON[B.name]||(B.dis?'🌍':'📍'))+'</span></div>';
 }
 
 loadPrices();
@@ -4511,7 +4602,7 @@ function renderTrip(){
   h+='<div class="tbox" id="tFeas"></div><div class="tbox" id="tMoti"></div><div class="tbox" id="tExp"></div><div id="tSum"></div>';
   h+='<button type="button" class="tlink" id="tArch">Tatili arşive al</button><button type="button" class="tlink" id="tDel" style="padding-top:6px;color:#ff8a9c">Tatili sil</button>';
   $('tBody').innerHTML=h;applyFolds(t);renderRoute();
-  document.querySelectorAll('#tBody .tamt').forEach(function(el){bindAmt(el);el.oninput=function(ev){fmtAmt(ev);var it=(t.items||[]).filter(function(x){return x.id===el.getAttribute('data-it')})[0];if(it){if(it.perPerson){it.ppAmt=parseNum(el.value)}else{it.total=parseNum(el.value)}save();renderTripDyn()}}});
+  document.querySelectorAll('#tBody .tamt').forEach(function(el){bindAmt(el);el.oninput=function(ev){fmtAmt(ev);var it=(t.items||[]).filter(function(x){return x.id===el.getAttribute('data-it')})[0];if(it){it.auto=false;if(it.perPerson){it.ppAmt=parseNum(el.value)}else{it.total=parseNum(el.value)}save();renderTripDyn()}}});
   renderTripDyn();
 }
 function renderTripDyn(){
@@ -4521,7 +4612,7 @@ function renderTripDyn(){
   // hero
   var kick=(t.season==='kis'?'❄️ KIŞ TATİLİ':'☀️ YAZ TATİLİ')+' · '+(t.scope==='dis'?'🌍 YURT DIŞI':'🇹🇷 YURT İÇİ');
   var cd=dd>0?'<b>'+dd+'</b><span>gün kaldı</span>':(de>=0?'<b>🌴</b><span>Tatildesin</span>':'<b>✓</b><span>Tatil bitti</span>');
-  $('tHero').innerHTML=(t.season==='kis'?artWinter():artSummer())+'<div class="txt"><div class="kick">'+kick+'</div><h1>'+esc(t.dest||'Yeni tatil')+'</h1><div class="sub">'+tDateLabel(t.start)+' – '+tDateLabel(t.end)+' · '+nights(t)+' gece</div></div><div class="cdb">'+cd+'</div>';
+  $('tHero').innerHTML=(t.season==='kis'?artWinter():artSummer())+lmkHtml(t)+'<div class="txt"><div class="kick">'+kick+'</div><h1>'+esc(t.dest||'Yeni tatil')+'</h1><div class="sub">'+tDateLabel(t.start)+' – '+tDateLabel(t.end)+' · '+nights(t)+' gece</div>'+rtStrip(t)+'</div><div class="cdb">'+cd+'</div>';
   var nl=$('tNights');if(nl)nl.textContent='Dönüş · '+nights(t)+' gece';
   // bütçe
   (t.items||[]).forEach(function(it){var e=document.querySelector('[data-pp="'+it.id+'"]');if(e)e.textContent=it.perPerson?('× '+p+' kişi'):fmt(it.total/p)});
@@ -4559,7 +4650,7 @@ function renderTripDyn(){
   var pr='';
   if(de<0&&sp.list.length===0)pr='<div class="moti"><h3>🏖️ Tatil bitti</h3><p>Harcamalarını girelim mi? Nakit harcamalar girdiğin gün bakiyenden düşer, kartla yaptıkların kart listesine yazılır.</p><button type="button" class="tbtn" id="tPromptGo" style="margin:0">+ Tatil harcaması ekle</button></div>';
   var stat=(de<0&&sp.list.length>0)?(share-sp.share>=0?'Bütçe altı 🎉':'Bütçe aşıldı'):(f.lv==='ok'?'Rahat':f.lv==='wr'?'Sıkışık':f.lv==='bd'?'Ek destek':'—');
-  var strip='<div class="tbox" style="padding:10px"><div class="mini3tx"><div><small>Hedef (payın)</small><b>'+esc(fmt(share))+'</b></div><div><small>Ayırdığın</small><b>'+esc(fmt(t.saved||0))+'</b></div><div><small>Harcanan</small><b>'+esc(fmt(sp.share))+'</b></div><div><small>Durum</small><b>'+stat+'</b></div></div></div>';
+  var strip='<div class="tbox" style="padding:10px"><div class="mini3tx"><div><small>Senin payın</small><b>'+esc(fmt(share))+'</b></div><div><small>Harcanan</small><b>'+esc(fmt(sp.share))+'</b></div><div><small>Kalan</small><b>'+esc(fmt(Math.max(0,share-sp.share)))+'</b></div></div></div>';
   $('tPrompt').innerHTML=strip+pr;
   var pg=$('tPromptGo');if(pg)pg.onclick=function(){openTripExpense()};
 }
@@ -4610,11 +4701,11 @@ $('tBody').addEventListener('click',function(ev){
     save();renderTrip();renderTripCard();return}
   var sgb=ev.target.closest('[data-sug]');
   if(sgb&&sugFor){var inp=$(sugFor),nmv=sgb.getAttribute('data-sug');inp.value=nmv;$('tSug').innerHTML='';
-    if(sugFor==='tFrom'){t.from=nmv;lsSet('butcem_from',nmv);save();renderRouteRes();var d0=$('tDest');if(d0&&!d0.value)d0.focus()}
-    else{t.dest=nmv;save();inp.dispatchEvent(new Event('change',{bubbles:true}));renderTripDyn();renderTripCard();var sb2=document.querySelector('#tSwitch .on');if(sb2)sb2.textContent=(t.season==='kis'?'❄️':'☀️')+' '+(t.dest||'Yeni tatil')}
+    if(sugFor==='tFrom'){t.from=nmv;lsSet('butcem_from',nmv);save();renderRouteRes();var d0=$('tDest');if(d0&&!d0.value)d0.focus();else rtAuto(t)}
+    else{t.dest=nmv;save();inp.dispatchEvent(new Event('change',{bubbles:true}));renderTripDyn();renderTripCard();rtAuto(t);var sb2=document.querySelector('#tSwitch .on');if(sb2)sb2.textContent=(t.season==='kis'?'❄️':'☀️')+' '+(t.dest||'Yeni tatil')}
     return}
   var rmd=ev.target.closest('[data-rmode]');
-  if(rmd){var nm=rmd.getAttribute('data-rmode'),em2=(t.items||[]).every(function(i){return !(i.total>0)});t.mode=nm;if(em2)t.items=seedItems(nm);save();renderTrip();renderTripCard();return}
+  if(rmd){var nm=rmd.getAttribute('data-rmode'),em2=(t.items||[]).every(function(i){return !(i.total>0)});t.mode=nm;if(em2)t.items=seedItems(nm);rtWrite(t,false);save();renderTrip();renderTripCard();return}
   if(ev.target.closest('#tRtAdd')){rtAddToBudget(t);return}
   var lg=ev.target.closest('#tLodgeSet');
   if(lg){var kv=parseFloat(lg.getAttribute('data-v'))||0,ki2=(t.items||[]).filter(function(i){return i.label==='Konaklama'})[0];if(!ki2){ki2={id:uid(),label:'Konaklama',ico:'🏠',total:0};t.items.push(ki2)}ki2.perPerson=false;ki2.total=kv;save();renderTrip();renderTripCard();toast('Konaklama yazıldı ✓');return}
@@ -4647,12 +4738,21 @@ $('tBody').addEventListener('click',function(ev){
     markUndo();S.trips=S.trips.filter(function(x2){return x2.id!==t.id});S.cards.forEach(function(c){if(c.trip===t.id)delete c.trip});S.entries.forEach(function(e){if(e.trip===t.id)delete e.trip});
     save();closeTripScreen(true);toast('Tatil silindi',true);return}
 });
+$('tBody').addEventListener('mousedown',function(ev){if(ev.target.closest('[data-sug]'))ev.preventDefault()});
 $('tBody').addEventListener('change',function(ev){
-  var t=tripById(curTrip);if(!t||ev.target.id!=='tDest')return;
+  var tg0=ev.target.id;if(tg0!=='tDest'&&tg0!=='tFrom')return;
+  setTimeout(function(){chgPlace(tg0)},220);
+});
+function chgPlace(tid){
+  var t=tripById(curTrip);if(!t)return;var ev={target:{id:tid}};
+  var A0=plFind(t.from);if(A0&&!A0.dis&&t.from!==A0.name){t.from=A0.name;lsSet('butcem_from',t.from);var fi=$('tFrom');if(fi)fi.value=t.from}
   var B=plFind(t.dest);if(!B)return;
+  if(t.dest!==B.name){t.dest=B.name;var di=$('tDest');if(di)di.value=B.name;save();renderTripDyn();renderTripCard();var sb3=document.querySelector('#tSwitch .on');if(sb3)sb3.textContent=(t.season==='kis'?'❄️':'☀️')+' '+t.dest}
+  if(ev.target.id==='tFrom'){rtAuto(t);return}
   var want=B.dis?'dis':'ic';
   if(t.scope!==want){t.scope=want;t.exitOff=false;ensureExit(t);if(want==='dis'&&t.mode!=='arac'&&t.mode!=='ucak'){var em=(t.items||[]).every(function(i){return !(i.total>0)});t.mode='arac';if(em)t.items=seedItems('arac')}save();renderTrip();renderTripCard()}
-});
+  rtAuto(t);
+}
 $('tBody').addEventListener('input',function(ev){
   var t=tripById(curTrip);if(!t)return;
   if(ev.target.id==='tBackN'){var tt=tripById(curTrip),ss=tripSettle(tt,tripSpent(tt)),nn=parseInt(ev.target.value,10)||0,ba=$('tBackAmt');if(ba&&nn>0&&bkKind==='kon'&&ss.konPer>0&&!ba.value)ba.placeholder='Önerilen: '+fmt(nn*ss.konPer)}
