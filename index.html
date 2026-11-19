@@ -1001,16 +1001,19 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,4000-(Date.now()-t0))
       <div class="note" style="margin:0 0 10px">Veriler bu telefonda, uygulamanın kendi hafızasında saklanır. Tarayıcı verisini silersen kaybolabilir; arada bir yedek al.</div>
       <button class="btn" id="bFile">☁️ Yedeği dosya olarak kaydet (iCloud Drive)</button>
       <div class="note" style="margin-top:6px">Açılan menüden <b>Dosyalara Kaydet</b>'i seç, <b>iCloud Drive</b>'ı işaretle. Dosya telefon bozulsa bile iCloud'unda durur. Uygulama 3 günde bir hatırlatır.</div>
+      <button class="btn sec" id="bPick">📂 Yedek dosyasından geri yükle</button>
+      <input type="file" id="bPickIn" accept=".json,.txt,application/json,text/plain" style="display:none">
+      <div class="note" style="margin:6px 0 10px">Veriler silinirse iCloud Drive’a kaydettiğin yedek dosyasını buradan seçip geri yükleyebilirsin.</div>
+      <details style="margin:4px 0 10px"><summary style="cursor:pointer;font-weight:600;padding:8px 2px">Diğer yedekleme yöntemleri</summary>
       <button class="btn sec" id="bShare">📝 Yedeği Notlar'a kaydet</button>
       <div class="note" style="margin-top:6px">Açılan menüden <b>Notlar</b>'ı seç. Not, tarih ve gün başlığıyla kaydedilir (örn. “Bütçem yedeği — 18 Kasım 2026 Çarşamba”).</div>
       <button class="btn sec" id="bCsv">📤 Excel (CSV) olarak dışa aktar</button>
       <button class="btn sec" id="bBackup">Yedeği kopyala</button>
-      <button class="btn sec" id="bPick">📂 Yedek dosyasından geri yükle</button>
-      <input type="file" id="bPickIn" accept=".json,.txt,application/json,text/plain" style="display:none">
       <div class="note">Notlar'daki yedek metnini kopyalayıp aşağıya yapıştırarak geri yükleyebilirsin (başlık satırı sorun olmaz):</div>
       <textarea class="fld" id="restoreTx" placeholder="Yedek metnini buraya yapıştır"></textarea>
       <button class="btn sec" id="bRestore">Yedekten geri yükle</button>
       <button class="btn sec" id="brSet">📥 Tarayıcıdaki verilerimi getir</button>
+      </details>
       <button class="btn del" id="bWipe">Tüm verileri sil</button>
       <div class="note" id="wipeNote" style="display:none;color:var(--out)">Emin misin? Silmek için bir kez daha dokun.</div>
     </div>
@@ -1083,8 +1086,9 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,4000-(Date.now()-t0))
   <button type="button" class="di" data-dr="trip"><span class="e">🏖️</span><span>Tatil planı<small id="drTripSub">Tatilini planla</small></span></button>
   <button type="button" class="di" data-dr="inc"><span class="e">✨</span><span>Ek gelirlerim<small>Prim, kira, freelance</small></span></button>
   <button type="button" class="di" data-dr="year"><span class="e">🔮</span><span>Aylık tahmin<small>Önümüzdeki 6 ay</small></span></button>
-  <button type="button" class="di" data-dr="plan"><span class="e">📦</span><span>Plan<small id="drPlanSub">Sade ya da Detaylı</small></span></button>
+  <button type="button" class="di" data-dr="plan"><span class="e">📦</span><span><b id="drPlanNm" style="font-weight:inherit">Sade plana geç</b><small id="drPlanSub">Sadece gelir, fatura ve abonelikler</small></span></button>
   <button type="button" class="di" data-dr="set" style="margin-top:auto"><span class="e">⚙️</span><span>Ayarlar</span></button>
+  <div id="drVer" style="text-align:center;font-size:11.5px;color:var(--mut);opacity:.7;padding:10px 0 4px"></div>
 </div></div>
 <div id="kd"><div class="svin"><div class="svh"><button type="button" class="gscl" id="kdBack">‹ Kartlarım</button><b>Kart bilgisi</b><span style="width:84px"></span></div><div id="kdBody"></div></div></div>
 <div id="kt"><div class="svin"><div class="svh"><button type="button" class="gscl" id="ktBack">‹ Geri</button><b>Kartlarım</b><span style="width:64px"></span></div>
@@ -2622,11 +2626,10 @@ var RELEASES=[
   {v:'2.0',big:1,b:1,date:'Kasım 2026',title:'Bütçem 2.0 · Sade ve Detaylı plan',items:[
     ['📦','İki plan geldi: Sade ve Detaylı','Sade: sadece gelirini, faturalarını, aboneliklerini ve kredi taksitlerini yazarsın, her ay sana ne kaldığını sistem hesaplar. Detaylı: kartlar, günlük harcamalar, tahmin ve birikim hedefleri, her şey olduğu gibi duruyor.',1],
     ['🌱','Sade plan, sadece ihtiyacın olan','Tek bakışta “her ay sana kalan” rakamı, gelir ve sabit giderlerin dağılımı, önümüzdeki 3 ay. Kart, ekstre ya da taksit hesabı yapmana gerek yok.',1],
-    ['❓','Farkı her zaman görebilirsin','Üstteki ? simgesine dokununca iki planın neleri içerdiğini görürsün. Menüdeki Plan bölümünden istediğin zaman geçiş yapabilirsin, verilerin hiçbir zaman silinmez.',1],
+    ['❓','Farkı her zaman görebilirsin','Üstteki ? simgesine dokununca iki planın farkını görürsün. Plan değiştirmek için sol menüde tek dokunuş yeter: Sade plana geç ya da Detaylı plana geç. Verilerin hiçbir zaman silinmez.',1],
     ['💳','Kartla ödemeler netleşti','Faturalar ve aboneliklerde hangi karttan ve hangi ekstrede çıkacağı yazıyor. Kartlı aboneliğe dokununca ekstre bilgisi açılıyor. Ekstre hatırlatması ve tahmin de ekstre gününe göre çalışıyor.',1,'d'],
-    ['🛟','Verilerin daha güvende','Kayıtların bir şekilde görünmezse uygulama son otomatik yedeği geri yüklemeyi önerir.',0],
+    ['🛟','Verilerin daha güvende','Kayıtların bir şekilde görünmezse uygulama son otomatik yedeği ya da iCloud Drive’a kaydettiğin yedek dosyasını geri yüklemeyi önerir. Yedek ekranı sadeleşti: iCloud Drive’a kaydet ve dosyadan geri yükle önde, diğer yöntemler “Diğer yedekleme yöntemleri” altında. Yedek hatırlatması artık Sade planda da çıkıyor.',0],
     ['🚀','Bu ay çok şey değişti','Bütçem’in kullanımı artık sana göre ayarlanabiliyor. Gerçek bir uygulamaya giden yolda en büyük adım bu.',0]]},
-  {v:'1.46',date:'Kasım 2026',title:'Kartlı aboneliğe dokununca bilgi',items:[['💳','Kartla ödenen aboneliğe dokununca ekstre bilgisi','Hangi karttan çekildiği, ekstrenin kesim günü, son ödeme günü ve paranın hangi ekstrede çıkacağı hemen görünüyor. Düzenlemek için pencerede “Düzenle” var. Nakit ödenen abonelikler eskisi gibi doğrudan düzenlemeye gidiyor.',1]]},
   {v:'1.45',date:'Kasım 2026',title:'Kart ekstreleri daha akıllı',items:[['📆','Tahmin ekstre gününe göre hesaplanıyor','Kartla yaptığın harcamalar artık bu ay değil, ekstrenin gerçekten çıkacağı ay giderine sayılıyor. Ay sonu kesilen kartlarda “bu ay sıkışık” uyarısı gereksiz çıkmıyor.',1],['🔔','Ekstre hatırlatması','Ekstrenin son ödeme gününe 3 gün kala uygulama açılınca ödenecek tutarı hatırlatıyor. Bir gün içinde bir kez sorar.',1],['💳','Kartla mı ödüyorsun?','Kartın ekliyse ve bir aboneliği karta bağlamadıysan, uygulama bir kere sorar. Evet dersen karttan çekilir, nakit bakiyen düşmez. Hayır dersen bir daha sormaz.',1]]},
   {v:'1.44',date:'Kasım 2026',title:'Kartla ödenenler net görünüyor',items:[['💳','Kartla ödenen faturalar ve abonelikler','Faturalar ve abonelik satırlarında hangi kartla ödendiği ve paranın hangi ekstrede çıkacağı yazıyor. Örneğin “Aralık ekstresinde çıkar”. Ay sonu ve ay ortası kesilen kartlar ayrı ayrı doğru hesaplanıyor.',1],['🧾','Kartla ödediklerin kutusu','Ödemeler > Faturalar’ın en üstünde, bu ay kartla ödediklerinin hangi ekstrede çıkacağını gösteren küçük bir kutu var. Bakiyenden bir şey düşmez, sadece bilgi.',1],['💡','Faturalar dökümü tamamlandı','Özet’te Faturalar’a dokununca kartla ödenen faturalar da 💳 simgesiyle listede. Toplama eklenmiyor, çünkü zaten kart ekstresinde sayılıyor. Ödenmemiş faturalar da “bekliyor” olarak görünüyor.',1]]},
   {v:'1.43.2',date:'Kasım 2026',title:'Android’de tarayıcıdan devam',items:[['🤖','Android’de tarayıcıdan devam edebilirsin','Test uyarısında artık iPhone’da ana ekrana eklemenin şart, Android’de ise tarayıcı üzerinden devam etmenin serbest olduğu yazıyor. Uyarı Android’de bir kere çıkıyor.',1]]},
@@ -3086,8 +3089,8 @@ function bsRender(){
   var nk=nowK(),c=bsCalc(nk),h='',q='',i,k;
   var empty=!(c.inc>0||c.out>0);
   var lc=c.left>=0?'var(--in)':'var(--out)';
-  h+='<div style="text-align:center;padding:10px 0 14px"><span class="bschip">Sade plan</span><div style="color:var(--mut);font-size:13px;margin:10px 0 2px">'+esc(monthName(nk))+' · her ay sana kalan</div>'+
-    (c.inc>0?'<div class="bsbig num" style="color:'+lc+'">'+(c.left<0?'−':'+')+esc(fmt(Math.abs(c.left)))+'</div>':'<div class="bsbig num" style="color:var(--mut)">—</div>')+'</div>';
+  h+='<div style="text-align:center;padding:6px 0 12px"><span class="bschip">Sade plan</span></div>';
+  if(!empty&&c.inc>0){var kc=c.left>=0?'#27d3a722':'#ff5d6c22';h+='<div style="display:flex;gap:8px;margin:0 0 12px"><div class="bsc" style="flex:1;margin:0;padding:11px 12px"><div style="font-size:12px;color:var(--mut)">Gelir</div><div class="num" style="font-size:16px;font-weight:700;margin-top:2px">'+esc(fmt(c.inc))+'</div></div><div class="bsc" style="flex:1;margin:0;padding:11px 12px"><div style="font-size:12px;color:var(--mut)">Sabit gider</div><div class="num" style="font-size:16px;font-weight:700;margin-top:2px">'+esc(fmt(c.out))+'</div></div><div style="flex:1;border-radius:18px;padding:11px 12px;background:'+kc+'"><div style="font-size:12px;color:'+lc+'">Her ay kalan</div><div class="num" style="font-size:16px;font-weight:700;margin-top:2px;color:'+lc+'">'+(c.left<0?'−':'')+esc(fmt(Math.abs(c.left)))+'</div></div></div>'}
   if(empty){
     h+='<div class="bsc"><div class="bsh">Başlayalım</div><div style="color:var(--mut);font-size:13.5px;line-height:1.55;margin:4px 0 8px">Üç adımda her ay sana ne kaldığını görürsün. Gerisini sistem hesaplar.</div>'+
       '<button class="bsr" data-bs="inc"><span class="l"><span class="bsi" style="background:#27d3c333">💰</span><span><b>1. Gelirini yaz</b></span></span><span>›</span></button>'+
@@ -3097,15 +3100,22 @@ function bsRender(){
   }else{
     var den=Math.max(c.inc,c.out,1);
     function sg(v,col){return v>0?'<i style="width:'+(v/den*100).toFixed(1)+'%;background:'+col+'"></i>':''}
+    var bi=[],si_=[],ki=[],di=[];
+    S.bills.forEach(function(b){var a=bsBillAmt(b,nk);if(a>0)bi.push([b.name,a])});
+    S.plans.forEach(function(p){if(p.id===EXP||nk<p.start||(p.end&&nk>p.end)||(p.from&&nk<p.from))return;(p.sub?si_:ki).push([p.name,p.amt])});
+    bsRecRows().forEach(function(e){di.push([e.note||e.cat,e.amt])});
+    function grp(ic,col,t,v,items){if(!(v>0))return '';var r='<div class="bsr" style="cursor:default;border-bottom:0;padding-bottom:2px"><span class="l"><span class="bsi" style="background:'+col+'33;width:32px;height:32px;font-size:16px">'+ic+'</span><span><b>'+t+'</b></span></span><b class="num">−'+esc(fmt(v))+'</b></div>';
+      items.forEach(function(it){r+='<div style="display:flex;justify-content:space-between;gap:10px;padding:5px 2px 5px 44px;font-size:13.5px;color:var(--mut)"><span>'+esc(it[0])+'</span><span class="num">'+esc(fmt(it[1]))+'</span></div>'});
+      return r+'<div style="height:6px;border-bottom:1px solid #ffffff12"></div>'}
     function ln(ic,col,t,v){return v>0?'<div class="bsr" style="cursor:default"><span class="l"><span class="bsi" style="background:'+col+'33;width:32px;height:32px;font-size:16px">'+ic+'</span><span>'+t+'</span></span><b class="num">−'+esc(fmt(v))+'</b></div>':''}
-    h+='<div class="bsc"><div class="bsr" style="cursor:default;padding-top:0"><span class="l"><span class="bsi" style="background:#27d3c333;width:32px;height:32px;font-size:16px">💰</span><span>Gelirin</span></span><b class="num">'+(c.inc>0?esc(fmt(c.inc)):'Yaz ›')+'</b></div>'+
+    h+='<div class="bsc">'+(c.inc>0?'':'<button class="bsr" data-bs="inc" style="padding-top:0"><span>Gelirini yaz</span><b>Yaz ›</b></button>')+
       '<div class="bsbar">'+sg(c.bl,'#ff9f43')+sg(c.sb,'#c06cff')+sg(c.kr,'#4cc9f0')+sg(c.dz,'#8f95c2')+'</div>'+
-      ln('💡','#ff9f43','Faturalar',c.bl)+ln('🔁','#c06cff','Abonelikler',c.sb)+ln('🏦','#4cc9f0','Kredi ve taksitler',c.kr)+ln('🏠','#8f95c2','Düzenli ödemeler',c.dz)+
-      '<div class="bsr" style="cursor:default;border-top:1px solid #ffffff22;border-bottom:0;margin-top:4px"><span><b>Toplam sabit gider</b></span><b class="num">−'+esc(fmt(c.out))+'</b></div></div>';
+      grp('💡','#ff9f43','Faturalar',c.bl,bi)+grp('🔁','#c06cff','Abonelikler',c.sb,si_)+grp('🏦','#4cc9f0','Kredi ve taksitler',c.kr,ki)+grp('🏠','#8f95c2','Düzenli ödemeler',c.dz,di)+
+      '</div>';
     if(c.inc>0){
       h+='<div class="bsc"><div class="bsh">Önümüzdeki aylar</div>';
-      for(i=1;i<=3;i++){k=fromYm(ym(nk)+i);var cc=bsCalc(k);h+='<div class="bsr" style="cursor:default"><span>'+esc(monthName(k))+'</span><b class="num" style="color:'+(cc.left>=0?'var(--in)':'var(--out)')+'">'+(cc.left<0?'−':'+')+esc(fmt(Math.abs(cc.left)))+'</b></div>'}
-      h+='</div>';
+      var diff=false;for(i=1;i<=3;i++){k=fromYm(ym(nk)+i);var cc=bsCalc(k);if(Math.round(cc.left)!==Math.round(c.left))diff=true;h+='<div class="bsr" style="cursor:default"><span>'+esc(monthName(k))+'</span><b class="num" style="color:'+(cc.left>=0?'var(--in)':'var(--out)')+'">'+(cc.left<0?'−':'+')+esc(fmt(Math.abs(cc.left)))+'</b></div>'}
+      if(diff)h+='<div style="color:var(--mut);font-size:12.5px;line-height:1.5;margin:6px 2px 0">Rakam değişiyorsa o ay bir kredi, taksit ya da abonelik başlıyor veya bitiyor demektir.</div>';h+='</div>';
     }else h+='<button class="bsr" data-bs="inc" style="background:var(--card);border-radius:16px;padding:14px 16px;margin:0 0 12px"><span>Gelirini yaz, her ay sana ne kaldığını göstereyim</span><span>›</span></button>';
   }
   h+='<button class="bsup" data-bs="up">Kartlar, günlük harcama ve birikim hedefleri için Detaylı plan ›</button>';
@@ -3195,7 +3205,7 @@ function planPickDo(pl){
   if(first){lsSet('butcem_ob','1');lsSet('butcem_ver',APP_VER);S.plan=pl;save();applyPlan();render();goTab(pl==='basic'?'bhome':'ozet');if(pl==='full'){lsSet('butcem_ob','');try{localStorage.removeItem('butcem_ob')}catch(e){}startOnboarding()}return}
   if(pl==='basic'){
     askBox('Sade plana geçilsin mi?','Kartlar, ekstreler, günlük harcamalar, tahmin ve birikim ekranları <b>gizlenir</b>. Hiçbir şey silinmez, Detaylı plana dönünce hepsi geri gelir.<br><br>Sade planda rakamlar sadece gelirini, faturalarını, aboneliklerini ve kredi taksitlerini sayar.',[{t:'Sade plana geç',f:function(){planSet('basic')}},{t:'Vazgeç',c:'sec'}]);
-  }else planSet('full');
+  }else askBox('Detaylı plana geçilsin mi?','Kartlar, ekstreler, günlük harcamalar, tahmin, birikim ve tatil ekranları geri gelir. Sade plandayken girdiğin her şey korunur.',[{t:'Detaylı plana geç',f:function(){planSet('full')}},{t:'Vazgeç',c:'sec'}]);
 }
 function planPicker(first){
   var b=[{t:'🌱 Sade plan',f:function(){planPickDo('basic')}},{t:'🧾 Detaylı plan',f:function(){planPickDo('full')}},{t:'Farkları göster',c:'sec',f:function(){planCmp()}}];
@@ -3211,25 +3221,24 @@ function planCmp(){
   var h='<div class="wh"><div class="sp">📦</div><h2>Sade mi, Detaylı mı?</h2><div class="ws">'+(isBasic()?'Şu an Sade plandasın':'Şu an Detaylı plandasın')+'</div></div><div class="wb">'+
    planBlock('🌱','Sade plan','Sadece ne kazandığını ve her ay sabit ne ödediğini görmek isteyenler için.',['Gelirini yazarsın','Faturalarını, aboneliklerini ve kredi taksitlerini eklersin','Sistem her ay sana ne kaldığını hesaplar','Önümüzdeki 3 ayı görürsün'],'Bir kere girersin, gerisini sistem yapar. Günlük harcama yazmana gerek yok.')+
    planBlock('🧾','Detaylı plan','Paranın nereye gittiğini tam görmek isteyenler için.',['Sadedeki her şey','Kredi kartları, ekstre günleri ve kartla ödeme takibi','Günlük harcamalar ve kategori dağılımı','6 aylık tahmin ve “bu alışveriş bütçeme yeter mi” kontrolü','Birikim hedefleri (dolar, altın), tatil planı, ek gelirler','Ekstre hatırlatmaları'],'Biraz daha fazla giriş ister, karşılığında tam bir muhasebe görünümü verir.')+
-   '<div class="note" style="margin:0">Plan değiştirince verilerin silinmez. Sadeye geçersen detaylar gizlenir, Detaylı’ya dönünce hepsi geri gelir. Bu bilgiye üst taraftaki ? simgesinden her zaman ulaşabilirsin.</div></div>'+
-   '<div class="wf"><button type="button" class="btn" id="plSade">'+(isBasic()?'Sade planda kal':'Sade plana geç')+'</button><button type="button" class="btn sec" id="plDet">'+(isBasic()?'Detaylı plana geç':'Detaylı planda kal')+'</button><button type="button" class="skip" id="plClose">Kapat</button></div>';
+   '<div class="note" style="margin:0">Plan değiştirince verilerin silinmez. Sadeye geçersen detaylar gizlenir, Detaylı’ya dönünce hepsi geri gelir. Plan değiştirmek için sol üstteki menüyü aç: <b>'+(isBasic()?'Detaylı plana geç':'Sade plana geç')+'</b> yeter.</div></div>'+
+   '<div class="wf"><button type="button" class="btn" id="plClose">Tamam</button></div>';
   $('wnBox').innerHTML=h;$('wnBg').classList.add('show');
 }
 $('wnBox').addEventListener('click',function(ev){
-  var b=ev.target.closest('#plSade,#plDet,#plClose');if(!b)return;$('wnBg').classList.remove('show');
-  if(b.id==='plSade'){if(!isBasic())planPickDo('basic')}else if(b.id==='plDet'){if(isBasic())planPickDo('full')}
+  var b=ev.target.closest('#plClose');if(!b)return;$('wnBg').classList.remove('show');
 });
 $('plHelp').onclick=planCmp;
 var _render0=render;render=function(){_render0.apply(this,arguments);try{bsRender()}catch(e){}};
 /* ---------- Yan menü ---------- */
-function drOpen(){var t=pickTrip&&pickTrip(),sub='Tatilini planla';try{if(t){var dd=daysTo(t.start);sub=(t.dest||'Tatil')+' · '+(dd>0?dd+' gün kaldı':'devam ediyor')}}catch(e){}$('drTripSub').textContent=sub;try{$('drPlanSub').textContent=isBasic()?'Şu an: Sade':'Şu an: Detaylı'}catch(e){}$('dr').classList.add('show')}
+function drOpen(){var t=pickTrip&&pickTrip(),sub='Tatilini planla';try{if(t){var dd=daysTo(t.start);sub=(t.dest||'Tatil')+' · '+(dd>0?dd+' gün kaldı':'devam ediyor')}}catch(e){}$('drTripSub').textContent=sub;try{$('drPlanNm').textContent=isBasic()?'Detaylı plana geç':'Sade plana geç';$('drPlanSub').textContent=isBasic()?'Kartlar, harcamalar, tahmin ve birikim geri gelir':'Sadece gelir, fatura ve abonelikler'}catch(e){}try{$('drVer').textContent='Bütçem · sürüm '+APP_VER}catch(e){}$('dr').classList.add('show')}
 function drClose(){$('dr').classList.remove('show')}
 $('menuBtn').onclick=drOpen;
 $('dr').onclick=function(ev){
   var b=ev.target.closest('[data-dr]');
   if(!b){if(ev.target===$('dr'))drClose();return}
   var k=b.getAttribute('data-dr');drClose();
-  if(k==='plan')planPicker(false);
+  if(k==='plan')planPickDo(isBasic()?'full':'basic');
   else if(k==='sv')svOpen();
   else if(k==='cards')openCards();
   else if(k==='trip')openTripScreen();
@@ -4959,7 +4968,7 @@ function bkBanner(){
   var bs=$('bkStatus');if(bs){var lb0=parseInt(lsGet(LBK)||'0',10),ag=lb0?Math.floor((Date.now()-lb0)/86400000):-1;bs.textContent=lb0?('Son yedek: '+(ag<=0?'bugün':ag+' gün önce')):'Henüz yedek almadın';bs.className='note '+(lb0&&ag<4?'pos':'wr');bs.style.cssText='margin:0 0 6px;font-weight:700'}
   var b=$('bkBanner'),now=Date.now(),first=parseInt(lsGet(FRK)||'0',10),lb=parseInt(lsGet(LBK)||'0',10),sz=parseInt(lsGet(SZK)||'0',10);
   var DAY=86400000,ref=lb||first,age=ref?Math.floor((now-ref)/DAY):0,need=lb?age>=3:age>=2;
-  var show=S.entries.length>0&&need&&now>sz&&tab==='ozet';
+  var show=S.entries.length>0&&need&&now>sz&&(tab==='ozet'||tab==='bhome');
   b.classList.toggle('show',show);
   if(show)$('bkTx').textContent=lb?('💾 Son yedek '+age+' gün önce. Dosyalara kaydet?'):'💾 Henüz yedek almadın. Dosyalara kaydet?';
 }
@@ -5160,7 +5169,11 @@ document.addEventListener('visibilitychange',function(){
 });
 var lostMain=!lsGet(KEY),lostSnap=null;if(lostMain){var _sn=getSnaps();for(var _i=_sn.length-1;_i>=0;_i--){try{var _o=JSON.parse(_sn[_i].d);if(Array.isArray(_o.entries)&&_o.entries.length){lostSnap={o:_o,ts:_sn[_i].ts};break}}catch(e){}}}
 load();var rp=repair();if(rp>0)save();applyPlan();render();renderSnaps();checkRollover();if(rp>0)toast('Veriler kontrol edildi, '+rp+' kayıt düzeltildi');
-if(lostSnap){setTimeout(function(){var d=new Date(lostSnap.ts),dt=d.getDate()+'.'+(d.getMonth()+1)+'.'+d.getFullYear();askBox('Verilerin bulunamadı','Bu cihazda daha önce kullandığın kayıtlar görünmüyor. '+dt+' tarihli otomatik yedeği geri yükleyelim mi?',[{t:'Evet, geri yükle',c:'pri',f:function(){try{snap('Geri yüklemeden önce');applyBackup(lostSnap.o);save();applyPlan();render();renderSnaps();toast('Yedekten geri yüklendi ✓')}catch(e){toast('Bu yedek açılamadı')}}},{t:'Hayır, boş başla'}])},600)}
+if(!lostSnap&&lostMain&&lsGet(LBK))lostSnap={o:null,ts:parseInt(lsGet(LBK),10)};
+if(lostSnap){setTimeout(function(){var d=new Date(lostSnap.ts),dt=d.getDate()+'.'+(d.getMonth()+1)+'.'+d.getFullYear(),bt=[];
+if(lostSnap.o)bt.push({t:'Evet, otomatik yedeği geri yükle',c:'pri',f:function(){try{snap('Geri yüklemeden önce');applyBackup(lostSnap.o);save();applyPlan();render();renderSnaps();toast('Yedekten geri yüklendi ✓')}catch(e){toast('Bu yedek açılamadı')}}});
+bt.push({t:'📂 Yedek dosyasından geri yükle',c:lostSnap.o?'sec':'pri',f:function(){$('bPickIn').value='';$('bPickIn').click()}});bt.push({t:'Hayır, boş başla'});
+askBox('Verilerin bulunamadı','Bu cihazda daha önce kullandığın kayıtlar görünmüyor. '+(lostSnap.o?dt+' tarihli otomatik yedeği ya da iCloud Drive’a kaydettiğin yedek dosyasını geri yükleyebilirsin.':'iCloud Drive’a kaydettiğin yedek dosyasını seçerek geri yükleyebilirsin.'),bt)},600)}
 else if(!startGuide())startOnboarding();
 try{if(window.__splashReady)window.__splashReady()}catch(e){}
 maybeWn();setTimeout(function(){try{stmtCutCheck()}catch(e){}},4500);setTimeout(function(){try{stmtRemind()}catch(e){}},8000);setTimeout(function(){try{subCardAsk()}catch(e){}},12000);
