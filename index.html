@@ -1481,6 +1481,7 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,4300-(Date.now()-t0))
 <div id="ndaBg"><div class="nh"><b>Gizlilik taahhütnamesi</b><small>Uygulamayı kullanmadan önce okuyup onaylaman gerekiyor.</small></div>
   <div id="ndaScroll"></div>
   <div id="ndaFoot">
+    <div id="ndaDevRow" style="display:none;margin:0 0 10px"><input class="fld" id="ndaDevIn" type="password" placeholder="Geliştirici şifresi" autocomplete="off" style="margin:0 0 6px"><button type="button" class="btn sec sm" id="ndaDevOk">Gir</button></div>
     <div id="ndaHint">Onay için metni sonuna kadar kaydır ↓</div>
     <div class="two"><input class="fld" id="ndaAd" placeholder="Adın" autocomplete="given-name"><input class="fld" id="ndaSoy" placeholder="Soyadın" autocomplete="family-name"></div>
     <label class="chk dis" id="ndaChkL"><input type="checkbox" id="ndaChk" disabled> Okudum, anladım ve onaylıyorum</label>
@@ -2083,6 +2084,16 @@ Sözleşme Sürümü: 1.0
 Test Kullanıcısı: Elektronik ortamda kayıtlı kullanıcı hesabı.
 
 Elektronik Onay: Kullanıcının açık kabul beyanı.`;
+var ndaOut=0,ndaBack=false,NDA_DEVH='1b5b822b800985a7f6536df6681d2bee41824472a8ea7ea28c67dd9fe2d591e1',ndaTaps=0,ndaTapT=0;
+function ndaIsDev(){return lsGet('butcem_dev')==='1'}
+function ndaSent(){return !!lsGet('butcem_nda_sent')}
+function ndaGate(first){var b=$('ndaGo'),n=$('ndaGateNote'),c=$('ndaConf');if(!b)return;
+  if(!first||ndaSent()){b.style.display='';b.disabled=false;if(n)n.style.display='none';if(c)c.style.display='none';return}
+  if(ndaBack){b.style.display='none';if(n)n.style.display='none';if(c){c.style.display='';try{setTimeout(function(){c.scrollIntoView({behavior:'smooth',block:'center'})},60)}catch(e){}}return}
+  if(c)c.style.display='none';b.style.display='';b.disabled=true;b.textContent='Önce kartı gönder';if(n){n.style.display='';n.textContent='Uygulamaya geçmek için onay kartını WhatsApp’tan '+NDA_OWNER+'’e göndermen gerekiyor. Butona dokun, WhatsApp’ta Gönder’e bas, sonra buraya dön.'}}
+function ndaLeft(){ndaOut=Date.now();ndaBack=false}
+function ndaReturned(){if(ndaOut&&Date.now()-ndaOut>=2500){ndaBack=true;ndaOut=0;var r=ndaGet();if(r&&$('ndaBg').classList.contains('show')&&$('ndaBg').classList.contains('done'))ndaGate(!ndaSent())}}
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')ndaReturned()});window.addEventListener('pageshow',ndaReturned);
 function ndaGet(){try{var r=JSON.parse(lsGet('butcem_nda')||'null');return(r&&r.v&&r.ad&&r.soy&&r.code)?r:null}catch(e){return null}}
 function ndaHtml(){
   var L=NDA_TXT.split('\n'),h='',list=null,i,t,m;
@@ -2139,22 +2150,30 @@ function ndaShare(r){
   ndaCardCanvas(r,function(b){
     if(!b){toast('Kart oluşturulamadı');return}
     var f=new File([b],'taahhutname-onay-'+r.code+'.png',{type:'image/png'}),tx=ndaText(r);
-    if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'Taahhütname onayı',text:tx}).catch(function(){})}
-    else if(navigator.share){navigator.share({title:'Taahhütname onayı',text:tx}).catch(function(){})}
-    else{try{navigator.clipboard.writeText(tx)}catch(e){}var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=f.name;document.body.appendChild(a);a.click();setTimeout(function(){a.remove()},500);toast('Kart indirildi, metin kopyalandı')}
+    function okS(){ndaBack=true;ndaGate(!ndaSent())}
+    if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'Taahhütname onayı',text:tx}).then(okS).catch(function(){})}
+    else if(navigator.share){navigator.share({title:'Taahhütname onayı',text:tx}).then(okS).catch(function(){})}
+    else{try{navigator.clipboard.writeText(tx)}catch(e){}var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=f.name;document.body.appendChild(a);a.click();setTimeout(function(){a.remove()},500);toast('Kart indirildi, metin kopyalandı');okS()}
   });
 }
 function ndaDone(r,first){
   var bg=$('ndaBg');bg.classList.add('done','show');
   var wa='https://wa.me/'+NDA_TEL+'?text='+encodeURIComponent('Merhaba, Bütçem test kullanıcısı taahhütnamesini onayladım.\n'+ndaText(r));
-  $('ndaDone').innerHTML='<h2 style="margin:0 0 4px;font-size:20px">'+(first?'✅ Onayın alındı':'📜 Taahhütnamem')+'</h2><div class="note" style="margin:0">'+(first?'Onay kartını uygulama sahibine göndermen gerekiyor, bir kopyası da onda kalsın.':'Onay kartın aşağıda. İstersen tekrar gönderebilirsin, kart hep aynı kalır.')+'</div><div class="ndto">📨 Kartı kime göndereceksin: <b>'+esc(NDA_OWNER)+'</b> (uygulama sahibi)</div><img id="ndaImg" alt="Onay kartı"><a class="btn" id="ndaWa" href="'+wa+'" target="_blank" rel="noopener">💬 WhatsApp’ta '+esc(NDA_OWNER)+'’e gönder</a><button class="btn sec" id="ndaShare" style="margin-top:8px">📤 Kartı resim olarak paylaş</button><button class="btn sec" id="ndaCopy" style="margin-top:8px">Metni kopyala</button><button class="btn sec" id="ndaGo" style="margin-top:8px">'+(first?'Uygulamaya geç':'Kapat')+'</button>';
+  $('ndaDone').innerHTML='<h2 style="margin:0 0 4px;font-size:20px">'+(first?'✅ Onayın alındı':'📜 Taahhütnamem')+'</h2><div class="note" style="margin:0">'+(first?'Onay kartını uygulama sahibine göndermen gerekiyor, bir kopyası da onda kalsın.':'Onay kartın aşağıda. İstersen tekrar gönderebilirsin, kart hep aynı kalır.')+'</div><div class="ndto">📨 Kartı kime göndereceksin: <b>'+esc(NDA_OWNER)+'</b> (uygulama sahibi)</div><img id="ndaImg" alt="Onay kartı"><a class="btn" id="ndaWa" href="'+wa+'" target="_blank" rel="noopener">💬 WhatsApp’ta '+esc(NDA_OWNER)+'’e gönder</a><button class="btn sec" id="ndaShare" style="margin-top:8px">📤 Kartı resim olarak paylaş</button><button class="btn sec" id="ndaCopy" style="margin-top:8px">Metni kopyala</button><div class="note" id="ndaGateNote" style="display:none;margin:10px 0 0"></div><div id="ndaConf" class="ndto" style="display:none;margin-top:12px"><b>Onay kartını '+esc(NDA_OWNER)+'’e WhatsApp’tan gönderdin mi?</b><div class="note" style="margin:6px 0 10px">Gönderdiğini beyan ediyorsun. Gönderilmediyse lütfen Hayır’a dokun.</div><button class="btn" id="ndaYes">✅ Evet, gönderdim</button><button class="btn sec" id="ndaNo" style="margin-top:8px">Hayır, tekrar dene</button></div><button class="btn" id="ndaGo" style="margin-top:8px">'+(first?'Uygulamaya geç':'Kapat')+'</button>';
   ndaCardCanvas(r,function(b){if(b)$('ndaImg').src=URL.createObjectURL(b)});
   $('ndaShare').onclick=function(){ndaShare(r)};
   $('ndaCopy').onclick=function(){try{navigator.clipboard.writeText(ndaText(r));toast('Metin kopyalandı')}catch(e){toast('Kopyalanamadı')}};
-  $('ndaGo').onclick=function(){bg.classList.remove('show','done')};
+  $('ndaWa').onclick=function(){ndaLeft()};
+  $('ndaGo').onclick=function(){if(first&&!ndaSent())return;bg.classList.remove('show','done')};
+  $('ndaYes').onclick=function(){lsSet('butcem_nda_sent',new Date().toISOString());bg.classList.remove('show','done')};
+  $('ndaNo').onclick=function(){ndaBack=false;ndaOut=0;ndaGate(true)};
+  ndaGate(first);
 }
 function ndaSign(){
-  var bg=$('ndaBg');bg.classList.remove('done');bg.classList.add('show');
+  var bg=$('ndaBg');
+  $('ndaBg').querySelector('.nh').onclick=function(){var n=Date.now();ndaTaps=(n-ndaTapT<1500)?ndaTaps+1:1;ndaTapT=n;if(ndaTaps>=7){ndaTaps=0;$('ndaDevRow').style.display='';$('ndaDevIn').focus()}};
+  $('ndaDevOk').onclick=function(){ndaHash($('ndaDevIn').value).then(function(h){if(h===NDA_DEVH){lsSet('butcem_dev','1');$('ndaBg').classList.remove('show','done');ndaWm(null);toast('Geliştirici modu açıldı')}else{$('ndaDevIn').value='';toast('Şifre yanlış')}})};
+bg.classList.remove('done');bg.classList.add('show');
   $('ndaScroll').innerHTML='<div class="ndn">⚠️ Bu taahhütname yalnızca Bütçem test kullanıcıları içindir.<small>Uygulama sahibi: '+esc(NDA_OWNER)+'</small></div>'+ndaHtml();$('ndaScroll').scrollTop=0;
   var sc=$('ndaScroll'),read=false;
   function upd(){
@@ -2176,8 +2195,8 @@ function ndaSign(){
     });
   };
 }
-function ndaOpen(){var r=ndaGet();if(r&&r.v===NDA_VER)ndaDone(r,false);else ndaSign()}
-function ndaInit(){var r=ndaGet();if(r&&r.v===NDA_VER){ndaWm(r);return}ndaSign()}
+function ndaOpen(){if(ndaIsDev()){toast('Geliştirici modundasın, taahhütname istenmiyor');return}var r=ndaGet();if(r&&r.v===NDA_VER)ndaDone(r,!ndaSent());else ndaSign()}
+function ndaInit(){if(ndaIsDev())return;var r=ndaGet();if(r&&r.v===NDA_VER){ndaWm(r);if(!ndaSent())ndaDone(r,true);return}ndaSign()}
 setTimeout(ndaInit,50);
 /* ---------- Taksit penceresi kontrolü ---------- */
 function planItems(){
