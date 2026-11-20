@@ -1250,6 +1250,34 @@ b.wm{display:inline-flex;gap:0;font-size:18px}
 #wrow:not(.two) #fcard .hd{font-size:14px}#wrow:not(.two) #fcard .hd b{font-size:22px!important;letter-spacing:-.4px}
 #wrow.two #wl .wbody .wsp{opacity:.4!important}
 b.wm{display:block!important;white-space:nowrap;font-size:20px}b.wm>b,b.wm>i{display:inline!important;font-size:inherit!important}
+
+/* cüzdan grafiği 2 */
+.wspw{display:none;position:absolute;pointer-events:none;z-index:0}
+.wspw svg{width:100%;height:100%;overflow:visible;display:block}
+.wspw .g1{fill:none;stroke:#fff;stroke-opacity:.08;stroke-width:1;vector-effect:non-scaling-stroke;stroke-dasharray:2 4}
+.wspw .ar{fill:url(#wsa)}
+.wspw .ln{fill:none;stroke:url(#wsl);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 4px #9fe7ff88)}
+.wspw .pj{fill:none;stroke:#fff;stroke-opacity:.55;stroke-width:1.8;stroke-dasharray:3 5;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.wspw .wd{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%}
+.wspw .wd.t{background:#fff;box-shadow:0 0 0 3px #ffffff33,0 0 12px #bff1ffcc;animation:wdp 2.4s ease-in-out infinite}
+.wspw .wd.e{display:none;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border:2px solid #ffd98a;background:#2b1f6a;box-shadow:0 0 10px #ffb64888}
+.wspw .wd.e.over{border-color:#ff8da0;box-shadow:0 0 10px #ff6b8188}.wspw .wd.e.rahat,.wspw .wd.e.ok{border-color:#7ff0c1;box-shadow:0 0 10px #2fcf8f88}
+@keyframes wdp{0%,100%{box-shadow:0 0 0 3px #ffffff33,0 0 12px #bff1ffcc}50%{box-shadow:0 0 0 7px #ffffff10,0 0 18px #bff1ffee}}
+#wrow:not(.two) .wbody .wspw{display:block;top:40px;right:26px;width:37%;height:66px}
+#wrow.two .wbody .wspw{display:none}
+#wrow.two .wspw .wd{display:none!important}
+/* ay sonu tahmini: cüzdanın altında ince şerit */
+#wrow:not(.two) #wl{display:flex;flex-direction:column}
+#wrow:not(.two) #wl #wbody{order:1}
+#wrow:not(.two) #wl #fcard{order:2;margin:8px 0 0!important;padding:9px 14px!important;border-radius:14px!important;transform:none!important}
+#wrow:not(.two) #fcard .fcb,#wrow:not(.two) #fcard .fcl{display:none!important}
+#wrow:not(.two) #fcard .hd{font-size:13.5px;min-height:0}#wrow:not(.two) #fcard .hd b{font-size:17px!important}
+#wrow:not(.two) #fcard.pc{box-shadow:0 5px 14px #ff4f8b30,inset 0 1px 0 #ffffff55!important}
+
+/* üstte bulanıklık yok: kart ve liste cam efekti kapalı */
+.card,.li,.ch,.wsr,.wsr.wfc,.month,#tripSide,#tripSide .tt,.stickypill,.pc,.wbody,.chs .ch,#dueBox .li,#dueBox .chs .ch,.bill,.vcard,.thero .cdb,.dp{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.card{background:linear-gradient(160deg,#1a1f4d,#141842)!important}
+#dueBox .li,#dueBox .chs .ch{background:linear-gradient(180deg,#1b2050,#161a46)!important}
 </style>
 </head>
 <body>
@@ -2684,7 +2712,7 @@ function render(){
   if(isCur&&inc>0){
     var o=outlook(ck),lv=level(o.inc,o.free),day=now.getDate(),left=n-day+1,vs=varSpend(ck),
         allow=(bal-pend)/left,avg=vs/day;
-    chip.className='chip-st show '+lv;$('chipTx').textContent=lv==='over'?'Bütçe aşılıyor':(lv==='tight'?'Bütçe sıkışık':'Bütçe rahat');
+    chip.className='chip-st show '+lv;$('chipTx').textContent=lv==='over'?'Bütçe aşılıyor':(lv==='tight'?'Bütçe sıkışık':'Bütçe rahat');window.__wfc={bal:bal,free:o.free,lv:lv};
     $('fc1').textContent=fmt(o.free);$('fc1').className='num '+(o.free<0?'neg':'pos');
     $('fc2').textContent=allow>0?fmt(allow):'0 ₺';$('fc2').className='num '+(allow<=0?'neg':'');
     $('fc3').textContent=fmt(avg);$('fc3').className='num';
@@ -2907,17 +2935,26 @@ function tripScene(t,B){
   if(BEACH.indexOf(n)>-1||!B)return H+'<defs><linearGradient id="sks" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fd3ff"/><stop offset=".5" stop-color="#3a93dc"/><stop offset="1" stop-color="#0f4a96"/></linearGradient></defs><rect width="170" height="190" fill="url(#sks)"/><circle cx="130" cy="38" r="15" fill="#fff6c8" opacity=".9"/><path d="M0 112L36 84 66 104 104 72 140 100 170 88V140H0z" fill="#3d6f9e" opacity=".8"/><path d="M0 134C30 128 60 140 90 134S140 126 170 134V190H0z" fill="#1fb6c9"/><path d="M0 156C34 148 70 160 100 154S150 148 170 156V190H0z" fill="#1893b8"/><path d="M22 150c0-30 4-46 6-56" stroke="#2c2012" stroke-width="3" fill="none"/><path d="M28 94c-14-2-22 6-24 12 10-6 16-6 24-12zM28 94c12-6 22-2 28 6-10-4-18-4-28-6zM28 94c-4-12-14-14-22-12 10 2 14 6 22 12zM28 94c6-12 16-14 24-10-10 2-16 6-24 10z" fill="#1c8a4a"/></svg>';
   return H+'<defs><linearGradient id="skm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fd8ff"/><stop offset=".55" stop-color="#58b3a0"/><stop offset="1" stop-color="#1f6b4a"/></linearGradient></defs><rect width="170" height="190" fill="url(#skm)"/><circle cx="130" cy="40" r="14" fill="#fff6c8" opacity=".9"/><path d="M0 120L30 80 56 108 92 58 128 110 152 88 170 108V190H0z" fill="#3f7d6a"/><path d="M0 144L36 112 70 136 110 106 150 134 170 124V190H0z" fill="#2c6a52"/><path d="M0 164C40 154 90 172 130 162S160 160 170 164V190H0z" fill="#1c5a3a"/><g fill="#14472f"><path d="M18 168l8-26 8 26z"/><path d="M40 172l7-22 7 22z"/><path d="M130 170l8-26 8 26z"/><path d="M150 174l6-20 6 20z"/></g></svg>'}
 
-function wspSync(){var wb=$('wbody');if(!wb)return;var sv=wb.querySelector('.wsp');
-  if(!sv){wb.insertAdjacentHTML('afterbegin','<svg class="wsp" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="wspg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".36"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs><path class="ar" d=""/><path class="ln" pathLength="1" d=""/></svg>');sv=wb.querySelector('.wsp')}
+function wspSync(){var wb=$('wbody');if(!wb)return;var old=wb.querySelector('.wsp');if(old)old.parentNode.removeChild(old);var w=wb.querySelector('.wspw');
+  if(!w){wb.insertAdjacentHTML('afterbegin','<div class="wspw" aria-hidden="true"><svg viewBox="0 0 100 40" preserveAspectRatio="none"><defs><linearGradient id="wsa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fe7ff" stop-opacity=".75"/><stop offset=".55" stop-color="#8f7bff" stop-opacity=".3"/><stop offset="1" stop-color="#8f7bff" stop-opacity="0"/></linearGradient><linearGradient id="wsl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity=".75"/><stop offset="1" stop-color="#bff1ff"/></linearGradient></defs><path class="g1" d="M0 12H100M0 22H100M0 32H100"/><path class="ar" d=""/><path class="pj" d=""/><path class="ln" pathLength="1" d=""/></svg><i class="wd t"></i><i class="wd e"></i></div>');w=wb.querySelector('.wspw')}
   var isCur=mk(cur)===nowK(),dim=new Date(cur.getFullYear(),cur.getMonth()+1,0).getDate(),last=isCur?new Date().getDate():dim,es=monthEntries(),day=[];
   for(var i=0;i<=dim;i++)day.push(0);
   es.forEach(function(e){var d=parseInt(String(e.date).slice(8,10),10);if(!(d>=1&&d<=dim))return;if(e.type==='in'){if(!e.pendIn)day[d]+=e.amt}else if(!e.pending)day[d]-=e.amt});
   var pts=[],run=0;for(var d=1;d<=last;d++){run+=day[d];pts.push(run)}
   if(pts.length<2)pts=[0,0];
-  var mn=Math.min.apply(null,pts),mx=Math.max.apply(null,pts),rg=(mx-mn)||1,n=pts.length,xy=pts.map(function(v,i){return[(i/(n-1))*100,34-((v-mn)/rg)*26]});
+  var fc=window.__wfc,pe=null;if(isCur&&fc&&isFinite(fc.free)&&isFinite(fc.bal)&&last<dim)pe=pts[pts.length-1]+(fc.free-fc.bal);
+  var all=pts.slice();if(pe!==null)all.push(pe);var mn=Math.min.apply(null,all),mx=Math.max.apply(null,all),rg=(mx-mn)||1,n=pts.length;
+  function Y(v){return 35-((v-mn)/rg)*29}
+  var span=Math.max(1,dim-1),xy=pts.map(function(v,i){return[(i/span)*100,Y(v)]});
   var dstr='M'+xy[0][0].toFixed(1)+' '+xy[0][1].toFixed(1);
   for(var k=1;k<xy.length;k++){var p0=xy[k-1],p1=xy[k],cx=((p0[0]+p1[0])/2).toFixed(1);dstr+=' C'+cx+' '+p0[1].toFixed(1)+' '+cx+' '+p1[1].toFixed(1)+' '+p1[0].toFixed(1)+' '+p1[1].toFixed(1)}
-  sv.querySelector('.ln').setAttribute('d',dstr);sv.querySelector('.ar').setAttribute('d',dstr+' L100 40 L0 40 Z')}
+  var lx=xy[xy.length-1][0],ly=xy[xy.length-1][1],sv=w.querySelector('svg');
+  sv.querySelector('.ln').setAttribute('d',dstr);sv.querySelector('.ar').setAttribute('d',dstr+' L'+lx.toFixed(1)+' 40 L0 40 Z');
+  var pj=sv.querySelector('.pj'),de=w.querySelector('.wd.e'),dt=w.querySelector('.wd.t');
+  if(pe!==null){var ey=Y(pe),mx2=(lx+100)/2;pj.setAttribute('d','M'+lx.toFixed(1)+' '+ly.toFixed(1)+' C'+mx2.toFixed(1)+' '+ly.toFixed(1)+' '+mx2.toFixed(1)+' '+ey.toFixed(1)+' 100 '+ey.toFixed(1));
+    de.style.display='block';de.style.left='100%';de.style.top=(ey/40*100)+'%';de.className='wd e '+(fc&&fc.lv||'')}
+  else{pj.setAttribute('d','');de.style.display='none'}
+  dt.style.left=lx+'%';dt.style.top=(ly/40*100)+'%'}
 function countAm(){if(!document.body.classList.contains('gxload'))return;document.querySelectorAll('#dueBox .am,#wstrips .wsr b').forEach(function(e){var m=/^([\d.]+),(\d\d) ₺$/.exec(e.textContent.trim());if(!m||e.__c)return;e.__c=1;var to=parseFloat(m[1].replace(/\./g,'')+'.'+m[2]),t0=performance.now();(function f(t){var q=Math.min(1,(t-t0)/800),v=to*(1-Math.pow(1-q,3));e.textContent=fmt(v,true);if(q<1)requestAnimationFrame(f);else e.textContent=fmt(to,true)})(t0)})}
 
 function drSkin(){var dp=$('drp');if(!dp||dp.getAttribute('data-sk'))return;dp.setAttribute('data-sk','1');
@@ -3562,9 +3599,9 @@ function renderSubChk(){
 }
 $('subChkBody').addEventListener('click',function(ev){
   var b=ev.target.closest('button');if(!b)return;
-  if(b.id==='scOk'||b.id==='scDone'){lsSet('butcem_subchk',nowK());scMode='sum';renderSubChk();toast('Abonelikler kontrol edildi ✓');return}
+  if(b.id==='scOk'||b.id==='scDone'){lsSet('butcem_subchk',nowK());scMode='sum';renderSubChk();refreshAttn();toast('Abonelikler kontrol edildi ✓');return}
   if(b.id==='scChg'){scMode='list';renderSubChk();return}
-  if(b.id==='scLater'){lsSet('butcem_subsnz',String(Date.now()+3*86400000));renderSubChk();toast('3 gün sonra tekrar sorarım');return}
+  if(b.id==='scLater'){lsSet('butcem_subsnz',String(Date.now()+3*86400000));renderSubChk();refreshAttn();toast('3 gün sonra tekrar sorarım');return}
   var id=b.getAttribute('data-sc');if(id)openSc(id);
 });
 function scSetType(t){scType=t;$('scAmtB').classList.toggle('on',t==='amt');$('scEndB').classList.toggle('on',t==='end');$('scAmtBox').style.display=t==='amt'?'':'none';$('scEndBox').style.display=t==='end'?'block':'none';$('scSave').textContent=t==='amt'?'Kaydet':'Aboneliği sonlandır'}
