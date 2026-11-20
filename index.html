@@ -1093,6 +1093,18 @@ body.gxload .wsp .ar{animation:gxarea 1.4s .9s ease-out backwards}
 /* lead icon */
 .lsp{display:inline-flex;vertical-align:-4px;margin-right:2px}.lsp .lic{width:18px;height:18px}
 .banner>b .lsp .lic{width:17px;height:17px}
+
+.bks{display:flex;flex-wrap:wrap;gap:7px;margin:-2px 0 10px}.bks .bk{display:flex;align-items:center;gap:7px;padding:8px 12px;border-radius:999px;border:1px solid #ffffff24;background:#ffffff12;color:var(--tx,#fff);font:inherit;font-size:13px;font-weight:700}.bks .bk i{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 0 0 1px #ffffff55}.bks .bk:active{transform:scale(.96)}
+.vcard:before{display:none}.vcard:after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(115deg,transparent 30%,#ffffff26 44%,transparent 58%),repeating-linear-gradient(135deg,#ffffff08 0 2px,transparent 2px 9px);display:block;width:auto;height:auto;right:0;bottom:0}
+.vcard .chip{width:42px;height:31px;border-radius:7px;margin:0;background:linear-gradient(135deg,#f6dc98,#c8962f);box-shadow:inset 0 0 0 1px #0003,inset 0 1px 0 #fff8;position:relative;overflow:hidden}.vcard .chip:before{content:'';position:absolute;inset:0;background:linear-gradient(#0000 31%,#0003 32% 35%,#0000 36% 64%,#0003 65% 68%,#0000 69%),linear-gradient(90deg,#0000 31%,#0003 32% 35%,#0000 36% 64%,#0003 65% 68%,#0000 69%)}
+.vcard .cls{opacity:.9;flex:none}.vcard .mrk{flex:none;filter:drop-shadow(0 1px 3px #0005)}
+.vcard .vrow,.vcard .vrow2,.vcard .vrow3{display:flex;align-items:center;justify-content:space-between;gap:10px;position:relative;z-index:1}
+.vcard .vn{margin:0;font-size:18px;font-weight:800;text-shadow:0 1px 6px #0005;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vcard .vnum{font-family:ui-monospace,Menlo,monospace;font-size:15px;letter-spacing:2px;font-weight:700;text-shadow:0 1px 4px #0006;position:relative;z-index:1;white-space:nowrap}
+.vcard .vk{font-size:10px;letter-spacing:1.6px;font-weight:800;opacity:.8}
+.vcard.sm{padding:13px 15px 0;min-height:0;overflow:hidden}.vcard.sm .vrow2{margin:10px 0 8px}.vcard.sm .vnum{font-size:13px;letter-spacing:1.5px;flex:1;text-align:center;opacity:.92}.vcard.sm .chip{width:34px;height:25px}.vcard.sm .mrk{width:32px;height:21px}
+.vcard.sm .vbot{position:relative;z-index:1;margin:0 -15px;padding:8px 15px 9px;font-size:12px;font-weight:800;background:#00000030;overflow:hidden}.vcard.sm .vbot i{position:absolute;left:0;bottom:0;height:3px;background:#fffc}.vcard.sm .vbot span{position:relative}
+.vcard.big{padding:18px 18px 16px}.vcard.big .vrow2{margin:16px 0 12px}.vcard.big .vnum{font-size:19px;letter-spacing:2.5px}.vcard.big .vrow3{margin:12px 0 4px}
 </style>
 </head>
 <body>
@@ -1435,7 +1447,7 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,4300-(Date.now()-t0))
       <div id="mcList"></div>
       <div class="paysg" style="margin:10px 0 8px"><button type="button" class="on" id="cdTK">💳 Kredi kartı</button><button type="button" id="cdTM">🍽️ Yemek kartı</button></div>
       <div id="cdForm"><div class="note" style="margin:8px 0 6px" id="cdHint">Kartlarını ekle: limitler toplanır. Limit yetmeyince ne yapacağını sana sorarım.</div>
-      <input class="fld" id="cdName" list="bankList" autocomplete="off" placeholder="Kart adı (örn. Garanti, Annemin kartı, Ahmet’in kartı)" maxlength="30"><span class="lbl" id="cdSwL" style="display:none">Kart rengi</span><div class="swr" id="cdSw" style="display:none"></div>
+      <input class="fld" id="cdName" autocomplete="off" placeholder="Kart adı (örn. Garanti, Annemin kartı, Ahmet’in kartı)" maxlength="30"><div class="bks" id="bkSug"></div><span class="lbl" id="cdSwL" style="display:none">Kart rengi</span><div class="swr" id="cdSw" style="display:none"></div>
       <div class="two"><input class="fld" id="cdLim" inputmode="decimal" placeholder="Kart limiti ₺" autocomplete="off"><div></div></div>
       <div class="two"><div><span class="lbl">Ekstre kesim günü</span><input class="fld" id="cdCut" type="number" min="1" max="31" placeholder="örn. 15"></div><div><span class="lbl">Son ödeme günü</span><input class="fld" id="cdDue" type="number" min="1" max="31" placeholder="örn. 25"></div></div>
       <button class="btn sec sm" id="cdAdd">Kartı ekle</button><button class="btn sec sm" id="cdCancel" style="display:none">Vazgeç, listeye dön</button></div>
@@ -2740,7 +2752,7 @@ function wrowSync(){var wl=$('wl'),t=null;try{t=pickTrip()}catch(e){}var row=$('
     if(!st){st=document.createElement('div');st.id='wstrips';row.parentNode.insertBefore(st,row);
       st.onclick=function(ev){var b=ev.target.closest('[data-ws]');if(!b)return;var k=b.getAttribute('data-ws');if(k==='fc'){var y=document.querySelector('[data-dr="year"]');if(y)y.click()}else{var c=document.querySelector('[data-dr="cards"]');if(c)c.click()}}}
     var h='<button type="button" class="wsr wfc" data-ws="fc"><span>Ay sonu tahmini</span><b>'+esc($('fcHead').textContent)+'</b></button>';
-    try{homeCards().forEach(function(x){var o=x.o,bg=palGrad(x.t==='c'?cdColIdx(o):mcColIdx(o)),val=x.t==='c'?(function(){var av=r2(o.limit-cdUsed(o.id));return av<0?'Limit aşıldı':'Kalan '+fmt(av,true)})():fmt(o.bal,true);
+    try{homeCards().forEach(function(x){var o=x.o,bg=(x.t==='c'?cardGrad(o):palGrad(mcColIdx(o))),val=x.t==='c'?(function(){var av=r2(o.limit-cdUsed(o.id));return av<0?'Limit aşıldı':'Kalan '+fmt(av,true)})():fmt(o.bal,true);
       h+='<button type="button" class="wsr" data-ws="kc" style="background:'+bg+'"><span>'+esc(o.name)+'</span><b>'+esc(val)+'</b></button>'})}catch(e){}
     st.innerHTML=h;st.style.display=''}
   else if(st)st.style.display='none'}
@@ -3393,10 +3405,10 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.9';
+var APP_VER='2.9.1';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
-var RELEASES=[
+var RELEASES=[{v:'2.9.1',date:'Kasım 2026',title:'Gerçek kart görünümü',items:[['💳','Kartlar gerçek kart gibi','Çip, temassız simgesi, •••• •••• •••• ile biten dekoratif numara ve parlak yüzey. Eski kartların da hepsi yeni görünüyor.',1],['🎨','Banka renkleri','Garanti, İş Bankası, Akbank, Yapı Kredi gibi bankaların kart tonları otomatik uygulanır (logo yok).',1],['🔎','Banka önerileri','Kart adını yazarken altında dokunulabilir banka önerileri çıkar.',1]]},
   {v:'2.9',date:'Kasım 2026',title:'Yenilenen ana ekran ve yan menü',items:[['✨','Yepyeni görünüm','Üst başlık, selamlama, ay seçici ve alt menü yenilendi. Kartlar cam gibi, ikonlar parlak ve çizgi ikon oldu. Animasyonlu logon artık ana ekranın tepesinde.',1],['🏖️','Tatil planın cüzdanın yanında','Tatil planın varsa cüzdan küçülür, yanında kaç gün kaldığı, kaç kişi gideceği ve tahmini toplam görünür. Ay sonu tahmini ve kartların cüzdanın üstünde ince şeritler olarak kalır. Hedefe göre kış, plaj, şehir veya doğa sahnesi çıkar.',1],['📈','Cüzdanda bakiye çizgisi','Cüzdan küçülünce arkasında bu ayki bakiyenin inip çıkışını gösteren soluk bir çizgi görünür.',1],['🏦','Banka adı yazınca tamamlanır','Kart eklerken Garanti, İş Bankası, Akbank gibi bir ad yazınca tam banka adı ve rengi kendiliğinden gelir.',1],['☰','Yenilenen yan menü','Menü Paran, Planların ve Diğer diye gruplara ayrıldı. Her satırda renkli ikon var.',1],['📊','Çizgisel kategori detayı','Kategori detayı halka yerine çizgili, sade bir liste. Satıra dokununca kalemler açılır.',1],['📅','Daha küçük Ödemelerim','Yaklaşan ödemeler en çok 3 satır ve daha kompakt. Ödenenleri görmek için Ödendi kutusuna dokunursun.',0],['🧹','Daha az emoji','Başlıklarda ve kategori ikonlarında emoji yerine çizgi ikonlar kullanıldı. “Bugünkü harcamalarını not ettin mi?” hatırlatması kaldırıldı.',0]]},
   {v:'2.8',date:'Kasım 2026',title:'Yaklaşan ödemeler ve hedef birikimi',items:[['📅','Yaklaşan ödemeler (7 gün)','Ana ekranda Faturalar ve Krediler iki kutu. Altında önümüzdeki 7 günde ödeyeceklerin ve tahsil edeceklerin tarihe göre sıralı görünür: sabit günlü faturalar (internet, telefon), krediler, abonelikler, kart ekstresi ve elden borçlar. Eski “Yaklaşan ödemeler” kartı ve borç hatırlatma şeridi bu listeye taşındı.',1],['💳','Kart ekstresi tek satırda','Kartla ödediğin taksit ve abonelikler ekstrenin içinde görünür. Satıra dokununca kalemler tarihleriyle açılır, oradan ekstreyi ödeyebilirsin. “Kartla bu ay” şeridi ekstre listeye girince kaybolur, aksi hâlde kalan limiti gösterir.',1],['🤝','Taksitli elden borç','Elden borç ve alacağı taksitli kaydedebilirsin. Tutar eşit bölünür, her ay sıradaki taksit listede çıkar.',1],['🎯','Hedefe her birikim sayılır','Araç gibi bir hedefe dolar, altın ya da TL birikimin güncel kurdan TL değeriyle otomatik sayılır. Tek hedefin varsa otomatik bağlanır, birden fazlaysa hangisi için olduğunu seçersin. Birikimlerim’e Türk lirası da eklendi.',1],['🚦','Renkli uyarılar','Ödenmemiş ve günü geçenler kırmızı, yaklaşanlar sarı, ödenenler yeşil. Vadesi geçen alacağın kırmızı değil turuncu görünür.',1],['🗓️','Fatura ödeme günü','Faturaya isteğe bağlı “Ayın kaçında ödenir?” ekleyebilirsin. Elektrik, su ve doğalgaz günleri değiştiği için listeye girmez.',1]]},
   {v:'2.7',date:'Kasım 2026',title:'Daha kolay menü ve taksit girişi',items:[['☰','Menü artık tek dokunuşta','Alt çubuğun en soluna Menü sekmesi geldi. Ekranın sol kenarından sağa kaydırınca da menü açılır, sola kaydırınca kapanır.',1],['💳','Kartla harcadıkların hemen üstte','Bu ay kartla ne kadar harcadığını ve ekstrenin ödenip ödenmediğini ana ekranda cüzdanın hemen altında tek satırda görürsün. Dokununca kart listesine gider.',1],['🏦','Taksit eklerken “daha önce ödedin mi?” sorusu','Kredi ya da taksit eklerken Hayır / Evet diye sorulur. Başlangıç ayını geçmişe alırsan Evet kendiliğinden seçilir ve ödenen taksit sayısı hazır gelir. Kalan taksitleri ve tutarı kendim hesaplarım.',1],['📜','Test kullanıcısı taahhütnamesi','Uygulamayı kullanmadan önce gizlilik taahhütnamesini okuyup onaylaman gerekir. Onay kartını WhatsApp’tan uygulama sahibine tek dokunuşla gönderebilirsin. Menüdeki Taahhütnamem’den tekrar açabilirsin.',1]]},
@@ -4798,6 +4810,14 @@ function updLimInfo(){
 var cdEdit=null,cdArm=null,cdOpen=null;
 var PAL=[['#4b3bd6','#9a6bff'],['#0e7c86','#2fe0c8'],['#c0306f','#ff7a8a'],['#1d4fb8','#38b6ff'],['#8a3fd1','#e87dff'],['#0b7a4f','#3be09b'],['#d9541e','#ffb347'],['#2b2f4a','#6a74a8'],['#b8203a','#ff6b6b'],['#0f172a','#4b5563']];
 function palGrad(i){var q=PAL[((i%PAL.length)+PAL.length)%PAL.length];return 'radial-gradient(circle at 88% -8%,#ffffff55,transparent 52%),linear-gradient(135deg,'+q[0]+','+q[1]+')'}
+
+var BKG={'Garanti BBVA':['#064e2b','#2fbf71'],'İş Bankası':['#0a1f5c','#2f63d6'],'Akbank':['#9b0f16','#ff5a4a'],'Yapı Kredi':['#0b2a6e','#6a35b8'],'Ziraat Bankası':['#a30d1b','#ee4a55'],'Halkbank':['#073f8f','#2e93e6'],'VakıfBank':['#2b2300','#f2b705'],'QNB':['#4a1160','#b43fd6'],'DenizBank':['#005a9e','#3cb8ff'],'TEB':['#07692f','#7ed957'],'ING':['#c43e00','#ffa23a'],'Enpara':['#4a1a7a','#d24bb5'],'HSBC':['#1d1d1f','#d1001c'],'Kuveyt Türk':['#065f46','#22c997'],'Albaraka Türk':['#0b4d3f','#3fb59a'],'Türkiye Finans':['#5b1a8c','#e0529c'],'Şekerbank':['#b50f2a','#ff8a5c'],'Odeabank':['#5e0a18','#e0243c'],'Fibabanka':['#8f0045','#ff5f8f'],'Anadolubank':['#7a1020','#3a67c9'],'Burgan Bank':['#0a3a8a','#4aa3ff'],'Alternatif Bank':['#0b6b6e','#47d1b5'],'Vakıf Katılım':['#2b2300','#e0a800'],'Ziraat Katılım':['#a30d1b','#ee4a55'],'Papara':['#1c0f3a','#7c4dff']};
+function bankOf(nm){var n=bkN(nm);if(n.length<3)return null;for(var i=0;i<BANKS.length;i++){var b=BANKS[i];if(n.indexOf(bkN(b[0]))>-1)return b;for(var j=0;j<b[2].length;j++){var a=b[2][j];if(a.length>=4&&n.indexOf(a)>-1)return b}}return null}
+function cardGrad(c){var b=bankOf(c.name),q=b&&BKG[b[0]];if(!q)return palGrad(cdColIdx(c));return 'radial-gradient(circle at 85% -10%,#ffffff4d,transparent 55%),linear-gradient(135deg,'+q[0]+','+q[1]+')'}
+function fk4(id){var h=7;id=String(id||'');for(var i=0;i<id.length;i++)h=(h*37+id.charCodeAt(i))>>>0;h=Math.imul(h^(h>>>15),2246822507)>>>0;h=Math.imul(h^(h>>>13),3266489909)>>>0;h^=h>>>16;return String(1000+(h>>>0)%9000)}
+var CLSV='<svg class="cls" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 9a4.5 4.5 0 0 1 0 6"/><path d="M11.5 6.5a8.5 8.5 0 0 1 0 11"/><path d="M15 4a12.5 12.5 0 0 1 0 16"/></svg>';
+var MARK='<svg class="mrk" viewBox="0 0 44 28" width="40" height="26"><rect x="3" y="5" width="18" height="18" rx="5" transform="rotate(45 12 14)" fill="#fff" fill-opacity=".85"/><rect x="17" y="5" width="18" height="18" rx="5" transform="rotate(45 26 14)" fill="#fff" fill-opacity=".38"/></svg>';
+function cardTone(c){var b=bankOf(c.name);return b?b[0]:''}
 function cdColIdx(c){if(typeof c.col==='number')return c.col;var id=c.id,h=0;for(var i=0;i<id.length;i++)h=(h*31+id.charCodeAt(i))>>>0;return h%5}
 function mcColIdx(m){return typeof m.col==='number'?m.col:5}
 function swHtml(sel,attr){return PAL.map(function(q,i){return '<button type="button" '+attr+'="'+i+'" class="'+(sel===i?'on':'')+'" aria-label="Renk '+(i+1)+'" style="background:linear-gradient(135deg,'+q[0]+','+q[1]+')"></button>'}).join('')}
@@ -4815,7 +4835,7 @@ function renderWalletCards(){
   var old=document.querySelectorAll('#wl .pc.kc');for(var i=0;i<old.length;i++)old[i].parentNode.removeChild(old[i]);
   var hc=homeCards(),wb=$('wbody');if(!wb||!hc.length)return;var h='';
   hc.forEach(function(x,i){
-    var o=x.o,bg=palGrad(x.t==='c'?cdColIdx(o):mcColIdx(o)),head,det;
+    var o=x.o,bg=(x.t==='c'?cardGrad(o):palGrad(mcColIdx(o))),head,det;
     if(x.t==='c'){var us=cdUsed(o.id),av=r2(o.limit-us);
       head='<span>'+esc(o.name)+'</span><b class="num">'+(av<0?'Limit aşıldı':'Kalan +'+esc(fmt(av,true)))+'</b>';
       det='<div class="fc"><div><small>Borç</small><b>−'+esc(fmt(us,true))+'</b></div><div><small>Limit</small><b>'+esc(fmt(o.limit,true))+'</b></div><div><small>Ekstre kesim günü</small><b>Ayın '+o.cut+'’i</b></div><div><small>Son ödeme günü</small><b>Ayın '+o.due+'’i</b></div></div>'}
@@ -4836,7 +4856,7 @@ function renderCardDefs(){
     '<div class="citem" style="padding:0 0 10px"><span>Kullanılan '+esc(fmt(u,true))+'</span><span><b>Kalan '+esc(fmt(Math.max(0,t-u),true))+'</b></span></div>';
   var h='';S.cardDefs.forEach(function(c){
     var us=cdUsed(c.id),av=r2(c.limit-us),pc=c.limit>0?Math.min(100,us/c.limit*100):0;
-    h+='<button type="button" class="vcard sm" data-cd="'+esc(c.id)+'" style="background:'+palGrad(cdColIdx(c))+'"><div class="vrow"><span class="chip"></span><span class="vn">'+esc(c.name)+'</span><span class="vr2">'+(av<0?'⚠️ Limit aşıldı':'Kalan +'+esc(fmt(av,true)))+'</span><span class="vgo">›</span></div></button>';
+    h+='<button type="button" class="vcard sm" data-cd="'+esc(c.id)+'" style="background:'+cardGrad(c)+'"><div class="vrow"><span class="vn">'+esc(c.name)+'</span>'+CLSV+'</div><div class="vrow2"><span class="chip"></span><span class="vnum">•••• •••• •••• '+fk4(c.id)+'</span>'+MARK+'</div><div class="vbot"><span>'+(av<0?'Limit aşıldı':'Kalan +'+esc(fmt(av,true)))+'</span><i style="width:'+pc.toFixed(1)+'%"></i></div></button>';
   });
   list.innerHTML=h;swDraw();if(kdSel)renderKd();
 }
@@ -4845,7 +4865,7 @@ function renderKd(){
   if(kdSel.t==='c'){
     var c=cdById(kdSel.id);if(!c){kdClose();return}
     var us=cdUsed(c.id),av=r2(c.limit-us),pc=c.limit>0?Math.min(100,us/c.limit*100):0;
-    h+='<div class="vcard big" style="background:'+palGrad(cdColIdx(c))+'"><div class="vt"><span>KREDİ KARTI</span><span>💳</span></div><div class="chip"></div><div class="vdots">••••  ••••  ••••</div><div class="vn">'+esc(c.name)+'</div><div class="vbar"><i style="width:'+pc.toFixed(1)+'%"></i></div><div class="vb"><span>Borç −'+esc(fmt(us,true))+'</span><span><b>'+(av<0?'⚠️ Limit aşıldı −'+esc(fmt(-av,true)):'Kalan +'+esc(fmt(av,true)))+'</b></span></div></div>';
+    h+='<div class="vcard big" style="background:'+cardGrad(c)+'"><div class="vrow"><span class="vn">'+esc(c.name)+'</span>'+CLSV+'</div><div class="vrow2"><span class="chip"></span></div><div class="vnum">•••• •••• •••• '+fk4(c.id)+'</div><div class="vrow3"><span class="vk">KREDİ KARTI</span>'+MARK+'</div><div class="vbar"><i style="width:'+pc.toFixed(1)+'%"></i></div><div class="vb"><span>Borç −'+esc(fmt(us,true))+'</span><span><b>'+(av<0?'Limit aşıldı −'+esc(fmt(-av,true)):'Kalan +'+esc(fmt(av,true)))+'</b></span></div></div>';
     var bl=S.bills.filter(function(x){return x.cardId===c.id}),pl=S.plans.filter(function(x){return x.cardFrom&&!x.cardTo&&(x.cardId||x.cardLast)===c.id}),mt=0,lk='';
     pl.forEach(function(x){mt+=x.amt;lk+='<div class="citem" style="padding:3px 0"><span>'+esc(x.name)+' <small style="opacity:.7">her ay</small></span><span>'+esc(fmt(x.amt,true))+'</span></div>'});
     bl.forEach(function(x){var la=billLatest(x,'9999-99');mt+=la;lk+='<div class="citem" style="padding:3px 0"><span>'+esc(x.name)+' <small style="opacity:.7">fatura</small></span><span>'+(la>0?esc(fmt(la,true)):'—')+'</span></div>'});
@@ -4894,7 +4914,14 @@ var BANKS=[['Garanti BBVA',5,['garanti','garanti bbva','garanti bankasi','garant
 function bkN(v){return String(v||'').toLocaleLowerCase('tr').replace(/\s+/g,' ').trim()}
 function bankFind(v){var n=bkN(v);if(n.length<2)return null;for(var i=0;i<BANKS.length;i++){var b=BANKS[i];if(bkN(b[0])===n)return b;for(var j=0;j<b[2].length;j++)if(b[2][j]===n)return b}return null}
 function bankApply(){var inp=$('cdName');if(!inp)return;var b=bankFind(inp.value);if(!b)return;inp.value=b[0];cdColSel=b[1];try{swDraw()}catch(e){}}
-(function(){var dl=$('bankList');if(dl)dl.innerHTML=BANKS.map(function(b){return '<option value="'+b[0]+'">'}).join('');var inp=$('cdName');if(inp){inp.addEventListener('change',bankApply);inp.addEventListener('blur',bankApply)}})();
+(function(){var inp=$('cdName'),box=$('bkSug');if(!inp||!box)return;
+function show(){var n=bkN(inp.value),l=[];if(n.length<1)l=BANKS.slice(0,8);else{BANKS.forEach(function(b){var ok=bkN(b[0]).indexOf(n)>-1;if(!ok)b[2].forEach(function(a){if(a.indexOf(n)===0||(n.length>2&&a.indexOf(n)>-1))ok=true});if(ok)l.push(b)})}
+ if(l.length===1&&bkN(l[0][0])===n)l=[];
+ box.innerHTML=l.slice(0,8).map(function(b){var q=BKG[b[0]]||PAL[b[1]];return '<button type="button" class="bk" data-bk="'+esc(b[0])+'"><i style="background:linear-gradient(135deg,'+q[0]+','+q[1]+')"></i>'+esc(b[0])+'</button>'}).join('');box.style.display=l.length?'':'none'}
+inp.addEventListener('input',show);inp.addEventListener('focus',show);inp.addEventListener('change',bankApply);
+box.addEventListener('mousedown',function(e){e.preventDefault()});
+box.addEventListener('click',function(e){var t=e.target.closest('.bk');if(!t)return;var nm=t.getAttribute('data-bk');inp.value=nm;bankApply();box.style.display='none';box.innerHTML='';var l=$('cdLim');if(l)l.focus()});
+show();box.style.display='none'})();
 function cdClear(){cdEdit=null;var cb=$('cdCancel');if(cb)cb.style.display='none';$('cdName').value='';$('cdLim').value='';$('cdCut').value='';$('cdDue').value='';$('cdAdd').textContent='Kartı ekle';cdColSel=S.cardDefs.length%PAL.length;swDraw()}
 bindAmt($('cdLim'));$('cdLim').oninput=fmtAmt;
 $('cdAdd').onclick=function(){
