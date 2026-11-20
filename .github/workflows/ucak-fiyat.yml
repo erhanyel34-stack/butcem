@@ -1,0 +1,34 @@
+name: Uçak fiyatlarını güncelle
+on:
+  schedule:
+    - cron: '17 4 * * *'
+  workflow_dispatch:
+    inputs:
+      debug:
+        default: '0'
+permissions:
+  contents: write
+jobs:
+  fiyat:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Fiyatları çek
+        env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+          FLIGHT_HOST: ${{ vars.FLIGHT_HOST }}
+          FLIGHT_PATH: ${{ vars.FLIGHT_PATH }}
+          DEBUG: ${{ github.event.inputs.debug }}
+        run: node scripts/scripts/ucak_fiyat.mjs
+      - name: Değişiklik varsa kaydet
+        run: |
+          if ! git diff --quiet fiyatlar.json; then
+            git config user.name "fiyat-bot"
+            git config user.email "bot@users.noreply.github.com"
+            git add fiyatlar.json
+            git commit -m "Uçak fiyatları güncellendi"
+            git push
+          fi
