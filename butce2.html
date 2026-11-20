@@ -4115,6 +4115,7 @@ function isBasic(){return S.plan==='basic'}
 var BS_TABS={ozet:'bhome',fatura:'bpay',islem:'bhome'},BS_BACK={bhome:'ozet',bpay:'fatura'};
 function goTab(v){
   v=isBasic()?(BS_TABS[v]||v):(BS_BACK[v]||v);
+  if(v==='fatura'&&psCur==='g')setPs('f');
   tab=v;
   document.querySelectorAll('.nav .t').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-v')===v)});
   ['ozet','fatura','islem','ayar','bhome','bpay'].forEach(function(n){$('v-'+n).classList.toggle('on',n===v)});
