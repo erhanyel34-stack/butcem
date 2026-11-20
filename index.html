@@ -957,7 +957,7 @@ input[type=month].fld,input[type=date].fld{min-width:0;max-width:100%;width:100%
 .gsbox input::placeholder{color:#6d74a6}
 .gsbox button{background:#ffffff1c;border:0;color:#cfd3f5;width:24px;height:24px;border-radius:50%;font-size:12px;display:none;padding:0}
 .gscl{flex:none;white-space:nowrap;background:#ffffff14;border:0;color:#fff;font-size:15px;font-weight:700;min-width:64px;height:48px;padding:0 14px;border-radius:14px;touch-action:manipulation}
-#gsb{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 0 40px}
+#gsb{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 0 calc(40px + var(--kb,0px))}
 .gsg{font-size:11.5px;color:#9aa0cf;letter-spacing:.5px;margin:16px 2px 7px;text-transform:uppercase;font-weight:700}
 .gsr{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#ffffff0d;border:0;border-radius:15px;padding:11px 12px;margin-bottom:7px;color:#fff}
 .gsr .ico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
@@ -1158,9 +1158,33 @@ body.pl-basic .nav .t[data-v=ayar]{display:flex;order:5}
 .asm{display:flex;gap:8px;margin:0 0 12px;align-items:flex-start;animation:asin .3s ease-out}
 @keyframes asin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .asm.me{justify-content:flex-end}.asm.me .asbb{background:linear-gradient(135deg,#7a55ff,#3f6be0);border-radius:18px 18px 6px 18px;max-width:82%;font-weight:600}
-.asm.bot .asbb{background:#ffffff12;border:1px solid #ffffff1c;border-radius:6px 18px 18px 18px;max-width:calc(100% - 40px);min-width:0;flex:1}
+.asm.bot .asbb{background:var(--card);border:1px solid var(--line);border-radius:6px var(--r) var(--r) var(--r);max-width:calc(100% - 40px);min-width:0;flex:1}
 .asbb{padding:11px 14px;font-size:14.5px;line-height:1.5}.asbb p{margin:0 0 8px}.asbb p:last-child{margin-bottom:0}.asbb b{font-weight:800}.asn{font-size:12.5px;color:#b9bff0}
-.asav{width:30px;height:30px;border-radius:10px;flex:none;display:grid;place-items:center;background:linear-gradient(145deg,#8a6bff,#3f86ea 60%,#22d3c5);box-shadow:0 4px 12px #6a4cff55}.asav .lic{width:17px;height:17px;stroke:#fff;fill:#ffffff33}.asav.big{width:52px;height:52px;border-radius:17px}.asav.big .lic{width:28px;height:28px}
+.asav{width:32px;height:32px;border-radius:10px;flex:none;display:grid;place-items:center;background:linear-gradient(145deg,#8a6bff,#3f86ea 60%,#22d3c5);box-shadow:0 4px 12px #6a4cff55}.asav .lic{width:17px;height:17px;stroke:#fff;fill:#ffffff33}.asav.big{width:52px;height:52px;border-radius:17px}.asav.big .lic{width:28px;height:28px}
+.asnm{display:flex;flex-direction:column;align-items:center;line-height:1.15}.asnm small{font-size:11px;font-weight:600;color:#9aa4d6;display:inline-flex;align-items:center;gap:5px;margin-top:2px}.asnm small i{width:6px;height:6px;border-radius:50%;background:#3ddc97;display:inline-block}.asnm small.ty i{background:#b9bff0;animation:asd 1s infinite ease-in-out}
+.asts{display:block;text-align:right;font-size:10.5px;opacity:.55;margin-top:4px;font-weight:500}
+.asm.me .asbb{padding-bottom:8px}
+.asav{background:none!important;box-shadow:none!important;border-radius:50%!important}.asav .bface{width:100%;height:100%;display:block}
+.asnm{flex-direction:row!important;align-items:center!important;gap:9px;text-align:left}.asnt{display:flex;flex-direction:column;align-items:flex-start;font-size:18px;line-height:1.15}
+.asfc{width:40px;height:40px;border-radius:50%;flex:none;position:relative;box-shadow:0 0 0 2px #ffffff22,0 4px 14px #6a4cff66}.asfc svg{width:100%;height:100%;display:block}
+.asfc::after{content:"";position:absolute;right:0;bottom:1px;width:10px;height:10px;border-radius:50%;background:#3ddc97;border:2px solid #0b0e22}
+.bey{transform-box:fill-box;transform-origin:center;animation:bblink 4.2s infinite}
+@keyframes bblink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+.asfc{animation:bbob 3.4s ease-in-out infinite}.asm.bot .asav{animation:bbob 4.2s ease-in-out infinite}
+@keyframes bbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.6px)}}
+.bpu{animation:blook 7s infinite ease-in-out}
+@keyframes blook{0%,18%,100%{transform:translate(0,0)}24%,40%{transform:translate(1.3px,-.4px)}46%,62%{transform:translate(-1.3px,.2px)}68%{transform:translate(0,.8px)}}
+.bmo,.bck{transform-box:fill-box;transform-origin:center}
+.bck{animation:bckp 3.2s infinite ease-in-out}
+@keyframes bckp{0%,100%{opacity:.8}50%{opacity:1}}
+#as.bty .bmo{animation:btalk .42s infinite ease-in-out}
+@keyframes btalk{0%,100%{transform:scale(.8,.55)}50%{transform:scale(1,1.25)}}
+#as.bty .asfc{animation:bbob .5s infinite ease-in-out}
+.asrv{opacity:0;transform:translateY(6px);animation:asrv .38s ease-out forwards}
+@keyframes asrv{to{opacity:1;transform:none}}
+#asHelpBtn{display:none}#asChips{display:none}.asst{display:none}
+.asbot{padding-top:4px}
+.asav{display:inline-flex;align-items:center;justify-content:center}.asav em{font-style:normal;font-weight:900;font-family:var(--num);font-size:15px;color:#fff}
 .asdots{display:inline-flex;gap:4px}.asdots i{width:7px;height:7px;border-radius:50%;background:#b9bff0;animation:asd 1s infinite ease-in-out}.asdots i:nth-child(2){animation-delay:.15s}.asdots i:nth-child(3){animation-delay:.3s}
 @keyframes asd{0%,80%,100%{opacity:.3;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
 .asst{display:block;margin-top:6px;font-size:12px;color:#b9bff0}
@@ -1640,7 +1664,7 @@ window.__splashReady=function(){go();setTimeout(kill,Math.max(0,2750-(Date.now()
 </div>
 
 <div id="dr"><div class="dp" id="drp"><div class="dh">BPlan</div>
-  <button type="button" class="di" data-dr="asst"><span class="e">✨</span><span>Asistanım<b class="nb">YENİ</b><small>Sor, hemen cevaplayayım</small></span></button>
+  <button type="button" class="di" data-dr="asst"><span class="e">✨</span><span>Bibi<b class="nb">YENİ</b><small>Bütçe asistanın, sor hemen cevaplasın</small></span></button>
   <button type="button" class="di" data-dr="sv"><span class="e"><svg viewBox="0 0 28 28" width="28" height="28" aria-hidden="true"><rect x="3" y="4" width="22" height="19" rx="4" fill="#4a3fc4" stroke="#8f7cff" stroke-width="1.4"/><rect x="6" y="7" width="16" height="13" rx="2.5" fill="#171a46"/><circle cx="12.5" cy="13.5" r="3.6" fill="#23277a" stroke="#ffd34d" stroke-width="1.5"/><circle cx="12.5" cy="13.5" r=".9" fill="#ffd34d"/><rect x="18" y="11.5" width="2.6" height="4" rx="1" fill="#ffd34d"/><rect x="6" y="23" width="3" height="2" rx=".8" fill="#4a3fc4"/><rect x="19" y="23" width="3" height="2" rx=".8" fill="#4a3fc4"/></svg></span><span>Birikimlerim<small>Altın, döviz, gümüş</small></span></button>
   <button type="button" class="di" data-dr="cards"><span class="e">💳</span><span>Kartlarım<small>Limit, borç, bağlı ödemeler</small></span></button>
   <button type="button" class="di" data-dr="trip"><span class="e">🏖️</span><span>Tatil planı<small id="drTripSub">Tatilini planla</small></span></button>
@@ -1679,11 +1703,11 @@ window.__splashReady=function(){go();setTimeout(kill,Math.max(0,2750-(Date.now()
 <div id="sv"><div class="svin"><div class="svh"><button type="button" class="gscl" id="svBack">‹ Geri</button><b>Birikimlerim</b><button type="button" class="gscl" id="svRef">Yenile</button></div><div id="svBody"></div></div></div>
 
 <div id="as"><div class="asin">
-  <div class="ash"><button type="button" class="gscl" id="asBack">‹ Geri</button><b>Asistanım</b><span class="asbtns"><button type="button" class="gscl" id="asHelpBtn" aria-label="Nasıl kullanılır?">?</button><button type="button" class="gscl" id="asClear" aria-label="Sohbeti temizle">Temizle</button></span></div>
+  <div class="ash"><button type="button" class="gscl" id="asBack">‹ Geri</button><b class="asnm"><span class="asfc"><svg class="bface" viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="bfg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6bff"/><stop offset=".6" stop-color="#3f86ea"/><stop offset="1" stop-color="#22d3c5"/></linearGradient></defs><circle cx="20" cy="20" r="20" fill="url(#bfg)"/><path d="M20 2.5C16 2.5 14 5.5 16.5 7.5C18 8.7 20 8 20 6.4C20 8 22 8.7 23.5 7.5C26 5.5 24 2.5 20 2.5Z" fill="#fff" fill-opacity=".0"/><g class="bey"><ellipse cx="13.5" cy="18" rx="3.1" ry="4.1" fill="#fff"/><ellipse cx="26.5" cy="18" rx="3.1" ry="4.1" fill="#fff"/><g class="bpu"><circle cx="14.2" cy="18.8" r="1.7" fill="#1a1b52"/><circle cx="27.2" cy="18.8" r="1.7" fill="#1a1b52"/></g></g><g class="bck"><circle cx="8.6" cy="25" r="2.6" fill="#ff8fb8" fill-opacity=".55"/><circle cx="31.4" cy="25" r="2.6" fill="#ff8fb8" fill-opacity=".55"/></g><g class="bmo"><path d="M14.5 26C17.5 30.2 22.5 30.2 25.5 26" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/></g></svg></span><span class="asnt">Bibi<small id="asSt"><i></i>çevrimiçi</small></span></b><span class="asbtns"><button type="button" class="gscl" id="asHelpBtn" aria-label="Nasıl kullanılır?">?</button><button type="button" class="gscl" id="asClear" aria-label="Sohbeti temizle">Temizle</button></span></div>
   <div class="aschat" id="asChat"></div>
   <div class="ashelp" id="asHelp"></div>
   <div class="asbot"><div class="aschips" id="asChips"></div>
-  <form class="asform" id="asForm" autocomplete="off"><input class="fld" id="asIn" placeholder="Bir şey sor… örn. Bu ay neye harcadım?" maxlength="120" enterkeyhint="send"><button type="submit" class="asgo" aria-label="Gönder"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V6M6.5 11.5L12 6l5.5 5.5"/></svg></button></form></div>
+  <form class="asform" id="asForm" autocomplete="off"><input class="fld" id="asIn" placeholder="Bibi’ye sor…" maxlength="120" enterkeyhint="send"><button type="submit" class="asgo" aria-label="Gönder"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V6M6.5 11.5L12 6l5.5 5.5"/></svg></button></form></div>
 </div></div>
 
 <!-- Gelir/gider penceresi -->
@@ -1898,7 +1922,7 @@ window.__splashReady=function(){go();setTimeout(kill,Math.max(0,2750-(Date.now()
 <div class="cbg" id="igbg"><div class="ig" id="igBox"></div></div>
 <div class="cbg" id="tiBg"><div class="ti" id="tiBox"></div></div>
 <div class="cbg" id="cfBg"><div class="cf" id="cfBox"></div></div>
-<div id="gs"><div class="gsin"><div class="gsh"><div class="gsbox"><span class="gsi">🔍</span><input id="gsq" type="search" name="butcem-ara" placeholder="Kredi, yemek, telefon faturası…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="search"><button type="button" id="gsx" aria-label="Temizle">✕</button></div><button type="button" id="gsc" class="gscl">Kapat</button></div><div id="gsb"></div></div></div>
+<div id="gs"><div class="gsin"><div class="gsh"><div class="gsbox"><span class="gsi">🔍</span><input id="gsq" type="search" name="bpq" placeholder="Kredi, yemek, telefon faturası…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="search"><button type="button" id="gsx" aria-label="Temizle">✕</button></div><button type="button" id="gsc" class="gscl">Kapat</button></div><div id="gsb"></div></div></div>
 <div class="cbg" id="wnBg"><div class="wn" id="wnBox"></div></div>
 <div class="cbg" id="rcBg"><div class="rcb" id="rcBox"></div></div>
 <div class="toast" id="toast"></div>
@@ -2963,8 +2987,8 @@ var LK=Object.keys(LI).sort(function(a,b){return b.length-a.length});
 function lsv(d){return '<svg class="lic" viewBox="0 0 24 24" aria-hidden="true">'+d+'</svg>'}
 function lead(e){var n=e.firstChild;if(!n||n.nodeType!==3)return;var t=n.nodeValue.replace(/^\s+/,''),t2=t.replace(/️/g,'');for(var i=0;i<LK.length;i++){var k=LK[i];if(t2.indexOf(k)===0){var rest=t2.slice(k.length).replace(/^\s+/,'');var sp=document.createElement('span');sp.className='lsp';sp.innerHTML=lsv(LI[k]);e.insertBefore(sp,n);n.nodeValue=rest?' '+rest:'';return}}}
 function skin(root){try{var r=root||document;
-  r.querySelectorAll('.oe,.chip.tl>b,.nav .t>span,#dueBox .li .ic,.di>.e,.rgi,.ico,.tx .ico,.bill-row .ic,.bill .ic,.bico').forEach(function(e){if(e.firstElementChild)return;var t=e.textContent.replace(/️/g,'').trim(),d=LI[t];if(d)e.innerHTML=lsv(d)});
-  r.querySelectorAll('.seg button,.paysg button,#sQuick .chip,#sPayM button,.bsi,.pill>small,.fgh,.rdh,.tl,.citem>b,.gsg,span.lbl,.thelp,summary,h3,h2,.banner>b,#attnHead b,.card>h4,#dueBox .hd span,.bsec,.btn,.paysg button,#dueBox .emp').forEach(lead);r.querySelectorAll('.empty em').forEach(function(e){if(e.firstElementChild)return;var t=e.textContent.replace(/\uFE0F/g,'').trim(),d=LI[t];if(d)e.innerHTML=lsv(d)})}catch(x){}}
+  r.querySelectorAll('.oe,.chip.tl>b,.nav .t>span,#dueBox .li .ic,.di>.e,.rgi,.ico,.tx .ico,.bill-row .ic,.bill .ic,.bico,.gsi,.gsbi').forEach(function(e){if(e.firstElementChild)return;var t=e.textContent.replace(/️/g,'').trim(),d=LI[t];if(d)e.innerHTML=lsv(d)});
+  r.querySelectorAll('.seg button,.paysg button,#sQuick .chip,#sPayM button,.bsi,.pill>small,.fgh,.rdh,.tl,.citem>b,.gsg,span.lbl,.thelp,summary,h3,h2,.banner>b,#attnHead b,.card>h4,#dueBox .hd span,.bsec,.btn,.paysg button,#dueBox .emp,.gsch button,.gsr .m b').forEach(lead);r.querySelectorAll('.empty em').forEach(function(e){if(e.firstElementChild)return;var t=e.textContent.replace(/\uFE0F/g,'').trim(),d=LI[t];if(d)e.innerHTML=lsv(d)})}catch(x){}}
 var TWR=null;
 function tskin(){try{if(!TWR)TWR=new RegExp('('+LK.map(function(k){return k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}).join('|')+')','g');
   ['tscr','tlist','tiBox','tripcard'].forEach(function(id){var root=document.getElementById(id);if(!root)return;
@@ -3695,10 +3719,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.10';
+var APP_VER='2.11';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+{"v":"2.11","b":1,"big":1,"bigTitle":"Tanış: Bibi!","ribbon":"YENİ · AKILLI ASİSTAN","cta":"asst","date":"Kasım 2026","title":"Bibi: bütçe asistanın artık çok daha akıllı","items":[["🧭","Tanış: Bibi","Asistanımızın artık bir adı ve yüzü var. Bibi sana sohbet eder gibi yazıyor: “yazıyor…” der, kısa kısa cevap verir, samimi konuşur. Ekran sadeleşti, yazı kalabalığı gitti.",1],["🎯","Hedeflerini biliyor","“Araba almak için her ay ne kadar biriktirmem lazım?” dersen hedefini bulur, kalan tutarı ve 6, 12, 24, 36 ay için aylık ayırman gereken parayı söyler. “Peki 12 ay olsun” diye devam edebilirsin.",1],["🛍️","“Şunu almak istiyorum” de, hesaplasın","PlayStation, telefon, ne olursa: fiyatı sorar, gelir ve giderine bakıp aylık ne kadar kenara ayırman gerektiğini söyler. “Alabilir miyim?” dersen ay sonu tahminine göre rahat mı sıkışık mı olur, yorumlar. Tek dokunuşla hedef olarak ekleyebilirsin.",1],["🏖️","Tatil sorularını cevaplıyor","“Bodrum’a tatile gitmek istiyorum” de. Tatil planındaki hesapla uçak, araba, otobüs ve tren için yaklaşık maliyeti verir. “Temmuzda ailece” ya da “2 kişi” dersen ona göre hesaplar. Tatil bütçeni ve ne kadar biriktirmen gerektiğini de söyler.",1],["💱","Kurlardan da anlıyor","“Dolar kaç TL?”, “1000 dolar kaç lira?”, “5000 TL kaç euro?”, “Gram altın ne kadar?” Güncel kurla çevirir.",1],["💡","Fatura ve tasarruf yorumları","“Bu ay faturalarım çok mu geldi?” diye sor, geçen ayla kıyaslasın; azsa farkı birikime eklemeni önersin. “Nasıl tasarruf edeyim?” dersen en çok harcadığın kalemleri ve kısarsan ne kadar kalacağını gösterir.",1],["🔎","Arama ekranı sabitlendi","Klavye açılırken arama ekranının zıplaması düzeltildi. Arama ekranındaki ikonlar da yeni çizgi ikonlara geçti.",0],["🔁","Ödemeler ekranı düzeltildi","Gelirler ekranından Ödemeler’e geçince sekmelerin ve faturaların kaybolması düzeltildi.",0],["✨","Yeni açılış animasyonu","Logo ışık çizgileriyle oluşuyor, BPlan yazısı ve slogan sırayla geliyor, ardından ana ekrana yumuşakça geçiyor.",1]]},
 {"v":"2.10","b":1,"big":1,"bigTitle":"BPlan geldi!","ribbon":"YENİ ADIMIZ, YENİ YÜZÜMÜZ","cta":"asst","date":"Kasım 2026","title":"BPlan, Asistanım, yeni cüzdan","items":[["🌅","Yeni adımız BPlan","Bütçem artık BPlan: kısa, samimi ve akılda kalıcı. Yeni logomuz ve yeni açılış animasyonumuz da hazır. Verilerin, kayıtların ve ayarların aynen duruyor.",1],["✨","Asistanım: sor, hemen cevaplasın","Yan menüdeki “Asistanım”a dokun ve günlük dille yaz: “Bu ay neye çok para harcadım?” Cevap kendi kayıtlarından hesaplanır; kategoriler, tutarlar ve karşılaştırmalar kartlar halinde gelir.",1],["🔎","Neler sorabilirsin?","Harcama dağılımı, bu ay sana kim para gönderdi, hedefine ne zaman ulaşırsın, kart ekstreni ödedin mi, geçen aya göre değişim, ay sonu tahmini, yaklaşan ödemeler, abonelikler ve borçlar.",1],["🔒","Verilerin telefonundan çıkmaz","Yapay zekâ değil; telefonunda çalışan, kurallara dayalı yerel bir asistan. Sorduklarını hiçbir yere göndermez, sohbeti saklamaz.",1],["📖","Nasıl kullanılır?","Asistan ekranının sağ üstündeki ? düğmesinde adım adım kullanım, örnek sorular ve daha iyi cevap almak için ipuçları var. Hiç veri girmediysen asistan sana neyi girmen gerektiğini söyler.",1],["👛","Daha sade üst alan, yeni cüzdan","Üstte yalnızca logo, ad ve selamlama var. Ay seçici cüzdanın içinde, ay sonu tahmini ise net bir kart olarak ilerleme çubuğuyla görünüyor. Bütçe çubuğu duruma göre renk alıyor.",1],["💳","Kartlar gerçek kart gibi","Çip, temassız simgesi, •••• •••• •••• ile biten dekoratif numara. Garanti, İş Bankası, Akbank gibi bankaların ve Ticket, Pluxee, Multinet gibi yemek kartlarının tonları otomatik uygulanır.",1],["☰","Sade plan yenilendi","Her ay sana kalan tutar tek bir kartta, kategoriler renkli ikonlu, alt menü düzenli.",1],["🧹","Daha az emoji, daha az kalabalık","Ödemeler, Gelecek aylar, “Yeni işlem” ve bu pencere çizgi ikonlara geçti. Arama ve yana kaydırmadaki ekran kayması düzeltildi. Eski küçük düzeltme notları listeden kaldırıldı.",1],["🏖️","Tatil bölümü yenilendi","Tatil ekranındaki emojiler çizgi ikonlara döndü, Kış tatili ilk sırada geliyor, kar yazıların arkasına alındı.",1],["🧹","Daha hafif ve düzenli","Gereksiz kodlar temizlendi, uygulama daha küçük ve hızlı açılıyor. Gider ekleme penceresindeki mod notu düzeldi.",0]]},
 {"v":"2.9","date":"Kasım 2026","title":"Yenilenen ana ekran ve yan menü","items":[["✨","Yepyeni görünüm","Üst başlık, selamlama, ay seçici ve alt menü yenilendi. Kartlar cam gibi, ikonlar parlak ve çizgi ikon oldu. Animasyonlu logon artık ana ekranın tepesinde.",1],["🏖️","Tatil planın cüzdanın yanında","Tatil planın varsa cüzdan küçülür, yanında kaç gün kaldığı, kaç kişi gideceği ve tahmini toplam görünür. Ay sonu tahmini ve kartların cüzdanın üstünde ince şeritler olarak kalır. Hedefe göre kış, plaj, şehir veya doğa sahnesi çıkar.",1],["📈","Cüzdanda bakiye çizgisi","Cüzdan küçülünce arkasında bu ayki bakiyenin inip çıkışını gösteren soluk bir çizgi görünür.",1],["🏦","Banka adı yazınca tamamlanır","Kart eklerken Garanti, İş Bankası, Akbank gibi bir ad yazınca tam banka adı ve rengi kendiliğinden gelir.",1],["☰","Yenilenen yan menü","Menü Paran, Planların ve Diğer diye gruplara ayrıldı. Her satırda renkli ikon var.",1],["📊","Çizgisel kategori detayı","Kategori detayı halka yerine çizgili, sade bir liste. Satıra dokununca kalemler açılır.",1],["📅","Daha küçük Ödemelerim","Yaklaşan ödemeler en çok 3 satır ve daha kompakt. Ödenenleri görmek için Ödendi kutusuna dokunursun.",0],["🧹","Daha az emoji","Başlıklarda ve kategori ikonlarında emoji yerine çizgi ikonlar kullanıldı. “Bugünkü harcamalarını not ettin mi?” hatırlatması kaldırıldı.",0]]},
 {"v":"2.8","date":"Kasım 2026","title":"Yaklaşan ödemeler ve hedef birikimi","items":[["📅","Yaklaşan ödemeler (7 gün)","Ana ekranda Faturalar ve Krediler iki kutu. Altında önümüzdeki 7 günde ödeyeceklerin ve tahsil edeceklerin tarihe göre sıralı görünür: sabit günlü faturalar (internet, telefon), krediler, abonelikler, kart ekstresi ve elden borçlar. Eski “Yaklaşan ödemeler” kartı ve borç hatırlatma şeridi bu listeye taşındı.",1],["💳","Kart ekstresi tek satırda","Kartla ödediğin taksit ve abonelikler ekstrenin içinde görünür. Satıra dokununca kalemler tarihleriyle açılır, oradan ekstreyi ödeyebilirsin. “Kartla bu ay” şeridi ekstre listeye girince kaybolur, aksi hâlde kalan limiti gösterir.",1],["🤝","Taksitli elden borç","Elden borç ve alacağı taksitli kaydedebilirsin. Tutar eşit bölünür, her ay sıradaki taksit listede çıkar.",1],["🎯","Hedefe her birikim sayılır","Araç gibi bir hedefe dolar, altın ya da TL birikimin güncel kurdan TL değeriyle otomatik sayılır. Tek hedefin varsa otomatik bağlanır, birden fazlaysa hangisi için olduğunu seçersin. Birikimlerim’e Türk lirası da eklendi.",1],["🚦","Renkli uyarılar","Ödenmemiş ve günü geçenler kırmızı, yaklaşanlar sarı, ödenenler yeşil. Vadesi geçen alacağın kırmızı değil turuncu görünür.",1],["🗓️","Fatura ödeme günü","Faturaya isteğe bağlı “Ayın kaçında ödenir?” ekleyebilirsin. Elektrik, su ve doğalgaz günleri değiştiği için listeye girmez.",1]]},
@@ -3735,7 +3760,7 @@ function renderWn(list,fresh){
     h+='<div class="wr"><span class="wv">v'+esc(r.v)+'</span><span class="wt">'+esc(r.title)+'</span></div>';
     r.items.forEach(function(it){if(isBasic()&&it[4]==='d')return;h+='<div class="it">'+wnIco(it[0])+'<div><b>'+esc(it[1])+(it[3]?'<span class="nw">YENİ</span>':'')+'</b><small>'+esc(it[2])+'</small></div></div>'});
   });
-  h+='</div><div class="wf">'+((fresh&&list.length&&list[0].cta==='asst')?'<button type="button" class="btn sec" id="wnAs">'+lsv(LI['✨'])+' Asistanı dene</button>':'')+'<button type="button" class="btn" id="wnOk">Harika, anladım '+lsv(LI['✓'])+'</button></div>';
+  h+='</div><div class="wf">'+((fresh&&list.length&&list[0].cta==='asst')?'<button type="button" class="btn sec" id="wnAs">'+lsv(LI['✨'])+' Bibi’yi dene</button>':'')+'<button type="button" class="btn" id="wnOk">Harika, anladım '+lsv(LI['✓'])+'</button></div>';
   $('wnBox').innerHTML=h;$('wnBg').classList.add('show');
 }
 function openWn(all){
@@ -4203,6 +4228,13 @@ var AS_Q=[['Bu ay neye çok para harcadım?','spend'],['Bu ay bana kim para gön
 var AS_HELP=[['Harcamalar',[['Bu ay neye çok para harcadım?'],['Markete ne kadar harcadım?'],['En büyük harcamam hangisi?'],['Geçen aya göre ne değişti?']]],['Gelir',[['Bu ay bana kim para gönderdi?'],['Bu ay toplam gelirim ne kadar?']]],['Hedef ve birikim',[['Hedefime ne zaman ulaşırım?'],['Birikimim ne kadar?']]],['Kartlar',[['Kart ekstremi ödedim mi?'],['Kartımda ne kadar limit kaldı?']]],['Ödemeler ve borçlar',[['Yaklaşan ödemelerim neler?'],['Aboneliklerim toplam ne kadar?'],['Kim kime borçlu?'],['Ay sonunda ne kadar kalır?']]]];
 function asN(s){return String(s||'').toLocaleLowerCase('tr').replace(/ı/g,'i').replace(/ş/g,'s').replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ö/g,'o').replace(/ç/g,'c').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim()}
 var AS_INT=[
+ ['kur',['kur','doviz','kac tl','kac lira','kac dolar','kac euro','dolar ne','euro ne','dolar kac','euro kac','altin kac','gram altin','sterlin']],
+ ['alabilir',['alabilir miyim','alsam','alayim mi','aliyim mi','almali miyim','harcasam','yeter mi','yeterli mi','sorun olur mu','cebim yeter']],
+ ['tasarruf',['tasarruf','kisabilir','nereden kis','nasil biriktir','para birikmiyor','neden birikmiyor','para yetmiyor','cok harciyorum','nasil kenara']],
+ ['tesekkur',['tesekkur','sag ol','saol','eyvallah','mersi','cok iyi','harika','super']],
+ ['faturakiyas',['faturalarim cok','fatura cok','fatura az','faturalar cok','faturalar az','faturalarim az','fatura kiyas','fatura fazla','faturam cok','faturam az','faturalar yuksek','fatura yuksek','faturalarim yuksek']],
+ ['hedefplan',['biriktirmem','biriktirmeliyim','ne kadar biriktir','biriktirmem lazim','kenara','ayirmam','ayirmaliyim','her ay ne kadar','almak icin','almam icin','alabilmem icin','almak istiyorum','alacagim','kac ayda','kac para biriktir','ne kadar lazim','ne kadar gerek']],
+ ['tatil',['tatil','tatile','tatilde','ucak bileti','ucak fiyat','bilet fiyat','ucak ucreti','seyahat','gezi','yolculuk','ne kadar tutar','tatil butce']],
  ['ekstre',['ekstre','kart borc','kartimi ode','kart ode','kredi karti ode','kart limit','kalan limit','limitim','kart harcama','kartla']],
  ['hedef',['hedef','ne zaman ulas','ne zaman alab','ne zaman biter','ne zaman biri']],
  ['birikim',['birikim','altin','dolar','euro','tasarruf','biriktir']],
@@ -4218,7 +4250,7 @@ var AS_INT=[
  ['spend',['harca','nereye','neye','kategori','gider','dagilim','en cok','para gitti','masraf','nelere']],
  ['yardim',['yardim','neler yapabil','ne yapabil','nasil kullan','merhaba','selam','nasilsin','ne sorabil','sen kimsin','ne ise yar']]
 ];
-var AS_ST={spend:'Harcamalarına bakıyorum…',gelen:'Gelirlerini tarıyorum…',hedef:'Hedeflerini hesaplıyorum…',ekstre:'Kart ekstrelerini kontrol ediyorum…',gecen:'İki ayı karşılaştırıyorum…',tahmin:'Ay sonu tahminini hesaplıyorum…',yaklasan:'Yaklaşan ödemelere bakıyorum…',borc:'Borç ve alacaklarını topluyorum…',abonelik:'Aboneliklerini topluyorum…',birikim:'Birikimlerini hesaplıyorum…',bakiye:'Bakiyene bakıyorum…',gunluk:'Günlük payını hesaplıyorum…',buyuk:'En büyük harcamaları arıyorum…',cat:'Kategoriyi inceliyorum…',note:'Kayıtlarında arıyorum…',yardim:'',none:'Düşünüyorum…'};
+var AS_ST={kur:'Güncel kurlara bakıyorum…',alabilir:'Bütçene göre hesaplıyorum…',tasarruf:'Harcamalarını inceliyorum…',tatilozet:'Tatil planına bakıyorum…',tesekkur:'…',disi:'…',faturakiyas:'Fatura ödemelerini karşılaştırıyorum…',hedefplan:'Hedefini ve aylık tutarı hesaplıyorum…',tatil:'Rota ve fiyat tahminlerine bakıyorum…',spend:'Harcamalarına bakıyorum…',gelen:'Gelirlerini tarıyorum…',hedef:'Hedeflerini hesaplıyorum…',ekstre:'Kart ekstrelerini kontrol ediyorum…',gecen:'İki ayı karşılaştırıyorum…',tahmin:'Ay sonu tahminini hesaplıyorum…',yaklasan:'Yaklaşan ödemelere bakıyorum…',borc:'Borç ve alacaklarını topluyorum…',abonelik:'Aboneliklerini topluyorum…',birikim:'Birikimlerini hesaplıyorum…',bakiye:'Bakiyene bakıyorum…',gunluk:'Günlük payını hesaplıyorum…',buyuk:'En büyük harcamaları arıyorum…',cat:'Kategoriyi inceliyorum…',note:'Kayıtlarında arıyorum…',yardim:'',none:'Düşünüyorum…'};
 var asAct=[],asBusy=false;
 function asAgg(k){
   var sv=cur,y=+k.slice(0,4),m=+k.slice(5,7),es=[];cur=new Date(y,m-1,1);try{es=monthEntries()}catch(e){es=[]}cur=sv;
@@ -4246,6 +4278,7 @@ var AS_ACT={
  gelir:['Gelirleri gör',function(){goPay('g')}],
  odeme:['Ödemeler',function(){goPay('f')}],
  yil:['Aylık tahmin',function(){var b=document.querySelector('[data-dr="year"]');if(b)b.click()}],
+ tatil:['Tatil planı',function(){try{openTripList()}catch(e){}}],
  ozet:['Ana sayfa',function(){var b=document.querySelector('.nav .t[data-v="ozet"],.nav .t[data-v="bhome"]');if(b)b.click()}]
 };
 var AS_R={
@@ -4363,49 +4396,250 @@ function asNoteR(t){
   if(!found.length)return null;var nk=nowK(),pk=asPrevK(nk),m=0,p=0;found.forEach(function(e){if(e.type==='in')return;var mk_=e.date.slice(0,7);if(mk_===nk)m+=e.amt;else if(mk_===pk)p+=e.amt});
   found.sort(function(x,y){return x.date<y.date?1:-1});
   return {h:'<p>Kayıtlarında bununla eşleşen <b>'+found.length+'</b> işlem buldum. Bu ay <b>'+esc(fmt(m))+'</b>, geçen ay <b>'+esc(fmt(p))+'</b>.</p>'+asRows(found.slice(0,5).map(function(e){return {t:e.note||e.cat,s:(+e.date.slice(8,10))+' '+monthName(e.date.slice(0,7)),v:fmt(e.amt),c:e.type==='in'?'#2fcf8f':asCol(e.cat)}})),a:['ozet']}}
+
+function asPlaces(t){
+  var SW='bana benim icin kadar tatile tatil gitmek gitmeyi istiyorum gidecegim gidelim ucak bileti fiyat nasil araba arabayla otobus tren ayda bugun yarin hafta sonu yaz kis'.split(' '),out=[],ws=asN(t).split(' '),I=plIndex();
+  ws.forEach(function(w){if(w.length<4||SW.indexOf(w)>-1)return;
+    var c=[w];for(var n=1;n<=3&&w.length-n>=4;n++)c.push(w.slice(0,w.length-n));
+    for(var i=0;i<c.length;i++){var pl=I[nrm(c[i])];if(pl){if(out.indexOf(pl)<0)out.push(pl);break}}});
+  return out}
+function asGoalFor(t){
+  var ws=asN(t).split(' ').filter(function(w){return w.length>=4}),hit=null;
+  S.goals.forEach(function(g){if(hit)return;var gn=asN(g.name).split(' ');if(gn.some(function(x){return x.length>=3&&ws.some(function(w){var k=Math.min(x.length,w.length,5);return k>=3&&w.slice(0,k)===x.slice(0,k)})}))hit=g});
+  return hit}
+AS_R.hedefplan=function(t){
+  if(!S.goals.length)return asEmpty('Henüz bir hedefin yok. Birikimlerim bölümünden araba, ev, tatil gibi bir hedef ekle; fiyatını yazarsan ne kadar biriktirmen gerektiğini aylara bölerek hesaplarım.',['sv']);
+  var g=asGoalFor(t),mm=asN(t).match(/([a-z0-9]{2,}) (?:almak|alabilmek|alayim|alacagim|almam|alabilmem)\b/),subj=mm&&mm[1];
+  if(!g&&subj&&!/^(bir|bunu|onu|bu|su|her|icin|kac)$/.test(subj)){
+    var pn0=asNum(t.replace(/\d+ kisi/,''));
+    if(pn0)return asBuy(subj.charAt(0).toLocaleUpperCase('tr')+subj.slice(1),pn0);
+    asCtx={subj:subj.charAt(0).toLocaleUpperCase('tr')+subj.slice(1)};
+    return {h:'<p><b>'+esc(asCtx.subj)+'</b> için kayıtlı hedefin yok. Güncel fiyatı yaklaşık kaç TL? Sadece rakamı yazman yeter (örn. 70000 ya da 70 bin), bütçene göre her ay ne kadar kenara ayırman gerektiğini hesaplayayım.</p>',a:['sv'],sug:['30000','70000','150000']}}
+  if(!g&&subj&&!/^(bir|bunu|onu|bu|su|her|icin|kac)$/.test(subj))return {h:'<p>“'+esc(subj)+'” için kayıtlı bir hedefin yok. Birikimlerim bölümünden bir hedef olarak ekle, fiyatını yaz; ne kadar biriktirmen gerektiğini aylara bölüp söyleyeyim. Şu an hedeflerin: '+S.goals.map(function(x){return '<b>'+esc(x.name)+'</b>'}).join(', ')+'.</p>',a:['sv']};
+  if(!g&&S.goals.length===1)g=S.goals[0];
+  if(!g)return {h:'<p>Hangi hedefin için hesaplayayım?</p>',a:['sv'],sug:S.goals.slice(0,4).map(function(x){return x.name+' için ne kadar biriktirmem lazım?'})};
+  var gs=gSaved(g),left=Math.max(0,g.target-gs),pr=guPrice(g.unit)||1,tlv=function(v){return g.unit==='try'?'':'≈ '+fmt(v*pr)};
+  if(left<=1e-9)return {h:'<p><b>'+esc(g.name)+'</b> hedefine ulaşmışsın: biriken '+esc(guFmt(gs,g.unit))+', hedef '+esc(guFmt(g.target,g.unit))+'. 🎉</p>',a:['sv']};
+  var h='<p><b>'+esc(g.name)+'</b> için hedefin <b>'+esc(guFmt(g.target,g.unit))+'</b>. Şu ana kadar <b>'+esc(guFmt(gs,g.unit))+'</b> biriktirmişsin, kalan <b>'+esc(guFmt(left,g.unit))+'</b>'+(g.unit==='try'?'':' ('+esc(fmt(left*pr))+')')+'.</p>';
+  var rows=[6,12,24,36].map(function(n){var m=left/n;return {t:n+' ayda tamamlamak için',s:tlv(m)?tlv(m)+' / ay':'Her ay kenara',v:guFmt(m,g.unit),c:g.col||'#7c5cff'}});
+  h+=asRows(rows);
+  var n=guMonths(g);
+  if(n>0)h+='<p class="asn">Şu an aylık '+esc(guFmt(g.mo,g.unit))+' ayırıyorsun; bu tempoyla '+esc(guWhen(n))+' civarında ulaşırsın.</p>';
+  else h+='<p class="asn">Birikimlerim’de bu hedef için aylık ayırabileceğin tutarı yazarsan ulaşma tarihini de söylerim.</p>';
+  if(g.unit!=='try')h+='<p class="asn">Tutarlar güncel kurla çevrilir; kur değişirse aylık tutar da değişir.</p>';
+  return {h:h,a:['sv']}};
+AS_R.tatil=function(t){
+  var pl=asPlaces(t);
+  if(!pl.length)return {h:'<p>Nereye gitmek istiyorsun? Yer adını yaz, tatil planındaki hesapla uçak, araba, otobüs ve tren için yaklaşık maliyeti söyleyeyim. Örn: “İstanbul’dan Bodrum’a gitmek istiyorum”.</p>',a:['tatil'],sug:['Bodrum’a tatile gitmek istiyorum','Antalya’ya uçak fiyatı ne kadar?']};
+  var from,dest;
+  if(pl.length>=2){from=pl[0];dest=pl[1]}else{dest=pl[0];var f0=lsGet('butcem_from')||((S.trips.filter(function(x){return x.from})[0]||{}).from)||'';from=plFind(f0)}
+  if(!from)return {h:'<p><b>'+esc(dest.name)+'</b> için hesaplayabilmem için nereden yola çıkacağını bilmem lazım. “İstanbul’dan '+esc(dest.name)+'’a gitmek istiyorum” gibi yazabilirsin.</p>',a:['tatil']};
+  var tn=asN(t),st=addDays(today(),30),MN=['ocak','subat','mart','nisan','mayis','haziran','temmuz','agustos','eylul','ekim','kasim','aralik'],mi=-1;
+  MN.forEach(function(m,i){if(mi<0&&(' '+tn).indexOf(' '+m)>-1)mi=i});
+  if(mi>=0){var nw=new Date(),yy=nw.getFullYear();if(mi<nw.getMonth()||(mi===nw.getMonth()&&nw.getDate()>20))yy++;st=yy+'-'+('0'+(mi+1)).slice(-2)+'-15'}
+  var pm=tn.match(/(\d+) kisi/),pc=pm?Math.max(1,Math.min(10,+pm[1])):(/ailece|ailemle/.test(tn)?4:(/esimle|sevgilimle|ciftimiz|iki kisi/.test(tn)?2:1));
+  var sm=+st.slice(5,7),tr={dest:dest.name,from:from.name,season:(sm>=5&&sm<=9)?'yaz':'kis',scope:dest.dis?'dis':'ic',who:'aile',mode:'arac',fuel:'benzin',cons:7,people:pc,start:st,end:addDays(st,5)};
+  var R=rtCalc(tr);
+  if(!R||!R.ok)return {h:'<p><b>'+esc(from.name)+' → '+esc(dest.name)+'</b> için tahmin çıkaramadım (aynı yer ya da desteklenmeyen rota). Tatil planında elle girebilirsin.</p>',a:['tatil']};
+  var rows=[],lab={ucak:'✈️ Uçak',arac:'🚗 Araba',otobus:'🚌 Otobüs',tren:'🚆 Tren'},col={ucak:'#4cc9f0',arac:'#ffb648',otobus:'#2fcf8f',tren:'#c06cff'};
+  ['ucak','arac','otobus','tren'].forEach(function(k){var m=R.M[k];if(m&&m.ok)rows.push({t:lab[k].replace(/^\S+\s/,''),s:(k==='arac'?'Yakıt + otoyol, gidiş-dönüş':'Gidiş-dönüş, '+(pc>1?pc+' kişi toplam':'kişi başı'))+' · yaklaşık '+Math.round(m.time*10)/10+' sa',v:fmt(k==='arac'?m.total:m.total),c:col[k]}) });
+  var h='<p><b>'+esc(from.name)+' → '+esc(dest.name)+'</b> için yaklaşık '+esc(MONTHS[new Date(st+'T00:00:00').getMonth()])+' ayında, 5 gece'+(pc>1?', '+pc+' kişi':'')+' için tahminlerim:</p>'+asRows(rows);
+  if(R.M.ucak&&R.M.ucak.ok&&R.M.arac&&R.M.arac.ok)h+='<p class="asn">'+(pc>1?pc+' kişi için':'Tek başına')+' uçak <b>'+esc(fmt(R.M.ucak.total))+'</b>; arabayla yolculuk masrafı <b>'+esc(fmt(R.M.arac.total))+'</b>'+(pc>1?' (kişi başı '+esc(fmt(R.M.arac.total/pc))+')':'. Arabada kişi sayısı arttıkça kişi başı maliyet düşer')+'.</p>';
+  h+='<p class="asn">Bunlar tarih ve sezona göre ortalamalara dayanan <b>tahminlerdir</b>, anlık bilet fiyatı değildir. Konaklama ve yemek için tatil planını açıp tarih, kişi sayısı ve kendi bilet fiyatını yazabilirsin.</p>';
+  return {h:h,a:['tatil']}};
+
+var asCtx=null;
+function asNum(q){
+  var t=String(q||'').toLocaleLowerCase('tr'),m=t.match(/(\d[\d.,]*)\s*(bin|milyon|k\b)?\s*(tl|lira|₺|\$|dolar|usd|euro|eur|€)?/);if(!m)return null;
+  var raw=m[1],v;if(/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(raw))v=parseFloat(raw.replace(/\./g,'').replace(',','.'));else v=parseFloat(raw.replace(',','.'));
+  if(!(v>0))return null;if(m[2]==='bin'||m[2]==='k')v*=1000;else if(m[2]==='milyon')v*=1e6;
+  var u=m[3]||'',cu='try';if(/\$|dolar|usd/.test(u))cu='usd';else if(/euro|eur|€/.test(u))cu='eur';
+  var pr=cu==='try'?1:(svPrice(cu)||0);if(!(pr>0)){pr=1;cu='try'}
+  return {v:v,tl:v*pr,cu:cu}}
+function asCap(){
+  var nk=nowK(),pk=asPrevK(nk),b=asAgg(pk),a=asAgg(nk),u=b.inc>0?b:a;
+  return {net:u.inc-u.out,inc:u.inc,out:u.out,lbl:u===b?'geçen ay':'bu ay',has:u.inc>0}}
+function asBuy(subj,pn){
+  var c=asCap(),price=pn.tl,h='<p><b>'+esc(subj)+'</b> için fiyat yaklaşık <b>'+esc(fmt(price))+'</b>.</p>';
+  if(!c.has)return {h:h+'<p>Gelir kaydın olmadığı için bütçene göre öneri yapamıyorum. Gelirini ekleyince aylık ne kadar ayırabileceğini hesaplarım. Şimdilik süreye göre aylık tutarlar:</p>'+asRows([6,12,24].map(function(n){return {t:n+' ayda',s:'Her ay kenara',v:fmt(price/n),c:'#7c5cff'}})),a:['sv']};
+  var cap=Math.max(0,c.net),opts=[6,12,18,24,36],pick=null;
+  opts.forEach(function(n){if(!pick&&cap>0&&price/n<=cap*0.7)pick=n});
+  h+='<p>Kayıtlarına göre '+c.lbl+' gelirin <b>'+esc(fmt(c.inc))+'</b>, harcaman <b>'+esc(fmt(c.out))+'</b>, geriye yaklaşık <b>'+esc(fmt(Math.max(0,c.net)))+'</b> kalmış.</p>';
+  h+=asRows([6,12,24,36].map(function(n){var m=price/n;return {t:n+' ayda',s:cap>0?(m/cap>1.5?'Aylık kalanından fazla':'Kalan paranın %'+Math.round(m/cap*100)+'’si'):'Her ay kenara',v:fmt(m),p:cap>0?Math.min(100,m/cap*100):null,c:cap>0&&m>cap?'#ff6b81':'#7c5cff'}}));
+  if(cap<=0)h+='<p class="asn">Şu an giderlerin gelirini karşılıyor, ayırabileceğin para görünmüyor. Önce küçük bir tutarı bile her ay kenara koyabilmek için harcamalarını gözden geçirmeni öneririm.</p>';
+  else if(pick)h+='<p class="asn">Bütçeni zorlamayan seçenek: <b>'+pick+' ayda</b>, aylık <b>'+esc(fmt(price/pick))+'</b> ayırmak. Böylece kalan paranın yaklaşık %'+Math.round(price/pick/cap*100)+'’sini kullanırsın, gerisi beklenmedik giderlere yeter.</p>';
+  else h+='<p class="asn">Kalan paranın tamamını ayırsan bile yaklaşık <b>'+Math.ceil(price/cap)+' ay</b> sürer. Fiyatı düşürmek, ikinci el ya da taksit seçeneklerine bakmak mantıklı olabilir.</p>';
+  h+='<p class="asn">Hesap, '+c.lbl+'ki gelir-gider farkına dayanır; her ay aynı olmayabilir.</p>';
+  return {h:h,a:['sv']}}
+AS_R.faturakiyas=function(){
+  var nk=nowK(),pk=asPrevK(nk),a=asAgg(nk),b=asAgg(pk),A=a.by['Faturalar']||0,B=b.by['Faturalar']||0;
+  if(!(A>0)&&!(B>0))return asEmpty('Henüz ödenmiş fatura kaydın yok. Faturalarını ödediğinde (Ödemeler › Faturalar) iki ayı karşılaştırıp yorumlarım.',['odeme']);
+  if(!(B>0))return {h:'<p>Bu ay şu ana kadar <b>'+esc(fmt(A))+'</b> fatura ödemişsin. Geçen aya ait fatura kaydın olmadığı için karşılaştırma yapamıyorum.</p>',a:['odeme']};
+  var d=A-B,sa=a.subs['Faturalar']||{},sb=b.subs['Faturalar']||{},ks={};Object.keys(sa).concat(Object.keys(sb)).forEach(function(x){ks[x]=1});
+  var rows=Object.keys(ks).map(function(k){return {k:k,x:(sa[k]||0)-(sb[k]||0)}}).filter(function(r){return Math.abs(r.x)>=1}).sort(function(x,y){return Math.abs(y.x)-Math.abs(x.x)}).slice(0,5);
+  var h='<p>Bu ay şu ana kadar <b>'+esc(fmt(A))+'</b>, geçen ay <b>'+esc(fmt(B))+'</b> fatura ödemişsin. '+(Math.abs(d)<1?'Hemen hemen aynı.':(d>0?'Bu ay <b>'+esc(fmt(d))+'</b> daha fazla.':'Bu ay <b>'+esc(fmt(-d))+'</b> daha az.'))+'</p>';
+  if(rows.length)h+=asRows(rows.map(function(r){return {t:r.k,s:'Geçen ay '+fmt(sb[r.k]||0)+' → bu ay '+fmt(sa[r.k]||0),v:(r.x>0?'+':'−')+fmt(Math.abs(r.x)),c:r.x>0?'#ff6b81':'#2fcf8f'}}));
+  if(d<-1)h+='<p class="asn">Faturalar geçen aya göre düşük kaldı. Aradaki yaklaşık <b>'+esc(fmt(-d))+'</b>’yi birikimine eklemeyi düşünebilirsin; bu tempoyla yılda yaklaşık '+esc(fmt(-d*12))+' eder.</p>';
+  else if(d>1){var top=rows.filter(function(r){return r.x>0})[0];h+='<p class="asn">Artışın ana nedeni'+(top?' <b>'+esc(top.k)+'</b>':'')+'. Mevsim ve kullanımla değişebilir; gelecek ay da yüksek kalırsa tasarruf için tüketimine bakmak iyi olur.</p>'}
+  h+='<p class="asn">Henüz ödemediğin faturalar bu ayın toplamına dahil değildir.</p>';
+  return {h:h,a:['odeme']}};
+
+/* ---------- Asistan 2: kur, alabilir miyim, tasarruf, tatil bütçesi, sohbet, devam soruları ---------- */
+var BFACE='<svg class="bface" viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="bfg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6bff"/><stop offset=".6" stop-color="#3f86ea"/><stop offset="1" stop-color="#22d3c5"/></linearGradient></defs><circle cx="20" cy="20" r="20" fill="url(#bfg)"/><path d="M20 2.5C16 2.5 14 5.5 16.5 7.5C18 8.7 20 8 20 6.4C20 8 22 8.7 23.5 7.5C26 5.5 24 2.5 20 2.5Z" fill="#fff" fill-opacity=".0"/><g class="bey"><ellipse cx="13.5" cy="18" rx="3.1" ry="4.1" fill="#fff"/><ellipse cx="26.5" cy="18" rx="3.1" ry="4.1" fill="#fff"/><g class="bpu"><circle cx="14.2" cy="18.8" r="1.7" fill="#1a1b52"/><circle cx="27.2" cy="18.8" r="1.7" fill="#1a1b52"/></g></g><g class="bck"><circle cx="8.6" cy="25" r="2.6" fill="#ff8fb8" fill-opacity=".55"/><circle cx="31.4" cy="25" r="2.6" fill="#ff8fb8" fill-opacity=".55"/></g><g class="bmo"><path d="M14.5 26C17.5 30.2 22.5 30.2 25.5 26" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/></g></svg>';
+var asLast=null;
+function asCurs(t){
+  var M=[['usd',/dolar|usd|\$/],['eur',/euro|eur|€/],['gbp',/sterlin|gbp|£|pound/],['altin',/altin|gram/],['try',/\btl\b|lira|₺|turk/]],o=[];
+  M.forEach(function(m){var i=t.search(m[1]);if(i>-1)o.push([i,m[0]])});o.sort(function(a,b){return a[0]-b[0]});return o.map(function(x){return x[1]})}
+function asCurNm(k){return {usd:'Dolar',eur:'Euro',gbp:'Sterlin',altin:'Gram altın',try:'TL'}[k]}
+function asRt(v,k){var d=v>=10?2:(v>=1?2:4);return v.toLocaleString('tr-TR',{minimumFractionDigits:d,maximumFractionDigits:d})+' '+({try:'₺',usd:'$',eur:'€',gbp:'£',altin:'gr'}[k]||'')}
+function asCurPr(k){return k==='try'?1:(svPrice(k)||0)}
+function asGoalBtn(name,price,mo){return {t:'Hedef olarak ekle',f:function(b){
+  if(S.goals.some(function(g){return asN(g.name)===asN(name)})){toast('Bu hedef zaten ekli');return}
+  S.goals.push({id:uid(),name:name,icon:'🎯',col:'#7c5cff',unit:'try',target:Math.round(price),saved:0,mo:Math.round(mo||0),ref:Math.round(price)});
+  save();try{svRender()}catch(e){}toast('✓ “'+name+'” hedef olarak eklendi',true);if(b){b.textContent='Eklendi ✓';b.disabled=true}}}}
+AS_R.kur=function(t){
+  var R=svRates(),cs=asCurs(t),pn=asNum(t.replace(/(\d)\s*(dolar|euro|tl|lira)/,'$1 $2'));
+  var age=R.t?Math.round((Date.now()-R.t)/3600000):null;
+  if(!(R.usd>0)){try{svFetch()}catch(e){}return {h:'<p>Güncel kurları şu an alamadım (internet gerekebilir). Birkaç saniye sonra tekrar sorarsan yenilenmiş olur.</p>',a:['sv']}}
+  var note='<p class="asn">Kurlar uygulamadaki son güncel değerlerdir'+(age!=null?' ('+(age<1?'az önce':age+' saat önce')+' güncellendi)':'')+'; banka alış-satış farkı yoktur.</p>';
+  if(pn&&cs.length){
+    var src=cs[0],dst=cs[1]||(src==='try'?'usd':'try');if(src===dst)dst=src==='try'?'usd':'try';
+    var ps=asCurPr(src),pd=asCurPr(dst);
+    if(ps>0&&pd>0){var amt=pn.v,res=amt*ps/pd,fm=function(v,k){return k==='try'?fmt(v):v.toLocaleString('tr-TR',{maximumFractionDigits:2})+' '+(k==='usd'?'$':k==='eur'?'€':k==='gbp'?'£':'gr')};
+      return {h:asBig(fm(res,dst),fm(amt,src)+' karşılığı')+'<p>1 '+asCurNm(src)+' ≈ <b>'+esc(asRt(ps/pd,dst))+'</b></p>'+note,a:['sv']}}}
+  var rows=[],want=cs.filter(function(k){return k!=='try'});
+  var list=want.length?want:['usd','eur','gbp','altin'];
+  list.forEach(function(k){var p=asCurPr(k);if(p>0)rows.push({t:asCurNm(k),s:k==='altin'?'1 gram':'1 birim',v:asRt(p,'try'),c:{usd:'#2fcf8f',eur:'#4cc9f0',gbp:'#c06cff',altin:'#ffb648'}[k]})});
+  if(!rows.length)return {h:'<p>Bu para birimi için kur bulamadım. Dolar, euro, sterlin ve gram altın için söyleyebilirim.</p>',a:['sv']};
+  var extra='';if(S.sav.length){var tot=0,by={};S.sav.forEach(function(x){var pr=svPrice(x.type);if(pr>0){var v=pr*x.amt;tot+=v;var g=(x.type==='try')?'TL':(x.type==='usd'||x.type==='eur'||x.type==='gbp')?'Döviz':'Altın';by[g]=(by[g]||0)+v}});
+    if(tot>0&&/birikim|param|elimde|benim/.test(t))extra='<p class="asn">Birikimlerin '+Object.keys(by).map(function(g){return g+' %'+Math.round(by[g]/tot*100)}).join(', ')+' dağılımında. Hangisinin yükseleceğini bilemem, yatırım tavsiyesi veremem; çeşitlendirme dengeli bir yaklaşımdır.</p>'}
+  return {h:'<p>Güncel kurlar:</p>'+asRows(rows)+extra+note,a:['sv'],sug:['1000 dolar kaç TL?','5000 TL kaç euro?']}};
+AS_R.alabilir=function(t){
+  var pn=asNum(t);
+  if(!pn&&asCurs(t).some(function(k){return k!=='try'}))return AS_R.kur(t+' birikim');
+  var mm=asN(t).match(/([a-z0-9]{2,}) (?:alabilir|alsam|alayim|alsak|alinir|aliyim)/),subj=mm&&mm[1]?mm[1].charAt(0).toLocaleUpperCase('tr')+mm[1].slice(1):'Bu alışveriş';
+  if(!pn){asCtx={k:'afford',subj:subj};return {h:'<p>Bütçene göre bakabilmem için tutarı yaz. Sadece rakam yeterli (örn. 12000 ya da 12 bin).</p>',sug:['5000','15000','40000']}}
+  return asAfford(subj,pn)};
+function asAfford(subj,pn){
+  var nk=nowK(),a=asAgg(nk),price=pn.tl;
+  if(!(a.inc>0))return {h:'<p>Bu ay gelir kaydın olmadığı için “alabilir miyim” sorusuna net bakamıyorum. Maaşını ya da gelirini eklersen ay sonu tahminine göre yorumlarım.</p>',a:['gider']};
+  var o=outlook(nk),free=o.free,d=dueItems(),dueSum=0;d.late.concat(d.soon).forEach(function(i){dueSum+=(i.amt>0?i.amt:0)});
+  var bal=a.inc-a.out,ratio=free>0?price/free:9,v,col;
+  if(price<=free*0.4){v='Rahatça alabilirsin';col='#2fcf8f'}else if(price<=free*0.8){v='Alabilirsin ama ay sonunu biraz sıkıştırır';col='#f5a524'}else if(price<=free){v='Alırsan ay sonunda neredeyse hiç paran kalmaz';col='#f5a524'}else{v='Bu ay karşılamak zor';col='#ff6b81'}
+  var h='<p><b>'+esc(subj)+'</b> için <b>'+esc(fmt(price))+'</b>:</p><p style="font-size:16px;font-weight:700;color:'+col+'">'+v+'.</p>';
+  h+=asRows([{t:'Şu anki bakiye (gelir − gider)',v:fmt(bal),c:'#4cc9f0'},{t:'Ay sonu tahmini kalan',s:'Sabit ödemeler ve tahmini harcama düşülmüş',v:(free<0?'−':'')+fmt(Math.abs(free)),c:free<0?'#ff6b81':'#2fcf8f'}].concat(dueSum>0?[{t:'Önümüzdeki 7 gün ödemeler',v:'−'+fmt(dueSum),c:'#ff9f43'}]:[]));
+  if(price>free*0.8){h+='<p class="asn">Tek seferde zorsa: 3 taksitle aylık <b>'+esc(fmt(price/3))+'</b>, 6 taksitle <b>'+esc(fmt(price/6))+'</b>. Ya da hedef yapıp her ay biraz ayırabilirsin.</p>'}
+  return {h:h,a:['yil'],btns:[asGoalBtn(subj,price,price/6)]}}
+AS_R.tasarruf=function(){
+  var nk=nowK(),pk=asPrevK(nk),a=asAgg(nk),b=asAgg(pk),u=b.out>a.out?b:a;
+  if(!(u.out>0))return asEmpty('Tasarruf önerisi için önce birkaç harcama kaydı gerek. Giderlerini ekledikçe nereden kısabileceğini söylerim.',['gider']);
+  var FIX=['Fatura','Krediler','Kart taksitleri','Araç taksitleri','Faturalar','Abonelikler','Kira','Kredi','Kredi Kartı','Araç','Taksit','Vergi','Sigorta','Eğitim','Sağlık'];
+  var ks=Object.keys(u.by).filter(function(k){return FIX.indexOf(k)<0}).sort(function(x,y){return u.by[y]-u.by[x]}).slice(0,3);
+  var h='<p>'+(u===b?'Geçen ayın':'Bu ayın')+' harcamalarına göre kısılabilecek başlıca kalemler:</p>',tot=0,rows=ks.map(function(k){var c=u.by[k]*0.1;tot+=c;return {t:k,s:'%10 kısarsan aylık '+fmt(c)+' kalır',v:fmt(u.by[k]),c:asCol(k)}});
+  h+=asRows(rows);
+  var subs=S.plans.filter(function(p){return p.sub&&!(p.end&&p.end<nowK())}),st=0;subs.forEach(function(p){st+=p.amt});
+  if(tot>0)h+='<p class="asn">Bu üç kalemde %10 kısmak ayda yaklaşık <b>'+esc(fmt(tot))+'</b>, yılda <b>'+esc(fmt(tot*12))+'</b> eder. Bu tutarı her ay birikime ayırmak güzel bir başlangıç olur.</p>';
+  if(subs.length>1)h+='<p class="asn">Ayrıca '+subs.length+' aboneliğin var ('+esc(fmt(st))+'/ay). Kullanmadığın varsa iptal etmek doğrudan tasarruf sağlar.</p>';
+  return {h:h,a:['sv','ozet']}};
+function asTripBudget(t){var tot=0;(t.items||[]).forEach(function(i){tot+=+i.total||0});return tot}
+AS_R.tatilozet=function(){
+  var ts=(S.trips||[]).filter(function(t){return t&&t.start&&daysTo(t.end||t.start)>=0}).sort(function(x,y){return x.start<y.start?-1:1});
+  if(!ts.length)return {h:'<p>Kayıtlı bir tatil planın yok. Nereye gitmek istediğini yazarsan (örn. “Bodrum’a gitmek istiyorum”) tahmini maliyetini hesaplarım; sonra Tatil planında detaylandırabilirsin.</p>',a:['tatil'],sug:['Bodrum’a tatile gitmek istiyorum']};
+  var t=ts[0],bud=asTripBudget(t),sv=+t.saved||0,dd=daysTo(t.start),mo=Math.max(1,dd/30),left=Math.max(0,bud-sv);
+  var h='<p><b>'+esc(t.dest||'Tatil')+'</b> planın '+(dd>0?dd+' gün sonra':'devam ediyor')+' ('+esc(t.start.slice(8,10)+'.'+t.start.slice(5,7))+').</p>';
+  if(!(bud>0))return {h:h+'<p>Bütçe kalemlerine henüz tutar girilmemiş. Tatil planını açıp kalemleri doldurursan ne kadar biriktirmen gerektiğini hesaplarım.</p>',a:['tatil']};
+  h+=asRows([{t:'Tahmini toplam bütçe',v:fmt(bud),c:'#4cc9f0'},{t:'Şimdiye kadar biriken',v:fmt(sv),c:'#2fcf8f',p:Math.min(100,sv/bud*100)},{t:'Kalan',v:fmt(left),c:'#ffb648'}]);
+  if(left>0&&dd>0)h+='<p class="asn">Tatile kadar kalan süreyle her ay yaklaşık <b>'+esc(fmt(left/mo))+'</b> kenara ayırman gerekir.</p>';
+  else if(left<=0)h+='<p class="asn">Tatil bütçeni tamamlamışsın, harika. 🎉</p>';
+  return {h:h,a:['tatil']}};
+AS_R.tesekkur=function(){var r=['Rica ederim! Başka bir şey sormak istersen buradayım.','Ne demek! Para, tatil, kur ya da hedefler hakkında istediğini sorabilirsin.','Her zaman. Bütçenle ilgili aklına takılan olursa yaz.'];return {h:'<p>'+r[Math.floor(Math.random()*r.length)]+'</p>',sug:['Bu ay neye çok para harcadım?','Dolar kaç TL?']}};
+AS_R.disi=function(){return {h:'<p>Hmm, bunu tam çıkaramadım. Ben para, harcama, tatil, kur ve hedefler konusunda iyiyim. Mesela şunları sorabilirsin:</p>',sug:['Bu ay neye çok para harcadım?','Bodrum’a tatile gitmek istiyorum','Dolar ne kadar?','PlayStation almak istiyorum','Nasıl tasarruf edebilirim?','Faturalarım geçen aya göre nasıl?'],a:[]}};
+function asMonthsFollow(t){
+  var m=asN(t).match(/(\d+) ay/);if(!m||!asLast||!asLast.buy)return null;var n=Math.max(1,Math.min(120,+m[1])),b=asLast.buy,mo=b.price/n,c=asCap();
+  var h='<p><b>'+esc(b.subj)+'</b> için <b>'+n+' ayda</b> aylık <b>'+esc(fmt(mo))+'</b> ayırman gerekir.'+(c.has&&c.net>0?' Bu, kalan paranın yaklaşık %'+Math.round(mo/c.net*100)+'’si.':'')+'</p>';
+  return {h:h,a:['sv'],btns:[asGoalBtn(b.subj,b.price,mo)]}}
 function asDetect(q){
   var t=asN(q),sc={},best=null,bs=0;
   AS_INT.forEach(function(it){var s=0;it[1].forEach(function(kw){if((' '+t).indexOf(' '+kw)>-1)s+=kw.length+3});if(s)sc[it[0]]=s});
   if(sc.ekstre&&/kart/.test(t)&&sc.borc)sc.borc=0;
   if(/ne zaman|hedef/.test(t)&&sc.hedef)sc.hedef+=12;
   if(sc.gelen&&sc.spend&&/nereye|neye|nelere/.test(t))sc.gelen=0;
+  if(/fatura/.test(t)&&/(cok|az|fazla|yuksek|dusuk|artti|azald|kiyas|gecen)/.test(t)&&!/(yaklasan|odenmemis|vade|odeme gunu|bu hafta|ne zaman)/.test(t))sc.faturakiyas=(sc.faturakiyas||0)+40;
+  if(/biriktir|ayir|kenara/.test(t)&&/icin|lazim|gerek|alabil/.test(t))sc.hedefplan=(sc.hedefplan||0)+25;
+  try{if(asPlaces(t).length&&/git|gidec|tatil|bilet|ucak|seyahat|gezi|yolculuk|arac|otobus/.test(t))sc.tatil=(sc.tatil||0)+30}catch(e){}
+  if(/(dolar|euro|sterlin|altin|gram|kur\b|doviz|usd|eur)/.test(t)&&/(kac|ne kadar|kur\b|fiyat|deger|ceviri|kac tl|kac lira|karsilig)/.test(t)&&!/(birikim|elimde|param|benim|hedef)/.test(t))sc.kur=(sc.kur||0)+40;
+  if(/\d/.test(t)&&/(dolar|euro|tl|lira)/.test(t)&&/kac (tl|lira|dolar|euro|sterlin)/.test(t))sc.kur=(sc.kur||0)+40;
+  if(/(alabilir|alsam|alayim|aliyim|almali|harcasam|yeter mi|yeterli)/.test(t)&&!/biriktir/.test(t))sc.alabilir=(sc.alabilir||0)+35;
+  if(/(tatil|tatilim|tatilime|tatil plan)/.test(t)&&/(butce|planim|kac gun|kaldi|ne kadar biriktir|ne kadar kaldi|biriktirdim)/.test(t)&&!asPlaces(t).length)sc.tatilozet=(sc.tatilozet||0)+45;
   var cat=asCatQ(t);
   Object.keys(sc).forEach(function(k){if(sc[k]>bs){bs=sc[k];best=k}});
-  if(cat&&(!best||best==='spend'||(/harca|ne kadar|toplam/.test(t)&&['ekstre','hedef','birikim','borc','gecen','tahmin','gelen','abonelik'].indexOf(best)<0)))return {id:'cat',cat:cat,t:t};
+  if(cat&&(!best||best==='spend'||(/harca|ne kadar|toplam/.test(t)&&['ekstre','hedef','birikim','borc','gecen','tahmin','gelen','abonelik'].concat(/harcad|harcama/.test(t)?[]:['tatil','hedefplan']).indexOf(best)<0)))return {id:'cat',cat:cat,t:t};
   if(best)return {id:best,t:t};
+  try{if(asPlaces(t).length)return {id:'tatil',t:t}}catch(e){}
   return {id:'none',t:t};
 }
 function asAnswer(q){
+  var cx=asCtx;asCtx=null;
+  if(cx){var pn=asNum(q);if(pn&&asN(q).split(' ').length<=6){var rb;try{rb=cx.k==='afford'?asAfford(cx.subj,pn):asBuy(cx.subj,pn)}catch(e){rb=null}if(rb){rb.st='Bütçene göre hesaplıyorum…';if(cx.k!=='afford')asLast={id:'buy',buy:{subj:cx.subj,price:pn.tl}};return rb}}}
+  try{var mf=asMonthsFollow(q);if(mf&&asN(q).split(' ').length<=6){mf.st='Yeniden hesaplıyorum…';return mf}}catch(e){}
   var d=asDetect(q),r=null;
+  if(d.id==='none'&&asLast&&asLast.t&&asN(q).split(' ').length<=5&&/^(peki|ya|ayrica|ve|bir de|gecen|bu ay|onceki|sonra)/.test(asN(q))&&['spend','gelen','buyuk','gecen','kur','yaklasan'].indexOf(asLast.id)>-1){d={id:asLast.id,t:asN(q)+' '+asLast.t.replace(/gecen ay\w*|bu ay|onceki ay/g,'')}}
   try{
     if(d.id==='cat')r=asCatR(d.cat,d.t);
     else if(AS_R[d.id])r=AS_R[d.id](d.t);
     else r=asNoteR(d.t);
   }catch(e){r=null}
-  if(!r){var rec=AS_Q.slice().sort(function(){return .5-Math.random()}).slice(0,3);r={h:'<p>Bunu tam anlayamadım. Ben şunlara bakabiliyorum: harcamalar, gelirler, hedef ve birikim, kart ekstresi, yaklaşan ödemeler, abonelikler ve borçlar. Şunlardan birini deneyebilirsin:</p>',a:[],sug:rec.map(function(x){return x[0]})}}
-  r.st=AS_ST[d.id==='none'?'note':d.id]||'Düşünüyorum…';return r}
+  if(!r){r=AS_R.disi()}
+  asLast={id:d.id,t:d.t,cat:d.cat};
+  r.st=AS_ST[d.id==='none'?'note':d.id]||'Düşünüyorum…';r.id=d.id;return r}
 function asScroll(){var c=$('asChat');if(c)c.scrollTop=c.scrollHeight}
-function asBub(role,html,id){var c=$('asChat');var d=document.createElement('div');d.className='asm '+role;if(id)d.id=id;d.innerHTML=(role==='bot'?'<span class="asav">'+lsv(LI['✨'])+'</span>':'')+'<div class="asbb">'+html+'</div>';c.appendChild(d);asScroll();return d}
-function asRender(r,node){
-  var h=r.h;if(r.sug)h+='<div class="assg">'+r.sug.map(function(s){return '<button type="button" data-asq="'+esc(s)+'">'+esc(s)+'</button>'}).join('')+'</div>';
-  if(r.a&&r.a.length){h+='<div class="asac">'+r.a.map(function(k){asAct.push(AS_ACT[k][1]);return '<button type="button" data-asa="'+(asAct.length-1)+'">'+esc(AS_ACT[k][0])+' ›</button>'}).join('')+'</div>'}
-  if(r.help)h+='<div class="asac"><button type="button" data-ashelp="1">Nasıl kullanılır? ›</button></div>';
-  node.querySelector('.asbb').innerHTML=h;asScroll()}
+function asBub(role,html,id){var c=$('asChat');var d=document.createElement('div');d.className='asm '+role;if(id)d.id=id;d.innerHTML=(role==='bot'?'<span class="asav">'+BFACE+'</span>':'')+'<div class="asbb">'+html+'</div>';c.appendChild(d);asScroll();return d}
+function asTs(){var d=new Date();return '<span class="asts">'+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)+'</span>'}
+function asFill(node,html,r,last){
+  var h=html;
+  if(r){
+    if(r.sug)h+='<div class="assg">'+r.sug.map(function(x){return '<button type="button" data-asq="'+esc(x)+'">'+esc(x)+'</button>'}).join('')+'</div>';
+    if(r.a&&r.a.length){h+='<div class="asac">'+r.a.map(function(k){asAct.push(AS_ACT[k][1]);return '<button type="button" data-asa="'+(asAct.length-1)+'">'+esc(AS_ACT[k][0])+' ›</button>'}).join('')+'</div>'}
+    if(r.btns&&r.btns.length){h+='<div class="asac">'+r.btns.map(function(b){asAct.push(b.f);return '<button type="button" class="asbtn" data-asb="'+(asAct.length-1)+'">'+esc(b.t)+'</button>'}).join('')+'</div>'}
+    if(r.help)h+='<div class="asac"><button type="button" data-ashelp="1">Nasıl kullanılır? ›</button></div>';
+  }
+  var bb=node.querySelector('.asbb');bb.innerHTML=h+(last?asTs():'');
+  if(!REDUCE){var kids=bb.children,k;for(k=0;k<kids.length;k++){kids[k].classList.add('asrv');kids[k].style.animationDelay=(k*0.12)+'s';(function(d){setTimeout(asScroll,d)})(k*120+60)}}
+  asScroll()}
+function asRender(r,node){asFill(node,r.h,r,true)}
+function asSplit(h){
+  var tmp=document.createElement('div');tmp.innerHTML=h;var kids=[].slice.call(tmp.children);
+  if(kids.length<3)return [h];
+  var n=1;if(kids[0].className==='asbg'&&kids[1]&&kids[1].nodeName==='P')n=2;
+  if(kids.length<=n)return [h];
+  return [kids.slice(0,n).map(function(x){return x.outerHTML}).join(''),kids.slice(n).map(function(x){return x.outerHTML}).join('')]}
+var AS_OP={spend:['Bir bakayım, hemen çıkarıyorum.','Tamam, harcamalarına göz atıyorum.'],gelen:['Bakıyorum, kim ne göndermiş.'],hedef:['Hedeflerine bir bakalım.'],hedefplan:['Güzel hedef! Hemen hesaplıyorum.','Tamam, bir hesaplayayım.'],tatil:['Tatil mi? Süper, hemen bakıyorum.','Ooo, tatil planı! Fiyatlara bakıyorum.'],tatilozet:['Tatil planına bir bakalım.'],kur:['Kurlara bakıyorum.'],alabilir:['Bir bakalım, bütçen ne diyor.'],tasarruf:['Harcamalarına bir göz atayım.'],faturakiyas:['Faturalara bakıyorum.'],gecen:['İki ayı yan yana koyuyorum.'],tahmin:['Ay sonuna kadar hesaplıyorum.'],birikim:['Birikimlerine bakıyorum.'],ekstre:['Kartlarına bakıyorum.'],yaklasan:['Yaklaşan ödemelere bir bakayım.'],borc:['Borç alacak durumuna bakıyorum.'],abonelik:['Aboneliklerine bakıyorum.'],bakiye:['Bakiyene bakıyorum.'],gunluk:['Günlük payını hesaplıyorum.'],buyuk:['En büyükleri buluyorum.']};
+function asTy(on){try{$('as').classList.toggle('bty',!!on)}catch(x){}var e=$('asSt');if(!e)return;e.className=on?'ty':'';e.innerHTML='<i></i>'+(on?'yazıyor…':'çevrimiçi')}
+function asDots(){return asBub('bot','<span class="asdots"><i></i><i></i><i></i></span>')}
 function asAsk(q){
   q=String(q||'').trim();if(!q||asBusy)return;asBusy=true;
-  asBub('me',esc(q));$('asIn').value='';
-  var r=asAnswer(q),tp=asBub('bot','<span class="asdots"><i></i><i></i><i></i></span><small class="asst">'+esc(r.st)+'</small>');
-  var wait=REDUCE?150:(650+Math.random()*450);
-  setTimeout(function(){asRender(r,tp);asBusy=false;var ch=$('asChips');if(ch)ch.scrollLeft=0},wait);
+  asBub('me',esc(q)+asTs());$('asIn').value='';
+  var r=asAnswer(q),parts=asSplit(r.h),op=(AS_OP[r.id]||null),opener=op?op[Math.floor(Math.random()*op.length)]:null;
+  var fast=REDUCE,rnd=function(a,b){return fast?60:a+Math.random()*(b-a)};
+  var steps=[];
+  if(opener&&parts.length>1)steps.push({h:'<p>'+esc(opener)+'</p>',w:rnd(650,900)});
+  steps.push({h:parts[0],w:rnd(800,1100)+(fast?0:Math.min(500,parts[0].length*1.2))});
+  if(parts[1])steps.push({h:parts[1],w:rnd(700,1000)+(fast?0:Math.min(600,parts[1].length*0.6))});
+  var n=0;
+  function next(){
+    if(n>=steps.length){asTy(false);asBusy=false;return}
+    var st=steps[n],lastStep=(n===steps.length-1);asTy(true);
+    var tp=asDots();
+    setTimeout(function(){asFill(tp,st.h,lastStep?r:null,lastStep);n++;if(lastStep){asTy(false);asBusy=false}else setTimeout(next,fast?40:320)},st.w);
+  }
+  setTimeout(next,fast?30:380);
 }
 function asIntro(){
   var c=$('asChat');if(c.childNodes.length)return;
   var nd=null;try{nd=ndaGet()}catch(e){}
-  var h='<p><b>'+(nd?'Merhaba '+esc(nd.ad)+'!':'Merhaba!')+'</b> Ben BPlan asistanı. Kayıtlarına bakıp sorularını cevaplarım.</p><p class="asn">Not: Yapay zekâ değilim; telefonundaki verilerle kurallara göre çalışan yerel bir asistanım. Hiçbir bilgin telefonundan dışarı çıkmaz.</p>';
-  asBub('bot',h);
-  var d=asBub('bot','<p>Şunlardan birine dokunabilir ya da kendi sorunu yazabilirsin:</p><div class="assg">'+AS_Q.slice(0,6).map(function(s){return '<button type="button" data-asq="'+esc(s[0])+'">'+esc(s[0])+'</button>'}).join('')+'</div><div class="asac"><button type="button" data-ashelp="1">Nasıl kullanılır? ›</button></div>')}
+  asBub('bot','<p><b>'+(nd?'Merhaba '+esc(nd.ad)+', ben Bibi.':'Merhaba, ben Bibi.')+'</b></p><p>Paran, tatilin, kurlar ve hedeflerin hakkında istediğini sorabilirsin.</p><div class="assg">'+['Bu ay neye çok harcadım?','Bodrum’a gitmek istiyorum','Dolar kaç TL?'].map(function(x){return '<button type="button" data-asq="'+esc(x)+'">'+esc(x)+'</button>'}).join('')+'</div>')}
 function asHelpHtml(){
-  var h='<div class="ashero"><span class="asav big">'+lsv(LI['✨'])+'</span><h2>Asistanım</h2><p>BPlan’daki kayıtlarına bakıp sorularını saniyeler içinde cevaplayan yerel asistan.</p></div>';
+  var h='<div class="ashero"><span class="asav big">'+BFACE+'</span><h2>Bibi</h2><p>BPlan’daki kayıtlarına bakıp sorularını saniyeler içinde cevaplayan yerel asistanın.</p></div>';
   h+='<div class="ashc"><h3>Ne işe yarar?</h3><p>Ekranları tek tek gezmeden “Bu ay neye çok para harcadım?”, “Kart ekstremi ödedim mi?” gibi soruların cevabını hemen alırsın. Rakamlar senin kayıtlarından hesaplanır.</p></div>';
   h+='<div class="ashc"><h3>Nasıl kullanılır?</h3><ol><li><b>Sor.</b> Aşağıdaki kutuya yaz ya da öneri butonlarına dokun. Günlük konuşma diliyle yazabilirsin.</li><li><b>Cevabı oku.</b> Kategoriler, tutarlar ve karşılaştırmalar kartlar halinde gelir.</li><li><b>Detaya git.</b> Cevabın altındaki düğmeler seni ilgili ekrana götürür.</li></ol></div>';
   h+='<div class="ashc"><h3>Neler sorabilirsin?</h3>'+AS_HELP.map(function(g){return '<div class="ashg"><b>'+esc(g[0])+'</b>'+g[1].map(function(x){return '<button type="button" data-asq="'+esc(x[0])+'">'+esc(x[0])+'</button>'}).join('')+'</div>'}).join('')+'</div>';
@@ -4424,6 +4658,7 @@ $('asHelpBtn').onclick=function(){$('asHelp').innerHTML=asHelpHtml();$('as').cla
 $('asForm').onsubmit=function(ev){ev.preventDefault();asAsk($('asIn').value)};
 $('as').addEventListener('click',function(ev){
   var q=ev.target.closest('[data-asq]');if(q){$('as').classList.remove('help');asAsk(q.getAttribute('data-asq'));return}
+  var ab=ev.target.closest('[data-asb]');if(ab){var fb=asAct[+ab.getAttribute('data-asb')];if(fb)fb(ab);return}
   var a=ev.target.closest('[data-asa]');if(a){var f=asAct[+a.getAttribute('data-asa')];if(f){asClose();setTimeout(f,120)}return}
   if(ev.target.closest('[data-ashelp]')){$('asHelp').innerHTML=asHelpHtml();$('as').classList.add('help');$('asHelp').scrollTop=0}
 });
@@ -4431,8 +4666,8 @@ $('asClear').onclick=function(){$('asChat').innerHTML='';asAct=[];asBusy=false;a
 (function(){var c=$('asChips');if(c)c.innerHTML=AS_Q.map(function(s){return '<button type="button" data-asq="'+esc(s[0])+'">'+esc(s[0])+'</button>'}).join('')})();
 
 
-(function(){function pin(){var v=window.visualViewport;if(!v)return;var o=document.getElementById('gs'),a=document.getElementById('as');if((o&&o.classList.contains('show'))||(a&&a.classList.contains('show'))){if(window.scrollX||(window.scrollY&&document.body.style.position==='fixed'&&false))window.scrollTo(0,window.scrollY);if(v.offsetLeft)window.scrollTo(0,window.scrollY)}}
-['gsq','asIn'].forEach(function(id){var e=document.getElementById(id);if(!e)return;e.addEventListener('focus',function(){[0,60,160,320,600].forEach(function(t){setTimeout(function(){var g=document.getElementById('gs');if(g&&g.classList.contains('show')&&typeof gsFit==='function')gsFit();if(typeof asVv==='function')asVv();window.scrollTo(0,document.body.style.position==='fixed'?(parseInt(document.body.style.top||'0')*-1):window.scrollY)},t)})})});
+(function(){function pin(){var v=window.visualViewport;if(!v)return;var o=document.getElementById('gs'),a=document.getElementById('as');if(a&&a.classList.contains('show')&&!(o&&o.classList.contains('show'))){if(window.scrollX||(window.scrollY&&document.body.style.position==='fixed'&&false))window.scrollTo(0,window.scrollY);if(v.offsetLeft)window.scrollTo(0,window.scrollY)}}
+['asIn'].forEach(function(id){var e=document.getElementById(id);if(!e)return;e.addEventListener('focus',function(){[0,60,160,320,600].forEach(function(t){setTimeout(function(){var g=document.getElementById('gs');if(g&&g.classList.contains('show')&&typeof gsFit==='function')gsFit();if(typeof asVv==='function')asVv();window.scrollTo(0,document.body.style.position==='fixed'?(parseInt(document.body.style.top||'0')*-1):window.scrollY)},t)})})});
 if(window.visualViewport){visualViewport.addEventListener('scroll',pin);visualViewport.addEventListener('resize',pin)}
 })();
 $('v-bhome').addEventListener('click',bsClick);$('v-bpay').addEventListener('click',bsClick);
@@ -6518,10 +6753,10 @@ function gsHit(hay,words){hay=trn(hay);return words.every(function(w){return hay
 function gsRecent(){try{return JSON.parse(lsGet('butcem_gsr')||'[]')}catch(e){return[]}}
 function gsRemember(){var q=$('gsq').value.trim();if(q.length<2)return;var a=gsRecent().filter(function(x){return x!==q});a.unshift(q);lsSet('butcem_gsr',JSON.stringify(a.slice(0,5)))}
 var gsY=0;
-function gsFit(){var g=$('gs'),v=window.visualViewport;if(!g.classList.contains('show'))return;g.style.height=v?v.height+'px':'';g.style.top=v?v.offsetTop+'px':'';g.style.bottom='auto'}
+function gsFit(){var g=$('gs'),v=window.visualViewport;if(!g.classList.contains('show'))return;g.style.height='';g.style.bottom='';var ot=v?Math.round(v.offsetTop):0;g.style.top='';g.style.setProperty('--kb',(v?Math.max(0,Math.round(window.innerHeight-v.height-ot)):0)+'px')}
 if(window.visualViewport){visualViewport.addEventListener('resize',gsFit);visualViewport.addEventListener('scroll',gsFit)}
-function gsOpen(){gsY=window.scrollY||0;document.body.style.position='fixed';document.body.style.top=(-gsY)+'px';document.body.style.width='100%';$('gs').classList.add('show');gsFit();gsAct=null;gsDone=null;gsMode='all';$('gsq').value='';gsRender();$('gsq').focus();setTimeout(function(){$('gsq').focus()},150)}
-function gsClose(){$('gs').classList.remove('show');$('gs').style.height='';$('gs').style.top='';$('gs').style.bottom='';$('gsq').blur();document.body.style.position='';document.body.style.top='';document.body.style.width='';window.scrollTo(0,gsY)}
+function gsOpen(){gsY=window.scrollY||0;document.body.style.position='fixed';document.body.style.top=(-gsY)+'px';document.body.style.width='100%';$('gs').classList.add('show');gsFit();gsAct=null;gsDone=null;gsMode='all';$('gsq').value='';gsRender();try{$('gsq').focus({preventScroll:true})}catch(e){$('gsq').focus()}}
+function gsClose(){$('gs').classList.remove('show');$('gs').style.height='';$('gs').style.top='';$('gs').style.bottom='';$('gs').style.removeProperty('--kb');$('gsq').blur();document.body.style.position='';document.body.style.top='';document.body.style.width='';window.scrollTo(0,gsY)}
 function gsGoTab(v,target){if(target==='cdCard'){openCards();return}document.querySelector('.nav .t[data-v="'+v+'"]').click();if(v==='fatura')setPs({cdCard:'k',cardsCard:'k',plist:'k',planCard:'k',ipCard:'g'}[target]||'f');if(target)setTimeout(function(){var e=$(target);if(e&&e.scrollIntoView)e.scrollIntoView({block:'start',behavior:'smooth'})},350)}
 function gsRow(cls,ico,icoBg,title,sub,amt,attr,extra){return '<button type="button" class="gsr '+cls+'" '+attr+'><span class="ico" style="background:'+icoBg+'">'+ico+'</span><span class="m"><b>'+esc(title)+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+(extra||'')+'</span>'+(amt?'<span class="a">'+esc(amt)+'</span>':'<span class="go">›</span>')+'</button>'}
 function gsActions(W){
