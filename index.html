@@ -2682,10 +2682,12 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.4.7';
+var APP_VER='2.4.9';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+  {v:'2.4.9',date:'Kasım 2026',title:'Güncel uçak fiyatları',items:[['✈️','Uçak bileti fiyatı gerçek verilerden','Popüler rotalarda uçak fiyatı artık günlük güncellenen örnek bilet fiyatlarına göre hesaplanıyor. Fiyatı olmayan rotalarda eski tahmin kullanılır.',1]]},
+  {v:'2.4.8',date:'Kasım 2026',title:'Tren sadece trenin gittiği yerlerde',items:[['🚆','Tren seçeneği akıllandı','Gideceğin yer ve çıkış şehrin arasında tren yoksa (Bodrum gibi) Ulaşım bölümünde Tren hiç çıkmıyor. Tren seçiliyken rota değişirse otomatik Araç’a geçiyor.',1]]},
   {v:'2.4.7',date:'Kasım 2026',title:'Yeni logo ve açılış animasyonu',items:[['✨','Yeni logo','Uygulamanın yeni ikonu: ortada parlayan ₺ parası, çevresinde renkli bütçe halkası.',1],['🖼️','Ana ekran ikonu','Ana ekrana eklediğinde yeni logo görünür. Eski ikonu olanlar uygulamayı silip yeniden ekleyebilir.',0],['🎬','Yeni açılış animasyonu','Renkli halka ve ₺ parası kendi eksenlerinde dönerken ince halkalar onların içinden girip çıkar, hepsi birlikte yavaşlayıp tık diye durur, sonra uygulama açılır.',1]]},
 {v:'2.4',date:'Kasım 2026',title:'Tatil kartı paylaş, tarih ipucu',items:[['📤','Tatil kartını paylaş','Tatil ekranındaki Paylaş düğmesiyle şehir silüetli, rota, tarih ve kişi başı tutarı gösteren kartı arkadaşlarına gönderebilirsin.',1],['📅','Tarih ipucu','Yoğun sezona denk gelen tarihlerde daha uygun bir haftayı önerir, tek dokunuşla tarihleri kaydırabilirsin. Sezon dışıysa bunu da söyler.',1]]},
 {v:'2.3.1',date:'Kasım 2026',title:'Şehir silüetleri ve canlı gökyüzü',items:[['🏙️','Şehir silüetleri','Tatil kartında çıkış şehri solda soluk, varış şehri sağda belirgin: İstanbul köprü ve Galata, Antalya saat kulesi ve Hadrian Kapısı, İzmir saat kulesi, Ankara Anıtkabir ve daha fazlası.',1],['☀️','Parlayan güneş, yanıp sönen ay','Yaz tatilinde güneş ışınlarıyla parlıyor, kış tatilinde ay nefes alır gibi yanıp sönüyor, yıldızlar göz kırpıyor.',1],['🏔️','Trabzon düzeldi','Sümela Manastırı artık sissiz, kayalığın içinde net görünüyor.',0]]},
@@ -4397,6 +4399,11 @@ function plIndex(){
 function plFind(s){var k=nrm(s);if(!k)return null;var I=plIndex();if(I[k])return I[k];var ks=Object.keys(I);for(var i=0;i<ks.length;i++){if(ks[i].indexOf(k)===0&&k.length>=3)return I[ks[i]]}return null}
 function plOptions(){return Object.keys(PL_TR).concat(Object.keys(PL_DIS)).map(function(n){return '<option value="'+esc(n)+'">'}).join('')}
 function hav(a,b){var R=6371,r=Math.PI/180,dl=(b.lat-a.lat)*r,dn=(b.lon-a.lon)*r,x=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dn/2)*Math.sin(dn/2);return 2*R*Math.asin(Math.sqrt(x))}
+var TRAIN_NET={'İstanbul':1,'Ankara':1,'İzmir':1,'Eskişehir':1,'Konya':1,'Sivas':1,'Kocaeli':1,'Sakarya':1,'Kayseri':1,'Adana':1,'Mersin':1,'Gaziantep':1,'Diyarbakır':1,'Erzurum':1,'Kars':1,'Malatya':1,'Elazığ':1,'Samsun':1,'Denizli':1,'Pamukkale':1,'Aydın':1,'Afyon':1,'Kütahya':1,'Balıkesir':1,'Edirne':1,'Tekirdağ':1};
+function trenOK(t){if(!t||t.scope==='dis')return false;var A=plFind(t.from),B=plFind(t.dest);if(!A||A.dis||!B||B.dis||A.name===B.name)return false;return !!(pairGet(getP().tren,A.name,B.name)||(TRAIN_NET[A.name]&&TRAIN_NET[B.name]))}
+function modeList(t){return MODES.filter(function(m){if(t.scope==='dis')return m[0]==='ucak'||m[0]==='arac';if(m[0]==='tren')return trenOK(t);return true})}
+function syncMode(t){if(!t)return false;var ch=false;if(t.mode==='tren'&&!trenOK(t)){var empty=(t.items||[]).every(function(i){return !(i.total>0)});t.mode='arac';if(empty)t.items=seedItems('arac');ch=true}var b=document.getElementById('tModeBox');if(b){var h=segHtml('mode',modeList(t),t.mode);if(b.innerHTML!==h)b.innerHTML=h}if(ch)save();return ch}
+function fixMode(t){if(t.mode==='tren'&&!trenOK(t)){t.mode='arac';return true}return false}
 function pk(a,b){return a+'|'+b}
 function pairGet(tbl,a,b){return tbl[pk(a,b)]!==undefined?tbl[pk(a,b)]:tbl[pk(b,a)]}
 function r50(n){return Math.max(0,Math.round(n/50)*50)}
@@ -4427,10 +4434,11 @@ function rtCalc(t){
   if(!apA||!apB||apA===apB)M.ucak={ok:false,why:(!apB?B.name+'\'da':!apA?A.name+'\'da':'Aynı havalimanı')+' uçak seçeneği yok'};
   else{
     var a1=plIndex()[nrm(apA)],b1=plIndex()[nrm(apB)],fl=hav(a1,b1),pr=dis?(P.ucak.disTaban+P.ucak.disKm*fl):(P.ucak.taban+P.ucak.km*fl);
-    if(summer)pr*=P.ucak.yazCarpan;
+    var rp=(!dis&&P.ucakRota)?pairGet(P.ucakRota,apA,apB):undefined,live=rp>0;
+    if(live)pr=rp;else if(summer)pr*=P.ucak.yazCarpan;
     var viaB=(!dis&&apB!==B.name),ft=0.6+fl/720;
     var tot2=pr*2*p;
-    M.ucak={ok:true,time:ft,total:tot2,pp:tot2/p,lines:[['✈️ Uçak biletleri · gidiş-dönüş × '+p+' kişi',tot2]],note:(viaB?apB+' havalimanına uçulur, '+B.name+'\'a yol ile geçilir. ':'')+'Havalimanı ulaşımı ve bagaj dahil değil.',parts:{pp:pr*2}};
+    M.ucak={ok:true,time:ft,total:tot2,pp:tot2/p,lines:[['✈️ Uçak biletleri · gidiş-dönüş × '+p+' kişi',tot2]],note:(viaB?apB+' havalimanına uçulur, '+B.name+'\'a yol ile geçilir. ':'')+(live?'Güncel örnek fiyata göre. ':'')+'Havalimanı ulaşımı ve bagaj dahil değil.',parts:{pp:pr*2}};
   }
   // otobüs & tren (yalnız yurt içi)
   if(dis){M.otobus={ok:false,why:'Yurt dışında yok'};M.tren={ok:false,why:'Yurt dışında yok'}}
@@ -4439,7 +4447,8 @@ function rtCalc(t){
     M.otobus={ok:true,time:road/72,total:bt*p,pp:bt,lines:[['🚌 Otobüs bileti · gidiş-dönüş × '+p+' kişi',bt*p]],note:'',parts:{pp:bt}};
     var tn=pairGet(P.tren,A.name,B.name);
     if(tn)M.tren={ok:true,time:tn[1],total:tn[0]*2*p,pp:tn[0]*2,lines:[['🚆 Tren bileti · gidiş-dönüş × '+p+' kişi',tn[0]*2*p]],note:'Hızlı tren, ekonomi sınıfı.',parts:{pp:tn[0]*2}};
-    else M.tren={ok:false,why:'Bu rotada hızlı tren yok'};
+    else if(TRAIN_NET[A.name]&&TRAIN_NET[B.name]){var tp=Math.max(150,Math.round(road*1.1/10)*10);M.tren={ok:true,time:road/80,total:tp*2*p,pp:tp*2,lines:[['🚆 Tren bileti · gidiş-dönüş × '+p+' kişi',tp*2*p]],note:'Yaklaşık fiyat; bilet tipine göre değişir.',parts:{pp:tp*2}}}
+    else M.tren={ok:false,why:'Bu rotada tren yok'};
   }
   var best=null;['arac','ucak','otobus','tren'].forEach(function(k){if(M[k].ok&&(!best||M[k].pp<M[best].pp))best=k});
   var meal=dis?P.yemek[cur]*curRate(cur).v:P.yemek.ic;
@@ -4537,7 +4546,7 @@ function rtAddToBudget(t){
   if(!rtCalc(t).ok){toast('Önce nereden–nereye yaz');return}
   rtWrite(t,true);t.est=true;save();renderTrip();renderTripCard();toast('Bütçeye yazıldı ✓');
 }
-function rtAuto(t){if(rtWrite(t,false)){save();renderTrip();renderTripCard();return true}return false}
+function rtAuto(t){syncMode(t);if(rtWrite(t,false)){save();renderTrip();renderTripCard();return true}return false}
 var PL_ICON={'İstanbul':'🕌','Ankara':'🏛️','İzmir':'🌅','Bursa':'🌲','Antalya':'🏖️','Bodrum':'⛵','Çeşme':'🏄','Marmaris':'⛵','Dalaman':'🌴','Fethiye':'🪂','Kaş':'🤿','Kemer':'🏖️','Alanya':'🏰','Side':'🏛️','Kuşadası':'🏖️','Didim':'🏖️','Ayvalık':'🌇','Çanakkale':'🏛️','Uludağ':'⛷️','Kapadokya':'🎈','Göreme':'🎈','Trabzon':'🏔️','Rize':'🍃','Uzungöl':'🏞️','Pamukkale':'♨️','Mardin':'🕌','Erzurum':'⛷️','Kars':'❄️','Bolu':'🌳','Abant':'🌳','Sapanca':'🌿','Safranbolu':'🏘️','Konya':'🕌','Datça':'🌊','Göcek':'⛵','Kalkan':'🌊','Belek':'⛳','Bozcaada':'🍇','Gökçeada':'🌊','Roma':'🏛️','Paris':'🗼','Londra':'🎡','Berlin':'🧱','Atina':'🏛️','Venedik':'🚤','Barselona':'⛪','Amsterdam':'🌷','Prag':'🏰','Viyana':'🎻','Budapeşte':'🏰','Dubai':'🏙️','Tokyo':'🗼','New York':'🗽','Maldivler':'🏝️','Mekke':'🕋','Medine':'🕌','Bali':'🌴','Bangkok':'🛕','Kahire':'🔺','Şarm el-Şeyh':'🤿','Santorini':'🏝️','Mykonos':'🏝️','Girit':'🏝️','Malta':'🏝️','Lizbon':'🚋','Madrid':'💃','Marakeş':'🕌','Singapur':'🌆','Seul':'🏙️','Milano':'👗','Floransa':'🎨','Münih':'🍺','Dubrovnik':'🏰'};
 var LM={
 'hadrian':'<path fill-rule="evenodd" d="M6 94V38h88v56zM38 94V66a12 12 0 0 1 24 0v28zM13 94V74a8 8 0 0 1 16 0v20zM71 94V74a8 8 0 0 1 16 0v20z"/><path d="M2 31h96v7H2zM10 20h80v11H10z"/><path d="M16 22h9v7h-9zM45 22h10v7H45zM75 22h9v7h-9z" fill="#0003"/><path d="M33 38v56M67 38v56" stroke="#0003" stroke-width="2.4"/><path d="M42 92h16M16 92h10M74 92h10" stroke="#fff" stroke-width="2"/>',
@@ -4659,7 +4668,7 @@ function renderTrip(){
     '<span class="lbl">Mevsim</span>'+segHtml('season',[['yaz','☀️','Yaz'],['kis','❄️','Kış']],t.season)+
     '<span class="lbl">Nerede</span>'+segHtml('scope',[['ic','🇹🇷','Yurt içi'],['dis','🌍','Yurt dışı']],t.scope)+
     '<span class="lbl">Kiminle</span>'+segHtml('who',WHOS,t.who)+
-    '<span class="lbl">Ulaşım</span>'+segHtml('mode',MODES.filter(function(m){return t.scope!=='dis'||m[0]==='ucak'||m[0]==='arac'}),t.mode)+
+    '<span class="lbl">Ulaşım</span>'+'<span id="tModeBox">'+segHtml('mode',modeList(t),t.mode)+'</span>'+
     '<div class="two"><div><span class="lbl">Gidiş</span><input class="fld" id="tStart" type="date" value="'+t.start+'"></div><div><span class="lbl" id="tNights">Dönüş · '+nights(t)+' gece</span><input class="fld" id="tEnd" type="date" value="'+t.end+'"></div></div><div id="tDateTip"></div>'+
     '<span class="lbl">Kaç kişi</span><div class="tstep"><button type="button" id="tPm">−</button><b id="tPv">'+t.people+'</b><button type="button" id="tPp">+</button></div></div>';
   h+='<div class="tbox" id="tRouteBox"><h2>🧭 Yol ve maliyet tahmini <span class="newb">YENİ</span></h2><div id="tRouteIn"></div></div>';
@@ -4696,6 +4705,7 @@ function dateTip(t){
 function renderDateTip(){var t=tripById(curTrip),el=$('tDateTip');if(!t||!el)return;var h=dateTip(t);el.innerHTML=h}
 function renderTripDyn(){
   var t=tripById(curTrip);if(!t)return;
+  syncMode(t);
   if($('tRouteRes'))renderRouteRes();
   renderDateTip();
   var share=tripShare(t),tot=tripBudget(t),p=Math.max(1,t.people||1),dd=daysTo(t.start),de=daysTo(t.end),sp=tripSpent(t);
@@ -4848,7 +4858,7 @@ function chgPlace(tid){
 $('tBody').addEventListener('input',function(ev){
   var t=tripById(curTrip);if(!t)return;
   if(ev.target.id==='tBackN'){var tt=tripById(curTrip),ss=tripSettle(tt,tripSpent(tt)),nn=parseInt(ev.target.value,10)||0,ba=$('tBackAmt');if(ba&&nn>0&&bkKind==='kon'&&ss.konPer>0&&!ba.value)ba.placeholder='Önerilen: '+fmt(nn*ss.konPer)}
-  if(ev.target.id==='tFrom'){showSug('tFrom');t.from=ev.target.value;lsSet('butcem_from',t.from);save();renderRouteRes();return}
+  if(ev.target.id==='tFrom'){showSug('tFrom');t.from=ev.target.value;lsSet('butcem_from',t.from);syncMode(t);save();renderRouteRes();return}
   if(ev.target.id==='tCons'){var cv=parseNum(ev.target.value);if(cv>0){t.cons=cv;save();renderRouteRes()}return}
   if(ev.target.id==='tDest'){showSug('tDest');t.dest=ev.target.value;save();renderTripDyn();renderTripCard();var sb=document.querySelector('#tSwitch .on');if(sb)sb.textContent=(t.season==='kis'?'❄️':'☀️')+' '+(t.dest||'Yeni tatil')}
   if(ev.target.id==='tStart'||ev.target.id==='tEnd'){
