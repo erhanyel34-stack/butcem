@@ -15,7 +15,7 @@
 <style>
 #tgate.an .st,#tgate.an .warn,#tgate.an #tgMove{display:none!important}
 html{background:#0b0e22}
-#spl{--bg:#0b0e22;--acc:#7c5cff;--acc2:#27d3c3;--num:ui-rounded,"SF Pro Rounded",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;position:fixed;inset:0;z-index:9999;background:radial-gradient(circle at 50% 42%,#26327a 0%,#141a4d 45%,#0b0e22 100%);display:grid;place-items:center;overflow:hidden;animation:splFail .4s 6s forwards;-webkit-user-select:none;user-select:none}
+#spl{--bg:#0b0e22;--acc:#7c5cff;--acc2:#27d3c3;--num:ui-rounded,"SF Pro Rounded",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;position:fixed;inset:0;z-index:9999;background:radial-gradient(circle at 50% 42%,#26327a 0%,#141a4d 45%,#0b0e22 100%);display:grid;place-items:center;overflow:hidden;animation:splFail .4s 8s forwards;-webkit-user-select:none;user-select:none}
 #spl *{box-sizing:border-box}
 #spl .glow{position:absolute;border-radius:50%;filter:blur(70px);opacity:0}
 #spl .g1{width:300px;height:300px;background:#7c5cff;left:-90px;top:-60px;animation:splGl 1.6s .1s ease-out forwards}
@@ -34,12 +34,12 @@ html{background:#0b0e22}
 #spl .name{margin-top:26px;font-family:var(--num);font-weight:800;font-size:38px;letter-spacing:-1px;color:#f3f5ff;display:flex}
 #spl .name i{font-style:normal;display:inline-block;opacity:0;transform:translateY(14px);animation:splCh .5s ease-out forwards}
 @keyframes splCh{to{opacity:1;transform:none}}
-#spl .tag{margin-top:8px;font-size:14.5px;color:#8f96c6;opacity:0;animation:splFi .7s 1.45s ease-out forwards}
+#spl .tag{margin-top:8px;font-size:14.5px;color:#8f96c6;opacity:0;animation:splFi .7s 1.8s ease-out forwards}
 @keyframes splFi{to{opacity:1}}
 #spl .bar{position:absolute;left:50%;bottom:84px;width:120px;height:4px;margin-left:-60px;border-radius:4px;background:#ffffff14;overflow:hidden;opacity:0;animation:splFi .4s 1.2s forwards}
 #spl .bar b{display:block;height:100%;width:0;border-radius:4px;background:linear-gradient(90deg,var(--acc),var(--acc2));animation:splLd 1.1s 1.2s ease-in-out forwards}
 @keyframes splLd{to{width:100%}}
-#spl .credit{position:absolute;bottom:38px;left:0;right:0;text-align:center;font-size:11.5px;color:#8f96c688;opacity:0;animation:splFi .6s 1.7s forwards}
+#spl .credit{position:absolute;bottom:38px;left:0;right:0;text-align:center;font-size:11.5px;color:#8f96c688;opacity:0;animation:splFi .6s 2.1s forwards}
 #spl .coin{position:absolute;width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,#ffd27a,#ffb648);opacity:0;box-shadow:0 4px 10px #ffb64855}
 #spl .c1{left:18%;top:36%;animation:splFl 2.4s .9s ease-in-out forwards}
 #spl .c2{right:20%;top:41%;width:10px;height:10px;animation:splFl 2.4s 1.2s ease-in-out forwards}
@@ -50,18 +50,18 @@ html{background:#0b0e22}
 #spl .logo:after{border-radius:30px}
 #spl .sa{animation:splIn .6s .3s cubic-bezier(.2,1.2,.4,1) both;transform-origin:60px 60px}
 @keyframes splIn{0%{opacity:0;transform:scale(.5)}100%{opacity:1;transform:none}}
-#spl .sring{animation:splSpin 1.5s 1.03s linear forwards;transform-origin:60px 60px}
+#spl .sring{animation:splSpin 2.7s 1.03s linear forwards;transform-origin:60px 60px}
 #spl .gh{opacity:0;transform-origin:60px 60px}
-#spl .gh1{animation:splGh1 1.5s .95s linear forwards}
-#spl .gh2{animation:splGh2 1.5s .95s linear forwards}
+#spl .gh1{animation:splGh1 2.7s .95s linear forwards}
+#spl .gh2{animation:splGh2 2.7s .95s linear forwards}
 @keyframes splGh1{0.0%{transform:rotate(25deg) scaleY(0.000);opacity:0.90}3.1%{transform:rotate(25deg) scaleY(-0.993);opacity:0.90}6.1%{transform:rotate(25deg) scaleY(-0.301);opacity:0.90}9.2%{transform:rotate(25deg) scaleY(0.851);opacity:0.90}12.3%{transform:rotate(25deg) scaleY(0.759);opacity:0.90}15.4%{transform:rotate(25deg) scaleY(-0.332);opacity:0.90}18.4%{transform:rotate(25deg) scaleY(-0.996);opacity:0.90}21.5%{transform:rotate(25deg) scaleY(-0.552);opacity:0.90}24.6%{transform:rotate(25deg) scaleY(0.420);opacity:0.90}27.6%{transform:rotate(25deg) scaleY(0.984);opacity:0.90}30.7%{transform:rotate(25deg) scaleY(0.750);opacity:0.90}33.8%{transform:rotate(25deg) scaleY(0.005);opacity:0.90}36.9%{transform:rotate(25deg) scaleY(-0.703);opacity:0.90}39.9%{transform:rotate(25deg) scaleY(-0.998);opacity:0.90}43.0%{transform:rotate(25deg) scaleY(-0.820);opacity:0.90}46.1%{transform:rotate(25deg) scaleY(-0.337);opacity:0.90}49.1%{transform:rotate(25deg) scaleY(0.217);opacity:0.90}52.2%{transform:rotate(25deg) scaleY(0.666);opacity:0.90}55.3%{transform:rotate(25deg) scaleY(0.926);opacity:0.90}58.4%{transform:rotate(25deg) scaleY(1.000);opacity:0.90}61.4%{transform:rotate(25deg) scaleY(0.931);opacity:0.90}64.5%{transform:rotate(25deg) scaleY(0.779);opacity:0.90}67.6%{transform:rotate(25deg) scaleY(0.594);opacity:0.90}70.6%{transform:rotate(25deg) scaleY(0.413);opacity:0.74}73.7%{transform:rotate(25deg) scaleY(0.258);opacity:0.47}76.8%{transform:rotate(25deg) scaleY(0.138);opacity:0.20}79.9%{transform:rotate(25deg) scaleY(0.057);opacity:0.00}82.9%{transform:rotate(25deg) scaleY(0.012);opacity:0.00}86.0%{transform:rotate(25deg) scaleY(-0.000);opacity:0.00}87%{opacity:0}100%{opacity:0}}
 @keyframes splGh2{0.0%{transform:rotate(-30deg) scaleX(1.000);opacity:0.90}3.1%{transform:rotate(-30deg) scaleX(0.121);opacity:0.90}6.1%{transform:rotate(-30deg) scaleX(-0.954);opacity:0.90}9.2%{transform:rotate(-30deg) scaleX(-0.525);opacity:0.90}12.3%{transform:rotate(-30deg) scaleX(0.651);opacity:0.90}15.4%{transform:rotate(-30deg) scaleX(0.943);opacity:0.90}18.4%{transform:rotate(-30deg) scaleX(0.093);opacity:0.90}21.5%{transform:rotate(-30deg) scaleX(-0.834);opacity:0.90}24.6%{transform:rotate(-30deg) scaleX(-0.907);opacity:0.90}27.6%{transform:rotate(-30deg) scaleX(-0.177);opacity:0.90}30.7%{transform:rotate(-30deg) scaleX(0.662);opacity:0.90}33.8%{transform:rotate(-30deg) scaleX(1.000);opacity:0.90}36.9%{transform:rotate(-30deg) scaleX(0.711);opacity:0.90}39.9%{transform:rotate(-30deg) scaleX(0.062);opacity:0.90}43.0%{transform:rotate(-30deg) scaleX(-0.573);opacity:0.90}46.1%{transform:rotate(-30deg) scaleX(-0.942);opacity:0.90}49.1%{transform:rotate(-30deg) scaleX(-0.976);opacity:0.90}52.2%{transform:rotate(-30deg) scaleX(-0.746);opacity:0.90}55.3%{transform:rotate(-30deg) scaleX(-0.377);opacity:0.90}58.4%{transform:rotate(-30deg) scaleX(0.019);opacity:0.90}61.4%{transform:rotate(-30deg) scaleX(0.364);opacity:0.90}64.5%{transform:rotate(-30deg) scaleX(0.627);opacity:0.90}67.6%{transform:rotate(-30deg) scaleX(0.804);opacity:0.90}70.6%{transform:rotate(-30deg) scaleX(0.911);opacity:0.74}73.7%{transform:rotate(-30deg) scaleX(0.966);opacity:0.47}76.8%{transform:rotate(-30deg) scaleX(0.990);opacity:0.20}79.9%{transform:rotate(-30deg) scaleX(0.998);opacity:0.00}82.9%{transform:rotate(-30deg) scaleX(1.000);opacity:0.00}86.0%{transform:rotate(-30deg) scaleX(1.000);opacity:0.00}87%{opacity:0}100%{opacity:0}}
-#spl .scn{animation:splPop .5s .25s cubic-bezier(.3,1.6,.5,1) both,splSpin 1.5s .95s linear forwards,splGw 1.4s 2.5s ease-in-out infinite;transform-origin:60px 60px}
+#spl .scn{animation:splPop .5s .25s cubic-bezier(.3,1.6,.5,1) both,splSpin 2.7s .95s linear forwards,splGw 1.4s 3.7s ease-in-out infinite;transform-origin:60px 60px}
 @keyframes splPop{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:none}}
 @keyframes splSpin{0.0%{transform:scaleX(1.000)}3.1%{transform:scaleX(0.121)}6.1%{transform:scaleX(-0.954)}9.2%{transform:scaleX(-0.525)}12.3%{transform:scaleX(0.651)}15.4%{transform:scaleX(0.943)}18.4%{transform:scaleX(0.093)}21.5%{transform:scaleX(-0.834)}24.6%{transform:scaleX(-0.907)}27.6%{transform:scaleX(-0.177)}30.7%{transform:scaleX(0.662)}33.8%{transform:scaleX(1.000)}36.9%{transform:scaleX(0.711)}39.9%{transform:scaleX(0.062)}43.0%{transform:scaleX(-0.573)}46.1%{transform:scaleX(-0.942)}49.1%{transform:scaleX(-0.976)}52.2%{transform:scaleX(-0.746)}55.3%{transform:scaleX(-0.377)}58.4%{transform:scaleX(0.019)}61.4%{transform:scaleX(0.364)}64.5%{transform:scaleX(0.627)}67.6%{transform:scaleX(0.804)}70.6%{transform:scaleX(0.911)}73.7%{transform:scaleX(0.966)}76.8%{transform:scaleX(0.990)}79.9%{transform:scaleX(0.998)}82.9%{transform:scaleX(1.000)}86.0%{transform:scaleX(1.000)}93%{transform:scale(1.13)}100%{transform:scale(1)}}
 @keyframes splGw{0%,100%{filter:brightness(1) drop-shadow(0 0 0 #fff0)}50%{filter:brightness(1.12) drop-shadow(0 0 7px #ffffffcc)}}
 #spl .glow{display:none}
-#spl .coin{width:3px;height:3px;background:#fff;box-shadow:0 0 8px #ffffffaa;animation:splTwF .6s calc(.3s + var(--dl,0s)) 3 ease-in-out both,splTw 2.6s 2.4s ease-in-out infinite}
+#spl .coin{width:3px;height:3px;background:#fff;box-shadow:0 0 8px #ffffffaa;animation:splTwF .6s calc(.3s + var(--dl,0s)) 3 ease-in-out both,splTw 2.6s 3.6s ease-in-out infinite}
 #spl .c1{left:18%;top:22%;--dl:0.07s}#spl .c2{right:16%;top:18%;width:2px;height:2px;--dl:0.28s}#spl .c3{left:14%;top:60%;width:2px;height:2px;--dl:0.17s}
 #spl .c4{right:20%;top:64%;--dl:0.4s}#spl .c5{left:32%;top:82%;width:2px;height:2px;--dl:0.05s}#spl .c6{right:34%;top:86%;--dl:0.33s}#spl .c7{left:48%;top:12%;width:2px;height:2px;--dl:0.23s}#spl .c8{right:8%;top:42%;width:2px;height:2px;--dl:0.12s}
 @keyframes splTwF{0%{opacity:0;transform:scale(.4)}45%{opacity:1;transform:scale(2.2);box-shadow:0 0 14px #fff}100%{opacity:0;transform:scale(.4)}}
@@ -297,6 +297,7 @@ textarea.fld{min-height:90px;font-family:ui-monospace,Menlo,monospace;font-size:
 .linkbtn{display:block;width:100%;text-align:center;color:var(--mut);font-size:13px;padding:14px 0 0}
 .bill-sum{font-family:var(--num);font-size:21px;font-weight:800;margin-bottom:6px}
 
+#tBody .thint{font-size:11.5px;color:var(--mut);margin:-2px 0 10px 4px;line-height:1.35}
 @keyframes pop{0%{transform:scale(.4);opacity:.3}60%{transform:scale(1.22)}100%{transform:scale(1);opacity:1}}
 @keyframes bump{0%{transform:translateY(0)}40%{transform:translateY(-5px) scale(1.12)}100%{transform:none}}
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
@@ -847,7 +848,7 @@ input[type=month].fld,input[type=date].fld{min-width:0;max-width:100%;width:100%
 if(navigator.webdriver){el.parentNode.removeChild(el);return}
 var done=false;function kill(){if(done)return;done=true;el.classList.add('out');setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el)},520)}
 el.addEventListener('click',kill);el.addEventListener('touchend',function(e){e.preventDefault();kill()},{passive:false});
-window.__splashReady=function(){setTimeout(kill,Math.max(0,3000-(Date.now()-t0)))};})();</script>
+window.__splashReady=function(){setTimeout(kill,Math.max(0,4300-(Date.now()-t0)))};})();</script>
 <div class="bgfx"><i></i><i></i></div>
 <div class="wrap">
   <div class="top">
@@ -2682,10 +2683,12 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.4.9';
+var APP_VER='2.5';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+  {v:'2.5',date:'Kasım 2026',title:'Aylık uçak fiyatları',items:[['✈️','Uçak fiyatı aya göre değişiyor','Bilet fiyatı artık gidiş ve dönüş tarihinin ayına göre hesaplanıyor. Yazın pahalı, kışın uygun. Fiyat tahmini ve ortalamalara dayanır, bunu kutunun altında da yazdık.',1],['✍️','Kendi bilet fiyatını yaz','Gerçek bilet fiyatını bulduysan Uçak biletleri kutusuna yazabilirsin, tahmin yerine seninki kullanılır.',1],['⚡','Elektrikli araç seçeneği','Tatil planında yakıt türüne Elektrik eklendi. Şarj maliyeti kWh fiyatı ve 100 km tüketimine göre hesaplanıyor, tüketimi kendi aracına göre değiştirebilirsin.',1],['🎬','Açılış animasyonu yavaşladı','Açılıştaki dönen logo biraz daha sakin ve rahat izleniyor.',0]]},
+  {v:'2.4.10',date:'Kasım 2026',title:'Plan ekranı kapanmıyor',items:[['🧭','Yer seçince Plan kutusu kapanmıyor','Çıkış ve gideceğin yeri seçtiğinde Plan kutusu artık kendiliğinden kapanıp seni aşağıya atmıyor. Kişi sayısı ve tarihleri rahatça seçebilirsin.',0],['👥','Kişi sayısı daha görünür','Kaç kişi seçimi artık Nereden–Nereye alanının hemen altında.',0]]},
   {v:'2.4.9',date:'Kasım 2026',title:'Güncel uçak fiyatları',items:[['✈️','Uçak bileti fiyatı gerçek verilerden','Popüler rotalarda uçak fiyatı artık günlük güncellenen örnek bilet fiyatlarına göre hesaplanıyor. Fiyatı olmayan rotalarda eski tahmin kullanılır.',1]]},
   {v:'2.4.8',date:'Kasım 2026',title:'Tren sadece trenin gittiği yerlerde',items:[['🚆','Tren seçeneği akıllandı','Gideceğin yer ve çıkış şehrin arasında tren yoksa (Bodrum gibi) Ulaşım bölümünde Tren hiç çıkmıyor. Tren seçiliyken rota değişirse otomatik Araç’a geçiyor.',1]]},
   {v:'2.4.7',date:'Kasım 2026',title:'Yeni logo ve açılış animasyonu',items:[['✨','Yeni logo','Uygulamanın yeni ikonu: ortada parlayan ₺ parası, çevresinde renkli bütçe halkası.',1],['🖼️','Ana ekran ikonu','Ana ekrana eklediğinde yeni logo görünür. Eski ikonu olanlar uygulamayı silip yeniden ekleyebilir.',0],['🎬','Yeni açılış animasyonu','Renkli halka ve ₺ parası kendi eksenlerinde dönerken ince halkalar onların içinden girip çıkar, hepsi birlikte yavaşlayıp tık diye durur, sonra uygulama açılır.',1]]},
@@ -4376,7 +4379,10 @@ var PL_NOAP=['Bursa','Uludağ','Sapanca','Bolu','Safranbolu','Edirne','Tekirdağ
 // yurt dışı: [enlem,boylam,ülke,para birimi,karayolu var mı]
 var PL_DIS={'Atina':[37.98,23.73,'Yunanistan','EUR',1],'Selanik':[40.64,22.94,'Yunanistan','EUR',1],'Sofya':[42.70,23.32,'Bulgaristan','EUR',1],'Belgrad':[44.79,20.45,'Sırbistan','EUR',1],'Budapeşte':[47.50,19.04,'Macaristan','EUR',1],'Viyana':[48.21,16.37,'Avusturya','EUR',1],'Prag':[50.08,14.44,'Çekya','EUR',1],'Berlin':[52.52,13.40,'Almanya','EUR',1],'Roma':[41.90,12.50,'İtalya','EUR',1],'Paris':[48.86,2.35,'Fransa','EUR',1],'Amsterdam':[52.37,4.90,'Hollanda','EUR',1],'Saraybosna':[43.86,18.41,'Bosna Hersek','EUR',1],'Tiflis':[41.72,44.78,'Gürcistan','USD',1],'Barselona':[41.39,2.17,'İspanya','EUR',0],'Madrid':[40.42,-3.70,'İspanya','EUR',0],'Lizbon':[38.72,-9.14,'Portekiz','EUR',0],'Londra':[51.51,-0.13,'İngiltere','GBP',0],'Dublin':[53.35,-6.26,'İrlanda','GBP',0],'Zürih':[47.38,8.54,'İsviçre','EUR',0],'Dubai':[25.20,55.27,'BAE','USD',0],'Bakü':[40.41,49.87,'Azerbaycan','USD',0],'Şarm el-Şeyh':[27.91,34.33,'Mısır','USD',0],'Kahire':[30.04,31.24,'Mısır','USD',0],'Maldivler':[4.18,73.51,'Maldivler','USD',0],'New York':[40.71,-74.00,'ABD','USD',0],'Tokyo':[35.68,139.69,'Japonya','USD',0],'Bangkok':[13.76,100.50,'Tayland','USD',0],'Bali':[-8.41,115.19,'Endonezya','USD',0],'Venedik':[45.44,12.32,'İtalya','EUR',1],'Floransa':[43.77,11.26,'İtalya','EUR',1],'Milano':[45.46,9.19,'İtalya','EUR',1],'Napoli':[40.85,14.27,'İtalya','EUR',1],'Münih':[48.14,11.58,'Almanya','EUR',1],'Brüksel':[50.85,4.35,'Belçika','EUR',1],'Zagreb':[45.81,15.98,'Hırvatistan','EUR',1],'Dubrovnik':[42.65,18.09,'Hırvatistan','EUR',1],'Bükreş':[44.43,26.10,'Romanya','EUR',1],'Varşova':[52.23,21.01,'Polonya','EUR',1],'Kopenhag':[55.68,12.57,'Danimarka','EUR',0],'Stockholm':[59.33,18.07,'İsveç','EUR',0],'Santorini':[36.39,25.46,'Yunanistan','EUR',0],'Mykonos':[37.45,25.33,'Yunanistan','EUR',0],'Girit':[35.34,25.14,'Yunanistan','EUR',0],'Malta':[35.90,14.51,'Malta','EUR',0],'Marakeş':[31.63,-8.01,'Fas','EUR',0],'Mekke':[21.39,39.86,'Suudi Arabistan','USD',0],'Medine':[24.47,39.61,'Suudi Arabistan','USD',0],'Singapur':[1.35,103.82,'Singapur','USD',0],'Seul':[37.57,126.98,'Güney Kore','USD',0]};
 var PL_ROAD={'İstanbul|Ankara':450,'İstanbul|İzmir':480,'İstanbul|Bursa':150,'İstanbul|Antalya':710,'İstanbul|Bodrum':850,'İstanbul|Çeşme':470,'İstanbul|Marmaris':800,'İstanbul|Çanakkale':330,'İstanbul|Kapadokya':740,'İstanbul|Trabzon':1050,'İstanbul|Fethiye':900,'İstanbul|Alanya':870,'İstanbul|Uludağ':160,'İstanbul|Sapanca':140};
-var PRICE_DEF={guncelleme:'2026-11-20',yakit:{benzin:71.3,motorin:95.3,lpg:50.7},gecis:{'İstanbul|İzmir':2525,'İstanbul|Bursa':1290,'İstanbul|Ankara':400,'İstanbul|Çanakkale':1540,'İstanbul|Antalya':1350,'İstanbul|Bodrum':2640,'İstanbul|Çeşme':2580,'İstanbul|Marmaris':2640,'İstanbul|Kapadokya':1000},gecisKm:1.0,yurtdisiGecisKmEur:0.07,ucak:{taban:1700,km:1.4,yazCarpan:1.25,disTaban:3000,disKm:1.9},otobus:{km:1.5},tren:{'İstanbul|Ankara':[990,4.5],'İstanbul|Eskişehir':[639,2.75],'Ankara|Eskişehir':[511,1.5],'Ankara|Konya':[458,1.9],'İstanbul|Konya':[1442,4.8],'Ankara|Sivas':[1001,2.9]},yemek:{ic:1100,EUR:50,USD:50,GBP:45}};
+var PRICE_DEF={guncelleme:'2026-11-20',yakit:{benzin:71.3,motorin:95.3,lpg:50.7,elektrik:13.5},gecis:{'İstanbul|İzmir':2525,'İstanbul|Bursa':1290,'İstanbul|Ankara':400,'İstanbul|Çanakkale':1540,'İstanbul|Antalya':1350,'İstanbul|Bodrum':2640,'İstanbul|Çeşme':2580,'İstanbul|Marmaris':2640,'İstanbul|Kapadokya':1000},gecisKm:1.0,yurtdisiGecisKmEur:0.07,ucak:{taban:1100,km:0.7,yazCarpan:1.5,disTaban:3000,disKm:1.9},ucakRota:{"İstanbul|Bodrum":1500,"İstanbul|Dalaman":1550,"İstanbul|Antalya":1450,"İstanbul|İzmir":1425,"İstanbul|Ankara":1475,"İstanbul|Trabzon":1650,"Ankara|Bodrum":1450,"Ankara|Dalaman":1500,"Ankara|Antalya":1425,"Ankara|İzmir":1425,"İzmir|Antalya":1475,"İzmir|Trabzon":1825,"Antalya|Trabzon":1750},ucakAy:{"kiyi":[1,1,1,1.1,1.2,1.6,2.0,2.05,1.45,1.2,1,1.1],"std":[1,1,1,1.05,1.1,1.3,1.55,1.55,1.3,1.15,1,1.1]},otobus:{km:1.5},tren:{'İstanbul|Ankara':[990,4.5],'İstanbul|Eskişehir':[639,2.75],'Ankara|Eskişehir':[511,1.5],'Ankara|Konya':[458,1.9],'İstanbul|Konya':[1442,4.8],'Ankara|Sivas':[1001,2.9]},yemek:{ic:1100,EUR:50,USD:50,GBP:45}};
+var UCAK_KIYI=['Antalya','Bodrum','Dalaman'];
+function ucakMul(P,m,a,b){var T=(P&&P.ucakAy&&P.ucakAy.kiyi&&P.ucakAy.std)?P.ucakAy:PRICE_DEF.ucakAy,k=(UCAK_KIYI.indexOf(a)>=0||UCAK_KIYI.indexOf(b)>=0)?'kiyi':'std';return T[k][m]||1}
+function monIdx(d){var m=parseInt(String(d||'').slice(5,7),10);return m>=1&&m<=12?m-1:0}
 var PRICES=null;
 function getP(){
   if(PRICES)return PRICES;
@@ -4418,27 +4424,31 @@ function rtCalc(t){
   var straight=hav(A,B),road=pairGet(PL_ROAD,A.name,B.name)||straight*(dis?1.25:1.3);
   road=Math.round(road/10)*10;
   var summer=t.season!=='kis',M={};
-  var cons=Math.max(3,Math.min(25,Number(t.cons)||7)),fuel=t.fuel||'benzin';
+  var fuel=t.fuel||'benzin',ev=fuel==='elektrik',cons=ev?Math.max(8,Math.min(45,Number(t.consEv)||17.5)):Math.max(3,Math.min(25,Number(t.cons)||7));
   // araba
   if(dis&&!B.land)M.arac={ok:false,why:'Karayoluyla gidilemez'};
   else{
-    var fp=(P.yakit[fuel]||P.yakit.benzin)*(dis?1.25:1),lt=road*2*cons/100,yk=lt*fp;
+    var fp=(P.yakit[fuel]||(ev?13.5:P.yakit.benzin))*(dis?1.25:1),lt=road*2*cons/100,yk=lt*fp;
     var tollOne,known=false;
     if(dis){tollOne=road*P.yurtdisiGecisKmEur*curRate('EUR').v}
     else{var g=pairGet(P.gecis,A.name,B.name);if(g!==undefined){tollOne=g;known=true}else tollOne=road>120?road*P.gecisKm:0}
     var toll=tollOne*2,tot=yk+toll;
-    M.arac={ok:true,time:road/82,total:tot,pp:tot/p,lines:[['⛽ Yakıt · '+Math.round(lt)+' L ('+(fuel==='motorin'?'dizel':fuel==='lpg'?'LPG':'benzin')+', '+cons+' L/100 km)',yk],['🛣️ Otoyol & köprü · gidiş-dönüş',toll]],note:dis?'Yurt dışı yol ücreti ve yakıt kaba tahmindir.':(known?'':(road>120?'Bu rota için kesin tarife yok, km\'ye göre kaba tahmin.':'')),parts:{yakit:yk,toll:toll}};
+    M.arac={ok:true,time:road/82,total:tot,pp:tot/p,lines:[[ev?('⚡ Şarj · '+Math.round(lt)+' kWh (elektrik, '+cons+' kWh/100 km)'):('⛽ Yakıt · '+Math.round(lt)+' L ('+(fuel==='motorin'?'dizel':fuel==='lpg'?'LPG':'benzin')+', '+cons+' L/100 km)'),yk],['🛣️ Otoyol & köprü · gidiş-dönüş',toll]],note:dis?'Yurt dışı yol ücreti ve yakıt kaba tahmindir.':(known?'':(road>120?'Bu rota için kesin tarife yok, km\'ye göre kaba tahmin.':'')),parts:{yakit:yk,toll:toll}};
   }
   // uçak
   var apA=PL_NOAP.indexOf(A.name)>=0?null:(PL_AP[A.name]||A.name),apB=dis?B.name:(PL_NOAP.indexOf(B.name)>=0?null:(PL_AP[B.name]||B.name));
   if(!apA||!apB||apA===apB)M.ucak={ok:false,why:(!apB?B.name+'\'da':!apA?A.name+'\'da':'Aynı havalimanı')+' uçak seçeneği yok'};
   else{
-    var a1=plIndex()[nrm(apA)],b1=plIndex()[nrm(apB)],fl=hav(a1,b1),pr=dis?(P.ucak.disTaban+P.ucak.disKm*fl):(P.ucak.taban+P.ucak.km*fl);
-    var rp=(!dis&&P.ucakRota)?pairGet(P.ucakRota,apA,apB):undefined,live=rp>0;
-    if(live)pr=rp;else if(summer)pr*=P.ucak.yazCarpan;
+    var a1=plIndex()[nrm(apA)],b1=plIndex()[nrm(apB)],fl=hav(a1,b1);
+    var base=(!dis&&P.ucakRota)?pairGet(P.ucakRota,apA,apB):undefined;
+    if(!(base>0))base=dis?(P.ucak.disTaban+P.ucak.disKm*fl):(P.ucak.taban+P.ucak.km*fl);
+    var prGo,prBack;
+    if(dis){prGo=prBack=summer?base*P.ucak.yazCarpan:base}
+    else{prGo=base*ucakMul(P,monIdx(t.start),apA,apB);prBack=base*ucakMul(P,monIdx(t.end),apA,apB)}
+    var pr=(prGo+prBack)/2;
     var viaB=(!dis&&apB!==B.name),ft=0.6+fl/720;
     var tot2=pr*2*p;
-    M.ucak={ok:true,time:ft,total:tot2,pp:tot2/p,lines:[['✈️ Uçak biletleri · gidiş-dönüş × '+p+' kişi',tot2]],note:(viaB?apB+' havalimanına uçulur, '+B.name+'\'a yol ile geçilir. ':'')+(live?'Güncel örnek fiyata göre. ':'')+'Havalimanı ulaşımı ve bagaj dahil değil.',parts:{pp:pr*2}};
+    M.ucak={ok:true,time:ft,total:tot2,pp:tot2/p,lines:[['✈️ Uçak biletleri · gidiş-dönüş × '+p+' kişi',tot2]],note:(viaB?apB+' havalimanına uçulur, '+B.name+'\'a yol ile geçilir. ':'')+'Tahmini fiyat: tarihe ve sezona göre ortalamalara dayanır. Kendi bilet fiyatını bütçedeki Uçak biletleri kutusuna yazabilirsin. Havalimanı ulaşımı ve bagaj dahil değil.',parts:{pp:pr*2}};
   }
   // otobüs & tren (yalnız yurt içi)
   if(dis){M.otobus={ok:false,why:'Yurt dışında yok'};M.tren={ok:false,why:'Yurt dışında yok'}}
@@ -4459,8 +4469,8 @@ function renderRoute(){
   var t=tripById(curTrip),el=$('tRouteIn');if(!t||!el)return;
   var h='';
   if(t.mode==='arac'){
-    h+='<span class="lbl">Yakıt türü</span>'+segHtml('fuel',[['benzin','⛽','Benzin'],['motorin','🛢️','Dizel'],['lpg','🔵','LPG']],t.fuel||'benzin')+
-      '<div class="two" style="margin-bottom:10px"><div><span class="lbl">Ortalama tüketim (L/100 km)</span><input class="fld" id="tCons" inputmode="decimal" value="'+esc(String(t.cons||7).replace('.',','))+'" autocomplete="off"></div><div></div></div>';
+    h+='<span class="lbl">Yakıt türü</span>'+segHtml('fuel',[['benzin','⛽','Benzin'],['motorin','🛢️','Dizel'],['lpg','🔵','LPG'],['elektrik','⚡','Elektrik']],t.fuel||'benzin')+
+      '<div class="two" style="margin-bottom:10px"><div><span class="lbl">Ortalama tüketim ('+(t.fuel==='elektrik'?'kWh':'L')+'/100 km)</span><input class="fld" id="tCons" inputmode="decimal" value="'+esc(String((t.fuel==='elektrik'?(t.consEv||17.5):(t.cons||7))).replace('.',','))+'" autocomplete="off"></div><div></div></div>';
   }
   h+='<div id="tRouteRes"></div>';
   h+='<span class="lbl" style="margin-top:12px">Toplam bütçem (isteğe bağlı)</span><input class="fld" id="tTarget" inputmode="decimal" placeholder="Örn. 60.000 ₺" autocomplete="off" value="'+((t.target||0)>0?esc(toIn(t.target)):'')+'"><div id="tLodge"></div>';
@@ -4665,20 +4675,21 @@ function renderTrip(){
   h+='<div class="tbox" id="tPlanBox"><h2>🧭 Plan</h2>'+
     '<div class="two"><div><span class="lbl">Nereden</span><input class="fld" id="tFrom" value="'+esc(t.from||'')+'" placeholder="Örn. İstanbul" maxlength="40" autocomplete="off"></div><div><span class="lbl">Nereye</span><input class="fld" id="tDest" value="'+esc(t.dest)+'" placeholder="Örn. Bodrum, Roma" maxlength="40" autocomplete="off"></div></div>'+
     '<div id="tSug" class="tsug"></div>'+
+    '<span class="lbl">Kaç kişi</span><div class="tstep"><button type="button" id="tPm">−</button><b id="tPv">'+t.people+'</b><button type="button" id="tPp">+</button></div>'+
     '<span class="lbl">Mevsim</span>'+segHtml('season',[['yaz','☀️','Yaz'],['kis','❄️','Kış']],t.season)+
     '<span class="lbl">Nerede</span>'+segHtml('scope',[['ic','🇹🇷','Yurt içi'],['dis','🌍','Yurt dışı']],t.scope)+
     '<span class="lbl">Kiminle</span>'+segHtml('who',WHOS,t.who)+
     '<span class="lbl">Ulaşım</span>'+'<span id="tModeBox">'+segHtml('mode',modeList(t),t.mode)+'</span>'+
     '<div class="two"><div><span class="lbl">Gidiş</span><input class="fld" id="tStart" type="date" value="'+t.start+'"></div><div><span class="lbl" id="tNights">Dönüş · '+nights(t)+' gece</span><input class="fld" id="tEnd" type="date" value="'+t.end+'"></div></div><div id="tDateTip"></div>'+
-    '<span class="lbl">Kaç kişi</span><div class="tstep"><button type="button" id="tPm">−</button><b id="tPv">'+t.people+'</b><button type="button" id="tPp">+</button></div></div>';
+    '</div>';
   h+='<div class="tbox" id="tRouteBox"><h2>🧭 Yol ve maliyet tahmini <span class="newb">YENİ</span></h2><div id="tRouteIn"></div></div>';
   h+='<div class="tbox" id="tBudBox"><h2>💰 Tatil bütçesi</h2><div class="thd"><span></span><span>Toplam</span><span>Kişi başı</span><span></span></div><div id="tRows">';
-  (t.items||[]).forEach(function(it){h+='<div class="trow"><span class="n"><span class="e">'+it.ico+'</span><span>'+esc(it.label)+(it.perPerson?' <small style="color:var(--mut)">· kişi başı</small>':'')+'</span></span><input class="tamt" data-it="'+it.id+'" inputmode="decimal" placeholder="'+(it.perPerson?'kişi başı ₺':'0 ₺')+'" value="'+((it.perPerson?it.ppAmt:it.total)>0?esc(toIn(it.perPerson?it.ppAmt:it.total)):'')+'" autocomplete="off"><span class="pp" data-pp="'+it.id+'"></span><button type="button" class="rm" data-rm="'+it.id+'" aria-label="Kaldır">✕</button></div>'});
+  (t.items||[]).forEach(function(it){h+='<div class="trow"><span class="n"><span class="e">'+it.ico+'</span><span>'+esc(it.label)+(it.perPerson?' <small style="color:var(--mut)">· kişi başı</small>':'')+'</span></span><input class="tamt" data-it="'+it.id+'" inputmode="decimal" placeholder="'+(it.perPerson?'kişi başı ₺':'0 ₺')+'" value="'+((it.perPerson?it.ppAmt:it.total)>0?esc(toIn(it.perPerson?it.ppAmt:it.total)):'')+'" autocomplete="off"><span class="pp" data-pp="'+it.id+'"></span><button type="button" class="rm" data-rm="'+it.id+'" aria-label="Kaldır">✕</button></div>'+((it.auto&&it.label==='Uçak biletleri')?'<div class="thint">Tahmini · ortalama fiyatlara dayanır. Kendi bilet fiyatını yazabilirsin.</div>':'')});
   h+='</div><div class="two" style="margin-top:10px"><input class="fld" id="tNewLbl" placeholder="Yeni kalem (örn. Hediye)" maxlength="30"><button type="button" class="tbtn g" id="tAddIt" style="margin:0;padding:12px">Ekle</button></div><div class="ttot"><span>Toplam<small id="tTotSub"></small></span><span style="text-align:right"><b class="num" id="tTot"></b><small id="tTotPp"></small></span></div></div>';
   h+='<div class="tbox" id="tFeas"></div><div class="tbox" id="tMoti"></div><div class="tbox" id="tExp"></div><div id="tSum"></div>';
   h+='<button type="button" class="tlink" id="tArch">Tatili arşive al</button><button type="button" class="tlink" id="tDel" style="padding-top:6px;color:#ff8a9c">Tatili sil</button>';
   $('tBody').innerHTML=h;applyFolds(t);renderRoute();
-  document.querySelectorAll('#tBody .tamt').forEach(function(el){bindAmt(el);el.oninput=function(ev){fmtAmt(ev);var it=(t.items||[]).filter(function(x){return x.id===el.getAttribute('data-it')})[0];if(it){it.auto=false;if(it.perPerson){it.ppAmt=parseNum(el.value)}else{it.total=parseNum(el.value)}save();renderTripDyn()}}});
+  document.querySelectorAll('#tBody .tamt').forEach(function(el){bindAmt(el);el.oninput=function(ev){fmtAmt(ev);var it=(t.items||[]).filter(function(x){return x.id===el.getAttribute('data-it')})[0];if(it){it.auto=false;var hn=el.parentNode&&el.parentNode.nextElementSibling;if(hn&&hn.classList&&hn.classList.contains('thint'))hn.parentNode.removeChild(hn);if(it.perPerson){it.ppAmt=parseNum(el.value)}else{it.total=parseNum(el.value)}save();renderTripDyn()}}});
   renderTripDyn();
 }
 
@@ -4859,7 +4870,7 @@ $('tBody').addEventListener('input',function(ev){
   var t=tripById(curTrip);if(!t)return;
   if(ev.target.id==='tBackN'){var tt=tripById(curTrip),ss=tripSettle(tt,tripSpent(tt)),nn=parseInt(ev.target.value,10)||0,ba=$('tBackAmt');if(ba&&nn>0&&bkKind==='kon'&&ss.konPer>0&&!ba.value)ba.placeholder='Önerilen: '+fmt(nn*ss.konPer)}
   if(ev.target.id==='tFrom'){showSug('tFrom');t.from=ev.target.value;lsSet('butcem_from',t.from);syncMode(t);save();renderRouteRes();return}
-  if(ev.target.id==='tCons'){var cv=parseNum(ev.target.value);if(cv>0){t.cons=cv;save();renderRouteRes()}return}
+  if(ev.target.id==='tCons'){var cv=parseNum(ev.target.value);if(cv>0){if(t.fuel==='elektrik')t.consEv=cv;else t.cons=cv;save();renderRouteRes()}return}
   if(ev.target.id==='tDest'){showSug('tDest');t.dest=ev.target.value;save();renderTripDyn();renderTripCard();var sb=document.querySelector('#tSwitch .on');if(sb)sb.textContent=(t.season==='kis'?'❄️':'☀️')+' '+(t.dest||'Yeni tatil')}
   if(ev.target.id==='tStart'||ev.target.id==='tEnd'){
     var s1=$('tStart').value,e1=$('tEnd').value;
@@ -5188,7 +5199,7 @@ $('bCsv').onclick=function(){
 /* ---------- Tatil bölümlerini katla ---------- */
 var tFold={};
 $('tBody').addEventListener('click',function(ev){var h=ev.target.closest('.tbox>h2');if(!h)return;var bx=h.parentNode;if(!bx.id)return;bx.classList.toggle('fold');tFold[curTrip+':'+bx.id]=bx.classList.contains('fold')});
-function applyFolds(t){['tPlanBox','tRouteBox','tBudBox','tFeas','tMoti','tExp'].forEach(function(id){var el=$(id);if(!el)return;var k=t.id+':'+id,f=tFold[k];if(f===undefined)f=(id==='tPlanBox')?!!t.dest:false;el.classList.toggle('fold',!!f)})}
+function applyFolds(t){['tPlanBox','tRouteBox','tBudBox','tFeas','tMoti','tExp'].forEach(function(id){var el=$(id);if(!el)return;var k=t.id+':'+id,f=tFold[k];if(f===undefined){f=(id==='tPlanBox')?!!t.dest:false;if(id==='tPlanBox')tFold[k]=f}el.classList.toggle('fold',!!f)})}
 
 /* ---------- Yazı boyutu ---------- */
 function setBig(on){document.documentElement.classList.toggle('big',on);$('fsN').classList.toggle('on',!on);$('fsB').classList.toggle('on',on);lsSet('butcem_big',on?'1':'0')}
