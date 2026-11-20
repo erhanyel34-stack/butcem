@@ -811,7 +811,13 @@ html.big body{zoom:1.12}
 /* v1.14 geçmişten başlayan kredi */
 #pOldWrap{margin:0 0 6px}
 #pOldBox{background:#ffffff0a;border:1.5px solid #7c5cff55;border-radius:16px;padding:12px;margin:2px 0 10px}
-#pOldBox .chk{margin:0 0 8px}
+#pOldBox .chk{margin:0}
+.qb{display:flex;gap:10px;margin:8px 0 0}.qb button{flex:1;padding:13px 8px;border-radius:14px;font-size:14.5px;font-weight:700;color:#fff;background:#ffffff10;border:1.5px solid #ffffff22;line-height:1.25}
+.qb button small{display:block;font-weight:500;opacity:.7;font-size:12px;margin-top:3px}
+.qb button.on{background:linear-gradient(135deg,#7c5cff55,#2c7be544);border-color:#8f7cff}
+.qrow{display:flex;align-items:center;gap:10px}.qrow b{font-size:14px;flex:1}
+.stp{display:flex;align-items:center;gap:6px}.stp button{width:38px;height:38px;border-radius:12px;background:#ffffff14;color:#fff;font-size:22px;font-weight:700}
+.stp input{width:52px;text-align:center;font-size:20px;font-weight:800;background:none;border:0;color:#fff;padding:0}
 /* v1.15.3 */
 .bill.flash{animation:billfl 2.2s}
 @keyframes billfl{0%,60%{box-shadow:0 0 0 2px #7c5cff,0 0 22px #7c5cff88}100%{box-shadow:0 0 0 0 #7c5cff00}}
@@ -1313,12 +1319,13 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,4300-(Date.now()-t0))
       <div><span class="lbl">Başlangıç ayı</span><input class="fld" id="pStart" type="month"></div>
       <div><span class="lbl">Ayın kaçında ödenir?</span><input class="fld" id="pDay" type="number" min="1" max="31" inputmode="numeric" placeholder="5"></div>
     </div>
-    <div id="pOldWrap"><label class="chk"><input type="checkbox" id="pOld"> Bu kredi / taksit zaten başladı, bazı taksitleri ödedim</label>
+    <div id="pOldWrap"><input type="checkbox" id="pOld" style="display:none">
+      <span class="lbl" style="font-size:15px;font-weight:700;color:var(--txt,#fff);margin-top:4px">Bu taksitten daha önce ödediğin oldu mu?</span>
+      <div class="qb"><button type="button" id="pOldNo" class="on">Hayır<small>Yeni başlıyor</small></button><button type="button" id="pOldYes">Evet<small>Bazılarını ödedim</small></button></div>
       <div id="pOldBox" style="display:none">
-        <span class="lbl">Şu ana kadar kaç taksit ödedin?</span>
-        <input class="fld" id="pPaid" type="number" min="0" inputmode="numeric" placeholder="Örn. 8" autocomplete="off">
+        <div class="qrow"><b>Kaç taksit ödedin?</b><div class="stp"><button type="button" id="pMinus" aria-label="Azalt">−</button><input id="pPaid" type="number" min="0" inputmode="numeric" placeholder="0" autocomplete="off"><button type="button" id="pPlus" aria-label="Artır">+</button></div></div>
+        <div class="note" id="pOldSum" style="margin:10px 0 8px;font-size:14px"></div>
         <label class="chk"><input type="checkbox" id="pHist" checked> Ödediğim aylar geçmiş aylara da işlensin</label>
-        <div class="note" id="pOldSum" style="margin:0 0 10px;font-size:14px"></div>
       </div></div>
     <span class="lbl">Son ödeme ayı (boşsa süresiz)</span>
     <input class="fld" id="pEnd" type="month">
@@ -1904,7 +1911,7 @@ function planItems(){
 }
 function oldApply(){
   var on=$('pOld').checked&&!tryMode&&!planEdit;
-  $('pOldBox').style.display=on?'':'none';
+  $('pOldBox').style.display=on?'':'none';$('pOldYes').classList.toggle('on',on);$('pOldNo').classList.toggle('on',!on);
   var ps=$('pStart');ps.style.pointerEvents=on?'none':'';ps.style.opacity=on?'.65':'';
   if(!on)return;
   var c=parseInt($('pCount').value,10),pd=parseInt($('pPaid').value,10),day=parseInt($('pDay').value,10),a=parseNum($('pAmt').value),sm=$('pOldSum');
@@ -1914,7 +1921,7 @@ function oldApply(){
   var td=new Date().getDate(),counted=(day>=1&&day<=31)?(day<=td):true,si=ym(nowK())-(counted?pd-1:pd);
   var st=fromYm(si);$('pStart').value=st;$('pEnd').value=fromYm(si+c-1);
   var rem=c-pd,tot=a>0?a*c:0;
-  sm.innerHTML='İlk taksit <b>'+esc(mlab(st))+'</b>, son taksit <b>'+esc(mlab(fromYm(si+c-1)))+'</b><br>Ödenen <b>'+pd+'</b> · kalan <b>'+rem+' taksit</b>'+(a>0?' ('+esc(fmt(rem*a,true))+')<br>Kredinin toplamı <b>'+esc(fmt(tot,true))+'</b>':'');
+  sm.innerHTML='Başlangıç <b>'+esc(mlab(st))+'</b> görünüyor, <b>'+pd+'</b> taksit geçmiş.<br>Kalan <b>'+rem+' taksit</b>'+(a>0?' · <b>'+esc(fmt(rem*a,true))+'</b>':'');
 }
 function planCheck(){
   try{oldApply()}catch(e){}
@@ -2279,7 +2286,15 @@ $('pTotal').oninput=function(ev){fmtAmt(ev);fromTotal();planCheck()};
 $('pCount').oninput=function(){syncEnd();if(isKredi()){var a0=parseNum($('pAmt').value),c0=parseInt($('pCount').value,10);$('pTotal').value=(a0>0&&c0>0)?toIn(a0*c0):'';planCheck();return}var t=parseNum($('pTotal').value),a=parseNum($('pAmt').value),c=parseInt($('pCount').value,10);
   if(t>0&&c>0)fromTotal();else if(a>0&&c>0)$('pTotal').value=toIn(a*c);planCheck()};
 $('pAmt').oninput=function(ev){fmtAmt(ev);var a=parseNum($('pAmt').value),c=parseInt($('pCount').value,10);$('pTotal').value=(a>0&&c>0)?toIn(a*c):'';planCheck()};
-$('pStart').onchange=function(){syncEnd();planCheck()};
+$('pStart').onchange=function(){syncEnd();
+  try{if(!$('pOld').checked&&!planEdit&&!tryMode&&$('pOldWrap').style.display!=='none'){var st=$('pStart').value;
+    if(st&&st<nowK()){var day=parseInt($('pDay').value,10),c=parseInt($('pCount').value,10),cn=(day>=1&&day<=31)?(day<=new Date().getDate()):true,pd=ym(nowK())-ym(st)+(cn?1:0);
+      if(c>0&&pd>c)pd=c;if(pd>=1){$('pOld').checked=true;$('pPaid').value=pd}}}}catch(e){}
+  planCheck()};
+$('pOldYes').onclick=function(){$('pOld').checked=true;$('pOld').onchange();$('pPaid').focus&&0};
+$('pOldNo').onclick=function(){$('pOld').checked=false;$('pPaid').value='';$('pOld').onchange()};
+$('pMinus').onclick=function(){var v=parseInt($('pPaid').value,10)||0;$('pPaid').value=Math.max(0,v-1);planCheck()};
+$('pPlus').onclick=function(){var v=parseInt($('pPaid').value,10)||0,c=parseInt($('pCount').value,10);$('pPaid').value=(c>0&&v>=c)?c:v+1;planCheck()};
 $('pDay').oninput=planCheck;
 $('pOld').onchange=function(){if(!$('pOld').checked){$('pStart').value=mk(new Date())}planCheck()};
 $('pPaid').oninput=planCheck;
@@ -2746,10 +2761,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.6.2';
+var APP_VER='2.7';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+  {v:'2.7',date:'Kasım 2026',title:'Daha kolay menü ve taksit girişi',items:[['☰','Menü artık tek dokunuşta','Alt çubuğun en soluna Menü sekmesi geldi. Ekranın sol kenarından sağa kaydırınca da menü açılır, sola kaydırınca kapanır.',1],['💳','Kartla harcadıkların hemen üstte','Bu ay kartla ne kadar harcadığını ve ekstrenin ödenip ödenmediğini ana ekranda cüzdanın hemen altında tek satırda görürsün. Dokununca kart listesine gider.',1],['🏦','Taksit eklerken “daha önce ödedin mi?” sorusu','Kredi ya da taksit eklerken Hayır / Evet diye sorulur. Başlangıç ayını geçmişe alırsan Evet kendiliğinden seçilir ve ödenen taksit sayısı hazır gelir. Kalan taksitleri ve tutarı kendim hesaplarım.',1]]},
   {v:'2.6.2',date:'Kasım 2026',title:'Performans ve kararlılık',items:[['⚡','Performans ve kararlılık iyileştirmeleri','Uygulama genelinde küçük hız ve kararlılık iyileştirmeleri yapıldı.',0]]},
 {v:'2.6',date:'Kasım 2026',title:'Tatillerim, elden borçlar, tek takvim',items:[['🗂️','Tatillerim listesi','Menüden Tatil planı’na girince tüm tatillerin sezona göre renkli kartlarda alt alta görünür. Karta dokunup düzenleyebilir, Paylaş ile kartı gönderebilirsin.',1],['📅','Tek takvimle tarih seçimi','Gidişe, sonra dönüşe aynı takvimde dokun. Arası renkli şeritle gösterilir ve tarihler kendiliğinden kaydolur.',1],['🔗','Planı arkadaşına ekle','Paylaştığın kartla birlikte bir bağlantı gider. Arkadaşın bağlantıyı kopyalayıp uygulamada Tatil planı › Arkadaşımın planını yapıştır der. Konaklama, yol ve bilet gibi ortak giderler onun planlarına da eklenir. Kendi kayıtların ve arkadaşlardan gelen paralar gitmez.',1],['✅','Tatil planını kaydet','Yeni planın en altındaki Kaydet düğmesine basınca plan Tatillerim listesinde kalır. Üstteki ✕ ile çıkarsan kaydedilmez.',1],['🤝','Elden borçlar','Menüden borç verdiğin ya da aldığın parayı TL, dolar, euro, sterlin veya altın olarak yaz. Vade günü hatırlatılır, vade ayının bütçene gelir ya da gider olarak yansır. Taksitle ödeme veya tahsilat da girebilirsin. Verdiğin parayı bütçenden mi birikiminden mi verdiğini sorar.',1]]},{v:'2.5',date:'Kasım 2026',title:'Aylık uçak fiyatları',items:[['✈️','Uçak fiyatı aya göre değişiyor','Bilet fiyatı artık gidiş ve dönüş tarihinin ayına göre hesaplanıyor. Yazın pahalı, kışın uygun. Fiyat tahmini ve ortalamalara dayanır, bunu kutunun altında da yazdık.',1],['✍️','Kendi bilet fiyatını yaz','Gerçek bilet fiyatını bulduysan Uçak biletleri kutusuna yazabilirsin, tahmin yerine seninki kullanılır.',1],['⚡','Elektrikli araç seçeneği','Tatil planında yakıt türüne Elektrik eklendi. Şarj maliyeti kWh fiyatı ve 100 km tüketimine göre hesaplanıyor, tüketimi kendi aracına göre değiştirebilirsin.',1],['🎬','Açılış animasyonu yavaşladı','Açılıştaki dönen logo biraz daha sakin ve rahat izleniyor.',0]]},
   {v:'2.4.10',date:'Kasım 2026',title:'Plan ekranı kapanmıyor',items:[['🧭','Yer seçince Plan kutusu kapanmıyor','Çıkış ve gideceğin yeri seçtiğinde Plan kutusu artık kendiliğinden kapanıp seni aşağıya atmıyor. Kişi sayısı ve tarihleri rahatça seçebilirsin.',0],['👥','Kişi sayısı daha görünür','Kaç kişi seçimi artık Nereden–Nereye alanının hemen altında.',0]]},
