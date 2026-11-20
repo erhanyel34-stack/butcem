@@ -446,7 +446,7 @@ body.pl-basic .nav .t[data-v=ozet],body.pl-basic .nav .t[data-v=fatura],body.pl-
 body:not(.pl-basic) #v-bhome,body:not(.pl-basic) #v-bpay{display:none!important}
 body.pl-basic #v-ozet,body.pl-basic #v-fatura,body.pl-basic #v-islem{display:none!important}
 body.pl-basic #gsBar,body.pl-basic #banner,body.pl-basic #tripBanner,body.pl-basic .month,body.pl-basic .dt,body.pl-basic #obAgain,body.pl-basic #uPayWrap{display:none!important}
-body.pl-basic #dr [data-dr]:not([data-dr=set]):not([data-dr=plan]){display:none!important}
+body.pl-basic #dr [data-dr]:not([data-dr=set]):not([data-dr=plan]):not([data-dr=nda]){display:none!important}
 .wh.big .sp{font-size:58px;animation:bump .9s cubic-bezier(.3,1.4,.5,1)}
 .wh.big h2{font-size:27px;background:linear-gradient(90deg,#8f7cff,#27d3c3);-webkit-background-clip:text;background-clip:text;color:transparent}
 .bgrib{display:inline-block;font-size:11px;font-weight:800;letter-spacing:1.2px;color:#fff;background:linear-gradient(90deg,#7c5cff,#27d3c3);border-radius:20px;padding:4px 12px;margin:2px 0 8px}
@@ -811,7 +811,32 @@ html.big body{zoom:1.12}
 /* v1.14 geçmişten başlayan kredi */
 #pOldWrap{margin:0 0 6px}
 #pOldBox{background:#ffffff0a;border:1.5px solid #7c5cff55;border-radius:16px;padding:12px;margin:2px 0 10px}
-#pOldBox .chk{margin:0 0 8px}
+#pOldBox .chk{margin:0}
+.qb{display:flex;gap:10px;margin:8px 0 0}.qb button{flex:1;padding:13px 8px;border-radius:14px;font-size:14.5px;font-weight:700;color:#fff;background:#ffffff10;border:1.5px solid #ffffff22;line-height:1.25}
+.qb button small{display:block;font-weight:500;opacity:.7;font-size:12px;margin-top:3px}
+.qb button.on{background:linear-gradient(135deg,#7c5cff55,#2c7be544);border-color:#8f7cff}
+.qrow{display:flex;align-items:center;gap:10px}.qrow b{font-size:14px;flex:1}
+.stp{display:flex;align-items:center;gap:6px}.stp button{width:38px;height:38px;border-radius:12px;background:#ffffff14;color:#fff;font-size:22px;font-weight:700}
+.stp input{width:52px;text-align:center;font-size:20px;font-weight:800;background:none;border:0;color:#fff;padding:0}
+
+/* taahhütname */
+#ndaBg{position:fixed;inset:0;z-index:8900;background:#0b0e22;display:none;flex-direction:column;color:#fff}
+#ndaBg.show{display:flex}
+#ndaBg .nh{padding:calc(env(safe-area-inset-top) + 16px) 18px 10px;border-bottom:1px solid #ffffff18}
+#ndaBg .nh b{font-size:17px;display:block}#ndaBg .nh small{opacity:.7;font-size:12.5px}
+#ndaScroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 18px 20px;font-size:14.5px;line-height:1.55}
+#ndaScroll h1{font-size:18px;margin:0 0 10px;line-height:1.3}#ndaScroll h2{font-size:15.5px;margin:20px 0 6px;color:#cdbfff}
+#ndaScroll p{margin:0 0 9px}#ndaScroll ul,#ndaScroll ol{margin:0 0 10px;padding-left:20px}#ndaScroll li{margin:0 0 5px}
+#ndaFoot{padding:12px 18px calc(env(safe-area-inset-bottom) + 14px);border-top:1px solid #ffffff18;background:#10143a}
+#ndaFoot .two{display:flex;gap:10px;margin:0 0 8px}#ndaFoot .two .fld{margin:0;min-width:0}
+#ndaFoot .chk{margin:6px 0 10px}#ndaFoot .chk.dis{opacity:.45}
+#ndaHint{font-size:12.5px;opacity:.75;margin:0 0 6px}#ndaErr{color:#ff8fa3;font-size:12.5px;margin:0 0 6px;min-height:0}
+#ndaDone{flex:1;overflow-y:auto;padding:calc(env(safe-area-inset-top) + 18px) 18px 18px;display:none}
+#ndaBg.done #ndaScroll,#ndaBg.done #ndaFoot,#ndaBg.done .nh{display:none}#ndaBg.done #ndaDone{display:block}
+#ndaDone img{width:100%;border-radius:18px;display:block;margin:10px 0 14px;box-shadow:0 10px 30px #0008}
+#ndaScroll .ndn{background:#ffb64826;border:1.5px solid #ffb64880;border-radius:14px;padding:12px 14px;margin:0 0 14px;font-weight:700;font-size:14.5px;line-height:1.4}#ndaScroll .ndn small{display:block;font-weight:500;opacity:.85;margin-top:4px;font-size:13px}
+#ndaDone .ndto{background:#ffffff0f;border:1px solid #ffffff22;border-radius:14px;padding:10px 14px;margin:10px 0 0;font-size:14px}#ndaDone a.btn{display:block;text-align:center;text-decoration:none;margin-top:6px}
+#ndaWm{position:fixed;inset:0;z-index:8800;pointer-events:none;display:none}
 /* v1.15.3 */
 .bill.flash{animation:billfl 2.2s}
 @keyframes billfl{0%,60%{box-shadow:0 0 0 2px #7c5cff,0 0 22px #7c5cff88}100%{box-shadow:0 0 0 0 #7c5cff00}}
@@ -953,6 +978,7 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,4300-(Date.now()-t0))
       </div>
     </div>
 
+    <button type="button" id="cardStrip" style="display:none;width:100%;margin:12px 0 0;padding:12px 16px;text-align:left;color:inherit;background:linear-gradient(135deg,#a37cff26,#a37cff0f);border:1px solid #a37cff44;border-radius:16px;align-items:center;gap:10px"></button>
     <div class="card" id="guide" style="display:none"><div class="dnh"><h2 style="margin:0">👋 Başlayalım</h2><button type="button" class="linkbtn" id="gdX" style="width:auto;padding:4px 8px">Kapat</button></div><div class="note" style="margin:4px 0 8px">Üç adımda bütçen hazır. Dokun, ilgili yere götüreyim.</div><div id="gdList"></div></div>
     <div class="card" id="zamCard" style="display:none"><h2 id="zamTitle">🎉 Maaşında zam oldu mu?</h2><div class="note" id="zamNote" style="margin:0 0 8px"></div>
       <input class="fld" id="zamAmt" inputmode="decimal" placeholder="Güncel aylık maaşın" autocomplete="off">
@@ -1205,6 +1231,7 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,4300-(Date.now()-t0))
   <button type="button" class="di" data-dr="inc"><span class="e">✨</span><span>Ek gelirlerim<small>Prim, kira, freelance</small></span></button>
   <button type="button" class="di" data-dr="year"><span class="e">🔮</span><span>Aylık tahmin<small>Önümüzdeki 6 ay</small></span></button>
   <button type="button" class="di" data-dr="plan"><span class="e">📦</span><span><b id="drPlanNm" style="font-weight:inherit">Sade plana geç</b><small id="drPlanSub">Sadece gelir, fatura ve abonelikler</small></span></button>
+  <button type="button" class="di" data-dr="nda"><span class="e">📜</span><span>Taahhütnamem<small>Onay kartın</small></span></button>
   <button type="button" class="di" data-dr="set" style="margin-top:auto"><span class="e">⚙️</span><span>Ayarlar</span></button>
   <div id="drVer" style="text-align:center;font-size:11.5px;color:var(--mut);opacity:.7;padding:10px 0 4px"></div>
 </div></div>
@@ -1312,12 +1339,13 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,4300-(Date.now()-t0))
       <div><span class="lbl">Başlangıç ayı</span><input class="fld" id="pStart" type="month"></div>
       <div><span class="lbl">Ayın kaçında ödenir?</span><input class="fld" id="pDay" type="number" min="1" max="31" inputmode="numeric" placeholder="5"></div>
     </div>
-    <div id="pOldWrap"><label class="chk"><input type="checkbox" id="pOld"> Bu kredi / taksit zaten başladı, bazı taksitleri ödedim</label>
+    <div id="pOldWrap"><input type="checkbox" id="pOld" style="display:none">
+      <span class="lbl" style="font-size:15px;font-weight:700;color:var(--txt,#fff);margin-top:4px">Bu taksitten daha önce ödediğin oldu mu?</span>
+      <div class="qb"><button type="button" id="pOldNo" class="on">Hayır<small>Yeni başlıyor</small></button><button type="button" id="pOldYes">Evet<small>Bazılarını ödedim</small></button></div>
       <div id="pOldBox" style="display:none">
-        <span class="lbl">Şu ana kadar kaç taksit ödedin?</span>
-        <input class="fld" id="pPaid" type="number" min="0" inputmode="numeric" placeholder="Örn. 8" autocomplete="off">
+        <div class="qrow"><b>Kaç taksit ödedin?</b><div class="stp"><button type="button" id="pMinus" aria-label="Azalt">−</button><input id="pPaid" type="number" min="0" inputmode="numeric" placeholder="0" autocomplete="off"><button type="button" id="pPlus" aria-label="Artır">+</button></div></div>
+        <div class="note" id="pOldSum" style="margin:10px 0 8px;font-size:14px"></div>
         <label class="chk"><input type="checkbox" id="pHist" checked> Ödediğim aylar geçmiş aylara da işlensin</label>
-        <div class="note" id="pOldSum" style="margin:0 0 10px;font-size:14px"></div>
       </div></div>
     <span class="lbl">Son ödeme ayı (boşsa süresiz)</span>
     <input class="fld" id="pEnd" type="month">
@@ -1450,8 +1478,21 @@ window.__splashReady=function(){setTimeout(kill,Math.max(0,4300-(Date.now()-t0))
 <div class="cbg" id="rcBg"><div class="rcb" id="rcBox"></div></div>
 <div class="toast" id="toast"></div>
 
+<div id="ndaBg"><div class="nh"><b>Gizlilik taahhütnamesi</b><small>Uygulamayı kullanmadan önce okuyup onaylaman gerekiyor.</small></div>
+  <div id="ndaScroll"></div>
+  <div id="ndaFoot">
+    <div id="ndaHint">Onay için metni sonuna kadar kaydır ↓</div>
+    <div class="two"><input class="fld" id="ndaAd" placeholder="Adın" autocomplete="given-name"><input class="fld" id="ndaSoy" placeholder="Soyadın" autocomplete="family-name"></div>
+    <label class="chk dis" id="ndaChkL"><input type="checkbox" id="ndaChk" disabled> Okudum, anladım ve onaylıyorum</label>
+    <div id="ndaErr"></div>
+    <button class="btn" id="ndaOk" disabled>Onayla ve devam et</button>
+  </div>
+  <div id="ndaDone"></div>
+</div>
+<div id="ndaWm"></div>
 <nav class="nav">
   <i class="ind"></i>
+  <button class="t" id="navMenu" type="button"><span>☰</span>Menü</button>
   <button class="t on" data-v="ozet"><span>🏠</span>Özet</button>
   <button class="t" data-v="fatura"><span>🔁</span>Ödemeler</button>
   <button class="t" data-v="islem"><span>🧾</span>İşlemler</button>
@@ -1890,6 +1931,254 @@ function entryCheck(){
   var c=buildCheck(rows,{});sVer=c.v;box.innerHTML=c.html;
 }
 
+
+/* ===== taahhütname (gizlilik / test kullanıcısı) ===== */
+var NDA_VER='1.0',NDA_OWNER='Erhan Yel',NDA_TEL='905413227941';
+var NDA_TXT=`GİZLİLİK, BİLGİ GÜVENLİĞİ VE TEST KULLANICISI TAAHHÜTNAMESİ
+
+Sözleşme Türü: Gizlilik ve Bilgi Güvenliği Taahhütnamesi (NDA)
+
+Yürürlük Tarihi: Elektronik onay tarihi
+
+1. SÖZLEŞMENİN AMACI
+
+İşbu sözleşme, henüz test aşamasında bulunan dijital finans uygulamasına erişim sağlayan kullanıcıların, uygulamaya ilişkin gizli bilgileri, ticari sırları, yazılım altyapısını, finansal işleyişi, teknik detayları ve ticari stratejileri korumasını sağlamak amacıyla düzenlenmiştir.
+
+Test kullanıcısı, uygulamaya erişim sağlamadan önce işbu sözleşmede yer alan bütün yükümlülükleri kabul etmekle yükümlüdür.
+
+2. GİZLİ BİLGİLERİN KAPSAMI
+
+Test kullanıcısı aşağıdaki bilgilerin tamamının gizli ve korunması gereken bilgiler olduğunu kabul eder:
+
+* Uygulamanın tasarımı, arayüzü ve kullanım özellikleri.
+* Finansal işleyiş, bakiye, ödeme, para transferi ve hesaplama sistemleri.
+* Yazılım altyapısı, algoritmalar, kaynak kodları, teknik mimari ve veri yapıları.
+* Henüz kamuya açıklanmamış özellikler ve geliştirme süreçleri.
+* İş modeli, gelir modeli, fiyatlandırma, komisyon oranları ve ticari stratejiler.
+* Test sürecinde paylaşılan belgeler, raporlar, kullanıcı bilgileri ve teknik dokümanlar.
+* Uygulama içerisinde görülen ekranlar, içerikler, sistemsel çıktılar ve işlem akışları.
+* Uygulamanın gelecekteki geliştirmelerine ilişkin bilgiler.
+* Uygulama sahibi tarafından yazılı, sözlü veya dijital ortamda paylaşılan diğer gizli bilgiler.
+
+Bu liste sınırlayıcı olmayıp, uygulamaya ilişkin kamuya açık olmayan tüm teknik, finansal ve ticari bilgiler gizlilik kapsamındadır.
+
+3. ÜÇÜNCÜ KİŞİLERLE PAYLAŞIM YASAĞI
+
+Test kullanıcısı;
+
+1. Uygulama hakkında hiçbir gizli bilgiyi üçüncü kişilerle paylaşamaz.
+2. Uygulamaya ait ekran görüntüsü, ekran videosu, fotoğraf veya kayıtları izinsiz olarak alamaz, çoğaltamaz, yayımlayamaz veya dağıtamaz.
+3. Uygulama hakkında sosyal medya, internet siteleri, forumlar, mesajlaşma grupları veya diğer dijital platformlarda izinsiz açıklama yapamaz.
+4. Uygulamanın test bağlantısını, kullanıcı hesabını veya erişim bilgilerini başka kişilere devredemez.
+5. Uygulamanın finansal işleyişini, çalışma mantığını veya teknik altyapısını üçüncü kişilere açıklayamaz.
+6. Test sırasında öğrendiği bilgileri başka bir kişi, şirket, kurum veya ticari girişim lehine kullanamaz.
+7. Uygulama içerisindeki bilgileri kişisel arşiv, ticari veri tabanı veya başka bir platforma aktaramaz.
+8. Uygulamanın yazılımını, tasarımını veya işleyişini izinsiz şekilde kopyalayamaz, taklit edemez ya da yeniden üretemez.
+
+Bu yasaklar, uygulama sahibinin önceden verilmiş yazılı izni bulunmadıkça geçerlidir.
+
+4. TİCARİ SIRLAR VE FİKRİ MÜLKİYET HAKLARI
+
+Test kullanıcısı, uygulamanın test sürecinde eriştiği yazılım, tasarım, iş modeli, teknik sistem, algoritma, ticari bilgiler ve diğer fikri ürünlerin ilgili hak sahiplerine ait olduğunu kabul eder.
+
+Test kullanıcısına uygulamayı test etme amacıyla erişim verilmesi, herhangi bir fikri mülkiyet hakkının devredildiği veya kullanım lisansı verildiği anlamına gelmez.
+
+Test kullanıcısı, uygulama kapsamında öğrendiği bilgileri kullanarak benzer veya rakip bir ürün geliştirmek, üçüncü kişilere teknik destek sağlamak veya ticari avantaj elde etmek amacıyla gizli bilgileri kullanamaz.
+
+Bu hüküm, kullanıcının önceden sahip olduğu bağımsız bilgi ve deneyimlerini kullanmasını veya hukuka uygun bağımsız geliştirme faaliyetlerini yasaklamaz.
+
+5. GİZLİLİK YÜKÜMLÜLÜĞÜNÜN SÜRESİ
+
+İşbu sözleşme elektronik ortamda kabul edildiği tarihte yürürlüğe girer.
+
+Gizlilik yükümlülüğü;
+
+* Test sürecinin sona ermesi,
+* Kullanıcının uygulamadan çıkarılması,
+* Kullanıcı hesabının kapatılması,
+* Test programından ayrılınması,
+
+durumlarında da devam eder.
+
+Genel gizli bilgiler bakımından gizlilik yükümlülüğü sözleşmenin sona ermesinden itibaren 5 yıl devam eder.
+
+Ticari sır niteliğindeki bilgiler bakımından gizlilik yükümlülüğü, ilgili bilgiler hukuka uygun şekilde alenileşinceye kadar devam eder.
+
+6. CEZAİ ŞART VE TAZMİNAT SORUMLULUĞU
+
+Test kullanıcısı, işbu sözleşmede belirtilen gizlilik ve bilgi güvenliği yükümlülüklerini ihlal etmesi durumunda sözleşmeye aykırı davranmış sayılır.
+
+Gizli bilgilerin yetkisiz üçüncü kişilerle paylaşılması, yayımlanması, çoğaltılması, ticari amaçla kullanılması, izinsiz aktarılması veya uygulamanın teknik ve ticari yapısının açıklanması hâllerinde;
+
+Her bir bağımsız ihlal için 1.000.000 TL (Bir Milyon Türk Lirası) sözleşmesel cezai şart ödenmesi kararlaştırılmıştır.
+
+Cezai şartın talep edilebilmesi için ihlalin ve kullanıcının sözleşmesel sorumluluğunun hukuken ortaya konulması gerekir.
+
+Birbirinden bağımsız ihlaller ayrı ayrı değerlendirilebilir. Tek bir eylemden kaynaklanan mükerrer talepler bakımından hukukun genel ilkeleri saklıdır.
+
+Cezai şartın talep edilmesi, hukuken talep edilebilir ve ispatlanabilir olması kaydıyla cezai şart tutarını aşan zararların ayrıca talep edilmesine engel değildir.
+
+Cezai şart, 6098 sayılı Türk Borçlar Kanunu’nun ilgili hükümlerine tabidir. Hâkimin aşırı gördüğü cezai şartı indirme yetkisi saklıdır.
+
+7. İHLAL DURUMUNDA HUKUKİ YOLLAR
+
+Gizlilik yükümlülüğünün ihlal edilmesi durumunda uygulamanın hak sahibi;
+
+* Kullanıcının uygulamaya erişimini sonlandırabilir.
+* İhlalin durdurulmasını ve gizli bilgilerin kullanımının sona erdirilmesini talep edebilir.
+* Hukuki koşulları mevcutsa ihtiyati tedbir ve diğer koruyucu hukuki yollara başvurabilir.
+* Sözleşmede kararlaştırılan cezai şartı talep edebilir.
+* Şartları oluştuğunda maddi zararlarının tazminini isteyebilir.
+* İhlalin niteliğine göre ilgili hukuki ve cezai başvuru yollarını kullanabilir.
+
+8. BİLGİLERİN SİLİNMESİ VE İADESİ
+
+Test sürecinin sona ermesi veya uygulama sahibinin talepte bulunması hâlinde test kullanıcısı, elinde bulunan gizli belgeleri, dosyaları ve materyalleri kullanmayı bırakmak ve talimata uygun şekilde silmek veya iade etmekle yükümlüdür.
+
+Kanuni saklama yükümlülükleri saklıdır.
+
+9. KİŞİSEL VERİLERİN KORUNMASI
+
+Taraflar, test sürecinde erişilebilecek kişisel verilerin korunması konusunda 6698 sayılı Kişisel Verilerin Korunması Kanunu ve ilgili mevzuata uygun davranmayı kabul eder.
+
+Test kullanıcısı, eriştiği kişisel verileri izinsiz olarak kaydedemez, çoğaltamaz, paylaşamaz veya farklı amaçlarla kullanamaz.
+
+Kişisel verilerin işlenmesine ilişkin aydınlatma yükümlülüğü, gerekli olduğu hâllerde ayrıca yerine getirilir.
+
+10. UYGULANACAK HUKUK VE YETKİ
+
+İşbu sözleşmenin uygulanmasında Türkiye Cumhuriyeti hukuku geçerlidir.
+
+Sözleşmeden doğabilecek uyuşmazlıklarda görev ve yetkiye ilişkin emredici kanuni düzenlemeler saklı kalmak kaydıyla Türkiye Cumhuriyeti mahkemeleri ve icra daireleri yetkilidir.
+
+11. ELEKTRONİK KABUL VE YÜRÜRLÜK
+
+Test kullanıcısı;
+
+* İşbu sözleşmenin tamamını okuduğunu ve anladığını,
+* Gizlilik ve bilgi güvenliği yükümlülüklerinden haberdar olduğunu,
+* Üçüncü kişilerle bilgi paylaşımının yasak olduğunu bildiğini,
+* 1.000.000 TL sözleşmesel cezai şart hükmünü okuduğunu ve anladığını,
+* Sözleşmeyi özgür iradesiyle elektronik ortamda kabul ettiğini,
+
+beyan ve taahhüt eder.
+
+Elektronik kabul işlemi, kullanıcının sözleşmenin tamamını görüntülemesinden ve açık onay vermesinden sonra gerçekleştirilir.
+
+Kabul edilen sözleşmenin metni, sürüm numarası, tarih ve saat bilgisi ile elektronik kabul kayıtları saklanır.
+
+
+TEST KULLANICISI KABUL BEYANI
+
+İşbu Gizlilik, Bilgi Güvenliği ve Test Kullanıcısı Taahhütnamesi’ni okuduğumu, anladığımı ve tüm hükümlerini kabul ettiğimi beyan ederim.
+
+Test aşamasındaki dijital finans uygulamasına ilişkin hiçbir gizli bilgiyi üçüncü kişilerle paylaşmayacağımı, uygulamaya ait ekran görüntülerini veya teknik bilgileri izinsiz yayımlamayacağımı, ticari sırları ve yazılım altyapısını koruyacağımı kabul ve taahhüt ederim.
+
+Gizlilik yükümlülüklerini ihlal etmem hâlinde, hukuki şartları oluştuğunda her bir bağımsız ihlal için 1.000.000 TL sözleşmesel cezai şart ve ilgili mevzuat kapsamında doğabilecek diğer hukuki sorumluluklarla karşılaşabileceğimi bildiğimi kabul ederim.
+
+Kabul Tarihi: Elektronik ortamda otomatik kaydedilir.
+
+Sözleşme Sürümü: 1.0
+
+Test Kullanıcısı: Elektronik ortamda kayıtlı kullanıcı hesabı.
+
+Elektronik Onay: Kullanıcının açık kabul beyanı.`;
+function ndaGet(){try{var r=JSON.parse(lsGet('butcem_nda')||'null');return(r&&r.v&&r.ad&&r.soy&&r.code)?r:null}catch(e){return null}}
+function ndaHtml(){
+  var L=NDA_TXT.split('\n'),h='',list=null,i,t,m;
+  function endL(){if(list){h+='</'+list+'>';list=null}}
+  for(i=0;i<L.length;i++){t=L[i].trim();if(!t){endL();continue}
+    if(i===0){endL();h+='<h1>'+esc(t)+'</h1>';continue}
+    if(/^\d+\.\s+[A-ZÇĞİÖŞÜ0-9 ,’'\-–]+$/.test(t)||t==='TEST KULLANICISI KABUL BEYANI'){endL();h+='<h2>'+esc(t)+'</h2>';continue}
+    if(t.charAt(0)==='*'){if(list!=='ul'){endL();h+='<ul>';list='ul'}h+='<li>'+esc(t.replace(/^\*\s*/,''))+'</li>';continue}
+    m=/^(\d+)\.\s+(.*)$/.exec(t);
+    if(m){if(list!=='ol'){endL();h+='<ol>';list='ol'}h+='<li>'+esc(m[2])+'</li>';continue}
+    endL();h+='<p>'+esc(t)+'</p>'}
+  endL();return h;
+}
+function ndaDev(){
+  var u=navigator.userAgent||'',dv=/iPhone/.test(u)?'iPhone':/iPad/.test(u)?'iPad':/Android/.test(u)?'Android':/Mac/.test(u)?'Mac':/Windows/.test(u)?'Windows':'Cihaz';
+  var sa=false;try{sa=window.navigator.standalone===true||window.matchMedia('(display-mode: standalone)').matches}catch(e){}
+  var br=/CriOS|Chrome/.test(u)?'Chrome':/FxiOS|Firefox/.test(u)?'Firefox':/Safari/.test(u)?'Safari':'Tarayıcı';
+  return dv+' · '+(sa?'ana ekran uygulaması':br);
+}
+function ndaCyrb(str){var h1=0xdeadbeef,h2=0x41c6ce57,i,c;for(i=0;i<str.length;i++){c=str.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}
+  h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);
+  return (h2>>>0).toString(16).padStart(8,'0')+(h1>>>0).toString(16).padStart(8,'0')}
+function ndaHash(str){
+  try{if(window.crypto&&crypto.subtle&&window.TextEncoder){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(str)).then(function(b){var a=new Uint8Array(b),s='';for(var i=0;i<a.length;i++)s+=('0'+a[i].toString(16)).slice(-2);return s})}}catch(e){}
+  return Promise.resolve(ndaCyrb(str)+ndaCyrb(str+'#'));
+}
+function ndaCode(hex){var AL='23456789ABCDEFGHJKMNPQRSTUVWXYZ',o='',i;for(i=0;i<8;i++)o+=AL.charAt(parseInt(hex.substr(i*2,2),16)%AL.length);return o.slice(0,4)+'-'+o.slice(4)}
+function ndaFmtDate(d){function z(n){return(n<10?'0':'')+n}return z(d.getDate())+'.'+z(d.getMonth()+1)+'.'+d.getFullYear()+' '+z(d.getHours())+':'+z(d.getMinutes())+':'+z(d.getSeconds())}
+function ndaName(r){return r.ad+' '+r.soy}
+function ndaText(r){return 'Gizlilik ve test kullanıcısı taahhütnamesini (sürüm '+r.v+') okudum ve onayladım.\nAd Soyad: '+ndaName(r)+'\nTarih/saat: '+r.ts+'\nCihaz: '+r.dev+'\nUygulama: Bütçem v'+r.app+'\nOnay kodu: '+r.code}
+function ndaWm(r){
+  var w=$('ndaWm');if(!r){w.style.display='none';return}
+  var t=ndaName(r).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" width="300" height="190"><text x="150" y="100" text-anchor="middle" transform="rotate(-24 150 95)" font-family="sans-serif" font-size="15" font-weight="600" fill="#ffffff" fill-opacity="0.07">'+t+' · test kullanıcısı</text></svg>';
+  w.style.backgroundImage='url("data:image/svg+xml;utf8,'+encodeURIComponent(svg)+'")';w.style.display='block';
+}
+function ndaCardCanvas(r,cb){
+  var W=900,H=1080,c=document.createElement('canvas');c.width=W;c.height=H;var x=c.getContext('2d');
+  var g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#2a2170');g.addColorStop(.6,'#4b36c9');g.addColorStop(1,'#1e8fa0');x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.fillStyle='#ffffff14';x.beginPath();x.arc(W-60,120,260,0,7);x.fill();
+  x.textBaseline='alphabetic';x.fillStyle='#fff';x.font='700 30px -apple-system,Helvetica,Arial,sans-serif';x.fillText('BÜTÇEM · TEST KULLANICISI',60,110);
+  x.font='800 56px -apple-system,Helvetica,Arial,sans-serif';x.fillText('Taahhütname',60,190);x.fillText('onay kartı',60,254);
+  x.fillStyle='#ffffff22';x.fillRect(60,290,W-120,3);
+  function row(lbl,val,y,big){x.fillStyle='#ffffffb0';x.font='600 26px -apple-system,Helvetica,Arial,sans-serif';x.fillText(lbl,60,y);x.fillStyle='#fff';x.font=(big?'800 46px ':'700 34px ')+'-apple-system,Helvetica,Arial,sans-serif';
+    var s=val,mw=W-120;while(x.measureText(s).width>mw&&s.length>4)s=s.slice(0,-2);if(s!==val)s=s.trim()+'…';x.fillText(s,60,y+(big?56:46))}
+  row('AD SOYAD',ndaName(r),350,true);row('ONAY TARİHİ VE SAATİ',r.ts,490);row('CİHAZ',r.dev,610);row('SÖZLEŞME SÜRÜMÜ · UYGULAMA',r.v+' · Bütçem v'+r.app,730);
+  x.fillStyle='#ffffff1f';x.beginPath();if(x.roundRect)x.roundRect(60,850,W-120,150,28);else x.rect(60,850,W-120,150);x.fill();
+  x.fillStyle='#ffffffb0';x.font='600 26px -apple-system,Helvetica,Arial,sans-serif';x.fillText('ONAY KODU',90,900);
+  x.fillStyle='#fff';x.font='800 64px ui-monospace,Menlo,monospace';x.fillText(r.code,90,968);
+  x.fillStyle='#ffffff90';x.font='500 22px -apple-system,Helvetica,Arial,sans-serif';x.fillText('Metin kodu: '+r.th,60,1040);
+  c.toBlob(function(b){cb(b)},'image/png');
+}
+function ndaShare(r){
+  ndaCardCanvas(r,function(b){
+    if(!b){toast('Kart oluşturulamadı');return}
+    var f=new File([b],'taahhutname-onay-'+r.code+'.png',{type:'image/png'}),tx=ndaText(r);
+    if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'Taahhütname onayı',text:tx}).catch(function(){})}
+    else if(navigator.share){navigator.share({title:'Taahhütname onayı',text:tx}).catch(function(){})}
+    else{try{navigator.clipboard.writeText(tx)}catch(e){}var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=f.name;document.body.appendChild(a);a.click();setTimeout(function(){a.remove()},500);toast('Kart indirildi, metin kopyalandı')}
+  });
+}
+function ndaDone(r,first){
+  var bg=$('ndaBg');bg.classList.add('done','show');
+  var wa='https://wa.me/'+NDA_TEL+'?text='+encodeURIComponent('Merhaba, Bütçem test kullanıcısı taahhütnamesini onayladım.\n'+ndaText(r));
+  $('ndaDone').innerHTML='<h2 style="margin:0 0 4px;font-size:20px">'+(first?'✅ Onayın alındı':'📜 Taahhütnamem')+'</h2><div class="note" style="margin:0">'+(first?'Onay kartını uygulama sahibine göndermen gerekiyor, bir kopyası da onda kalsın.':'Onay kartın aşağıda. İstersen tekrar gönderebilirsin, kart hep aynı kalır.')+'</div><div class="ndto">📨 Kartı kime göndereceksin: <b>'+esc(NDA_OWNER)+'</b> (uygulama sahibi)</div><img id="ndaImg" alt="Onay kartı"><a class="btn" id="ndaWa" href="'+wa+'" target="_blank" rel="noopener">💬 WhatsApp’ta '+esc(NDA_OWNER)+'’e gönder</a><button class="btn sec" id="ndaShare" style="margin-top:8px">📤 Kartı resim olarak paylaş</button><button class="btn sec" id="ndaCopy" style="margin-top:8px">Metni kopyala</button><button class="btn sec" id="ndaGo" style="margin-top:8px">'+(first?'Uygulamaya geç':'Kapat')+'</button>';
+  ndaCardCanvas(r,function(b){if(b)$('ndaImg').src=URL.createObjectURL(b)});
+  $('ndaShare').onclick=function(){ndaShare(r)};
+  $('ndaCopy').onclick=function(){try{navigator.clipboard.writeText(ndaText(r));toast('Metin kopyalandı')}catch(e){toast('Kopyalanamadı')}};
+  $('ndaGo').onclick=function(){bg.classList.remove('show','done')};
+}
+function ndaSign(){
+  var bg=$('ndaBg');bg.classList.remove('done');bg.classList.add('show');
+  $('ndaScroll').innerHTML='<div class="ndn">⚠️ Bu taahhütname yalnızca Bütçem test kullanıcıları içindir.<small>Uygulama sahibi: '+esc(NDA_OWNER)+'</small></div>'+ndaHtml();$('ndaScroll').scrollTop=0;
+  var sc=$('ndaScroll'),read=false;
+  function upd(){
+    if(!read&&sc.scrollTop+sc.clientHeight>=sc.scrollHeight-12){read=true;$('ndaChk').disabled=false;$('ndaChkL').classList.remove('dis');$('ndaHint').style.display='none'}
+    var ad=$('ndaAd').value.replace(/\s+/g,' ').trim(),so=$('ndaSoy').value.replace(/\s+/g,' ').trim(),ok=nm(ad)&&nm(so);
+    $('ndaOk').disabled=!(read&&$('ndaChk').checked&&ok);
+    $('ndaErr').textContent=(ad&&!nm(ad))||(so&&!nm(so))?'Adını ve soyadını harflerle, eksiksiz yaz.':'';
+  }
+  function nm(v){return v.length>=2&&/^[\p{L}][\p{L} .'’-]*$/u.test(v)}
+  sc.onscroll=upd;$('ndaAd').oninput=upd;$('ndaSoy').oninput=upd;$('ndaChk').onchange=upd;
+  setTimeout(upd,60);
+  $('ndaOk').onclick=function(){
+    var ad=$('ndaAd').value.replace(/\s+/g,' ').trim(),so=$('ndaSoy').value.replace(/\s+/g,' ').trim();if(!(nm(ad)&&nm(so)))return;
+    $('ndaOk').disabled=true;
+    var d=new Date(),r={v:NDA_VER,ad:ad,soy:so,ts:ndaFmtDate(d),iso:d.toISOString(),dev:ndaDev(),app:APP_VER};
+    ndaHash(NDA_TXT).then(function(th){r.th=th.slice(0,8).toUpperCase();return ndaHash([NDA_VER,th,r.ad,r.soy,r.iso,r.dev,r.app].join('|'))}).then(function(h){
+      r.code=ndaCode(h);if(!ndaGet()||ndaGet().v!==NDA_VER)lsSet('butcem_nda',JSON.stringify(r));
+      r=ndaGet()||r;ndaWm(r);ndaDone(r,true);
+    });
+  };
+}
+function ndaOpen(){var r=ndaGet();if(r&&r.v===NDA_VER)ndaDone(r,false);else ndaSign()}
+function ndaInit(){var r=ndaGet();if(r&&r.v===NDA_VER){ndaWm(r);return}ndaSign()}
+setTimeout(ndaInit,50);
 /* ---------- Taksit penceresi kontrolü ---------- */
 function planItems(){
   var amt=parseNum($('pAmt').value),st=$('pStart').value,day=parseInt($('pDay').value,10),en=$('pEnd').value;
@@ -1902,7 +2191,7 @@ function planItems(){
 }
 function oldApply(){
   var on=$('pOld').checked&&!tryMode&&!planEdit;
-  $('pOldBox').style.display=on?'':'none';
+  $('pOldBox').style.display=on?'':'none';$('pOldYes').classList.toggle('on',on);$('pOldNo').classList.toggle('on',!on);
   var ps=$('pStart');ps.style.pointerEvents=on?'none':'';ps.style.opacity=on?'.65':'';
   if(!on)return;
   var c=parseInt($('pCount').value,10),pd=parseInt($('pPaid').value,10),day=parseInt($('pDay').value,10),a=parseNum($('pAmt').value),sm=$('pOldSum');
@@ -1912,7 +2201,7 @@ function oldApply(){
   var td=new Date().getDate(),counted=(day>=1&&day<=31)?(day<=td):true,si=ym(nowK())-(counted?pd-1:pd);
   var st=fromYm(si);$('pStart').value=st;$('pEnd').value=fromYm(si+c-1);
   var rem=c-pd,tot=a>0?a*c:0;
-  sm.innerHTML='İlk taksit <b>'+esc(mlab(st))+'</b>, son taksit <b>'+esc(mlab(fromYm(si+c-1)))+'</b><br>Ödenen <b>'+pd+'</b> · kalan <b>'+rem+' taksit</b>'+(a>0?' ('+esc(fmt(rem*a,true))+')<br>Kredinin toplamı <b>'+esc(fmt(tot,true))+'</b>':'');
+  sm.innerHTML='Başlangıç <b>'+esc(mlab(st))+'</b> görünüyor, <b>'+pd+'</b> taksit geçmiş.<br>Kalan <b>'+rem+' taksit</b>'+(a>0?' · <b>'+esc(fmt(rem*a,true))+'</b>':'');
 }
 function planCheck(){
   try{oldApply()}catch(e){}
@@ -2277,7 +2566,15 @@ $('pTotal').oninput=function(ev){fmtAmt(ev);fromTotal();planCheck()};
 $('pCount').oninput=function(){syncEnd();if(isKredi()){var a0=parseNum($('pAmt').value),c0=parseInt($('pCount').value,10);$('pTotal').value=(a0>0&&c0>0)?toIn(a0*c0):'';planCheck();return}var t=parseNum($('pTotal').value),a=parseNum($('pAmt').value),c=parseInt($('pCount').value,10);
   if(t>0&&c>0)fromTotal();else if(a>0&&c>0)$('pTotal').value=toIn(a*c);planCheck()};
 $('pAmt').oninput=function(ev){fmtAmt(ev);var a=parseNum($('pAmt').value),c=parseInt($('pCount').value,10);$('pTotal').value=(a>0&&c>0)?toIn(a*c):'';planCheck()};
-$('pStart').onchange=function(){syncEnd();planCheck()};
+$('pStart').onchange=function(){syncEnd();
+  try{if(!$('pOld').checked&&!planEdit&&!tryMode&&$('pOldWrap').style.display!=='none'){var st=$('pStart').value;
+    if(st&&st<nowK()){var day=parseInt($('pDay').value,10),c=parseInt($('pCount').value,10),cn=(day>=1&&day<=31)?(day<=new Date().getDate()):true,pd=ym(nowK())-ym(st)+(cn?1:0);
+      if(c>0&&pd>c)pd=c;if(pd>=1){$('pOld').checked=true;$('pPaid').value=pd}}}}catch(e){}
+  planCheck()};
+$('pOldYes').onclick=function(){$('pOld').checked=true;$('pOld').onchange();$('pPaid').focus&&0};
+$('pOldNo').onclick=function(){$('pOld').checked=false;$('pPaid').value='';$('pOld').onchange()};
+$('pMinus').onclick=function(){var v=parseInt($('pPaid').value,10)||0;$('pPaid').value=Math.max(0,v-1);planCheck()};
+$('pPlus').onclick=function(){var v=parseInt($('pPaid').value,10)||0,c=parseInt($('pCount').value,10);$('pPaid').value=(c>0&&v>=c)?c:v+1;planCheck()};
 $('pDay').oninput=planCheck;
 $('pOld').onchange=function(){if(!$('pOld').checked){$('pStart').value=mk(new Date())}planCheck()};
 $('pPaid').oninput=planCheck;
@@ -2744,10 +3041,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.6.2';
+var APP_VER='2.7';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+  {v:'2.7',date:'Kasım 2026',title:'Daha kolay menü ve taksit girişi',items:[['☰','Menü artık tek dokunuşta','Alt çubuğun en soluna Menü sekmesi geldi. Ekranın sol kenarından sağa kaydırınca da menü açılır, sola kaydırınca kapanır.',1],['💳','Kartla harcadıkların hemen üstte','Bu ay kartla ne kadar harcadığını ve ekstrenin ödenip ödenmediğini ana ekranda cüzdanın hemen altında tek satırda görürsün. Dokununca kart listesine gider.',1],['🏦','Taksit eklerken “daha önce ödedin mi?” sorusu','Kredi ya da taksit eklerken Hayır / Evet diye sorulur. Başlangıç ayını geçmişe alırsan Evet kendiliğinden seçilir ve ödenen taksit sayısı hazır gelir. Kalan taksitleri ve tutarı kendim hesaplarım.',1],['📜','Test kullanıcısı taahhütnamesi','Uygulamayı kullanmadan önce gizlilik taahhütnamesini okuyup onaylaman gerekir. Onay kartını WhatsApp’tan uygulama sahibine tek dokunuşla gönderebilirsin. Menüdeki Taahhütnamem’den tekrar açabilirsin.',1]]},
   {v:'2.6.2',date:'Kasım 2026',title:'Performans ve kararlılık',items:[['⚡','Performans ve kararlılık iyileştirmeleri','Uygulama genelinde küçük hız ve kararlılık iyileştirmeleri yapıldı.',0]]},
 {v:'2.6',date:'Kasım 2026',title:'Tatillerim, elden borçlar, tek takvim',items:[['🗂️','Tatillerim listesi','Menüden Tatil planı’na girince tüm tatillerin sezona göre renkli kartlarda alt alta görünür. Karta dokunup düzenleyebilir, Paylaş ile kartı gönderebilirsin.',1],['📅','Tek takvimle tarih seçimi','Gidişe, sonra dönüşe aynı takvimde dokun. Arası renkli şeritle gösterilir ve tarihler kendiliğinden kaydolur.',1],['🔗','Planı arkadaşına ekle','Paylaştığın kartla birlikte bir bağlantı gider. Arkadaşın bağlantıyı kopyalayıp uygulamada Tatil planı › Arkadaşımın planını yapıştır der. Konaklama, yol ve bilet gibi ortak giderler onun planlarına da eklenir. Kendi kayıtların ve arkadaşlardan gelen paralar gitmez.',1],['✅','Tatil planını kaydet','Yeni planın en altındaki Kaydet düğmesine basınca plan Tatillerim listesinde kalır. Üstteki ✕ ile çıkarsan kaydedilmez.',1],['🤝','Elden borçlar','Menüden borç verdiğin ya da aldığın parayı TL, dolar, euro, sterlin veya altın olarak yaz. Vade günü hatırlatılır, vade ayının bütçene gelir ya da gider olarak yansır. Taksitle ödeme veya tahsilat da girebilirsin. Verdiğin parayı bütçenden mi birikiminden mi verdiğini sorar.',1]]},{v:'2.5',date:'Kasım 2026',title:'Aylık uçak fiyatları',items:[['✈️','Uçak fiyatı aya göre değişiyor','Bilet fiyatı artık gidiş ve dönüş tarihinin ayına göre hesaplanıyor. Yazın pahalı, kışın uygun. Fiyat tahmini ve ortalamalara dayanır, bunu kutunun altında da yazdık.',1],['✍️','Kendi bilet fiyatını yaz','Gerçek bilet fiyatını bulduysan Uçak biletleri kutusuna yazabilirsin, tahmin yerine seninki kullanılır.',1],['⚡','Elektrikli araç seçeneği','Tatil planında yakıt türüne Elektrik eklendi. Şarj maliyeti kWh fiyatı ve 100 km tüketimine göre hesaplanıyor, tüketimi kendi aracına göre değiştirebilirsin.',1],['🎬','Açılış animasyonu yavaşladı','Açılıştaki dönen logo biraz daha sakin ve rahat izleniyor.',0]]},
   {v:'2.4.10',date:'Kasım 2026',title:'Plan ekranı kapanmıyor',items:[['🧭','Yer seçince Plan kutusu kapanmıyor','Çıkış ve gideceğin yeri seçtiğinde Plan kutusu artık kendiliğinden kapanıp seni aşağıya atmıyor. Kişi sayısı ve tarihleri rahatça seçebilirsin.',0],['👥','Kişi sayısı daha görünür','Kaç kişi seçimi artık Nereden–Nereye alanının hemen altında.',0]]},
@@ -2989,7 +3287,7 @@ function maybeWn(){
   var tries=0;
   (function wait(){
     tries++;if(tries>80||seenVer()===APP_VER)return;
-    var busy=document.getElementById('spl')||document.querySelector('.sheet-bg.show,.cbg.show,.tscr.show');
+    var busy=document.getElementById('spl')||document.querySelector('.sheet-bg.show,.cbg.show,.tscr.show,#ndaBg.show');
     if(busy){setTimeout(wait,700);return}
     openWn(false);
   })();
@@ -3399,6 +3697,7 @@ $('dr').onclick=function(ev){
   else if(k==='loan')lnOpen();
   else if(k==='inc'){goPay('g')}
   else if(k==='year'){document.querySelector('.nav .t[data-v="ozet"]').click();setTimeout(function(){var e=$('outcard');openMore(true);e.classList.add('open');lsSet('butcem_outopen','1');e.scrollIntoView({block:'center',behavior:'smooth'})},200)}
+  else if(k==='nda')ndaOpen();
   else if(k==='set')document.querySelector('.nav .t[data-v="ayar"]').click();
 };
 /* ---------- Birikimlerim ---------- */
@@ -3581,7 +3880,18 @@ function renderGuide(){
 $('gdX').onclick=function(){lsSet('butcem_guide','1');renderGuide()};
 $('gdList').onclick=function(ev){var b=ev.target.closest('[data-gs]');if(!b)return;var k=b.getAttribute('data-gs'),d=gdSteps();d[k]=1;lsSet('butcem_gsteps',JSON.stringify(d));
   if(k==='1'){openSheet();setType('in');syncMode()}else if(k==='2'){goPay('f');nbShow(true)}else{goPay('k')}renderGuide()};
-document.querySelectorAll('.nav .t').forEach(function(b){b.onclick=function(){goTab(b.getAttribute('data-v'))}});
+document.querySelectorAll('.nav .t[data-v]').forEach(function(b){b.onclick=function(){goTab(b.getAttribute('data-v'))}});
+$('navMenu').onclick=drOpen;
+(function(){var x0=0,y0=0,on=false,st=null;
+  document.addEventListener('touchstart',function(e){var t=e.touches[0];on=false;if(e.touches.length!==1)return;var op=$('dr').classList.contains('show');
+    if(op){on='c'}else if(t.clientX<=28){var n=e.target;if(n&&n.closest&&n.closest('input,textarea,select'))return;on='o'}
+    x0=t.clientX;y0=t.clientY},{passive:true});
+  document.addEventListener('touchmove',function(e){if(!on)return;var t=e.touches[0],dx=t.clientX-x0,dy=t.clientY-y0;
+    if(Math.abs(dy)>Math.abs(dx)*0.7&&Math.abs(dy)>14){on=false;return}
+    if(on==='o'&&dx>60){on=false;if(!document.querySelector('.sheet.show,.ov.show'))drOpen()}
+    else if(on==='c'&&dx<-60){on=false;drClose()}},{passive:true});
+  document.addEventListener('touchend',function(){on=false},{passive:true});
+})();
 
 /* ---------- Kutucuk ve halka çizimleri ---------- */
 var openMon={},openRing=null,outAll=false;
@@ -4198,12 +4508,13 @@ var cardArm=null,cardPayArm=null;
 function monthName(k){return MONTHS[parseInt(k.slice(5),10)-1]}
 function renderCardSpend(){
   var k=mk(cur),arr=S.cards.filter(function(c){return c.date.slice(0,7)===k}),box=$('cardSpend');
-  if(!arr.length){box.style.display='none';return}
+  var cs=$('cardStrip');if(!arr.length){box.style.display='none';if(cs)cs.style.display='none';return}
   var tot=0,un=0,by={};arr.forEach(function(c){tot+=c.amt;if(!c.paid)un+=c.amt;var n=c.tcat||c.cat;by[n]=(by[n]||0)+c.amt});
   var names=Object.keys(by).sort(function(a,b){return by[b]-by[a]}),ch='';
   names.slice(0,5).forEach(function(n){ch+='<span class="cspc">'+esc(n)+' · '+esc(fmt(by[n]))+'</span>'});
   $('cardSpendBody').innerHTML='<div class="citem" style="padding:0 0 8px"><b>Bu ay kartla</b><span class="num">'+esc(fmt(tot,true))+'</span></div><div class="cspw">'+ch+'</div>'+
     '<div class="note" style="margin:8px 0 0">'+(un>0?'Ekstresi ödenmemiş: <b>'+esc(fmt(un,true))+'</b>. Bu tutar bakiyenden henüz düşmedi, tahminlere dahil.':'Bu ayın kart harcamalarının ekstresi ödendi.')+'</div>'+(un>0?'<button type="button" class="btn sec sm" id="csGo" style="margin-top:8px">Kart listesine git</button>':'');
+  if(cs){cs.innerHTML='<span style="font-size:20px">💳</span><span style="flex:1;min-width:0"><b style="font-size:14.5px">Kartla bu ay '+esc(fmt(tot,true))+'</b><small style="display:block;opacity:.75;margin-top:2px">'+(un>0?'Ekstre ödenmemiş: '+esc(fmt(un,true)):'Ekstre ödendi')+'</small></span><span style="opacity:.6;font-size:20px">›</span>';cs.style.display='flex';cs.onclick=function(){goPay('k')}}
   box.style.display='';var g=$('csGo');if(g)g.onclick=function(){goPay('k')};
 }
 function renderCards(){
