@@ -3877,10 +3877,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.19';
+var APP_VER='2.20';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+{"v":"2.20","date":"Kasım 2026","title":"Birikim fırsatı","items":[["💰","Bibi ek birikim fırsatını fark ediyor","Gelirin kesinse ve planın rahatsa, Özet ekranındaki içgörü kartında bu ay hedef ayırmalarının dışında yaklaşık ne kadar kalabileceği yazar. Bu bir tahmindir, para ayrılmaz; karar sende.",1]]},
 {"v":"2.19","date":"Kasım 2026","title":"Hedef ve bütçe içgörüsü","items":[["🎯","Hedeflerin için Bibi notları","Özet ekranındaki içgörü kartında Bibi artık birikim hedeflerinde ilerlemeni, hedef ayırmalarının aylık tahminle uyumunu ve limitlerin içinde kaldığın ayları fark ediyor. Hedef tarihi olmadığı için ‘yetişemezsin’ gibi bir iddiada bulunmaz.",1]]},
 {"v":"2.18","date":"Kasım 2026","title":"Yaklaşan ödeme içgörüsü","items":[["🗓️","Yaklaşan ödemeler için Bibi notu","Önümüzdeki günlerde kart son ödeme günü, büyük bir ödeme ya da aynı günlere yığılan ödemeler olduğunda Bibi Özet ekranındaki içgörü kartında kısa bir not bırakır. Tahmini tutarlar ve fatura tahminleri kullanılmaz.",1]]},
 {"v":"2.17","date":"Kasım 2026","title":"Bibi’den içgörü","items":[["💡","Bibi’den içgörü","Özet ekranında, Bibi artık limitlerine yaklaştığında ya da bir kategoride harcaman belirgin değiştiğinde kısa bir not bırakıyor. İstersen ‘İncele’ ile ilgili yere gidebilir, ✕ ile kapatabilirsin. Gerek olmadığında hiç görünmez.",1],["⚙️","Kapatma seçeneği","Bu kartı istersen Ayarlar > Ana sayfa kartları bölümünden tamamen gizleyebilirsin.",0]]},
@@ -4858,6 +4859,31 @@ function bbiGlRule(d,o){var out=[],st=(o&&o.ignoreState)?{}:bbiStGet().items,per
       title:'🌱 Limitlerinin içinde kaldın',body:'Geçen ay harcamaların, belirlediğin '+(lm.length>1?'tüm kategori limitlerinin':'kategori limitinin')+' içinde kaldı. Bu, hedeflerine ayırdığın payı korumana yardımcı olabilir. 🌱'})}
   return out}
 bbiRegister({id:'goal',cat:'goal',needs:['goals'],cool:35,run:bbiGlRule});
+/* --- Aşama 7 · Birikim fırsatı. d.outlook (outlook), d.goals, d.limits, d.months, d.due okur; hiçbir şey yazmaz. Hedef seçimi yalnızca tek aktif hedef varsa yapılır --- */
+var BBI_SV={min:1000,minPct:0.05,buf:0.10,fresh:0.5,spike:2,day:5,t2:0.10,t3:0.20,hist:2};
+function bbiSvRound(v){return v<10000?Math.floor(v/100)*100:Math.floor(v/500)*500}
+function bbiSvRule(d,o){var U=BBI_SV,out=[],st=(o&&o.ignoreState)?{}:bbiStGet().items,per=d.nowK,ob=(d.outlook||[])[0],pk=fromYm(ym(per)-1),
+  last=bbiL(d.months).filter(function(m){return !m.cur&&m.k===pk})[0],hm=bbiL(d.months).filter(function(m){return !m.cur&&bbiNum(m.out)>0}).length;
+  if(!ob||ob.k!==per||ob.assumed)return out;
+  var inc=bbiNum(ob.inc),free=bbiNum(ob.free),vr=bbiNum(ob.vr);
+  if(!(inc>0)||!(vr>0)||!(free>0)||!(d.day>=U.day)||!(hm>=U.hist))return out;
+  if(!(last&&last.hasData&&bbiNum(last.inc)>0)||inc<last.inc*U.fresh||inc>last.inc*U.spike)return out;
+  if(bbiL(d.due&&d.due.late).length)return out;
+  var G=bbiL(d.goals).filter(function(g){return g.id&&g.name&&g.target>0&&g.saved>=0&&g.saved<g.target}),need=0;
+  for(var i=0;i<G.length;i++){var g=G[i];if(!(g.mo>0))continue;if(!(g.px>0))return out;need+=g.mo*g.px}
+  need=r2(need);
+  var L=r2(bbiL(d.limits).reduce(function(t,x){return t+bbiNum(x.limit)},0));if(L>0&&L+need>inc)return out;
+  var nx=0;bbiL(d.due&&d.due.soon).forEach(function(it){if(it&&bbiNum(it.amt)>0&&String(it.d||'').slice(0,7)>per)nx+=it.amt});
+  var net=free-need-inc*U.buf-nx;if(!(net>=Math.max(U.min,inc*U.minPct)))return out;
+  var amt=bbiSvRound(net),tier=net>=inc*U.t3?3:(net>=inc*U.t2?2:1),key=function(t){return'sv|opp|'+per+'|'+t};
+  for(var t=tier+1;t<=3;t++)if(st[key(t)])return out;
+  var one=G.length===1?G[0]:null,
+    tx=G.length?'bir kısmıyla '+(one?one.name+' hedefine':'hedeflerine')+' ek katkıyı':'bir kısmını birikime ayırmayı';
+  out.push({id:'sv.opp',key:key(tier),cat:'savings',type:'sopp',category:'Birikim fırsatı',label:'Tahmini fırsat',chip:'~'+fmt(amt),ico:'💰',color:'#3ddc97',amount:amt,period:per,sev:1,pri:250,created:Date.now(),
+    nav:G.length?{dr:'sv'}:{v:'ozet',el:'fcard'},
+    title:'💰 Ek birikim fırsatı',body:'Mevcut planına göre bu ay'+(need>0?' hedef ayırmalarının dışında':'')+' yaklaşık '+fmt(amt)+' kalabilir. Bu bir tahmin, kesin bakiye değil. İstersen bu tutarın '+tx+' değerlendirebilirsin. 💰'});
+  return out}
+bbiRegister({id:'savings',cat:'savings',needs:[],cool:35,run:bbiSvRule});
 
 /* --- Aşama 4 · İçgörü gösterim katmanı (Özet · "Bibi’den İçgörü"). Yalnızca bbiRun okur; mark/dismiss State'e yazar --- */
 var INS_WIN=3*864e5,INS_SIG=null,INS_T=0,INS_IO=null,INS_SEEN={},INS_CUR=[];
