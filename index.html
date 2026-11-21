@@ -3877,10 +3877,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.18';
+var APP_VER='2.19';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+{"v":"2.19","date":"Kasım 2026","title":"Hedef ve bütçe içgörüsü","items":[["🎯","Hedeflerin için Bibi notları","Özet ekranındaki içgörü kartında Bibi artık birikim hedeflerinde ilerlemeni, hedef ayırmalarının aylık tahminle uyumunu ve limitlerin içinde kaldığın ayları fark ediyor. Hedef tarihi olmadığı için ‘yetişemezsin’ gibi bir iddiada bulunmaz.",1]]},
 {"v":"2.18","date":"Kasım 2026","title":"Yaklaşan ödeme içgörüsü","items":[["🗓️","Yaklaşan ödemeler için Bibi notu","Önümüzdeki günlerde kart son ödeme günü, büyük bir ödeme ya da aynı günlere yığılan ödemeler olduğunda Bibi Özet ekranındaki içgörü kartında kısa bir not bırakır. Tahmini tutarlar ve fatura tahminleri kullanılmaz.",1]]},
 {"v":"2.17","date":"Kasım 2026","title":"Bibi’den içgörü","items":[["💡","Bibi’den içgörü","Özet ekranında, Bibi artık limitlerine yaklaştığında ya da bir kategoride harcaman belirgin değiştiğinde kısa bir not bırakıyor. İstersen ‘İncele’ ile ilgili yere gidebilir, ✕ ile kapatabilirsin. Gerek olmadığında hiç görünmez.",1],["⚙️","Kapatma seçeneği","Bu kartı istersen Ayarlar > Ana sayfa kartları bölümünden tamamen gizleyebilirsin.",0]]},
 {"v":"2.16.3","date":"Kasım 2026","title":"İç altyapı hazırlığı","items":[["📊","Harcama değişimi hazırlığı","Bibi’nin ileride kategori harcamalarındaki belirgin artış ve azalışları fark edebilmesi için arka plan mantığı hazırlandı. Görünürde bir değişiklik yok.",0]]},
@@ -4718,7 +4719,7 @@ function bbiBuild(){
   d.subs=bbiL(S.plans).filter(function(p){return p.sub&&pa(p)}).map(function(p){return{id:p.id,name:p.name,amt:bbiNum(p.amt),day:bbiNum(p.day)}});
   d.plans=bbiL(S.plans).filter(function(p){return !p.sub&&pa(p)}).map(function(p){return{id:p.id,name:p.name,cat:p.cat,amt:bbiNum(p.amt),day:bbiNum(p.day),end:p.end||''}});
   d.next={k:nx,planOut:bbiSafe(function(){var s=0;planEntries(kDate(nx)).forEach(function(e){s+=e.amt});return r2(s)},0),projIn:bbiSafe(function(){var s=0;projRows(nx).forEach(function(e){if(e.type==='in')s+=e.amt});return r2(s)},0),projOut:bbiSafe(function(){var s=0;projRows(nx).forEach(function(e){if(e.type!=='in')s+=e.amt});return r2(s)},0)};
-  d.goals=bbiL(S.goals).map(function(g){var sv=bbiSafe(function(){return gSaved(g)},0);return{id:g.id,name:g.name,unit:g.unit,target:bbiNum(g.target),saved:bbiNum(sv),mo:bbiNum(g.mo),remaining:Math.max(0,bbiNum(g.target)-bbiNum(sv))}});
+  d.goals=bbiL(S.goals).map(function(g){var sv=bbiSafe(function(){return gSaved(g)},0);return{id:g.id,name:g.name,unit:g.unit,target:bbiNum(g.target),saved:bbiNum(sv),mo:bbiNum(g.mo),px:bbiSafe(function(){return bbiNum(guPrice(g.unit))},0),remaining:Math.max(0,bbiNum(g.target)-bbiNum(sv))}});
   var tl=0,unp=0;bbiL(S.sav).forEach(function(x){var p=bbiSafe(function(){return svPrice(x.type)},0);if(p>0)tl+=p*x.amt;else unp++});d.savings={tl:r2(tl),n:bbiL(S.sav).length,unpriced:unp};
   d.loans=bbiSafe(function(){return lnOpenList().map(function(l){return{id:l.id,dir:l.dir,who:l.who,unit:l.unit,amt:bbiNum(l.amt),rest:bbiNum(l.rest),due:l.due||''}})},[]);
   d.incPlans=bbiSafe(function(){return ipOpenList(nk).map(function(p){return{id:p.id,name:p.name,amt:bbiNum(p.amt),day:bbiNum(p.day)}})},[]);
@@ -4830,6 +4831,33 @@ function bbiUpRule(d){var out=[],L=[],seen={},per=d.nowK,U=BBI_UP;
       title:'🗓️ Bu hafta ödemelerin yoğun',body:'Önümüzdeki 7 günde '+imp.length+' ödemen var, toplam '+fmt(tt)+'. Haftanı buna göre planlamak isteyebilirsin. 🗓️'})}
   return out}
 bbiRegister({id:'upcoming',cat:'upcoming',needs:[],cool:8,run:bbiUpRule});
+/* --- Aşama 6 · Hedef ve bütçe uyumu. d.goals (gSaved), d.outlook (outlook), d.limits (catSpent), d.months okur. Hedeflerin tarihi ve kategoriyle bağlantısı yoktur; bu yüzden hedef riski ve hedef–kategori ilişkisi üretilmez --- */
+var BBI_GL={ms:[25,50,75,90],min:500,fresh:0.5,x2:1.5,maxEta:120};
+function bbiGlRule(d,o){var out=[],st=(o&&o.ignoreState)?{}:bbiStGet().items,per=d.nowK,G=bbiL(d.goals).filter(function(g){return g.id&&g.name&&g.target>0&&g.saved>=0}),
+  act=G.filter(function(g){return g.saved<g.target}),U=BBI_GL;
+  function add(x){x.cat='goal';x.period=per;x.created=Date.now();out.push(x)}
+  act.forEach(function(g){var pct=Math.floor(g.saved/g.target*100),mm=0;U.ms.forEach(function(m){if(pct>=m)mm=m});if(!mm)return;
+    var key=function(n){return'gl|prog|'+g.id+'|'+n};if(U.ms.some(function(m){return m>mm&&st[key(m)]}))return;
+    var left=g.target-g.saved,n=g.mo>0?Math.ceil(left/g.mo-1e-9):0,eta=(n>0&&n<=U.maxEta)?' Aylık '+guFmt(g.mo,g.unit)+' ayırmaya devam edersen yaklaşık '+n+' ayda ulaşabilirsin.':'';
+    add({id:'gl.prog',key:key(mm),type:'gprog',category:String(g.name),label:'Hedef',chip:'%'+pct,ico:'🎯',color:'#3ddc97',pct:pct,saved:g.saved,target:g.target,sev:1,pri:200+mm,nav:{dr:'sv'},
+      title:'🎯 '+g.name+' hedefinde ilerleme',body:g.name+' hedefinde %'+pct+' seviyesine geldin ('+guFmt(g.saved,g.unit)+' / '+guFmt(g.target,g.unit)+').'+eta+' ✨'})});
+  var ob=(d.outlook||[])[0],pk=fromYm(ym(per)-1),last=bbiL(d.months).filter(function(m){return !m.cur&&m.k===pk})[0],
+    ok=!!(ob&&bbiNum(ob.inc)>0&&last&&last.hasData&&bbiNum(last.inc)>0&&ob.inc>=last.inc*U.fresh),bad=false,need=0;
+  act.forEach(function(g){if(!(g.mo>0))return;if(!(g.px>0)){bad=true;return}need+=g.mo*g.px});need=r2(need);
+  var conf=false,blk=false;
+  if(ok&&!bad&&need>=U.min){var free=bbiNum(ob.free),inc=r2(ob.inc);
+    if(need>free){conf=true;var s2=(!ob.assumed&&(free<=0||need>=free*U.x2))?2:1;
+      add({id:'gl.conf',key:'gl|conf|'+per,type:'gconf',category:'Hedef planın',label:'Hedef ve bütçe',chip:fmt(need),ico:'⚖️',color:'#ffb648',need:need,free:r2(free),assumed:!!ob.assumed,sev:s2,pri:450,nav:{dr:'sv'},
+        title:'⚖️ Hedef planın ve bu ayın tahmini',body:'Bu ay hedeflerine ayırmayı planladığın '+fmt(need)+(free>0?', tahmini kalan tutardan ('+fmt(free)+') fazla.':' için tahmini kalan tutar görünmüyor.')+' Bu bir tahmin; gelir ve harcamaların değişirse sonuç da değişir. ⚖️'})}
+    else{var L=r2(bbiL(d.limits).reduce(function(t,x){return t+bbiNum(x.limit)},0));
+      if(L>0&&L+need>inc&&(blk=true))add({id:'gl.lim',key:'gl|lim|'+per,type:'glim',category:'Limitler ve hedefler',label:'Hedef ve bütçe',chip:fmt(L+need),ico:'⚖️',color:'#ffb648',need:need,limits:L,income:inc,sev:1,pri:400,nav:{v:'ozet',el:'limCard'},
+        title:'⚖️ Limitlerin ve hedeflerin',body:'Kategori limitlerinin toplamı ('+fmt(L)+') ve aylık hedef ayırmaların ('+fmt(need)+') birlikte bu ayki gelirini ('+fmt(inc)+') aşıyor. Limitlerin hepsini kullanmazsan sorun olmaz, ama plan şu haliyle tam tutmuyor. ⚖️'})}}
+  var lm=bbiL(d.limits).filter(function(x){return bbiNum(x.limit)>0});
+  if(act.length&&lm.length&&last&&last.hasData&&!conf&&!blk){var mc=last.cat||{},any=0,all=lm.every(function(x){var sp=bbiNum(mc[x.cat]);if(sp>0)any++;return sp<=bbiNum(x.limit)});
+    if(all&&any>=1)add({id:'gl.keep',key:'gl|keep|'+pk,type:'gkeep',category:'Bütçe ve hedef',label:'Hedef ve bütçe',chip:'Limit içinde',ico:'🌱',color:'#3ddc97',count:lm.length,sev:1,pri:300,nav:{v:'ozet',el:'limCard'},
+      title:'🌱 Limitlerinin içinde kaldın',body:'Geçen ay harcamaların, belirlediğin '+(lm.length>1?'tüm kategori limitlerinin':'kategori limitinin')+' içinde kaldı. Bu, hedeflerine ayırdığın payı korumana yardımcı olabilir. 🌱'})}
+  return out}
+bbiRegister({id:'goal',cat:'goal',needs:['goals'],cool:35,run:bbiGlRule});
 
 /* --- Aşama 4 · İçgörü gösterim katmanı (Özet · "Bibi’den İçgörü"). Yalnızca bbiRun okur; mark/dismiss State'e yazar --- */
 var INS_WIN=3*864e5,INS_SIG=null,INS_T=0,INS_IO=null,INS_SEEN={},INS_CUR=[];
@@ -4864,7 +4892,7 @@ function insRender(){INS_T=0;var c=$('insCard');if(!c)return;
   c.style.display='';insWatch()}
 function insSched(){if(INS_T)return;INS_T=setTimeout(insRender,400)}
 function insGo(k){var x=INS_CUR.filter(function(z){return z.key===k})[0],n=x&&x.nav;
-  try{if(!n||typeof n!=='object')return;var v=String(n.v||''),el=n.el?document.getElementById(String(n.el)):null;
+  try{if(!n||typeof n!=='object')return;if(n.dr){var db=/^[a-z]{1,12}$/.test(String(n.dr))?document.querySelector('[data-dr="'+n.dr+'"]'):null;if(db)db.click();return}var v=String(n.v||''),el=n.el?document.getElementById(String(n.el)):null;
     if(v&&v!==tab&&v!=='ozet'&&$('v-'+v))goTab(v);
     if(el){var mw=$('moreWrap');if(mw&&mw.contains(el)&&mw.style.display==='none')openMore(true);
       if(el.offsetParent===null)el=$('insCard');
