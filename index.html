@@ -1395,6 +1395,14 @@ b.wm{display:block!important;white-space:nowrap;font-size:20px}b.wm>b,b.wm>i{dis
 @keyframes bbM1{0%{opacity:0;transform:translate(-42px,-16px)}15%{opacity:1}65%{opacity:1;transform:translate(-6px,-2px)}100%{opacity:0;transform:translate(0,0) scale(.3)}}
 @keyframes bbM2{0%{opacity:0;transform:translate(42px,16px)}15%{opacity:1}65%{opacity:1;transform:translate(6px,2px)}100%{opacity:0;transform:translate(0,0) scale(.3)}}
 @media (prefers-reduced-motion:reduce){.bb *{animation:none!important}}
+.asm.asth .asbb{display:none}
+.asm.asth{animation:none}
+.asm.bot.asth .asav{width:54px;height:54px;margin:-8px 4px -8px -6px}
+.asm.bot .asav.asavIn{animation:asavIn .4s ease-out!important}
+@keyframes asavIn{from{opacity:.4;transform:scale(1.5)}to{opacity:1;transform:none}}
+.bb[data-st=calm] .bb-body{animation:bbBreath 3.2s ease-in-out infinite}
+.bb[data-st=calm] .bb-cg{animation:bbGlowCalm .8s ease-out}
+@keyframes bbGlowCalm{0%{opacity:.6}100%{opacity:0}}
 /* küçük (sohbet) avatarında hareket yok */
 .bb.xs *{animation:none!important}
 @media (prefers-reduced-motion:reduce){.bb *{animation:none!important}}
@@ -2183,7 +2191,7 @@ function dim(d){return new Date(d.getFullYear(),d.getMonth()+1,0).getDate()}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
 var undoJson=null;
 function markUndo(){try{undoJson=JSON.stringify(S)}catch(e){undoJson=null}}
-function toast(t,undo){try{if(!undo&&!/hata|yanlış|geçersiz|yazmalısın|girmelisin|olmaz/i.test(t||''))bbAll('ok',1200)}catch(e){}
+function toast(t,undo){try{if(!undo&&!asBusy&&!/hata|yanlış|geçersiz|yazmalısın|girmelisin|olmaz/i.test(t||''))bbAll('ok',1200)}catch(e){}
   var e=$('toast');e.innerHTML='';var sp=document.createElement('span');sp.textContent=t;e.appendChild(sp);
   var ua=!!undo&&!!undoJson;e.classList.toggle('act',ua);
   if(ua){var b=document.createElement('button');b.type='button';b.textContent='Geri al';b.onclick=doUndo;e.appendChild(b)}
@@ -3857,10 +3865,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.15';
+var APP_VER='2.16';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+{"v":"2.16","date":"Kasım 2026","title":"Bibi yazarken artık kendisi görünüyor","items":[["💬","Üç nokta gitti, Bibi geldi","Bibi cevap hazırlarken sohbette üç nokta yerine kendi enerji küresi görünüyor. İçindeki ışık hızlanıyor, yörüngesinde ışık noktaları geziniyor. Cevap gelince yumuşakça sakinleşiyor.",1],["🎯","Konuya göre tepki","Tasarruf, tatil, harcama analizi ve borç konularında Bibi düşünürken kısa bir tepki veriyor. Uyarı gerektiren cevaplarda bu tepki yerine turuncu uyarı hali öne çıkıyor.",0]]},
 {"v":"2.15","date":"Kasım 2026","title":"Bibi artık konuya göre tepki veriyor","items":[["🧠","Düşünürken belli oluyor","Bibi düşünürken çekirdeği dalga dalga parlıyor, içindeki ışık şeritleri hızlanıyor ve yörüngesinde tarayan ışık noktaları dolaşıyor. Beklerkenki sakin halinden ilk bakışta ayırt edilir.",1],["🎯","Konuya göre kısa tepkiler","Tasarruf konuşunca ışıklar çekirdeğe toplanıyor, tatilde halkalar genişleyip bir ışık ileri doğru gidiyor, harcama sorularında içinden tarama dalgası geçiyor, borç konuşurken enerji akışları çekirdekte birleşiyor.",1],["✅","Başarı ve uyarı daha belirgin","Başarılı işlemde çekirdek parlıyor, enerji dalgası yayılıyor ve yörüngede kısa bir ışık turu atıyor. Uyarılarda turuncu çekirdek yavaşça nabız gibi atıyor.",0]]},
 {"v":"2.14","date":"Kasım 2026","title":"Bibi’nin yeni hali: yaşayan enerji varlığı","items":[["🌌","Bibi yepyeni bir görünümde","Emoji yüzü gitti. Bibi artık nefes alan, içinde ışık akan bir dijital enerji varlığı. Sohbette, ana sayfadaki balonda ve profilinde aynı karakter görünüyor.",1],["🪐","Yeteneklerle gelişir","Bibi’nin seviyesi, uygulamada gerçekten çalışan yeteneklerden hesaplanır. Yeni bir yetenek eklendikçe Bibi’ye yeni bir enerji halkası açılır. Şu an seviyesi: İleri. Bibi’nin adına dokunup yeteneklerini görebilirsin.",1],["✨","Tepki verir","Dokunursan tepki verir. Düşünürken içindeki ışık hızlanır, işin başarılı olunca küçük bir parlama yapar, uyarı verirken rengi yumuşak bir turuncuya döner.",1]]},
 {"v":"2.13","date":"Kasım 2026","title":"Bibi artık hep yanında","items":[["💬","Bibi balonu","Ana sayfada sağ altta Bibi’nin yuvarlak balonu duruyor. Dokununca sohbet açılıyor. İstemezsen Ayarlar’daki “Ana sayfa kartları”ndan kapatabilirsin.",1],["📅","Ekstre günlerini biliyor","Bibi kartlarının ekstre kesim ve son ödeme günlerini biliyor. “Ekstrem ne zaman kesiliyor?” diye sorabilirsin. Günler yaklaşınca sohbeti açtığında sana kendisi hatırlatıyor, balonda da kırmızı nokta çıkıyor.",1],["🧮","Alabilir miyim? ana sayfada","Tutarı yaz, bütçene etkisini, kaç ay süreceğini ve taksit seçeneklerini ay ay gör. Modüller’deki “Alabilir miyim?” da bunu açıyor. Bibi’ye de sorabilirsin, cevabından tek dokunuşla taksit ekranına geçersin.",1],["✨","Bibi’de binlik ayracı","Bibi’ye tutar yazarken rakamlar otomatik 2.500.000 gibi noktalanıyor. “Bir şey almak istiyorum” dediğinde konuyu yanlış anlama sorunu da düzeldi.",0],["👆","Dokunma düzeldi","Alt menü, Modüller ve geri düğmeleri ilk dokunuşta hemen çalışıyor.",0],["🧩","Ana sayfa kartlarını sen seç","Ayarlar’daki “Ana sayfa kartları”ndan istemediğin kartları kapatabilirsin. Veriler silinmez. Modüller’de de yeni “Asistan ve planlama” grubu var.",1]]},
@@ -4722,15 +4731,15 @@ function bbSvg(o){
   return s+'</svg>'}
 var BB_T=new WeakMap();
 function bbSet(el,st,ms){if(!el)return;var v=el.classList&&el.classList.contains('bb')?el:el.querySelector('.bb');if(!v||v.classList.contains('xs'))return;
-  clearTimeout(BB_T.get(v));v.removeAttribute('data-th');v.setAttribute('data-st','idle');void v.getBoundingClientRect();v.setAttribute('data-st',st);if(st==='ok'){v.querySelectorAll('animateMotion[data-tour]').forEach(function(a){try{a.beginElement()}catch(e){}})}
+  bbThemeNow=null;clearTimeout(BB_T.get(v));v.removeAttribute('data-th');v.setAttribute('data-st','idle');void v.getBoundingClientRect();v.setAttribute('data-st',st);if(st==='ok'){v.querySelectorAll('animateMotion[data-tour]').forEach(function(a){try{a.beginElement()}catch(e){}})}
   if(ms)BB_T.set(v,setTimeout(function(){v.setAttribute('data-st',bbWarn&&st!=='warn'?'warn':'idle')},ms))}
 var bbWarn=false;
-var BB_TH=[['debt',/borc|taksit|kredi|ekstre|odeme plan/],['trip',/tatil|ucak|rota|seyahat|gezi|otel|yolculuk|bilet|tatile/],['save',/tasarruf|biriktir|birikim|kenara|hedef/],['spend',/butce|harcad|harcama|ne kadar|gider|rapor|ortalama|bu ay/]];
+var BB_TH=[['debt',/borc|taksit|kredi|ekstre|odeme plan/],['trip',/tatil|ucak|rota|seyahat|gezi|otel|yolculuk|bilet|tatile/],['save',/tasarruf|biriktir|birikim|kenara|para koy|hedef/],['spend',/butce|harcad|harcama|ne kadar|gider|gelir|analiz|durumum|rapor|ortalama|bu ay/]];
 var BB_ID={tasarruf:'save',birikim:'save',hedefplan:'save',hedef:'save',tatil:'trip',tatilozet:'trip',borc:'debt',kredibitis:'debt',ekstre:'debt',kesim:'debt',faturakiyas:'debt',spend:'spend',gecen:'spend',ortalama:'spend',rapor:'spend',buyuk:'spend',gunluk:'spend'};
 function bbTopic(q,id){var n=asN(q),i;for(i=0;i<BB_TH.length;i++)if(BB_TH[i][1].test(n))return BB_TH[i][0];return BB_ID[id]||null}
-var asTheme=null,BB_THT=null;
+var asTheme=null,BB_THT=null,bbThemeNow=null;
 function bbThinkOn(th){document.querySelectorAll('.bb:not(.xs)').forEach(function(v){clearTimeout(BB_T.get(v));if(v.getAttribute('data-st')!=='think'){v.removeAttribute('data-th');v.setAttribute('data-st','think')}});
-  if(th){clearTimeout(BB_THT);document.querySelectorAll('.bb:not(.xs)').forEach(function(v){v.removeAttribute('data-th');void v.getBoundingClientRect();v.setAttribute('data-th',th)});BB_THT=setTimeout(function(){document.querySelectorAll('.bb[data-th]').forEach(function(v){v.removeAttribute('data-th')})},2000)}}
+  if(th){clearTimeout(BB_THT);bbThemeNow=th;document.querySelectorAll('.bb:not(.xs)').forEach(function(v){v.removeAttribute('data-th');void v.getBoundingClientRect();v.setAttribute('data-th',th)});BB_THT=setTimeout(function(){bbThemeNow=null;document.querySelectorAll('.bb[data-th]').forEach(function(v){v.removeAttribute('data-th')})},2000)}}
 function bbAll(st,ms){document.querySelectorAll('.bb:not(.xs)').forEach(function(v){bbSet(v,st,ms)})}
 function bbOpenFx(){var nw=null;try{nw=bbCheckNew()}catch(e){}bbLvCache=null;var h=document.querySelector('#as .asfc');if(h)bbMount(h,{size:'md',newRing:(nw&&nw.up)?bbLv().lv:0});var f=$('bibiFab');if(f)bbMount(f,{size:'sm'});
   if(nw){setTimeout(function(){var v=h&&h.querySelector('.bb');if(v)v.classList.add('lvup');bbSet(h,'ok',1400);try{asBub('bot','<p><b>'+(nw.up?'Seviye atladım! ':'')+'Yeni yeteneğim var:</b> '+nw.caps.map(function(c){return esc(c.name)}).join(', ')+'.</p>')}catch(e){}},700)}
@@ -5004,6 +5013,7 @@ function asScroll(){var c=$('asChat');if(c)c.scrollTop=c.scrollHeight}
 function asBub(role,html,id){var c=$('asChat');var d=document.createElement('div');d.className='asm '+role;if(id)d.id=id;d.innerHTML=(role==='bot'?'<span class="asav">'+bbSvg({size:'xs'})+'</span>':'')+'<div class="asbb">'+html+'</div>';c.appendChild(d);asScroll();return d}
 function asTs(){var d=new Date();return '<span class="asts">'+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)+'</span>'}
 function asFill(node,html,r,last){
+  if(node.classList.contains('asth')){node.classList.remove('asth');var av0=node.querySelector('.asav');if(av0){av0.innerHTML=bbSvg({size:'xs'});av0.classList.add('asavIn')}}
   var h=html;if(last&&r)bbWarn=(r.mood==='warn');
   if(r){
     if(r.sug)h+='<div class="assg">'+r.sug.map(function(x){return '<button type="button" data-asq="'+esc(x)+'">'+esc(x)+'</button>'}).join('')+'</div>';
@@ -5022,12 +5032,12 @@ function asSplit(h){
   if(kids.length<=n)return [h];
   return [kids.slice(0,n).map(function(x){return x.outerHTML}).join(''),kids.slice(n).map(function(x){return x.outerHTML}).join('')]}
 var AS_OP={kesim:['Kart tarihlerine bir bakayım.','Ekstre günlerini kontrol ediyorum.'],rapor:['O ayın kayıtlarını açıyorum.','Bir bakayım, o ay neler olmuş.'],limit:['Limitlerine bir bakalım.'],yemekkarti:['Yemek kartlarına bakıyorum.'],ortalama:['Geçmiş aylara göre ortalamanı çıkarıyorum.'],duzenli:['Düzenli ödemelerine bakıyorum.'],kredibitis:['Kredi ve taksit tarihlerine bakıyorum.'],spend:['Bir bakayım, hemen çıkarıyorum.','Tamam, harcamalarına göz atıyorum.'],gelen:['Bakıyorum, kim ne göndermiş.'],hedef:['Hedeflerine bir bakalım.'],hedefplan:['Güzel hedef! Hemen hesaplıyorum.','Tamam, bir hesaplayayım.'],tatil:['Tatil mi? Süper, hemen bakıyorum.','Ooo, tatil planı! Fiyatlara bakıyorum.'],tatilozet:['Tatil planına bir bakalım.'],kur:['Kurlara bakıyorum.'],alabilir:['Bir bakalım, bütçen ne diyor.'],tasarruf:['Harcamalarına bir göz atayım.'],faturakiyas:['Faturalara bakıyorum.'],gecen:['İki ayı yan yana koyuyorum.'],tahmin:['Ay sonuna kadar hesaplıyorum.'],birikim:['Birikimlerine bakıyorum.'],ekstre:['Kartlarına bakıyorum.'],yaklasan:['Yaklaşan ödemelere bir bakayım.'],borc:['Borç alacak durumuna bakıyorum.'],abonelik:['Aboneliklerine bakıyorum.'],bakiye:['Bakiyene bakıyorum.'],gunluk:['Günlük payını hesaplıyorum.'],buyuk:['En büyükleri buluyorum.']};
-function asTy(on){try{$('as').classList.toggle('bty',!!on);if(on){bbWarn=false;bbThinkOn(asTheme);asTheme=null}else bbAll(bbWarn?'warn':'ok',bbWarn?7000:1300)}catch(x){}var e=$('asSt');if(!e)return;e.className=on?'ty':'';e.innerHTML='<i></i>'+(on?'yazıyor…':'çevrimiçi')}
-function asDots(){return asBub('bot','<span class="asdots"><i></i><i></i><i></i></span>')}
+function asTy(on){try{$('as').classList.toggle('bty',!!on);if(on){bbWarn=false;bbThinkOn(asTheme);asTheme=null}else bbAll(bbWarn?'warn':'calm',bbWarn?7000:800)}catch(x){}var e=$('asSt');if(!e)return;e.className=on?'ty':'';e.innerHTML='<i></i>'+(on?'yazıyor…':'çevrimiçi')}
+function asDots(){var c=$('asChat'),d=document.createElement('div');d.className='asm bot asth';d.innerHTML='<span class="asav">'+bbSvg({size:'sm',st:'think'})+'</span><div class="asbb"></div>';c.appendChild(d);try{if(bbThemeNow){d.querySelector('.bb').setAttribute('data-th',bbThemeNow);bbThemeNow=null}}catch(e){}asScroll();return d}
 function asAsk(q){
   q=String(q||'').trim();if(!q||asBusy)return;asBusy=true;
   asBub('me',esc(q)+asTs());$('asIn').value='';
-  var r=asAnswer(q);try{asTheme=bbTopic(q,r.id)}catch(e){asTheme=null}
+  var r=asAnswer(q);try{asTheme=(r.mood==='warn')?null:bbTopic(q,r.id)}catch(e){asTheme=null}
   var parts=asSplit(r.h),op=(AS_OP[r.id]||null),opener=op?op[Math.floor(Math.random()*op.length)]:null;
   var fast=REDUCE,rnd=function(a,b){return fast?60:a+Math.random()*(b-a)};
   var steps=[];
