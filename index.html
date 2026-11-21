@@ -3865,10 +3865,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.16.1';
+var APP_VER='2.16.2';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+{"v":"2.16.2","date":"Kasım 2026","title":"İç altyapı hazırlığı","items":[["🎯","Limit takibi hazırlığı","Bibi’nin ileride kategori limitlerini kendisi izleyebilmesi için arka plan mantığı hazırlandı. Görünürde bir değişiklik yok.",0]]},
 {"v":"2.16.1","date":"Kasım 2026","title":"İç altyapı hazırlığı","items":[["🧱","Arka plan hazırlığı","Bibi’nin ileride finansal durumunu kendisi fark edebilmesi için gerekli salt okunur altyapı hazırlandı. Görünürde bir değişiklik yok.",0]]},
 {"v":"2.16","date":"Kasım 2026","title":"Bibi yazarken artık kendisi görünüyor","items":[["💬","Üç nokta gitti, Bibi geldi","Bibi cevap hazırlarken sohbette üç nokta yerine kendi enerji küresi görünüyor. İçindeki ışık hızlanıyor, yörüngesinde ışık noktaları geziniyor. Cevap gelince yumuşakça sakinleşiyor.",1],["🎯","Konuya göre tepki","Tasarruf, tatil, harcama analizi ve borç konularında Bibi düşünürken kısa bir tepki veriyor. Uyarı gerektiren cevaplarda bu tepki yerine turuncu uyarı hali öne çıkıyor.",0]]},
 {"v":"2.15","date":"Kasım 2026","title":"Bibi artık konuya göre tepki veriyor","items":[["🧠","Düşünürken belli oluyor","Bibi düşünürken çekirdeği dalga dalga parlıyor, içindeki ışık şeritleri hızlanıyor ve yörüngesinde tarayan ışık noktaları dolaşıyor. Beklerkenki sakin halinden ilk bakışta ayırt edilir.",1],["🎯","Konuya göre kısa tepkiler","Tasarruf konuşunca ışıklar çekirdeğe toplanıyor, tatilde halkalar genişleyip bir ışık ileri doğru gidiyor, harcama sorularında içinden tarama dalgası geçiyor, borç konuşurken enerji akışları çekirdekte birleşiyor.",1],["✅","Başarı ve uyarı daha belirgin","Başarılı işlemde çekirdek parlıyor, enerji dalgası yayılıyor ve yörüngede kısa bir ışık turu atıyor. Uyarılarda turuncu çekirdek yavaşça nabız gibi atıyor.",0]]},
@@ -4726,9 +4727,9 @@ function bbiData(force){
 function bbiRegister(r){if(!r||!r.id||typeof r.run!=='function'||BBI_RULES.some(function(x){return x.id===r.id}))return false;BBI_RULES.push({id:r.id,cat:r.cat||'',needs:r.needs||[],cool:r.cool||3,run:r.run});return true}
 function bbiValid(x){return !!(x&&typeof x==='object'&&x.id&&x.key&&x.cat&&x.title&&x.body&&[1,2,3].indexOf(x.sev)>-1)}
 function bbiRun(o){o=o||{};var d=bbiData();if(!d)return[];var out=[];
-  BBI_RULES.forEach(function(r){if(r.needs.some(function(n){return !d.has[n]}))return;var res=bbiSafe(function(){return r.run(d)},null);
+  BBI_RULES.forEach(function(r){if(r.needs.some(function(n){return !d.has[n]}))return;var res=bbiSafe(function(){return r.run(d,o)},null);
     [].concat(res||[]).forEach(function(x){if(bbiValid(x)&&(o.ignoreState||bbiStCan(x.key,x.sev,r.cool)))out.push(x)})});
-  out.sort(function(a,b){return b.sev-a.sev});return out.slice(0,o.max||3)}
+  out.sort(function(a,b){return b.sev-a.sev||(b.pri||0)-(a.pri||0)});return out.slice(0,o.max||3)}
 /* --- Insight State: finansal veriden ayrı, kendi anahtarında (butcem_bbi). Yalnızca çağrılınca yazar --- */
 function bbiStGet(){var o=null;try{o=JSON.parse(lsGet(BBI_KEY)||'null')}catch(e){o=null}
   if(!o||typeof o!=='object'||o.v!==1||!o.items||typeof o.items!=='object'||Array.isArray(o.items))o={v:1,items:{}};return o}
@@ -4739,6 +4740,23 @@ function bbiStCan(key,sev,cool){var it=bbiStGet().items[key];if(!it)return true;
 function bbiStMark(key,sev){var o=bbiStGet(),it=o.items[key]||{first:Date.now(),n:0,sev:0};it.last=Date.now();it.n=(it.n||0)+1;it.sev=Math.max(it.sev||0,sev||1);o.items[key]=it;return bbiStSave(o)}
 function bbiStDismiss(key){var o=bbiStGet(),it=o.items[key]||{first:Date.now(),n:0,sev:1};it.x=1;it.last=Date.now();o.items[key]=it;return bbiStSave(o)}
 function bbiStReset(){try{localStorage.removeItem(BBI_KEY)}catch(e){}}
+/* --- Aşama 2 · Limit içgörü motoru. Yalnızca d.limits (catSpent) okur; hiçbir şey yazmaz, ekrana göndermez --- */
+var BBI_LIM=[['over',4,3],['full',3,3],['crit',2,2],['near',1,1]];
+function bbiLimLv(sp,lim){var r=Math.round(sp*100),l=Math.round(lim*100);if(!(l>0)||!(sp>0))return null;
+  if(r>l)return'over';if(r===l)return'full';if(r*100>=l*95)return'crit';if(r*100>=l*80)return'near';return null}
+function bbiLimRule(d,o){var out=[],st=(o&&o.ignoreState)?{}:bbiStGet().items,per=d.nowK;
+  bbiL(d.limits).forEach(function(x){var lim=bbiNum(x.limit),sp=bbiNum(x.spent),lv=bbiLimLv(sp,lim);if(!lv||!x.cat)return;
+    var c=String(x.cat),key=function(n){return'lim|'+per+'|'+c+'|'+n},rk=0,sev=1,i;
+    for(i=0;i<BBI_LIM.length;i++)if(BBI_LIM[i][0]===lv){rk=BBI_LIM[i][1];sev=BBI_LIM[i][2]}
+    if(BBI_LIM.some(function(z){return z[1]>rk&&st[key(z[0])]}))return;
+    var pct=Math.floor(sp/lim*100),left=r2(lim-sp),over=r2(sp-lim),t,b;
+    if(lv==='near'){t='🟢 '+c+' limitine yaklaşıyorsun';b=c+' limitinin %'+pct+' seviyesine ulaştın. Ayın geri kalanında biraz daha dikkatli ilerlersen limitini koruyabilirsin. 👀'}
+    else if(lv==='crit'){t='🟠 '+c+' limiti kritik seviyede';b=c+' limitinin neredeyse tamamını kullandın (%'+pct+'). Limitini aşmana çok az kaldı: '+fmt(left)+'. 🟠'}
+    else if(lv==='full'){t='🔴 '+c+' limiti doldu';b=c+' limitini tamamen kullandın. Bundan sonraki harcamalar limiti aşacak. 🔴'}
+    else{t='🔴 '+c+' limiti aşıldı';b=c+' limitini aştın. Şu an limitinin '+fmt(over)+' üzerindesin. İstersen ayın kalanını birlikte planlayabiliriz. 🔴'}
+    out.push({id:'limit.'+lv,key:key(lv),cat:'limit',type:lv,category:c,period:per,spent:sp,limit:lim,left:lv==='over'?0:left,over:lv==='over'?over:0,pct:pct,sev:sev,pri:rk*1000+Math.min(pct,999),title:t,body:b,created:Date.now(),nav:{v:'ozet',el:'limCard'}})});
+  return out}
+bbiRegister({id:'limit',cat:'limit',needs:['limits'],cool:35,run:bbiLimRule});
 
 var BB_CAPS=[
  ['spend','Harcama analizi','b'],['gelen','Gelen para','b'],['gecen','Ay karşılaştırma','b'],['tahmin','Ay sonu tahmini','b'],['yaklasan','Yaklaşan ödemeler','b'],
