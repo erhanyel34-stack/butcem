@@ -164,10 +164,10 @@ button:active{transform:scale(.97)}
 .ins{position:relative;margin:0 0 10px;padding:10px 10px 8px 14px;border-radius:12px;background:#ffffff08;border:1px solid var(--line);overflow:hidden}
 .ins:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ac)}
 .insh{display:flex;align-items:center;gap:7px;font-size:13px;min-width:0}.insh b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.insh em{font-style:normal;font-size:11px;color:var(--mut);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.insx{width:32px;height:32px;margin:-6px -6px -6px 0;border-radius:9px;color:var(--mut);background:transparent;font-size:13px;flex:none}
+.insx{width:44px;height:44px;margin:-10px -10px -10px 0;border-radius:9px;color:var(--mut);background:transparent;font-size:13px;flex:none}
 .insb{margin:5px 0 7px;font-size:13.5px;line-height:1.45;color:var(--txt);overflow-wrap:anywhere}
 .insf{display:flex;align-items:center;justify-content:space-between;gap:8px}.inschip{font-size:12px;font-weight:700;color:var(--ac)}
-.insgo{font-size:12.5px;font-weight:700;color:var(--acc2);padding:6px 2px;background:transparent;margin-left:auto}
+.insgo{font-size:12.5px;font-weight:700;color:var(--acc2);padding:14px 12px;background:transparent;margin:-8px -10px -8px auto}
 .insfl{animation:insfl 1.4s ease-out}@keyframes insfl{0%,100%{box-shadow:0 0 0 0 #0000}30%{box-shadow:0 0 0 2px var(--acc2)}}
 .dnhint{margin-top:10px;padding-top:10px;border-top:1px solid #ffffff14;font-size:12.5px;color:var(--mut)}
 .pc.c4{background:linear-gradient(135deg,#3ddc97,#17896a);transform:scale(.985)}.wl.open .pc.c4{transform:none}
@@ -634,6 +634,7 @@ body.pl-basic #dr [data-dr]:not([data-dr=set]):not([data-dr=plan]):not([data-dr=
 .tlc .bd{padding:12px 16px 14px}.tlc .r1{display:flex;justify-content:space-between;align-items:baseline}.tlc .r1 b{font-size:21px}.tlc .r1 i{font-style:normal;font-size:24px;font-weight:800}
 .tlc .r2{font-size:13px;color:#b9b0f5;margin-top:2px}.tlc .bar{height:7px;background:#3a3175;border-radius:4px;margin:12px 0 10px;overflow:hidden}.tlc .bar u{display:block;height:7px;background:#ff9a62;border-radius:4px}
 .tlc .r3{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#b9b0f5}.tlc .r3 button{background:#3a3175;color:#fff;border-radius:10px;padding:7px 12px;font-size:12px;font-weight:700;margin-left:6px}
+.tla{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#ffffff0f;border:1px solid #4b3f93;border-radius:18px;padding:10px 12px;margin:0 0 10px}.tla>div{min-width:0}.tla b{display:block;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tla small{color:#b9b0f5;font-size:12px}.tla button{flex:none;min-height:44px;padding:0 16px;border-radius:14px;font-weight:700;color:#fff;background:#ffffff1f}
 .tlnew{display:block;width:100%;border-radius:20px;padding:16px;text-align:center;font-size:16px;font-weight:700;color:#fff;background:linear-gradient(90deg,#ffa944,#ff5a96)}
 .tlback{display:inline-block;margin:0 0 4px;padding:9px 16px;border-radius:14px;background:#ffffff1f;color:#fff;font-weight:700;font-size:14px}
 
@@ -2213,7 +2214,7 @@ function repair(){
     if(!e.id||seen[e.id]){e.id=uid()+Math.random().toString(36).slice(2,4);n++}
     seen[e.id]=1;return true});
   S.bills.forEach(function(b){if(b.day!=null&&!(b.day>=1&&b.day<=31&&b.day===Math.floor(b.day))){delete b.day;n++}});
-  S.trips=S.trips.filter(function(t){if(t&&t.draft){n++;return false}return true});
+  S.trips=S.trips.filter(function(t){if(t&&t.draft){if(tripRecs(t.id)>0){t.draft=false;n++;return true}n++;return false}return true});
   var tids={},eid={};S.trips.forEach(function(t){tids[t.id]=1});S.entries.forEach(function(e){eid[e.id]=1});
   S.entries.forEach(function(e){if(e.trip&&!tids[e.trip]){delete e.trip;n++}});
   S.cards=S.cards.filter(function(c){if(!okd.test(c.date||'')||!(c.amt>0)){n++;return false}return true});
@@ -3936,10 +3937,12 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.21.1';
+var APP_VER='2.23';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+{"v":"2.23","date":"Kasım 2026","title":"Tatil silme artık güvenli","items":[["🛡️","Kayıtlı tatil silinmiyor, arşive alınıyor","Harcama, kart veya arkadaş ödemesi kaydı olan tatilde Sil yerine Arşive al çıkar. Kayıtların, bakiyen ve kart borcun aynen kalır.",1],["🗄️","Arşivdeki tatiller ve geri alma","Tatillerim ekranının altında arşivdeki tatilleri görür, tek dokunuşla geri alabilirsin.",1]]},
+{"v":"2.22","date":"Kasım 2026","title":"Bibi daha kararlı","items":[["💳","Yaklaşan ödeme artık kaybolmuyor","Birden fazla limit uyarısı varken son ödeme günü 4 gün içinde olan ödeme de Özet ekranındaki Bibi kartlarında görünür. Limiti aşan veya dolan uyarılar yerinde kalır.",1],["🔔","Yükselen uyarılar doğru takip ediliyor","Bir uyarının seviyesi yükseldiğinde Bibi bunu artık doğru kaydediyor.",1],["👆","Daha rahat dokunma","Bibi kartındaki Kapat ve İncele düğmeleri daha kolay dokunulur boyutta.",1]]},
 {"v":"2.21.1","date":"Kasım 2026","title":"Bakım modu","items":[["🛠️","Bakım kilidi","Uygulama geçici olarak bakım modunda.",0]]},
 {"v":"2.21","date":"Kasım 2026","title":"Bibi önemli olanı öne alıyor","items":[["🎯","Daha doğru sıralama","Özet ekranındaki Bibi içgörülerinde, güncel limit uyarıları ve yaklaşan ödemeler artık geçen aya ait harcama değişimlerinin önüne geçiyor.",1],["🧩","Aynı isimli içgörüler artık kaybolmuyor","Bir ödemenin veya hedefin adı bir harcama kategorisiyle aynıysa ya da aynı kategoride hem limit hem harcama değişimi varsa, ikisi de gösteriliyor.",1]]},
 {"v":"2.20","date":"Kasım 2026","title":"Birikim fırsatı","items":[["💰","Bibi ek birikim fırsatını fark ediyor","Gelirin kesinse ve planın rahatsa, Özet ekranındaki içgörü kartında bu ay hedef ayırmalarının dışında yaklaşık ne kadar kalabileceği yazar. Bu bir tahmindir, para ayrılmaz; karar sende.",1]]},
@@ -4954,13 +4957,19 @@ var INS_AC={near:['🎯','#ffb648'],crit:['🎯','#ff9a3d'],full:['🎯','#ff6b8
 function insList(){var all=bbiRun({ignoreState:true,max:30}),fresh={},st=bbiStGet().items,now=Date.now(),cs={},out=[];
   bbiRun({max:30}).forEach(function(x){fresh[x.key]=1});
   all.forEach(function(x){var it=st[x.key];if(it&&it.x)return;if(!(fresh[x.key]||(it&&now-(it.first||0)<INS_WIN)))return;var ck=x.cat+'|'+(x.category||x.key);if(cs[ck])return;cs[ck]=1;out.push(x)});
-  return out.slice(0,3)}
+  var top=out.slice(0,3);
+  /* B1: 3 limit kartı yaklaşan kritik ödemeyi gizlemesin; sev 3 (aşıldı/doldu) limitlere dokunulmaz */
+  if(top.length===3&&!top.some(function(x){return x.cat==='upcoming'})){
+    var up=out.slice(3).filter(function(x){return x.cat==='upcoming'&&x.days<=4})[0],vi=-1;
+    if(up)top.forEach(function(x,i){if(x.cat==='limit'&&x.sev<3)vi=i});
+    if(up&&vi>=0)top[vi]=up}
+  return top}
 function insChip(x){if(x.chip)return x.chip;if(x.cat==='limit')return x.type==='over'?'+'+fmt(x.over):'%'+x.pct;return (x.dir==='up'?'+':'−')+'%'+x.pct}
 function insHtml(x){var a=INS_AC[x.type]||['💬','#8f96c6'];
   return '<div class="ins" data-k="'+esc(x.key)+'" style="--ac:'+esc(x.color||a[1])+'"><div class="insh"><span>'+esc(x.ico||a[0])+'</span><b>'+esc(x.category)+'</b><em>'+esc(x.label||(x.cat==='limit'?'Limit':'Harcama değişimi'))+'</em><button type="button" class="insx" data-x="'+esc(x.key)+'" aria-label="Kapat">✕</button></div>'
    +'<div class="insb">'+esc(x.body)+'</div><div class="insf"><span class="inschip num">'+esc(insChip(x))+'</span><button type="button" class="insgo" data-g="'+esc(x.key)+'">İncele ›</button></div></div>'}
 function insMark(k){if(INS_SEEN[k]||document.hidden||tab!=='ozet')return;INS_SEEN[k]=1;
-  var it=INS_CUR.filter(function(x){return x.key===k})[0];if(it&&!bbiStGet().items[k])bbiStMark(k,it.sev)}
+  var it=INS_CUR.filter(function(x){return x.key===k})[0],sv=it&&bbiStGet().items[k];if(it&&(!sv||(it.sev||0)>(sv.sev||0)))bbiStMark(k,it.sev)}
 function insWatch(){var c=$('insCard'),rows=c?c.querySelectorAll('.ins'):[];
   if(INS_IO){try{INS_IO.disconnect()}catch(e){}INS_IO=null}
   if(!rows.length)return;
@@ -6488,6 +6497,8 @@ function seedItems(mode){
 function addDays(d,n){var x=new Date(d+'T00:00:00');x.setDate(x.getDate()+n);return ds(x)}
 function daysTo(d){return Math.round((new Date(d+'T00:00:00')-new Date(today()+'T00:00:00'))/86400000)}
 function tripById(id){for(var i=0;i<S.trips.length;i++)if(S.trips[i].id===id)return S.trips[i];return null}
+/* tatile bağlı finansal kayıt sayısı (nakit, gelir, arkadaş ödemesi, kart) */
+function tripRecs(id){var n=0;(S.entries||[]).forEach(function(e){if(e&&e.trip===id)n++});(S.cards||[]).forEach(function(c){if(c&&c.trip===id)n++});return n}
 function activeTrips(){return S.trips.filter(function(t){return !t.archived&&(!t.draft||t.id===curTrip)})}
 function pickTrip(){
   var t=today(),a=activeTrips().slice().sort(function(x,y){return x.start<y.start?-1:1});
@@ -6615,6 +6626,7 @@ function openTripScreen(id){bkKind=null;
 function closeTripScreen(force){
   if(!curTrip&&!$('tscr').classList.contains('show'))return;
   var t=tripById(curTrip);
+  if(t&&t.draft&&force!==true&&tripRecs(t.id)>0){t.draft=false;save();toast('Harcama kaydı olduğu için tatil planı kaydedildi')}
   if(t&&t.draft&&force!==true){
     askBox('Tatil planı kaydedilmedi','Çıkarsan bu plan kaydedilmez. Kaydetmek için sayfanın en altındaki “Tatil planını kaydet” düğmesini kullan.',[
       {t:'Devam et'},
@@ -7064,12 +7076,16 @@ function tlRender(){
     h+='<div class="tlc" data-tl="'+esc(t.id)+'">'+tlScene(t)+'<div class="bd"><div class="r1"><b>'+((B&&PL_ICON[B.name])?PL_ICON[B.name]+' ':'')+esc(t.dest||'Yeni tatil')+'</b><i>'+esc(fmt(tot))+'</i></div><div class="r2">'+esc(tlDates(t))+' · '+nights(t)+' gece · '+(t.people||1)+' kişi</div><div class="bar"><u style="width:'+pct+'%"></u></div><div class="r3"><span>Senin payın '+esc(fmt(Math.round(sh)))+'</span><span><button type="button" data-tls="'+esc(t.id)+'">Paylaş</button><button type="button" data-tl="'+esc(t.id)+'">Düzenle ›</button></span></div></div></div>';
   });
   h+='<button type="button" class="tlnew" id="tlNew">＋ Yeni tatil planı ekle</button><button type="button" class="tlnew" id="tlPaste" style="margin-top:10px;background:#ffffff14">📥 Arkadaşımın planını yapıştır</button>';
+  var ar=S.trips.filter(function(t){return t.archived&&!t.draft}).sort(function(x,y){return x.start<y.start?1:-1});
+  if(ar.length){h+='<div class="tlh" style="margin-top:24px"><b style="font-size:17px">🗄️ Arşivdeki tatiller</b><span>'+ar.length+'</span></div>';
+    ar.forEach(function(t){var rc=tripRecs(t.id);h+='<div class="tla"><div><b>'+esc(t.dest||'Tatil')+'</b><small>'+esc(tlDates(t))+' · '+(t.people||1)+' kişi'+(rc?' · '+rc+' kayıt':'')+'</small></div><button type="button" data-tlr="'+esc(t.id)+'">Geri al</button></div>'})}
   $('tlBody').innerHTML=h;
 }
 function openTripList(){tlBack=true;tlRender();$('tlist').classList.add('show');$('tlist').scrollTop=0;document.body.style.overflow='hidden'}
 function closeTripList(){tlBack=false;$('tlist').classList.remove('show');document.body.style.overflow='';render()}
 $('tlBack').onclick=closeTripList;
 $('tlist').addEventListener('click',function(ev){
+  var rb=ev.target.closest('[data-tlr]');if(rb){var rt=tripById(rb.getAttribute('data-tlr'));if(rt){rt.archived=false;save();tlRender();renderTripCard();toast('Tatil arşivden geri alındı ✓')}return}
   var sb=ev.target.closest('[data-tls]');if(sb){var t=tripById(sb.getAttribute('data-tls'));if(t)trShare(t);return}
   if(ev.target.closest('#tlPaste')){tpPasteOpen();return}
   if(ev.target.closest('#tlNew')){var n=newTrip();openTripScreen(n.id);return}
@@ -7335,6 +7351,11 @@ $('tBody').addEventListener('click',function(ev){
   if(ev.target.closest('#tClose2')){t.archived=true;t.closed=true;t.draft=false;save();closeTripScreen(true);toast('Tatil kapatıldı, arşivde');return}
   if(ev.target.closest('#tArch')){t.archived=true;t.draft=false;save();closeTripScreen(true);toast('Tatil arşive alındı');return}
   if(ev.target.closest('#tDel')){
+    if(tripRecs(t.id)>0){
+      askBox('Tatil arşivlenecek','Tatil arşivlenecek. Bu tatile ait harcama ve ödeme kayıtların korunacak. Arşivden istediğin zaman geri alabilirsin.',[
+        {t:'Arşive al',f:function(){t.archived=true;t.draft=false;save();closeTripScreen(true);toast('Tatil arşive alındı')}},
+        {t:'Vazgeç',c:'sec'}]);
+      return}
     var d=$('tDel');if(!tDelArm){tDelArm=true;d.textContent='Silmek için tekrar dokun';setTimeout(function(){tDelArm=false;if($('tDel'))$('tDel').textContent='Tatili sil'},2500);return}
     markUndo();S.trips=S.trips.filter(function(x2){return x2.id!==t.id});S.cards.forEach(function(c){if(c.trip===t.id)delete c.trip});S.entries.forEach(function(e){if(e.trip===t.id)delete e.trip});
     save();closeTripScreen(true);toast('Tatil silindi',true);return}
