@@ -3865,10 +3865,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.16.2';
+var APP_VER='2.16.3';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+{"v":"2.16.3","date":"Kasım 2026","title":"İç altyapı hazırlığı","items":[["📊","Harcama değişimi hazırlığı","Bibi’nin ileride kategori harcamalarındaki belirgin artış ve azalışları fark edebilmesi için arka plan mantığı hazırlandı. Görünürde bir değişiklik yok.",0]]},
 {"v":"2.16.2","date":"Kasım 2026","title":"İç altyapı hazırlığı","items":[["🎯","Limit takibi hazırlığı","Bibi’nin ileride kategori limitlerini kendisi izleyebilmesi için arka plan mantığı hazırlandı. Görünürde bir değişiklik yok.",0]]},
 {"v":"2.16.1","date":"Kasım 2026","title":"İç altyapı hazırlığı","items":[["🧱","Arka plan hazırlığı","Bibi’nin ileride finansal durumunu kendisi fark edebilmesi için gerekli salt okunur altyapı hazırlandı. Görünürde bir değişiklik yok.",0]]},
 {"v":"2.16","date":"Kasım 2026","title":"Bibi yazarken artık kendisi görünüyor","items":[["💬","Üç nokta gitti, Bibi geldi","Bibi cevap hazırlarken sohbette üç nokta yerine kendi enerji küresi görünüyor. İçindeki ışık hızlanıyor, yörüngesinde ışık noktaları geziniyor. Cevap gelince yumuşakça sakinleşiyor.",1],["🎯","Konuya göre tepki","Tasarruf, tatil, harcama analizi ve borç konularında Bibi düşünürken kısa bir tepki veriyor. Uyarı gerektiren cevaplarda bu tepki yerine turuncu uyarı hali öne çıkıyor.",0]]},
@@ -4757,6 +4758,33 @@ function bbiLimRule(d,o){var out=[],st=(o&&o.ignoreState)?{}:bbiStGet().items,pe
     out.push({id:'limit.'+lv,key:key(lv),cat:'limit',type:lv,category:c,period:per,spent:sp,limit:lim,left:lv==='over'?0:left,over:lv==='over'?over:0,pct:pct,sev:sev,pri:rk*1000+Math.min(pct,999),title:t,body:b,created:Date.now(),nav:{v:'ozet',el:'limCard'}})});
   return out}
 bbiRegister({id:'limit',cat:'limit',needs:['limits'],cool:35,run:bbiLimRule});
+/* --- Aşama 3 · Kategori harcama değişimi. Yalnızca d.months[].cat (catSpent) okur; yalnızca tamamlanmış aylar --- */
+var BBI_CHG={min:500,pf:0.03,up:0.30,upx:0.60,dn:0.30};
+function bbiMed(a){a=a.slice().sort(function(x,y){return x-y});var n=a.length,h=n>>1;return n%2?a[h]:(a[h-1]+a[h])/2}
+function bbiChgRule(d,o){var out=[],st=(o&&o.ignoreState)?{}:bbiStGet().items,i0=ym(d.nowK),k1=fromYm(i0-1),
+  ms=bbiL(d.months).filter(function(m){return m.k&&!m.cur}),m1=ms.filter(function(m){return m.k===k1&&m.hasData})[0];
+  if(!m1)return out;
+  var bk=[2,3,4].map(function(n){return fromYm(i0-n)}),base=ms.filter(function(m){return bk.indexOf(m.k)>-1&&m.hasData});
+  if(base.length<2)return out;
+  var tot=base.reduce(function(t,m){return t+bbiNum(m.out)},0)/base.length,fl=Math.max(BBI_CHG.min,tot*BBI_CHG.pf),seen={};
+  Object.keys(m1.cat||{}).concat([].concat.apply([],base.map(function(m){return Object.keys(m.cat||{})}))).forEach(function(c){
+    if(seen[c]||!c)return;seen[c]=1;var x=bbiNum((m1.cat||{})[c]);if(!(x>0))return;
+    var vals=base.map(function(m){return Math.max(0,bbiNum((m.cat||{})[c]))});
+    if(vals.filter(function(v){return v>0}).length<2)return;
+    var ref=bbiMed(vals);if(!(ref>=BBI_CHG.min))return;
+    var diff=r2(x-ref),ra=diff/ref,lv=null;
+    if(ra>=BBI_CHG.upx&&diff>=2*fl)lv='upx';else if(ra>=BBI_CHG.up&&diff>=fl)lv='up';else if(ra<=-BBI_CHG.dn&&-diff>=fl)lv='dn';
+    if(!lv)return;
+    var key=function(n){return'chg|'+k1+'|'+c+'|'+n};
+    if(lv==='up'&&st[key('upx')])return;
+    var p=Math.floor(Math.abs(ra)*100),t,b;
+    if(lv==='dn'){t='✨ '+c+' harcaman düştü';b=c+' harcaman geçen ay, önceki aylara göre düşmüş (yaklaşık %'+p+', '+fmt(-diff)+' daha az). Bu kategoride güzel bir tasarruf sağlamış görünüyorsun. ✨'}
+    else if(lv==='up'){t='👀 '+c+' harcaman arttı';b=c+' harcaman geçen ay, önceki aylara göre belirgin şekilde artmış (yaklaşık %'+p+', '+fmt(diff)+' fazla). Bu kategoride biraz daha fazla harcama yapmışsın. 👀'}
+    else{t='👀 '+c+' harcaman belirgin arttı';b=c+' harcaman geçen ay, önceki aylara göre çok daha yüksek olmuş (yaklaşık %'+p+', '+fmt(diff)+' fazla). İstersen bu kategoriye birlikte göz atabiliriz. 👀'}
+    out.push({id:'chg.'+lv,key:key(lv),cat:'change',type:lv,category:c,period:k1,cmp:base.map(function(m){return m.k}),prev:r2(ref),spent:r2(x),diff:diff,pct:p,dir:diff>0?'up':'down',
+      sev:lv==='upx'?3:(lv==='up'?2:1),pri:Math.min(p,999),title:t,body:b,created:Date.now(),nav:{v:'ozet',el:'catbars'}})});
+  return out}
+bbiRegister({id:'change',cat:'change',needs:['entries'],cool:35,run:bbiChgRule});
 
 var BB_CAPS=[
  ['spend','Harcama analizi','b'],['gelen','Gelen para','b'],['gecen','Ay karşılaştırma','b'],['tahmin','Ay sonu tahmini','b'],['yaklasan','Yaklaşan ödemeler','b'],
