@@ -439,7 +439,7 @@ body.pl-basic .nav .t[data-v=ozet],body.pl-basic .nav .t[data-v=fatura],body.pl-
 body:not(.pl-basic) #v-bhome,body:not(.pl-basic) #v-bpay{display:none!important}
 body.pl-basic #v-ozet,body.pl-basic #v-fatura,body.pl-basic #v-islem{display:none!important}
 body.pl-basic #gsBar,body.pl-basic #banner,body.pl-basic #tripBanner,body.pl-basic .month,body.pl-basic .dt,body.pl-basic #obAgain,body.pl-basic #uPayWrap{display:none!important}
-body.pl-basic #dr [data-dr]:not([data-dr=set]):not([data-dr=plan]):not([data-dr=nda]):not([data-dr=asst]){display:none!important}
+body.pl-basic #dr [data-dr]:not([data-dr=set]):not([data-dr=plan]):not([data-dr=nda]):not([data-dr=asst]):not([data-dr=afford]):not([data-dr=tripok]){display:none!important}
 .wh.big .sp{font-size:58px;animation:bump .9s cubic-bezier(.3,1.4,.5,1)}
 .wh.big h2{font-size:27px;background:linear-gradient(90deg,#8f7cff,#27d3c3);-webkit-background-clip:text;background-clip:text;color:transparent}
 .bgrib{display:inline-block;font-size:11px;font-weight:800;letter-spacing:1.2px;color:#fff;background:linear-gradient(90deg,#7c5cff,#27d3c3);border-radius:20px;padding:4px 12px;margin:2px 0 8px}
@@ -1207,6 +1207,7 @@ body.pl-basic .nav .t[data-v=ayar]{display:flex;order:5}
 .ashero{text-align:center;padding:6px 8px 14px}.ashero h2{margin:10px 0 4px;font-size:26px}.ashero p{margin:0;color:#b9bff0;font-size:14px}
 .ashc{background:#ffffff0f;border:1px solid #ffffff1a;border-radius:20px;padding:14px 16px;margin:0 0 12px}.ashc h3{margin:0 0 8px;font-size:16px}.ashc p,.ashc li{font-size:14px;line-height:1.5;color:#dfe3ff}.ashc ol,.ashc ul{margin:0;padding-left:20px}.ashc li{margin:0 0 7px}
 .ashg{margin:0 0 10px}.ashg b{display:block;font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:#b9bff0;margin-bottom:6px}.ashg button{margin:0 6px 6px 0}
+#dr .di[data-dr=afford] .nb,#dr .di[data-dr=tripok] .nb{margin-left:8px;font-size:10px;font-weight:800;border-radius:7px;padding:2px 6px;background:#3ddc9722;color:#3ddc97;vertical-align:1px}
 #dr .di[data-dr=asst] .nb{margin-left:8px;font-size:10px;font-weight:800;border-radius:7px;padding:2px 6px;background:#3ddc9722;color:#3ddc97;vertical-align:1px}
 .wn .wf .btn.sec{margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px}.wn .wf .btn.sec .lic{width:19px;height:19px;stroke:#fff}
 .asbtns .gscl{min-width:44px;padding:8px 12px}
@@ -1228,6 +1229,7 @@ body .nav .plus{top:calc(50% - 26px)!important;left:calc(50% - 26px)!important;w
 
 /* 2.10 yana taşma + klavye kayması */
 html,body{overflow-x:clip!important;max-width:100vw;overscroll-behavior-x:none;touch-action:pan-y}
+button,.nav .t,.di,.gscl,.tclose,[role=button]{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .fch,.aschips,#sQuick,.tsw,#gs .chs,#asChips{touch-action:pan-x pan-y}
 #gs,#as{touch-action:pan-y;overscroll-behavior:contain;max-width:100vw}
 
@@ -1569,6 +1571,8 @@ window.__splashReady=function(){go();setTimeout(kill,Math.max(0,2750-(Date.now()
   <div class="view" id="v-bhome"></div>
   <div class="view" id="v-bpay"></div>
   <div class="view" id="v-ayar">
+    <div class="grp">Ana sayfa</div>
+    <div class="card" id="hcCard"><h2>🧩 Ana sayfa kartları</h2><div class="note" style="margin:0 0 6px">Görmek istemediğin kartları kapat. Veriler silinmez, istediğin an geri açarsın.</div><div id="hcList"></div></div>
     <div class="grp">Güvenlik</div>
     <div class="card acc"><h2>🔒 Uygulama şifresi</h2>
       <div class="note" id="pinStat" style="margin:0 0 10px;font-weight:700"></div>
@@ -1665,6 +1669,8 @@ window.__splashReady=function(){go();setTimeout(kill,Math.max(0,2750-(Date.now()
 
 <div id="dr"><div class="dp" id="drp"><div class="dh">BPlan</div>
   <button type="button" class="di" data-dr="asst"><span class="e">✨</span><span>Bibi<b class="nb">YENİ</b><small>Bütçe asistanın, sor hemen cevaplasın</small></span></button>
+  <button type="button" class="di" data-dr="afford"><span class="e">🧮</span><span>Alabilir miyim?<b class="nb">YENİ</b><small>Almak istediğin şey bütçene uyar mı, bakalım</small></span></button>
+  <button type="button" class="di" data-dr="tripok"><span class="e">🏖️</span><span>Tatili ayırabilir miyiz?<small>Gelir ve giderine bakıp tatil payını söylerim</small></span></button>
   <button type="button" class="di" data-dr="sv"><span class="e"><svg viewBox="0 0 28 28" width="28" height="28" aria-hidden="true"><rect x="3" y="4" width="22" height="19" rx="4" fill="#4a3fc4" stroke="#8f7cff" stroke-width="1.4"/><rect x="6" y="7" width="16" height="13" rx="2.5" fill="#171a46"/><circle cx="12.5" cy="13.5" r="3.6" fill="#23277a" stroke="#ffd34d" stroke-width="1.5"/><circle cx="12.5" cy="13.5" r=".9" fill="#ffd34d"/><rect x="18" y="11.5" width="2.6" height="4" rx="1" fill="#ffd34d"/><rect x="6" y="23" width="3" height="2" rx=".8" fill="#4a3fc4"/><rect x="19" y="23" width="3" height="2" rx=".8" fill="#4a3fc4"/></svg></span><span>Birikimlerim<small>Altın, döviz, gümüş</small></span></button>
   <button type="button" class="di" data-dr="cards"><span class="e">💳</span><span>Kartlarım<small>Limit, borç, bağlı ödemeler</small></span></button>
   <button type="button" class="di" data-dr="trip"><span class="e">🏖️</span><span>Tatil planı<small id="drTripSub">Tatilini planla</small></span></button>
@@ -3051,7 +3057,7 @@ function drSkin(){var dp=$('drp');if(!dp||dp.getAttribute('data-sk'))return;dp.s
   Object.keys(C).forEach(function(k){var b=dp.querySelector('[data-dr="'+k+'"] .e');if(b){b.style.backgroundColor='transparent';b.style.background=C[k][0];b.innerHTML=lsv(C[k][1])}});
   var cd=dp.querySelector('[data-dr="cards"]'),ln=dp.querySelector('[data-dr="loan"]'),ic=dp.querySelector('[data-dr="inc"]');if(cd&&ln&&ic){dp.insertBefore(ln,cd.nextSibling);dp.insertBefore(ic,ln.nextSibling)}
   function grp(k,t){var b=dp.querySelector('[data-dr="'+k+'"]');if(b){var d=document.createElement('div');d.className='dg';d.textContent=t;dp.insertBefore(d,b)}}
-  grp('asst','Asistan');grp('sv','Paran');grp('trip','Planların');grp('nda','Diğer')}
+  grp('asst','Asistan ve planlama');grp('sv','Paran');grp('trip','Planların');grp('nda','Diğer')}
 function wrowSync(){var wl=$('wl'),t=null;try{t=pickTrip()}catch(e){}var row=$('wrow');
   if(!row){row=document.createElement('div');row.id='wrow';wl.parentNode.insertBefore(row,wl);row.appendChild(wl);
     row.addEventListener('click',function(ev){if(!row.classList.contains('two'))return;ev.stopPropagation();if(ev.target.closest('#tripSide'))openTripList();else{var b=document.querySelector('[data-dr="year"]');if(b)b.click()}},true)}
@@ -3719,10 +3725,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.11';
+var APP_VER='2.12';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+{"v":"2.12","date":"Kasım 2026","title":"Daha rahat dokunuş, Modüller'de planlama","items":[["👆","Dokunma düzeldi","Alt menü, Modüller ve geri düğmeleri artık ilk dokunuşta hemen çalışıyor. Bazen ilk dokunuşun kaybolması sorunu giderildi.",0],["🧭","Modüller’de yeni grup","Modüller’de “Asistan ve planlama” grubu açıldı: Bibi, “Alabilir miyim?” ve “Tatili ayırabilir miyiz?” tek yerde.",1],["🧩","Ana sayfa kartlarını sen seç","Ayarlar’daki “Ana sayfa kartları”ndan istemediğin kartları kapatabilirsin. Veriler silinmez, istediğin an geri açılır. Ana sayfa kısalır, daha hızlı kayar.",1]]},
 {"v":"2.11","b":1,"big":1,"bigTitle":"Tanış: Bibi!","ribbon":"YENİ · AKILLI ASİSTAN","cta":"asst","date":"Kasım 2026","title":"Bibi: bütçe asistanın artık çok daha akıllı","items":[["🧭","Tanış: Bibi","Asistanımızın artık bir adı ve yüzü var. Bibi sana sohbet eder gibi yazıyor: “yazıyor…” der, kısa kısa cevap verir, samimi konuşur. “Merhaba, nasılsın?” dersen sohbet de eder. Ekran sadeleşti, yazı kalabalığı gitti.",1],["🎯","Hedeflerini biliyor","“Araba almak için her ay ne kadar biriktirmem lazım?” dersen hedefini bulur, kalan tutarı ve 6, 12, 24, 36 ay için aylık ayırman gereken parayı söyler. “Peki 12 ay olsun” diye devam edebilirsin.",1],["🛍️","“Şunu almak istiyorum” de, hesaplasın","PlayStation, telefon, ne olursa: fiyatı sorar, gelir ve giderine bakıp aylık ne kadar kenara ayırman gerektiğini söyler. “Alabilir miyim?” dersen ay sonu tahminine göre rahat mı sıkışık mı olur, yorumlar. Tek dokunuşla hedef olarak ekleyebilirsin.",1],["🏖️","Tatil sorularını cevaplıyor","“Bodrum’a tatile gitmek istiyorum” de. Tatil planındaki hesapla uçak, araba, otobüs ve tren için yaklaşık maliyeti verir. “Temmuzda ailece” ya da “2 kişi” dersen ona göre hesaplar. Tatil bütçeni ve ne kadar biriktirmen gerektiğini de söyler.",1],["📆","Geçmiş ve gelecek ayları biliyor","“Haziran’da elimde ne kalmıştı?”, “Mart’ta ne kadar ödeme yapmıştım?” gibi geçmiş ay raporları ve “Ocak ayı düzenli ödemelerim neler?”, “Şubat’ta kredim bitiyor mu?”, “Mart’ta elimde ne kadar para kalır?”, “3 ay sonra ne olacak?” gibi sorulara kayıtlı kredi, taksit, fatura ve aboneliklerine göre cevap verir; hangi ay hangi ödemenin bittiğini ve ne kadar rahatlayacağını söyler.",1],["🧭","Her konuda yardımcı","Yemek kartı bakiyen, kategori limitlerin, aylık ve yıllık ortalama harcaman, maaşının ne zaman yatacağı, “Gider nasıl eklerim?” gibi nasıl yapılır soruları da Bibi’ye sorulabilir.",1],["💱","Kurlardan da anlıyor","“Dolar kaç TL?”, “1000 dolar kaç lira?”, “5000 TL kaç euro?”, “Gram altın ne kadar?” Güncel kurla çevirir.",1],["💡","Fatura ve tasarruf yorumları","“Bu ay faturalarım çok mu geldi?” diye sor, geçen ayla kıyaslasın; azsa farkı birikime eklemeni önersin. “Nasıl tasarruf edeyim?” dersen en çok harcadığın kalemleri ve kısarsan ne kadar kalacağını gösterir.",1],["🔎","Arama ekranı sabitlendi","Klavye açılırken arama ekranının zıplaması düzeltildi. Arama ekranındaki ikonlar da yeni çizgi ikonlara geçti.",0],["🔁","Ödemeler ekranı düzeltildi","Gelirler ekranından Ödemeler’e geçince sekmelerin ve faturaların kaybolması düzeltildi.",0],["✨","Yeni açılış animasyonu","Logo ışık çizgileriyle oluşuyor, BPlan yazısı ve slogan sırayla geliyor, ardından ana ekrana yumuşakça geçiyor.",1]]},
 {"v":"2.10","b":1,"big":1,"bigTitle":"BPlan geldi!","ribbon":"YENİ ADIMIZ, YENİ YÜZÜMÜZ","cta":"asst","date":"Kasım 2026","title":"BPlan, Asistanım, yeni cüzdan","items":[["🌅","Yeni adımız BPlan","Bütçem artık BPlan: kısa, samimi ve akılda kalıcı. Yeni logomuz ve yeni açılış animasyonumuz da hazır. Verilerin, kayıtların ve ayarların aynen duruyor.",1],["✨","Asistanım: sor, hemen cevaplasın","Yan menüdeki “Asistanım”a dokun ve günlük dille yaz: “Bu ay neye çok para harcadım?” Cevap kendi kayıtlarından hesaplanır; kategoriler, tutarlar ve karşılaştırmalar kartlar halinde gelir.",1],["🔎","Neler sorabilirsin?","Harcama dağılımı, bu ay sana kim para gönderdi, hedefine ne zaman ulaşırsın, kart ekstreni ödedin mi, geçen aya göre değişim, ay sonu tahmini, yaklaşan ödemeler, abonelikler ve borçlar.",1],["🔒","Verilerin telefonundan çıkmaz","Yapay zekâ değil; telefonunda çalışan, kurallara dayalı yerel bir asistan. Sorduklarını hiçbir yere göndermez, sohbeti saklamaz.",1],["📖","Nasıl kullanılır?","Asistan ekranının sağ üstündeki ? düğmesinde adım adım kullanım, örnek sorular ve daha iyi cevap almak için ipuçları var. Hiç veri girmediysen asistan sana neyi girmen gerektiğini söyler.",1],["👛","Daha sade üst alan, yeni cüzdan","Üstte yalnızca logo, ad ve selamlama var. Ay seçici cüzdanın içinde, ay sonu tahmini ise net bir kart olarak ilerleme çubuğuyla görünüyor. Bütçe çubuğu duruma göre renk alıyor.",1],["💳","Kartlar gerçek kart gibi","Çip, temassız simgesi, •••• •••• •••• ile biten dekoratif numara. Garanti, İş Bankası, Akbank gibi bankaların ve Ticket, Pluxee, Multinet gibi yemek kartlarının tonları otomatik uygulanır.",1],["☰","Sade plan yenilendi","Her ay sana kalan tutar tek bir kartta, kategoriler renkli ikonlu, alt menü düzenli.",1],["🧹","Daha az emoji, daha az kalabalık","Ödemeler, Gelecek aylar, “Yeni işlem” ve bu pencere çizgi ikonlara geçti. Arama ve yana kaydırmadaki ekran kayması düzeltildi. Eski küçük düzeltme notları listeden kaldırıldı.",1],["🏖️","Tatil bölümü yenilendi","Tatil ekranındaki emojiler çizgi ikonlara döndü, Kış tatili ilk sırada geliyor, kar yazıların arkasına alındı.",1],["🧹","Daha hafif ve düzenli","Gereksiz kodlar temizlendi, uygulama daha küçük ve hızlı açılıyor. Gider ekleme penceresindeki mod notu düzeldi.",0]]},
 {"v":"2.9","date":"Kasım 2026","title":"Yenilenen ana ekran ve yan menü","items":[["✨","Yepyeni görünüm","Üst başlık, selamlama, ay seçici ve alt menü yenilendi. Kartlar cam gibi, ikonlar parlak ve çizgi ikon oldu. Animasyonlu logon artık ana ekranın tepesinde.",1],["🏖️","Tatil planın cüzdanın yanında","Tatil planın varsa cüzdan küçülür, yanında kaç gün kaldığı, kaç kişi gideceği ve tahmini toplam görünür. Ay sonu tahmini ve kartların cüzdanın üstünde ince şeritler olarak kalır. Hedefe göre kış, plaj, şehir veya doğa sahnesi çıkar.",1],["📈","Cüzdanda bakiye çizgisi","Cüzdan küçülünce arkasında bu ayki bakiyenin inip çıkışını gösteren soluk bir çizgi görünür.",1],["🏦","Banka adı yazınca tamamlanır","Kart eklerken Garanti, İş Bankası, Akbank gibi bir ad yazınca tam banka adı ve rengi kendiliğinden gelir.",1],["☰","Yenilenen yan menü","Menü Paran, Planların ve Diğer diye gruplara ayrıldı. Her satırda renkli ikon var.",1],["📊","Çizgisel kategori detayı","Kategori detayı halka yerine çizgili, sade bir liste. Satıra dokununca kalemler açılır.",1],["📅","Daha küçük Ödemelerim","Yaklaşan ödemeler en çok 3 satır ve daha kompakt. Ödenenleri görmek için Ödendi kutusuna dokunursun.",0],["🧹","Daha az emoji","Başlıklarda ve kategori ikonlarında emoji yerine çizgi ikonlar kullanıldı. “Bugünkü harcamalarını not ettin mi?” hatırlatması kaldırıldı.",0]]},
@@ -4810,7 +4817,7 @@ function asOpen(){
 function asVv(){var p=$('as'),v=window.visualViewport;if(!p||!v||!p.classList.contains('show'))return;p.style.top=v.offsetTop+'px';p.style.height=v.height+'px';p.style.bottom='auto';asScroll()}
 try{if(window.visualViewport){window.visualViewport.addEventListener('resize',asVv);window.visualViewport.addEventListener('scroll',asVv)}}catch(e){}
 function asClose(){var p=$('as');p.classList.remove('show');p.style.top='';p.style.height='';p.style.bottom=''}
-function asBadge(){var b=document.querySelector('#dr [data-dr="asst"] .nb');if(b)b.style.display=lsGet('butcem_asseen')?'none':''}
+function asBadge(){document.querySelectorAll('#dr .di .nb').forEach(function(b){b.style.display=lsGet('butcem_asseen')?'none':''})}
 $('asBack').onclick=function(){if($('as').classList.contains('help'))$('as').classList.remove('help');else asClose()};
 $('asHelpBtn').onclick=function(){$('asHelp').innerHTML=asHelpHtml();$('as').classList.add('help');$('asHelp').scrollTop=0};
 $('asForm').onsubmit=function(ev){ev.preventDefault();asAsk($('asIn').value)};
@@ -4921,6 +4928,8 @@ $('dr').onclick=function(ev){
   var k=b.getAttribute('data-dr');drClose();
   if(k==='plan')planPickDo(isBasic()?'full':'basic');
   else if(k==='asst')asOpen();
+  else if(k==='afford'){asOpen();setTimeout(function(){asAsk('Bir şey almak istiyorum, alabilir miyim?')},400)}
+  else if(k==='tripok'){asOpen();setTimeout(function(){asAsk('Tatile para ayırabilir miyim?')},400)}
   else if(k==='sv')svOpen();
   else if(k==='cards')openCards();
   else if(k==='trip'){if(S.trips.some(function(t){return !t.archived&&!t.draft}))openTripList();else{openTripList()}}
@@ -5180,6 +5189,15 @@ $('outrows').onclick=function(ev){
 };
 /* cüzdan: arkadaki kartlar dokununca açılır */
 
+/* ana sayfa kartlarını göster/gizle */
+var HC=[['upcard','Yaklaşan ödemeler'],['billcard','Bu ayın faturaları'],['krCard','Kredi ve taksitlerim'],['cardSpend','Kartla harcadıkların'],['outcard','Önümüzdeki 6 ay'],['yrCard','Geçmiş aylar']];
+function hcGet(){try{var a=JSON.parse(lsGet('butcem_hc')||'[]');return Array.isArray(a)?a:[]}catch(e){return[]}}
+function hcApply(){var h=hcGet(),st=$('hcStyle');if(!st){st=document.createElement('style');st.id='hcStyle';document.head.appendChild(st)}
+  st.textContent=h.map(function(id){return '#'+id+'{display:none!important}'}).join('')}
+function hcRender(){var l=$('hcList');if(!l)return;var h=hcGet();
+  l.innerHTML=HC.map(function(x){return '<label class="chk" style="display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)"><input type="checkbox" data-hc="'+x[0]+'"'+(h.indexOf(x[0])<0?' checked':'')+'><span>'+esc(x[1])+'</span></label>'}).join('');
+  l.onchange=function(ev){var c=ev.target.closest('[data-hc]');if(!c)return;var id=c.getAttribute('data-hc'),a=hcGet().filter(function(z){return z!==id});if(!c.checked)a.push(id);lsSet('butcem_hc',JSON.stringify(a));hcApply()}}
+try{hcApply();hcRender()}catch(e){}
 /* iOS'ta :active ve anlık dokunma tepkisi için */
 document.addEventListener('touchstart',function(){},{passive:true});
 /* cam gibi alt menü: kayan gösterge */
@@ -5191,6 +5209,17 @@ function moveInd(){
 window.addEventListener('resize',moveInd);window.addEventListener('orientationchange',moveInd);
 setTimeout(moveInd,0);setTimeout(moveInd,300);
 try{if(document.fonts&&document.fonts.ready)document.fonts.ready.then(moveInd)}catch(e){}
+/* alt menü, Modüller ve geri düğmeleri: ilk dokunuşta hemen çalışsın (iOS'ta bazen ilk tık kayboluyor) */
+(function(){var SEL='.nav .t,.nav .plus,#dr .di,#menuBtn,.gscl,.tclose',sx=0,sy=0,st=0,tg=null,bd=false;
+document.addEventListener('touchstart',function(e){tg=null;bd=false;if(e.touches.length!==1)return;var t=e.touches[0],x=e.target;sx=t.clientX;sy=t.clientY;st=Date.now();
+  if(x&&x.id==='dr'){bd=true;tg=x;return}
+  tg=x&&x.closest?x.closest(SEL):null;if(tg&&tg.disabled)tg=null},{passive:true});
+document.addEventListener('touchmove',function(e){if(!tg)return;var t=e.touches[0];if(Math.abs(t.clientX-sx)>8||Math.abs(t.clientY-sy)>8)tg=null},{passive:true});
+document.addEventListener('touchend',function(e){var el=tg;tg=null;if(!el||Date.now()-st>700)return;
+  if(e.cancelable)e.preventDefault();
+  try{var ae=document.activeElement;if(ae&&ae!==document.body&&/^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName)&&!(el.tagName==='INPUT'||el.tagName==='TEXTAREA'))ae.blur()}catch(x){}
+  el.click()},{passive:false});
+})();
 
 
 
