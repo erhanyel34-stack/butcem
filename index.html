@@ -3865,10 +3865,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.16';
+var APP_VER='2.16.1';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+{"v":"2.16.1","date":"Kasım 2026","title":"İç altyapı hazırlığı","items":[["🧱","Arka plan hazırlığı","Bibi’nin ileride finansal durumunu kendisi fark edebilmesi için gerekli salt okunur altyapı hazırlandı. Görünürde bir değişiklik yok.",0]]},
 {"v":"2.16","date":"Kasım 2026","title":"Bibi yazarken artık kendisi görünüyor","items":[["💬","Üç nokta gitti, Bibi geldi","Bibi cevap hazırlarken sohbette üç nokta yerine kendi enerji küresi görünüyor. İçindeki ışık hızlanıyor, yörüngesinde ışık noktaları geziniyor. Cevap gelince yumuşakça sakinleşiyor.",1],["🎯","Konuya göre tepki","Tasarruf, tatil, harcama analizi ve borç konularında Bibi düşünürken kısa bir tepki veriyor. Uyarı gerektiren cevaplarda bu tepki yerine turuncu uyarı hali öne çıkıyor.",0]]},
 {"v":"2.15","date":"Kasım 2026","title":"Bibi artık konuya göre tepki veriyor","items":[["🧠","Düşünürken belli oluyor","Bibi düşünürken çekirdeği dalga dalga parlıyor, içindeki ışık şeritleri hızlanıyor ve yörüngesinde tarayan ışık noktaları dolaşıyor. Beklerkenki sakin halinden ilk bakışta ayırt edilir.",1],["🎯","Konuya göre kısa tepkiler","Tasarruf konuşunca ışıklar çekirdeğe toplanıyor, tatilde halkalar genişleyip bir ışık ileri doğru gidiyor, harcama sorularında içinden tarama dalgası geçiyor, borç konuşurken enerji akışları çekirdekte birleşiyor.",1],["✅","Başarı ve uyarı daha belirgin","Başarılı işlemde çekirdek parlıyor, enerji dalgası yayılıyor ve yörüngede kısa bir ışık turu atıyor. Uyarılarda turuncu çekirdek yavaşça nabız gibi atıyor.",0]]},
 {"v":"2.14","date":"Kasım 2026","title":"Bibi’nin yeni hali: yaşayan enerji varlığı","items":[["🌌","Bibi yepyeni bir görünümde","Emoji yüzü gitti. Bibi artık nefes alan, içinde ışık akan bir dijital enerji varlığı. Sohbette, ana sayfadaki balonda ve profilinde aynı karakter görünüyor.",1],["🪐","Yeteneklerle gelişir","Bibi’nin seviyesi, uygulamada gerçekten çalışan yeteneklerden hesaplanır. Yeni bir yetenek eklendikçe Bibi’ye yeni bir enerji halkası açılır. Şu an seviyesi: İleri. Bibi’nin adına dokunup yeteneklerini görebilirsin.",1],["✨","Tepki verir","Dokunursan tepki verir. Düşünürken içindeki ışık hızlanır, işin başarılı olunca küçük bir parlama yapar, uyarı verirken rengi yumuşak bir turuncuya döner.",1]]},
@@ -4667,6 +4668,78 @@ AS_R.faturakiyas=function(){
 
 /* ---------- Asistan 2: kur, alabilir miyim, tasarruf, tatil bütçesi, sohbet, devam soruları ---------- */
 /* ===== Bibi: tek bileşen sistemi (görünüm, gelişim, durum, animasyon) ===== */
+/* ===== Bibi Finansal İçgörü altyapısı · Aşama 1 =====
+   Yalnızca okur. Henüz Bibi'ye, ekrana ya da bildirime bağlı değil, içgörü kuralı yok.
+   Katmanlar: Data Collector (bbiCollect) · Insight Data (bbiData) · Insight Core (bbiRegister/bbiRun) · Insight State (bbiSt*) */
+var BBI_KEY='butcem_bbi',BBI_RULES=[],BBI_CACHE=null,BBI_LOCK=false;
+function bbiSafe(f,d){try{var r=f();return r===undefined?d:r}catch(e){return d}}
+function bbiL(x){return Array.isArray(x)?x.filter(function(v){return v&&typeof v==="object"}):[]}
+function bbiNum(x){x=+x;return isFinite(x)?x:0}
+function bbiPlain(o){var r={};if(o&&typeof o==='object')Object.keys(o).forEach(function(k){var v=o[k],t=typeof v;if(t==='number'){if(isFinite(v))r[k]=v}else if(t==='string'||t==='boolean')r[k]=v});return r}
+function bbiMap(o){var r={};if(o&&typeof o==='object')Object.keys(o).forEach(function(k){var v=+o[k];if(isFinite(v))r[k]=v});return r}
+function bbiFreeze(o){if(o&&typeof o==='object'&&!Object.isFrozen(o)){Object.freeze(o);Object.keys(o).forEach(function(k){bbiFreeze(o[k])})}return o}
+function bbiFp(){try{return JSON.stringify(S)}catch(e){return null}}
+/* --- Data Collector: mevcut hesap fonksiyonlarını çağırır, düz kopyalar döndürür --- */
+function bbiBuild(){
+  var now=new Date(),nk=nowK(),t=today(),i0=ym(nk),nx=fromYm(i0+1),i,d={v:1,today:t,nowK:nk,day:now.getDate(),dim:dim(now)};
+  var ent=bbiL(S.entries);
+  d.has={entries:ent.length>0,limits:Object.keys(S.limits||{}).length>0,goals:bbiL(S.goals).length>0,cards:bbiL(S.cardDefs).length>0,cardSpend:bbiL(S.cards).length>0,
+    billEntries:ent.some(function(e){return e&&e.bill}),plans:bbiL(S.plans).some(function(p){return !p.sub}),subs:bbiL(S.plans).some(function(p){return p.sub}),
+    loans:bbiSafe(function(){return lnOpenList().length>0},false),sav:bbiL(S.sav).length>0,incPlans:bbiL(S.incPlans).length>0,trips:bbiL(S.trips).some(function(x){return x&&!x.draft&&!x.archived}),meals:bbiL(S.meals).length>0};
+  d.months=[];
+  for(i=0;i<6;i++){var k=fromYm(i0-i),m=bbiSafe(function(){var a=asAgg(k);return{k:k,cur:i===0,inc:r2(a.inc),out:r2(a.out),by:bbiMap(a.by),card:a.card,cardBy:bbiMap(a.cardBy),hasData:(a.inc>0||a.out>0)}},null);
+    if(!m)continue;m.cat=bbiSafe(function(){return bbiMap(catSpent(k))},{});d.months.push(m)}
+  d.outlook=[nk,nx].map(function(k){return bbiSafe(function(){var o=outlook(k);return{k:k,inc:o.inc,fix:o.fix,pl:o.pl,vr:o.vr,free:o.free,assumed:!!o.assumed,lv:level(o.inc,o.free)}},null)}).filter(Boolean);
+  var cs=bbiSafe(function(){return catSpent(nk)},{});
+  d.limits=Object.keys(S.limits||{}).filter(function(c){return S.limits[c]>0}).map(function(c){var sp=bbiNum(cs[c]);return{cat:c,limit:S.limits[c],spent:sp,ratio:sp/S.limits[c]}});
+  d.due=bbiSafe(function(){var q=dueItems();return{late:(q.late||[]).map(bbiPlain),soon:(q.soon||[]).map(bbiPlain),nod:(q.nod||[]).map(bbiPlain),old:bbiNum(q.old)}},{late:[],soon:[],nod:[],old:0});
+  var cd=bbiSafe(function(){return asCardDates()},[]);
+  d.cards=bbiL(S.cardDefs).map(function(c){var x=cd.filter(function(y){return y.c===c})[0]||null;
+    return{id:c.id,name:c.name,limit:bbiNum(c.limit),used:bbiSafe(function(){return cdUsed(c.id)},0),cut:bbiNum(c.cut),due:bbiNum(c.due),nextCut:x?x.cut:'',nextDue:x?x.due:'',daysToCut:x?x.cd:null,daysToDue:x?x.dd:null}});
+  d.statements=bbiSafe(function(){return stmtGroups().map(function(g){return{cid:g.cid,k:g.k,sum:bbiNum(g.sum),due:stmtDue(g.k,g.cid)||''}})},[]);
+  var pa=function(p){return p.id!==EXP&&nk>=p.start&&(!p.end||nk<=p.end)&&(!p.from||nk>=p.from)};
+  d.subs=bbiL(S.plans).filter(function(p){return p.sub&&pa(p)}).map(function(p){return{id:p.id,name:p.name,amt:bbiNum(p.amt),day:bbiNum(p.day)}});
+  d.plans=bbiL(S.plans).filter(function(p){return !p.sub&&pa(p)}).map(function(p){return{id:p.id,name:p.name,cat:p.cat,amt:bbiNum(p.amt),day:bbiNum(p.day),end:p.end||''}});
+  d.next={k:nx,planOut:bbiSafe(function(){var s=0;planEntries(kDate(nx)).forEach(function(e){s+=e.amt});return r2(s)},0),projIn:bbiSafe(function(){var s=0;projRows(nx).forEach(function(e){if(e.type==='in')s+=e.amt});return r2(s)},0),projOut:bbiSafe(function(){var s=0;projRows(nx).forEach(function(e){if(e.type!=='in')s+=e.amt});return r2(s)},0)};
+  d.goals=bbiL(S.goals).map(function(g){var sv=bbiSafe(function(){return gSaved(g)},0);return{id:g.id,name:g.name,unit:g.unit,target:bbiNum(g.target),saved:bbiNum(sv),mo:bbiNum(g.mo),remaining:Math.max(0,bbiNum(g.target)-bbiNum(sv))}});
+  var tl=0,unp=0;bbiL(S.sav).forEach(function(x){var p=bbiSafe(function(){return svPrice(x.type)},0);if(p>0)tl+=p*x.amt;else unp++});d.savings={tl:r2(tl),n:bbiL(S.sav).length,unpriced:unp};
+  d.loans=bbiSafe(function(){return lnOpenList().map(function(l){return{id:l.id,dir:l.dir,who:l.who,unit:l.unit,amt:bbiNum(l.amt),rest:bbiNum(l.rest),due:l.due||''}})},[]);
+  d.incPlans=bbiSafe(function(){return ipOpenList(nk).map(function(p){return{id:p.id,name:p.name,amt:bbiNum(p.amt),day:bbiNum(p.day)}})},[]);
+  d.year=bbiSafe(function(){return yearData().map(function(x){return{k:x.k,inc:x.inc,out:x.out}})},[]);
+  var hist=d.months.filter(function(m){return !m.cur&&m.hasData}).length;
+  d.quality={histMonths:hist,curHasData:!!(d.months[0]&&d.months[0].hasData),empty:Object.keys(d.has).filter(function(x){return !d.has[x]})};
+  return d}
+function bbiCollect(){
+  if(BBI_LOCK)return null;
+  var fp0=bbiFp(),cm=cur,out=null;
+  try{out=bbiBuild()}catch(e){out=null}finally{cur=cm}
+  var fp1=bbiFp();
+  if(fp0!==null&&fp0!==fp1){BBI_LOCK=true;out=null;try{console.warn('BBI: kayıtlı veri değişti, içgörü sistemi kapatıldı')}catch(e){}}
+  return out}
+/* --- Insight Data: dondurulmuş, kısa süreli önbellekli anlık görüntü --- */
+function bbiData(force){
+  if(BBI_LOCK)return null;
+  var sig=[today(),(S.entries||[]).length,bbiL(S.plans).length,bbiL(S.cards).length,bbiL(S.goals).length,Object.keys(S.limits||{}).length].join('|');
+  if(!force&&BBI_CACHE&&BBI_CACHE.sig===sig&&Date.now()-BBI_CACHE.t<45000)return BBI_CACHE.d;
+  var d=bbiCollect();if(!d)return null;bbiFreeze(d);BBI_CACHE={sig:sig,t:Date.now(),d:d};return d}
+/* --- Insight Core: kural kaydı ve çalıştırma (şu an hiç kural yok) --- */
+function bbiRegister(r){if(!r||!r.id||typeof r.run!=='function'||BBI_RULES.some(function(x){return x.id===r.id}))return false;BBI_RULES.push({id:r.id,cat:r.cat||'',needs:r.needs||[],cool:r.cool||3,run:r.run});return true}
+function bbiValid(x){return !!(x&&typeof x==='object'&&x.id&&x.key&&x.cat&&x.title&&x.body&&[1,2,3].indexOf(x.sev)>-1)}
+function bbiRun(o){o=o||{};var d=bbiData();if(!d)return[];var out=[];
+  BBI_RULES.forEach(function(r){if(r.needs.some(function(n){return !d.has[n]}))return;var res=bbiSafe(function(){return r.run(d)},null);
+    [].concat(res||[]).forEach(function(x){if(bbiValid(x)&&(o.ignoreState||bbiStCan(x.key,x.sev,r.cool)))out.push(x)})});
+  out.sort(function(a,b){return b.sev-a.sev});return out.slice(0,o.max||3)}
+/* --- Insight State: finansal veriden ayrı, kendi anahtarında (butcem_bbi). Yalnızca çağrılınca yazar --- */
+function bbiStGet(){var o=null;try{o=JSON.parse(lsGet(BBI_KEY)||'null')}catch(e){o=null}
+  if(!o||typeof o!=='object'||o.v!==1||!o.items||typeof o.items!=='object'||Array.isArray(o.items))o={v:1,items:{}};return o}
+function bbiStSave(o){try{var ks=Object.keys(o.items),lim=Date.now()-90*864e5;ks.forEach(function(k){if(!(o.items[k]&&o.items[k].last>lim))delete o.items[k]});
+  ks=Object.keys(o.items);if(ks.length>200){ks.sort(function(a,b){return o.items[a].last-o.items[b].last}).slice(0,ks.length-200).forEach(function(k){delete o.items[k]})}
+  lsSet(BBI_KEY,JSON.stringify(o));return true}catch(e){return false}}
+function bbiStCan(key,sev,cool){var it=bbiStGet().items[key];if(!it)return true;if(sev>(it.sev||0))return true;if(it.x)return false;return (Date.now()-(it.last||0))/864e5>=(cool||3)}
+function bbiStMark(key,sev){var o=bbiStGet(),it=o.items[key]||{first:Date.now(),n:0,sev:0};it.last=Date.now();it.n=(it.n||0)+1;it.sev=Math.max(it.sev||0,sev||1);o.items[key]=it;return bbiStSave(o)}
+function bbiStDismiss(key){var o=bbiStGet(),it=o.items[key]||{first:Date.now(),n:0,sev:1};it.x=1;it.last=Date.now();o.items[key]=it;return bbiStSave(o)}
+function bbiStReset(){try{localStorage.removeItem(BBI_KEY)}catch(e){}}
+
 var BB_CAPS=[
  ['spend','Harcama analizi','b'],['gelen','Gelen para','b'],['gecen','Ay karşılaştırma','b'],['tahmin','Ay sonu tahmini','b'],['yaklasan','Yaklaşan ödemeler','b'],
  ['bakiye','Bakiye','b'],['gunluk','Günlük harcama','b'],['buyuk','Büyük harcamalar','b'],['borc','Borç takibi','b'],['abonelik','Abonelikler','b'],
