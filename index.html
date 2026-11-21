@@ -160,6 +160,15 @@ button:active{transform:scale(.97)}
 .dnt{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:var(--mut);margin-bottom:8px}.dnt b{color:#fff;font-size:17px}
 .dnbar{display:flex;gap:2px;height:16px;border-radius:9px;overflow:hidden;background:#ffffff10}.dnbar i{display:block;height:100%;width:0;transition:width .9s cubic-bezier(.2,.8,.2,1)}
 .dnlg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:7px 16px;margin-top:12px}.dnlg>div{display:flex;align-items:center;gap:7px;font-size:13px;min-width:0}.dnlg .dot{width:10px;height:10px;border-radius:3px;flex:none}.dnlg .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dnlg .p{color:var(--mut)}
+#insCard{padding:14px 14px 4px}#insCard h2{margin-bottom:10px}.insorb{width:20px;height:20px;display:inline-flex;flex:none}.insorb svg{width:20px;height:20px}
+.ins{position:relative;margin:0 0 10px;padding:10px 10px 8px 14px;border-radius:12px;background:#ffffff08;border:1px solid var(--line);overflow:hidden}
+.ins:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ac)}
+.insh{display:flex;align-items:center;gap:7px;font-size:13px;min-width:0}.insh b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.insh em{font-style:normal;font-size:11px;color:var(--mut);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.insx{width:32px;height:32px;margin:-6px -6px -6px 0;border-radius:9px;color:var(--mut);background:transparent;font-size:13px;flex:none}
+.insb{margin:5px 0 7px;font-size:13.5px;line-height:1.45;color:var(--txt);overflow-wrap:anywhere}
+.insf{display:flex;align-items:center;justify-content:space-between;gap:8px}.inschip{font-size:12px;font-weight:700;color:var(--ac)}
+.insgo{font-size:12.5px;font-weight:700;color:var(--acc2);padding:6px 2px;background:transparent;margin-left:auto}
+.insfl{animation:insfl 1.4s ease-out}@keyframes insfl{0%,100%{box-shadow:0 0 0 0 #0000}30%{box-shadow:0 0 0 2px var(--acc2)}}
 .dnhint{margin-top:10px;padding-top:10px;border-top:1px solid #ffffff14;font-size:12.5px;color:var(--mut)}
 .pc.c4{background:linear-gradient(135deg,#3ddc97,#17896a);transform:scale(.985)}.wl.open .pc.c4{transform:none}
 .pc .insub{font-size:11.5px;font-weight:800;letter-spacing:.3px;color:#ffffffd0;margin:10px 0 2px}
@@ -1585,6 +1594,8 @@ window.__splashReady=function(){go();setTimeout(kill,Math.max(0,2750-(Date.now()
     </div>
 
     <div class="card" id="krCard" style="display:none"><button type="button" id="krHead" style="width:100%;text-align:left;color:inherit;padding:0"><div class="citem" style="padding:0"><b>🏦 Kredi ve taksitlerim</b><span id="krCh">›</span></div><div class="note" id="krSum" style="margin:4px 0 0"></div></button><div id="krTop" style="margin-top:8px"></div><div id="krBody" style="display:none;margin-top:6px"></div><button type="button" class="btn sec sm" id="krMore" style="margin-top:6px"></button></div>
+    <div class="card" id="insCard" style="display:none"></div>
+
     <div class="card">
       <div class="dnh"><h2 id="dnTitle">🍩 Nereye harcadım?</h2><div class="seg" id="dnSeg"><button type="button" class="on" data-m="g">Gider</button><button type="button" data-m="i">Gelir</button></div></div>
       <div id="donutBox"></div>
@@ -2996,6 +3007,7 @@ function render(){
   if(typeof renderSnaps==='function')renderSnaps();
   if(typeof renderTripCard==='function'){renderTripCard();renderCards();renderVe();renderInCard();renderIncDonut();renderIncPlans();renderIpPend();renderZam();tripBanner();try{lnBanner()}catch(e){}renderSubChk();renderDupChk();renderLimits();renderYear();renderLimSettings();renderSearch()}
   try{refreshAttn();renderGuide();renderKr();refreshDuo();renderDue()}catch(e){}
+  try{insSched()}catch(e){}
   gxLoad();hdr();hello();wrowSync();wspSync();skin();countAm();
 }
 
@@ -3865,10 +3877,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.16.3';
+var APP_VER='2.17';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+{"v":"2.17","date":"Kasım 2026","title":"Bibi’den içgörü","items":[["💡","Bibi’den içgörü","Özet ekranında, Bibi artık limitlerine yaklaştığında ya da bir kategoride harcaman belirgin değiştiğinde kısa bir not bırakıyor. İstersen ‘İncele’ ile ilgili yere gidebilir, ✕ ile kapatabilirsin. Gerek olmadığında hiç görünmez.",1],["⚙️","Kapatma seçeneği","Bu kartı istersen Ayarlar > Ana sayfa kartları bölümünden tamamen gizleyebilirsin.",0]]},
 {"v":"2.16.3","date":"Kasım 2026","title":"İç altyapı hazırlığı","items":[["📊","Harcama değişimi hazırlığı","Bibi’nin ileride kategori harcamalarındaki belirgin artış ve azalışları fark edebilmesi için arka plan mantığı hazırlandı. Görünürde bir değişiklik yok.",0]]},
 {"v":"2.16.2","date":"Kasım 2026","title":"İç altyapı hazırlığı","items":[["🎯","Limit takibi hazırlığı","Bibi’nin ileride kategori limitlerini kendisi izleyebilmesi için arka plan mantığı hazırlandı. Görünürde bir değişiklik yok.",0]]},
 {"v":"2.16.1","date":"Kasım 2026","title":"İç altyapı hazırlığı","items":[["🧱","Arka plan hazırlığı","Bibi’nin ileride finansal durumunu kendisi fark edebilmesi için gerekli salt okunur altyapı hazırlandı. Görünürde bir değişiklik yok.",0]]},
@@ -4301,6 +4314,7 @@ function goTab(v){
   ['ozet','fatura','islem','ayar','bhome','bpay'].forEach(function(n){$('v-'+n).classList.toggle('on',n===v)});
   window.scrollTo(0,0);banner();moveInd();
   try{bibiFabSync(v)}catch(e){}
+  try{insSched()}catch(e){}
 }
 function bibiFabSync(v){var f=$('bibiFab');if(!f)return;if(!f.querySelector('svg'))f.innerHTML=bbSvg({size:'sm'});document.body.classList.toggle('bb-home',v==='ozet'||v==='bhome');f.classList.toggle('ping',!!asCardNote())}
 function applyPlan(){document.body.classList.toggle('pl-basic',isBasic());goTab(tab)}
@@ -4786,6 +4800,50 @@ function bbiChgRule(d,o){var out=[],st=(o&&o.ignoreState)?{}:bbiStGet().items,i0
   return out}
 bbiRegister({id:'change',cat:'change',needs:['entries'],cool:35,run:bbiChgRule});
 
+/* --- Aşama 4 · İçgörü gösterim katmanı (Özet · "Bibi’den İçgörü"). Yalnızca bbiRun okur; mark/dismiss State'e yazar --- */
+var INS_WIN=3*864e5,INS_SIG='',INS_T=0,INS_IO=null,INS_SEEN={},INS_CUR=[];
+var INS_AC={near:['🎯','#ffb648'],crit:['🎯','#ff9a3d'],full:['🎯','#ff6b81'],over:['🎯','#ff6b81'],up:['📈','#ffb648'],upx:['📈','#ff9a3d'],dn:['📉','#3ddc97']};
+function insList(){var all=bbiRun({ignoreState:true,max:30}),fresh={},st=bbiStGet().items,now=Date.now(),cs={},out=[];
+  bbiRun({max:30}).forEach(function(x){fresh[x.key]=1});
+  all.forEach(function(x){var it=st[x.key];if(it&&it.x)return;if(!(fresh[x.key]||(it&&now-(it.first||0)<INS_WIN)))return;if(cs[x.category])return;cs[x.category]=1;out.push(x)});
+  return out.slice(0,3)}
+function insChip(x){if(x.cat==='limit')return x.type==='over'?'+'+fmt(x.over):'%'+x.pct;return (x.dir==='up'?'+':'−')+'%'+x.pct}
+function insHtml(x){var a=INS_AC[x.type]||['💬','#8f96c6'];
+  return '<div class="ins" data-k="'+esc(x.key)+'" style="--ac:'+a[1]+'"><div class="insh"><span>'+a[0]+'</span><b>'+esc(x.category)+'</b><em>'+(x.cat==='limit'?'Limit':'Harcama değişimi')+'</em><button type="button" class="insx" data-x="'+esc(x.key)+'" aria-label="Kapat">✕</button></div>'
+   +'<div class="insb">'+esc(x.body)+'</div><div class="insf"><span class="inschip num">'+esc(insChip(x))+'</span><button type="button" class="insgo" data-g="'+esc(x.key)+'">İncele ›</button></div></div>'}
+function insMark(k){if(INS_SEEN[k]||document.hidden||tab!=='ozet')return;INS_SEEN[k]=1;
+  var it=INS_CUR.filter(function(x){return x.key===k})[0];if(it&&!bbiStGet().items[k])bbiStMark(k,it.sev)}
+function insWatch(){var c=$('insCard'),rows=c?c.querySelectorAll('.ins'):[];
+  if(INS_IO){try{INS_IO.disconnect()}catch(e){}INS_IO=null}
+  if(!rows.length)return;
+  if(!('IntersectionObserver' in window)){setTimeout(function(){[].forEach.call(rows,function(r){if(r.offsetParent)insMark(r.getAttribute('data-k'))})},1500);return}
+  INS_IO=new IntersectionObserver(function(es){es.forEach(function(e){var el=e.target;
+    if(e.isIntersecting&&e.intersectionRatio>=0.6){if(!el._t)el._t=setTimeout(function(){el._t=0;if(el._v)insMark(el.getAttribute('data-k'))},1200);el._v=1}
+    else{el._v=0;if(el._t){clearTimeout(el._t);el._t=0}}})},{threshold:[0,0.6,1]});
+  [].forEach.call(rows,function(r){INS_IO.observe(r)})}
+function insRender(){INS_T=0;var c=$('insCard');if(!c)return;
+  if(tab!=='ozet'||isBasic())return;
+  if(mk(cur)!==nowK()){c.style.display='none';INS_SIG='';return}
+  var list=[];try{bbiData(true);list=insList()}catch(e){list=[]}
+  var sig=list.map(function(x){return x.key+'|'+x.body}).join('¦');
+  if(sig===INS_SIG&&(c.style.display!=='none'||!list.length))return;
+  INS_SIG=sig;INS_CUR=list;
+  if(!list.length){c.style.display='none';c.innerHTML='';insWatch();return}
+  c.innerHTML='<h2><span class="insorb">'+bbSvg({size:'xs'})+'</span>Bibi’den içgörü</h2>'+list.map(insHtml).join('');
+  c.style.display='';insWatch()}
+function insSched(){if(INS_T)return;INS_T=setTimeout(insRender,400)}
+function insGo(k){var x=INS_CUR.filter(function(z){return z.key===k})[0],n=x&&x.nav;
+  try{if(!n||typeof n!=='object')return;var v=String(n.v||''),el=n.el?document.getElementById(String(n.el)):null;
+    if(v&&v!==tab&&v!=='ozet'&&$('v-'+v))goTab(v);
+    if(el){var mw=$('moreWrap');if(mw&&mw.contains(el)&&mw.style.display==='none')openMore(true);
+      if(el.offsetParent===null)el=$('insCard');
+      setTimeout(function(){try{el.scrollIntoView({behavior:'smooth',block:'center'});el.classList.remove('insfl');void el.offsetWidth;el.classList.add('insfl');setTimeout(function(){el.classList.remove('insfl')},1500)}catch(e){}},80)}
+  }catch(e){}}
+function insDismiss(k){var x=INS_CUR.filter(function(z){return z.key===k})[0];if(!x)return;
+  if(!bbiStGet().items[k])bbiStMark(k,x.sev);bbiStDismiss(k);INS_SEEN[k]=1;INS_SIG='';insRender()}
+(function(){var c=$('insCard');if(!c)return;c.onclick=function(ev){var t=ev.target,x=t.closest&&t.closest('[data-x]'),g=t.closest&&t.closest('[data-g]');
+  if(x){ev.stopPropagation();ev.preventDefault();insDismiss(x.getAttribute('data-x'));return}
+  if(g)insGo(g.getAttribute('data-g'))}})();
 var BB_CAPS=[
  ['spend','Harcama analizi','b'],['gelen','Gelen para','b'],['gecen','Ay karşılaştırma','b'],['tahmin','Ay sonu tahmini','b'],['yaklasan','Yaklaşan ödemeler','b'],
  ['bakiye','Bakiye','b'],['gunluk','Günlük harcama','b'],['buyuk','Büyük harcamalar','b'],['borc','Borç takibi','b'],['abonelik','Abonelikler','b'],
@@ -5570,7 +5628,7 @@ $('outrows').onclick=function(ev){
 /* cüzdan: arkadaki kartlar dokununca açılır */
 
 /* ana sayfa kartlarını göster/gizle */
-var HC=[['upcard','Yaklaşan ödemeler'],['billcard','Bu ayın faturaları'],['krCard','Kredi ve taksitlerim'],['cardSpend','Kartla harcadıkların'],['outcard','Önümüzdeki 6 ay'],['bibiFab','Bibi sohbet balonu'],['yrCard','Geçmiş aylar']];
+var HC=[['upcard','Yaklaşan ödemeler'],['billcard','Bu ayın faturaları'],['krCard','Kredi ve taksitlerim'],['cardSpend','Kartla harcadıkların'],['outcard','Önümüzdeki 6 ay'],['bibiFab','Bibi sohbet balonu'],['insCard','Bibi’den içgörü'],['yrCard','Geçmiş aylar']];
 function hcGet(){try{var a=JSON.parse(lsGet('butcem_hc')||'[]');return Array.isArray(a)?a:[]}catch(e){return[]}}
 function hcApply(){var h=hcGet(),st=$('hcStyle');if(!st){st=document.createElement('style');st.id='hcStyle';document.head.appendChild(st)}
   st.textContent=h.map(function(id){return '#'+id+'{display:none!important}'}).join('')}
