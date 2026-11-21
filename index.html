@@ -1353,6 +1353,48 @@ b.wm{display:block!important;white-space:nowrap;font-size:20px}b.wm>b,b.wm>i{dis
 .bb[data-st=warn] .bb-halo{animation:bbWarnP 2.2s ease-in-out infinite}
 .bb.lvup .bb-flash{animation:bbFlash 1.1s ease-out}
 .bb .bb-new{stroke-dasharray:var(--len,300);animation:bbDraw 1.4s ease-out}
+
+/* ---- Bibi animasyon durumları (v2): idle / think / ok / warn / touch + konu tepkileri ---- */
+.bb .c-nc{fill:#fff}
+.bb[data-st=warn] .c-nuc{fill:url(#bbNucW)}.bb[data-st=warn] .c-nc{fill:#ffe9bd}
+.bb .bb-ts,.bb .bb-tour,.bb .is,.bb .bb-cg,.bb .bb-w,.bb .bb-band,.bb .bb-pt,.bb .bb-fwd,.bb .bb-m{opacity:0}
+.bb .is{opacity:1;transition:opacity .4s}.bb .bb-ts{transition:opacity .4s}.bb .bb-cg{transition:opacity .4s}
+.bb .bb-w{transform-origin:46px 47px}.bb .bb-cg{transform-origin:46px 47px}
+.bb-fx{transition:opacity .4s}.bb-scan{transition:opacity .4s}
+.bb .rgw{transform-origin:50px 50px}
+.bb[data-st=think] .bb-ts{opacity:1}
+.bb[data-st=think] .is{opacity:.3}
+.bb[data-st=think] .bb-cg{animation:bbGlowT 1.9s ease-in-out infinite}
+.bb[data-st=think] .bb-w{animation:bbWave 1.5s ease-out infinite}.bb[data-st=think] .bb-w.w2{animation-delay:.75s}
+.bb[data-st=think] .bb-halo{animation:bbHalo 1.9s ease-in-out infinite}
+.bb[data-st=ok] .bb-cg{animation:bbGlowOk .9s ease-out}
+.bb[data-st=ok] .bb-tour{animation:bbTour 1.2s ease-out}
+.bb[data-st=warn] .bb-cg{animation:bbGlowW 3.4s ease-in-out infinite}
+.bb[data-st=warn] .bb-body{animation:bbWarnBody 3.4s ease-in-out infinite}
+.bb[data-st=warn] .bb-halo{animation:bbWarnP 3.4s ease-in-out infinite}
+@keyframes bbGlowT{0%{opacity:.15}18%{opacity:.9}34%{opacity:.35}55%{opacity:1}72%{opacity:.25}100%{opacity:.15}}
+@keyframes bbGlowOk{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+@keyframes bbGlowW{0%,100%{opacity:.3}50%{opacity:.85}}
+@keyframes bbWarnBody{0%,100%{transform:scale(1)}50%{transform:scale(1.055)}}
+@keyframes bbWave{0%{opacity:.85;transform:scale(1)}100%{opacity:0;transform:scale(6.4)}}
+@keyframes bbTour{0%{opacity:0}12%{opacity:1}85%{opacity:1}100%{opacity:0}}
+/* konuya göre kısa tepkiler (yalnızca düşünürken) */
+.bb[data-th=spend] .bb-band{animation:bbSweep 1.5s ease-in-out}
+.bb[data-th=save] .bb-pt{animation:bbConv 1.5s ease-in both}
+.bb[data-th=save] .bb-cg{animation:bbGlowS 1.9s ease-out}
+.bb[data-th=trip] .rgw{animation:bbExpand 1.9s ease-in-out}
+.bb[data-th=trip] .bb-fwd{animation:bbFwd 1.5s ease-out}
+.bb[data-th=debt] .bb-m1{animation:bbM1 1.8s ease-in-out both}
+.bb[data-th=debt] .bb-m2{animation:bbM2 1.8s ease-in-out both}
+.bb[data-th=debt] .bb-cg{animation:bbGlowS 1.9s ease-out}
+@keyframes bbSweep{0%{opacity:0;transform:translateX(-6px)}20%{opacity:1}80%{opacity:1}100%{opacity:0;transform:translateX(56px)}}
+@keyframes bbConv{0%{opacity:0;transform:translate(var(--x),var(--y)) scale(1)}20%{opacity:1}100%{opacity:0;transform:translate(0,0) scale(.3)}}
+@keyframes bbGlowS{0%{opacity:.2}55%{opacity:1}100%{opacity:.55}}
+@keyframes bbExpand{0%{transform:scale(1)}45%{transform:scale(1.15)}100%{transform:scale(1)}}
+@keyframes bbFwd{0%{opacity:0;transform:translate(0,0)}15%{opacity:1}100%{opacity:0;transform:translate(36px,-26px)}}
+@keyframes bbM1{0%{opacity:0;transform:translate(-42px,-16px)}15%{opacity:1}65%{opacity:1;transform:translate(-6px,-2px)}100%{opacity:0;transform:translate(0,0) scale(.3)}}
+@keyframes bbM2{0%{opacity:0;transform:translate(42px,16px)}15%{opacity:1}65%{opacity:1;transform:translate(6px,2px)}100%{opacity:0;transform:translate(0,0) scale(.3)}}
+@media (prefers-reduced-motion:reduce){.bb *{animation:none!important}}
 /* küçük (sohbet) avatarında hareket yok */
 .bb.xs *{animation:none!important}
 @media (prefers-reduced-motion:reduce){.bb *{animation:none!important}}
@@ -1387,6 +1429,8 @@ b.wm{display:block!important;white-space:nowrap;font-size:20px}b.wm>b,b.wm>i{dis
 <radialGradient id="bbFlowW2"><stop offset="0" stop-color="#ff9aa8" stop-opacity=".75"/><stop offset="1" stop-color="#ff6b81" stop-opacity="0"/></radialGradient>
 <radialGradient id="bbHalo"><stop offset=".55" stop-color="#4a7bff" stop-opacity="0"/><stop offset=".8" stop-color="#4a7bff" stop-opacity=".22"/><stop offset="1" stop-color="#27d3e6" stop-opacity="0"/></radialGradient>
 <radialGradient id="bbHaloW"><stop offset=".55" stop-color="#f5a524" stop-opacity="0"/><stop offset=".8" stop-color="#f5a524" stop-opacity=".25"/><stop offset="1" stop-color="#ff6b81" stop-opacity="0"/></radialGradient>
+<radialGradient id="bbNucW"><stop offset="0" stop-color="#fff3d0" stop-opacity=".95"/><stop offset=".35" stop-color="#ffb04a" stop-opacity=".6"/><stop offset="1" stop-color="#f5a524" stop-opacity="0"/></radialGradient>
+<linearGradient id="bbBand" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#bff6ff" stop-opacity="0"/><stop offset=".5" stop-color="#bff6ff" stop-opacity=".55"/><stop offset="1" stop-color="#bff6ff" stop-opacity="0"/></linearGradient>
 <radialGradient id="bbNuc"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".35" stop-color="#9fefff" stop-opacity=".5"/><stop offset="1" stop-color="#27d3e6" stop-opacity="0"/></radialGradient>
 <linearGradient id="bbRing" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#27d3e6" stop-opacity="0"/><stop offset=".3" stop-color="#27d3e6"/><stop offset=".7" stop-color="#8a6bff"/><stop offset="1" stop-color="#8a6bff" stop-opacity="0"/></linearGradient>
 <linearGradient id="bbRingB" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8a6bff" stop-opacity="0"/><stop offset=".35" stop-color="#8a6bff"/><stop offset=".7" stop-color="#4cc9f0"/><stop offset="1" stop-color="#4cc9f0" stop-opacity="0"/></linearGradient>
@@ -3813,10 +3857,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.14';
+var APP_VER='2.15';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+{"v":"2.15","date":"Kasım 2026","title":"Bibi artık konuya göre tepki veriyor","items":[["🧠","Düşünürken belli oluyor","Bibi düşünürken çekirdeği dalga dalga parlıyor, içindeki ışık şeritleri hızlanıyor ve yörüngesinde tarayan ışık noktaları dolaşıyor. Beklerkenki sakin halinden ilk bakışta ayırt edilir.",1],["🎯","Konuya göre kısa tepkiler","Tasarruf konuşunca ışıklar çekirdeğe toplanıyor, tatilde halkalar genişleyip bir ışık ileri doğru gidiyor, harcama sorularında içinden tarama dalgası geçiyor, borç konuşurken enerji akışları çekirdekte birleşiyor.",1],["✅","Başarı ve uyarı daha belirgin","Başarılı işlemde çekirdek parlıyor, enerji dalgası yayılıyor ve yörüngede kısa bir ışık turu atıyor. Uyarılarda turuncu çekirdek yavaşça nabız gibi atıyor.",0]]},
 {"v":"2.14","date":"Kasım 2026","title":"Bibi’nin yeni hali: yaşayan enerji varlığı","items":[["🌌","Bibi yepyeni bir görünümde","Emoji yüzü gitti. Bibi artık nefes alan, içinde ışık akan bir dijital enerji varlığı. Sohbette, ana sayfadaki balonda ve profilinde aynı karakter görünüyor.",1],["🪐","Yeteneklerle gelişir","Bibi’nin seviyesi, uygulamada gerçekten çalışan yeteneklerden hesaplanır. Yeni bir yetenek eklendikçe Bibi’ye yeni bir enerji halkası açılır. Şu an seviyesi: İleri. Bibi’nin adına dokunup yeteneklerini görebilirsin.",1],["✨","Tepki verir","Dokunursan tepki verir. Düşünürken içindeki ışık hızlanır, işin başarılı olunca küçük bir parlama yapar, uyarı verirken rengi yumuşak bir turuncuya döner.",1]]},
 {"v":"2.13","date":"Kasım 2026","title":"Bibi artık hep yanında","items":[["💬","Bibi balonu","Ana sayfada sağ altta Bibi’nin yuvarlak balonu duruyor. Dokununca sohbet açılıyor. İstemezsen Ayarlar’daki “Ana sayfa kartları”ndan kapatabilirsin.",1],["📅","Ekstre günlerini biliyor","Bibi kartlarının ekstre kesim ve son ödeme günlerini biliyor. “Ekstrem ne zaman kesiliyor?” diye sorabilirsin. Günler yaklaşınca sohbeti açtığında sana kendisi hatırlatıyor, balonda da kırmızı nokta çıkıyor.",1],["🧮","Alabilir miyim? ana sayfada","Tutarı yaz, bütçene etkisini, kaç ay süreceğini ve taksit seçeneklerini ay ay gör. Modüller’deki “Alabilir miyim?” da bunu açıyor. Bibi’ye de sorabilirsin, cevabından tek dokunuşla taksit ekranına geçersin.",1],["✨","Bibi’de binlik ayracı","Bibi’ye tutar yazarken rakamlar otomatik 2.500.000 gibi noktalanıyor. “Bir şey almak istiyorum” dediğinde konuyu yanlış anlama sorunu da düzeldi.",0],["👆","Dokunma düzeldi","Alt menü, Modüller ve geri düğmeleri ilk dokunuşta hemen çalışıyor.",0],["🧩","Ana sayfa kartlarını sen seç","Ayarlar’daki “Ana sayfa kartları”ndan istemediğin kartları kapatabilirsin. Veriler silinmez. Modüller’de de yeni “Asistan ve planlama” grubu var.",1]]},
 {"v":"2.12","date":"Kasım 2026","title":"Daha rahat dokunuş, Modüller'de planlama","items":[["👆","Dokunma düzeldi","Alt menü, Modüller ve geri düğmeleri artık ilk dokunuşta hemen çalışıyor. Bazen ilk dokunuşun kaybolması sorunu giderildi.",0],["🧭","Modüller’de yeni grup","Modüller’de “Asistan ve planlama” grubu açıldı: Bibi, “Alabilir miyim?” ve “Tatili ayırabilir miyiz?” tek yerde.",1],["🧩","Ana sayfa kartlarını sen seç","Ayarlar’daki “Ana sayfa kartları”ndan istemediğin kartları kapatabilirsin. Veriler silinmez, istediğin an geri açılır. Ana sayfa kısalır, daha hızlı kayar.",1]]},
@@ -4639,40 +4684,53 @@ function bbCaps(){return BB_CAPS.map(function(c){var on=false;try{on=c[3]?!!c[3]
 function bbLevel(){var cs=bbCaps(),n=cs.filter(function(c){return c.on}).length,lv=1,i;for(i=0;i<BB_LV.length;i++)if(n>=BB_LV[i][0])lv=i+1;var nx=BB_LV[lv]||null;return {lv:lv,name:BB_LV[lv-1][1],n:n,total:cs.length,next:nx?nx[0]:null,nextName:nx?nx[1]:'',from:BB_LV[lv-1][0],caps:cs}}
 var bbLvCache=null;function bbLv(){if(!bbLvCache)bbLvCache=bbLevel();return bbLvCache}
 function bbReduced(){try{return window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}}
-function bbRing(rot,rx,ry,cls,sw,dur,n,anim,len){
+function bbRing(rot,rx,ry,cls,sw,dur,n,anim,len,tsd){
   var p='M-'+rx+' 0 A'+rx+' '+ry+' 0 1 1 '+rx+' 0 A'+rx+' '+ry+' 0 1 1 -'+rx+' 0',red=bbReduced(),i,dots='',uid='bbc'+(bbRing._n=(bbRing._n||0)+1);
+  var mo=function(d,b,extra){return '<animateMotion dur="'+d+'s" begin="'+b+'" repeatCount="'+(extra||'indefinite')+'" path="'+p+'"/>'};
   for(i=0;i<n;i++){var d=(dur*i/n).toFixed(2);
-    dots+=red?'<circle cx="'+(i%2?-rx:rx)+'" cy="0" r="2.3" fill="#e4f7ff"/>':'<circle r="1.7" fill="#e4f7ff"><animateMotion dur="'+dur+'s" begin="-'+d+'s" repeatCount="indefinite" path="'+p+'"/></circle><circle r="3.6" fill="#8fe6ff" opacity=".18"><animateMotion dur="'+dur+'s" begin="-'+d+'s" repeatCount="indefinite" path="'+p+'"/></circle>'}
-  var back='<g transform="translate(50 50) rotate('+rot+')"><ellipse class="rg '+cls+(anim?' bb-new':'')+'" rx="'+rx+'" ry="'+ry+'" fill="none" stroke-width="'+sw+'" style="--len:'+len+'" opacity=".5"/>'+dots+'</g>';
-  var front='<g transform="translate(50 50) rotate('+rot+')"><clipPath id="'+uid+'"><rect x="-60" y="0" width="120" height="40"/></clipPath><g clip-path="url(#'+uid+')"><path class="rg '+cls+'" d="M-'+rx+' 0 A'+rx+' '+ry+' 0 0 0 '+rx+' 0" fill="none" stroke-width="'+(sw*1.3)+'" stroke-linecap="round"/>'+dots+'</g></g>';
+    dots+=red?'<circle class="is" cx="'+(i%2?-rx:rx)+'" cy="0" r="1.7" fill="#e4f7ff"/>':'<g class="is"><circle r="1.7" fill="#e4f7ff">'+mo(dur,'-'+d+'s')+'</circle><circle r="3.6" fill="#8fe6ff" opacity=".18">'+mo(dur,'-'+d+'s')+'</circle></g>'}
+  if(!red){for(i=0;i<2;i++)dots+='<g class="bb-ts"><circle r="1.5" fill="#fff">'+mo(tsd,'-'+(tsd*i/2).toFixed(2)+'s')+'</circle><circle r="3.2" fill="#9fe8ff" opacity=".28">'+mo(tsd,'-'+(tsd*i/2).toFixed(2)+'s')+'</circle></g>';
+    dots+='<g class="bb-tour"><circle r="2" fill="#fff"><animateMotion data-tour="1" dur="1.1s" begin="indefinite" repeatCount="1" path="'+p+'"/></circle><circle r="4.2" fill="#9fe8ff" opacity=".3"><animateMotion data-tour="1" dur="1.1s" begin="indefinite" repeatCount="1" path="'+p+'"/></circle></g>'}
+  var back='<g class="rgw"><g transform="translate(50 50) rotate('+rot+')"><ellipse class="rg '+cls+(anim?' bb-new':'')+'" rx="'+rx+'" ry="'+ry+'" fill="none" stroke-width="'+sw+'" style="--len:'+len+'" opacity=".5"/>'+dots+'</g></g>';
+  var front='<g class="rgw"><g transform="translate(50 50) rotate('+rot+')"><clipPath id="'+uid+'"><rect x="-60" y="0" width="120" height="40"/></clipPath><g clip-path="url(#'+uid+')"><path class="rg '+cls+'" d="M-'+rx+' 0 A'+rx+' '+ry+' 0 0 0 '+rx+' 0" fill="none" stroke-width="'+(sw*1.3)+'" stroke-linecap="round"/>'+dots+'</g></g></g>';
   return [back,front]}
 function bbSvg(o){
   o=o||{};var L=bbLv(),lv=o.lv||L.lv,size=o.size||'md',xs=size==='xs',s='';
   s+='<svg class="bb'+(xs?' xs':'')+'" data-lv="'+lv+'" data-st="'+(o.st||'idle')+'" viewBox="0 0 100 100" aria-hidden="true">';
   s+='<g class="bb-halo"><circle cx="50" cy="50" r="47" class="c-halo"/></g>';
   if(lv>=4)s+='<g class="bb-r3"><circle cx="50" cy="50" r="46" fill="none" stroke="#8fb4ff" stroke-opacity=".38" stroke-width="1" stroke-dasharray="1.2 5.5" stroke-linecap="round"/></g><g class="bb-r3b"><circle cx="50" cy="4" r="1.8" fill="#bfa9ff"/><circle cx="94.5" cy="62" r="1.5" fill="#8fe6ff"/><circle cx="14" cy="76" r="1.6" fill="#a8c4ff"/></g>';
-  var RA=null,RB=null;if(lv>=2&&!xs){RA=bbRing(-24,40,12,'c-ring',1.3,7.5,1,o.newRing===2,270);s+=RA[0]}
-  if(lv>=3&&!xs){RB=bbRing(34,35,9,'c-ringb',1.2,10.5,2,o.newRing===3,230);s+=RB[0]}
+  var RA=null,RB=null;if(lv>=2&&!xs){RA=bbRing(-24,40,12,'c-ring',1.3,10,1,o.newRing===2,270,1.9);s+=RA[0]}
+  if(lv>=3&&!xs){RB=bbRing(34,35,9,'c-ringb',1.2,14,2,o.newRing===3,230,2.6);s+=RB[0]}
   if(xs&&lv>=2)s+='<g transform="translate(50 50) rotate(-24)"><ellipse rx="40" ry="12" fill="none" class="c-ring" stroke-width="2.6" opacity=".85"/><circle cx="37" cy="-3.5" r="3" fill="#e4f7ff"/></g>';
   s+='<g class="bb-body"><clipPath id="bbcp'+(bbSvg._n=(bbSvg._n||0)+1)+'"><circle cx="50" cy="50" r="27"/></clipPath>';
   s+='<circle cx="50" cy="50" r="27" class="c-core"/><g clip-path="url(#bbcp'+bbSvg._n+')">';
   s+='<g class="bb-fa"><ellipse cx="50" cy="50" rx="34" ry="12" class="c-fc" transform="rotate(-28 50 50)" opacity="1"/><path d="M24 56 C36 38 46 62 58 48 S72 42 78 44" fill="none" stroke="#7ff3ff" stroke-opacity=".55" stroke-width="2.6" stroke-linecap="round"/></g>';
   if(lv>=2)s+='<g class="bb-fb"><ellipse cx="50" cy="50" rx="32" ry="10" class="c-fp" transform="rotate(48 50 50)" opacity="1"/><path d="M26 44 C38 60 50 36 62 52 S72 58 76 54" fill="none" stroke="#b9a4ff" stroke-opacity=".5" stroke-width="2.2" stroke-linecap="round"/></g>';
-  s+='<g class="bb-fx"><ellipse cx="50" cy="50" rx="30" ry="7" class="c-fc" transform="rotate(100 50 50)"/></g>';
+  s+='<g class="bb-fx"><ellipse cx="50" cy="50" rx="30" ry="7" class="c-fc" transform="rotate(100 50 50)"/><path d="M26 50 C38 36 48 64 60 50 S72 44 76 48" fill="none" stroke="#c9fbff" stroke-opacity=".6" stroke-width="2" stroke-linecap="round"/></g>';
   s+='<g class="bb-hl"><path d="M32 40 A20 20 0 0 1 48 28" fill="none" stroke="#ffffff" stroke-opacity=".3" stroke-width="1.8" stroke-linecap="round"/></g>';
-  s+='<g class="bb-nuc"><circle cx="46" cy="47" r="12" class="c-nuc"/><circle cx="46" cy="47" r="2.4" fill="#fff"/></g></g>';
+  s+='<g class="bb-nuc"><circle cx="46" cy="47" r="12" class="c-nuc"/><circle cx="46" cy="47" r="2.4" class="c-nc"/></g>';
+  if(!xs)s+='<circle class="bb-cg c-nuc" cx="46" cy="47" r="17"/><circle class="bb-w w1" cx="46" cy="47" r="4" fill="none" stroke="#c9fbff" stroke-width="1.3"/><circle class="bb-w w2" cx="46" cy="47" r="4" fill="none" stroke="#c9fbff" stroke-width="1.3"/><rect class="bb-band" x="14" y="22" width="16" height="56" fill="url(#bbBand)"/>';
+  s+='</g>';
   s+='<circle cx="50" cy="50" r="26.6" fill="none" stroke="#8fd8ff" stroke-opacity=".45" stroke-width="1.1"/></g>';
   if(RA)s+=RA[1];if(RB)s+=RB[1];
   if(!xs){
+   var an=[[44,0],[22,38],[-22,38],[-44,0],[-22,-38],[22,-38]];s+=an.map(function(a,k){return '<circle class="bb-pt" cx="50" cy="50" r="1.7" fill="#e4f7ff" style="--x:'+a[0]+'px;--y:'+a[1]+'px;animation-delay:'+(k*.07)+'s"/>'}).join('');
+   s+='<circle class="bb-fwd" cx="50" cy="50" r="2.1" fill="#fff"/><circle class="bb-m bb-m1" cx="50" cy="50" r="2.4" fill="#cdbcff"/><circle class="bb-m bb-m2" cx="50" cy="50" r="2.4" fill="#9fe8ff"/>';
    s+='<g class="bb-scan"><path d="M50 18.5 A31.5 31.5 0 0 1 81.5 50" fill="none" stroke="#9fe8ff" stroke-opacity=".8" stroke-width="1.6" stroke-linecap="round"/></g>';
    s+='<circle class="bb-rip" cx="50" cy="50" r="27" fill="none" stroke="#9fe8ff" stroke-width="1.6"/>';
    s+='<circle class="bb-flash" cx="50" cy="50" r="30" fill="none" stroke="#fff" stroke-width="2.2"/>'}
   return s+'</svg>'}
 var BB_T=new WeakMap();
 function bbSet(el,st,ms){if(!el)return;var v=el.classList&&el.classList.contains('bb')?el:el.querySelector('.bb');if(!v||v.classList.contains('xs'))return;
-  clearTimeout(BB_T.get(v));v.setAttribute('data-st','idle');void v.getBoundingClientRect();v.setAttribute('data-st',st);
+  clearTimeout(BB_T.get(v));v.removeAttribute('data-th');v.setAttribute('data-st','idle');void v.getBoundingClientRect();v.setAttribute('data-st',st);if(st==='ok'){v.querySelectorAll('animateMotion[data-tour]').forEach(function(a){try{a.beginElement()}catch(e){}})}
   if(ms)BB_T.set(v,setTimeout(function(){v.setAttribute('data-st',bbWarn&&st!=='warn'?'warn':'idle')},ms))}
 var bbWarn=false;
+var BB_TH=[['debt',/borc|taksit|kredi|ekstre|odeme plan/],['trip',/tatil|ucak|rota|seyahat|gezi|otel|yolculuk|bilet|tatile/],['save',/tasarruf|biriktir|birikim|kenara|hedef/],['spend',/butce|harcad|harcama|ne kadar|gider|rapor|ortalama|bu ay/]];
+var BB_ID={tasarruf:'save',birikim:'save',hedefplan:'save',hedef:'save',tatil:'trip',tatilozet:'trip',borc:'debt',kredibitis:'debt',ekstre:'debt',kesim:'debt',faturakiyas:'debt',spend:'spend',gecen:'spend',ortalama:'spend',rapor:'spend',buyuk:'spend',gunluk:'spend'};
+function bbTopic(q,id){var n=asN(q),i;for(i=0;i<BB_TH.length;i++)if(BB_TH[i][1].test(n))return BB_TH[i][0];return BB_ID[id]||null}
+var asTheme=null,BB_THT=null;
+function bbThinkOn(th){document.querySelectorAll('.bb:not(.xs)').forEach(function(v){clearTimeout(BB_T.get(v));if(v.getAttribute('data-st')!=='think'){v.removeAttribute('data-th');v.setAttribute('data-st','think')}});
+  if(th){clearTimeout(BB_THT);document.querySelectorAll('.bb:not(.xs)').forEach(function(v){v.removeAttribute('data-th');void v.getBoundingClientRect();v.setAttribute('data-th',th)});BB_THT=setTimeout(function(){document.querySelectorAll('.bb[data-th]').forEach(function(v){v.removeAttribute('data-th')})},2000)}}
 function bbAll(st,ms){document.querySelectorAll('.bb:not(.xs)').forEach(function(v){bbSet(v,st,ms)})}
 function bbOpenFx(){var nw=null;try{nw=bbCheckNew()}catch(e){}bbLvCache=null;var h=document.querySelector('#as .asfc');if(h)bbMount(h,{size:'md',newRing:(nw&&nw.up)?bbLv().lv:0});var f=$('bibiFab');if(f)bbMount(f,{size:'sm'});
   if(nw){setTimeout(function(){var v=h&&h.querySelector('.bb');if(v)v.classList.add('lvup');bbSet(h,'ok',1400);try{asBub('bot','<p><b>'+(nw.up?'Seviye atladım! ':'')+'Yeni yeteneğim var:</b> '+nw.caps.map(function(c){return esc(c.name)}).join(', ')+'.</p>')}catch(e){}},700)}
@@ -4964,12 +5022,13 @@ function asSplit(h){
   if(kids.length<=n)return [h];
   return [kids.slice(0,n).map(function(x){return x.outerHTML}).join(''),kids.slice(n).map(function(x){return x.outerHTML}).join('')]}
 var AS_OP={kesim:['Kart tarihlerine bir bakayım.','Ekstre günlerini kontrol ediyorum.'],rapor:['O ayın kayıtlarını açıyorum.','Bir bakayım, o ay neler olmuş.'],limit:['Limitlerine bir bakalım.'],yemekkarti:['Yemek kartlarına bakıyorum.'],ortalama:['Geçmiş aylara göre ortalamanı çıkarıyorum.'],duzenli:['Düzenli ödemelerine bakıyorum.'],kredibitis:['Kredi ve taksit tarihlerine bakıyorum.'],spend:['Bir bakayım, hemen çıkarıyorum.','Tamam, harcamalarına göz atıyorum.'],gelen:['Bakıyorum, kim ne göndermiş.'],hedef:['Hedeflerine bir bakalım.'],hedefplan:['Güzel hedef! Hemen hesaplıyorum.','Tamam, bir hesaplayayım.'],tatil:['Tatil mi? Süper, hemen bakıyorum.','Ooo, tatil planı! Fiyatlara bakıyorum.'],tatilozet:['Tatil planına bir bakalım.'],kur:['Kurlara bakıyorum.'],alabilir:['Bir bakalım, bütçen ne diyor.'],tasarruf:['Harcamalarına bir göz atayım.'],faturakiyas:['Faturalara bakıyorum.'],gecen:['İki ayı yan yana koyuyorum.'],tahmin:['Ay sonuna kadar hesaplıyorum.'],birikim:['Birikimlerine bakıyorum.'],ekstre:['Kartlarına bakıyorum.'],yaklasan:['Yaklaşan ödemelere bir bakayım.'],borc:['Borç alacak durumuna bakıyorum.'],abonelik:['Aboneliklerine bakıyorum.'],bakiye:['Bakiyene bakıyorum.'],gunluk:['Günlük payını hesaplıyorum.'],buyuk:['En büyükleri buluyorum.']};
-function asTy(on){try{$('as').classList.toggle('bty',!!on);if(on){bbWarn=false;bbAll('think')}else bbAll(bbWarn?'warn':'ok',bbWarn?0:1300)}catch(x){}var e=$('asSt');if(!e)return;e.className=on?'ty':'';e.innerHTML='<i></i>'+(on?'yazıyor…':'çevrimiçi')}
+function asTy(on){try{$('as').classList.toggle('bty',!!on);if(on){bbWarn=false;bbThinkOn(asTheme);asTheme=null}else bbAll(bbWarn?'warn':'ok',bbWarn?7000:1300)}catch(x){}var e=$('asSt');if(!e)return;e.className=on?'ty':'';e.innerHTML='<i></i>'+(on?'yazıyor…':'çevrimiçi')}
 function asDots(){return asBub('bot','<span class="asdots"><i></i><i></i><i></i></span>')}
 function asAsk(q){
   q=String(q||'').trim();if(!q||asBusy)return;asBusy=true;
   asBub('me',esc(q)+asTs());$('asIn').value='';
-  var r=asAnswer(q),parts=asSplit(r.h),op=(AS_OP[r.id]||null),opener=op?op[Math.floor(Math.random()*op.length)]:null;
+  var r=asAnswer(q);try{asTheme=bbTopic(q,r.id)}catch(e){asTheme=null}
+  var parts=asSplit(r.h),op=(AS_OP[r.id]||null),opener=op?op[Math.floor(Math.random()*op.length)]:null;
   var fast=REDUCE,rnd=function(a,b){return fast?60:a+Math.random()*(b-a)};
   var steps=[];
   if(opener&&parts.length>1)steps.push({h:'<p>'+esc(opener)+'</p>',w:rnd(650,900)});
