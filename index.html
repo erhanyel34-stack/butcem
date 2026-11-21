@@ -3877,10 +3877,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.20';
+var APP_VER='2.21';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+{"v":"2.21","date":"Kasım 2026","title":"Bibi önemli olanı öne alıyor","items":[["🎯","Daha doğru sıralama","Özet ekranındaki Bibi içgörülerinde, güncel limit uyarıları ve yaklaşan ödemeler artık geçen aya ait harcama değişimlerinin önüne geçiyor.",1],["🧩","Aynı isimli içgörüler artık kaybolmuyor","Bir ödemenin veya hedefin adı bir harcama kategorisiyle aynıysa ya da aynı kategoride hem limit hem harcama değişimi varsa, ikisi de gösteriliyor.",1]]},
 {"v":"2.20","date":"Kasım 2026","title":"Birikim fırsatı","items":[["💰","Bibi ek birikim fırsatını fark ediyor","Gelirin kesinse ve planın rahatsa, Özet ekranındaki içgörü kartında bu ay hedef ayırmalarının dışında yaklaşık ne kadar kalabileceği yazar. Bu bir tahmindir, para ayrılmaz; karar sende.",1]]},
 {"v":"2.19","date":"Kasım 2026","title":"Hedef ve bütçe içgörüsü","items":[["🎯","Hedeflerin için Bibi notları","Özet ekranındaki içgörü kartında Bibi artık birikim hedeflerinde ilerlemeni, hedef ayırmalarının aylık tahminle uyumunu ve limitlerin içinde kaldığın ayları fark ediyor. Hedef tarihi olmadığı için ‘yetişemezsin’ gibi bir iddiada bulunmaz.",1]]},
 {"v":"2.18","date":"Kasım 2026","title":"Yaklaşan ödeme içgörüsü","items":[["🗓️","Yaklaşan ödemeler için Bibi notu","Önümüzdeki günlerde kart son ödeme günü, büyük bir ödeme ya da aynı günlere yığılan ödemeler olduğunda Bibi Özet ekranındaki içgörü kartında kısa bir not bırakır. Tahmini tutarlar ve fatura tahminleri kullanılmaz.",1]]},
@@ -4744,10 +4745,12 @@ function bbiData(force){
 /* --- Insight Core: kural kaydı ve çalıştırma (şu an hiç kural yok) --- */
 function bbiRegister(r){if(!r||!r.id||typeof r.run!=='function'||BBI_RULES.some(function(x){return x.id===r.id}))return false;BBI_RULES.push({id:r.id,cat:r.cat||'',needs:r.needs||[],cool:r.cool||3,run:r.run});return true}
 function bbiValid(x){return !!(x&&typeof x==='object'&&x.id&&x.key&&x.cat&&x.title&&x.body&&[1,2,3].indexOf(x.sev)>-1)}
+/* sıralama önemi: geçen aya ait (geriye dönük) harcama değişimi, güncel limit ve yaklaşan ödeme uyarılarının önüne geçmesin diye bir kademe indirilir; kayıtlı sev değişmez */
+function bbiSevR(x){return x.cat==='change'?x.sev-1:x.sev}
 function bbiRun(o){o=o||{};var d=bbiData();if(!d)return[];var out=[];
   BBI_RULES.forEach(function(r){if(r.needs.some(function(n){return !d.has[n]}))return;var res=bbiSafe(function(){return r.run(d,o)},null);
     [].concat(res||[]).forEach(function(x){if(bbiValid(x)&&(o.ignoreState||bbiStCan(x.key,x.sev,r.cool)))out.push(x)})});
-  out.sort(function(a,b){return b.sev-a.sev||(b.pri||0)-(a.pri||0)});return out.slice(0,o.max||3)}
+  out.sort(function(a,b){return bbiSevR(b)-bbiSevR(a)||(b.pri||0)-(a.pri||0)});return out.slice(0,o.max||3)}
 /* --- Insight State: finansal veriden ayrı, kendi anahtarında (butcem_bbi). Yalnızca çağrılınca yazar --- */
 function bbiStGet(){var o=null;try{o=JSON.parse(lsGet(BBI_KEY)||'null')}catch(e){o=null}
   if(!o||typeof o!=='object'||o.v!==1||!o.items||typeof o.items!=='object'||Array.isArray(o.items))o={v:1,items:{}};return o}
@@ -4890,7 +4893,7 @@ var INS_WIN=3*864e5,INS_SIG=null,INS_T=0,INS_IO=null,INS_SEEN={},INS_CUR=[];
 var INS_AC={near:['🎯','#ffb648'],crit:['🎯','#ff9a3d'],full:['🎯','#ff6b81'],over:['🎯','#ff6b81'],up:['📈','#ffb648'],upx:['📈','#ff9a3d'],dn:['📉','#3ddc97']};
 function insList(){var all=bbiRun({ignoreState:true,max:30}),fresh={},st=bbiStGet().items,now=Date.now(),cs={},out=[];
   bbiRun({max:30}).forEach(function(x){fresh[x.key]=1});
-  all.forEach(function(x){var it=st[x.key];if(it&&it.x)return;if(!(fresh[x.key]||(it&&now-(it.first||0)<INS_WIN)))return;var ck=x.category||x.key;if(cs[ck])return;cs[ck]=1;out.push(x)});
+  all.forEach(function(x){var it=st[x.key];if(it&&it.x)return;if(!(fresh[x.key]||(it&&now-(it.first||0)<INS_WIN)))return;var ck=x.cat+'|'+(x.category||x.key);if(cs[ck])return;cs[ck]=1;out.push(x)});
   return out.slice(0,3)}
 function insChip(x){if(x.chip)return x.chip;if(x.cat==='limit')return x.type==='over'?'+'+fmt(x.over):'%'+x.pct;return (x.dir==='up'?'+':'−')+'%'+x.pct}
 function insHtml(x){var a=INS_AC[x.type]||['💬','#8f96c6'];
