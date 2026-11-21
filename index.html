@@ -3877,10 +3877,11 @@ $('scSave').onclick=function(){
 
 
 /* ---------- Yenilikler ---------- */
-var APP_VER='2.17';
+var APP_VER='2.18';
 var LEGACY_VER={'0.2':'1.2','0.1':'1.1','0':'1.0'};
 function seenVer(){var v=lsGet('butcem_ver');return LEGACY_VER[v]||v}
 var RELEASES=[
+{"v":"2.18","date":"Kasım 2026","title":"Yaklaşan ödeme içgörüsü","items":[["🗓️","Yaklaşan ödemeler için Bibi notu","Önümüzdeki günlerde kart son ödeme günü, büyük bir ödeme ya da aynı günlere yığılan ödemeler olduğunda Bibi Özet ekranındaki içgörü kartında kısa bir not bırakır. Tahmini tutarlar ve fatura tahminleri kullanılmaz.",1]]},
 {"v":"2.17","date":"Kasım 2026","title":"Bibi’den içgörü","items":[["💡","Bibi’den içgörü","Özet ekranında, Bibi artık limitlerine yaklaştığında ya da bir kategoride harcaman belirgin değiştiğinde kısa bir not bırakıyor. İstersen ‘İncele’ ile ilgili yere gidebilir, ✕ ile kapatabilirsin. Gerek olmadığında hiç görünmez.",1],["⚙️","Kapatma seçeneği","Bu kartı istersen Ayarlar > Ana sayfa kartları bölümünden tamamen gizleyebilirsin.",0]]},
 {"v":"2.16.3","date":"Kasım 2026","title":"İç altyapı hazırlığı","items":[["📊","Harcama değişimi hazırlığı","Bibi’nin ileride kategori harcamalarındaki belirgin artış ve azalışları fark edebilmesi için arka plan mantığı hazırlandı. Görünürde bir değişiklik yok.",0]]},
 {"v":"2.16.2","date":"Kasım 2026","title":"İç altyapı hazırlığı","items":[["🎯","Limit takibi hazırlığı","Bibi’nin ileride kategori limitlerini kendisi izleyebilmesi için arka plan mantığı hazırlandı. Görünürde bir değişiklik yok.",0]]},
@@ -4799,17 +4800,47 @@ function bbiChgRule(d,o){var out=[],st=(o&&o.ignoreState)?{}:bbiStGet().items,i0
       sev:lv==='upx'?3:(lv==='up'?2:1),pri:Math.min(p,999),title:t,body:b,created:Date.now(),nav:{v:'ozet',el:'catbars'}})});
   return out}
 bbiRegister({id:'change',cat:'change',needs:['entries'],cool:35,run:bbiChgRule});
+/* --- Aşama 5 · Yaklaşan ödeme içgörüleri. Yalnızca d.due.soon (dueItems, 7 gün) okur; faturalar (tutar tahmini), elden borçlar (TL tutarı yok), tahmini ekstreler ve alacaklar kapsam dışı --- */
+var BBI_UP={min:500,dens:3,dens2:5,win:2,clu:1000,bigAbs:2000,bigPct:0.15,bigNoInc:5000,crit:3};
+function bbiUpD(s){return s.slice(8,10)+'.'+s.slice(5,7)}
+function bbiUpDay(n,d){return n===0?'bugün':(n===1?'yarın':n+' gün sonra ('+bbiUpD(d)+')')}
+function bbiUpOk(it){if(!it||typeof it!=='object'||it.al||!(it.t==='k'||(it.t==='c'&&!it.est)))return false;
+  var a=bbiNum(it.amt),n=it.n,d=String(it.d||'');if(!(a>0)||!(typeof n==='number'&&n>=0&&n<=7&&Math.floor(n)===n)||!it.name)return false;
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return false;var y=+d.slice(0,4),m=+d.slice(5,7),dd=+d.slice(8,10),dt=new Date(y,m-1,dd);return dt.getFullYear()===y&&dt.getMonth()===m-1&&dt.getDate()===dd}
+function bbiUpRule(d){var out=[],L=[],seen={},per=d.nowK,U=BBI_UP;
+  bbiL(d.due&&d.due.soon).forEach(function(it){if(!bbiUpOk(it))return;var k=String(it.name).toLowerCase()+'|'+it.d+'|'+r2(it.amt);if(seen[k])return;seen[k]=1;L.push(it)});
+  if(!L.length)return out;
+  L.sort(function(a,b){return a.n-b.n||b.amt-a.amt});
+  var inc=bbiNum(((d.outlook||[])[0]||{}).inc),bt=inc>0?Math.max(U.bigAbs,inc*U.bigPct):U.bigNoInc,cov={};
+  function mk(o){o.cat='upcoming';o.label='Yaklaşan ödeme';o.period=per;o.created=Date.now();o.nav={v:'ozet',el:'dueBox'};out.push(o)}
+  L.forEach(function(it,i){if(it.t!=='c'||it.n>U.crit)return;cov[i]=1;var a=r2(it.amt);
+    mk({id:'upc.crit',key:'upc|crit|'+(it.key||it.id)+'|'+it.d,type:'ucrit',category:String(it.name),amt:a,date:it.d,days:it.n,sev:it.n<=1?2:1,pri:900-it.n,chip:fmt(a),ico:'💳',color:'#ff9a3d',
+      title:'💳 '+it.name+' için son ödeme günü yaklaşıyor',body:it.name+' için son ödeme günü '+bbiUpDay(it.n,it.d)+'. Ekstre tutarı '+fmt(a)+'. Önceden haberin olsun diye hatırlatayım. 💳'})});
+  L.forEach(function(it,i){if(cov[i]||it.amt<bt)return;var a=r2(it.amt);
+    mk({id:'upc.big',key:'upc|big|'+(it.key||it.id)+'|'+it.d,type:'ubig',category:String(it.name),amt:a,date:it.d,days:it.n,sev:it.n<=3?2:1,pri:700-it.n,chip:fmt(a),ico:'📅',color:'#ffb648',
+      title:'📅 '+it.name+' ödemen yaklaşıyor',body:it.name+' için '+fmt(a)+' tutarında bir ödemen '+bbiUpDay(it.n,it.d)+' var. Önceden haberin olsun diye hatırlatayım. 👀'})});
+  var imp=L.filter(function(x){return x.amt>=U.min}),best=null;
+  imp.forEach(function(st){var g=imp.filter(function(x){return x.n>=st.n&&x.n-st.n<=U.win}),t=g.reduce(function(s,x){return s+x.amt},0);
+    if(g.length>=2&&t>=U.clu&&(!best||t>best.t))best={st:st,g:g,t:r2(t)}});
+  if(best){var f=best.g[0],l=best.g[best.g.length-1],same=f.d===l.d;
+    mk({id:'upc.clus',key:'upc|clus|'+f.d,type:'uclu',category:'Yaklaşan ödemeler',count:best.g.length,total:best.t,from:f.d,to:l.d,sev:same?2:1,pri:600,chip:fmt(best.t),ico:'🗓️',color:'#7c5cff',
+      title:'🗓️ Ödemelerin bir araya gelmiş',body:(same?'Aynı gün ('+bbiUpD(f.d)+') ':bbiUpD(f.d)+'–'+bbiUpD(l.d)+' arasında ')+best.g.length+' ödemen var, toplam '+fmt(best.t)+'. Önceden bakmak istersen İncele. 📅'})}
+  if(imp.length>=U.dens&&!(best&&best.g.length>=imp.length)){var tt=r2(imp.reduce(function(s,x){return s+x.amt},0));
+    mk({id:'upc.dens',key:'upc|dens|'+per,type:'uden',category:'Yaklaşan ödemeler',count:imp.length,total:tt,sev:imp.length>=U.dens2?2:1,pri:500,chip:imp.length+' ödeme',ico:'🗓️',color:'#7c5cff',
+      title:'🗓️ Bu hafta ödemelerin yoğun',body:'Önümüzdeki 7 günde '+imp.length+' ödemen var, toplam '+fmt(tt)+'. Haftanı buna göre planlamak isteyebilirsin. 🗓️'})}
+  return out}
+bbiRegister({id:'upcoming',cat:'upcoming',needs:[],cool:8,run:bbiUpRule});
 
 /* --- Aşama 4 · İçgörü gösterim katmanı (Özet · "Bibi’den İçgörü"). Yalnızca bbiRun okur; mark/dismiss State'e yazar --- */
-var INS_WIN=3*864e5,INS_SIG='',INS_T=0,INS_IO=null,INS_SEEN={},INS_CUR=[];
+var INS_WIN=3*864e5,INS_SIG=null,INS_T=0,INS_IO=null,INS_SEEN={},INS_CUR=[];
 var INS_AC={near:['🎯','#ffb648'],crit:['🎯','#ff9a3d'],full:['🎯','#ff6b81'],over:['🎯','#ff6b81'],up:['📈','#ffb648'],upx:['📈','#ff9a3d'],dn:['📉','#3ddc97']};
 function insList(){var all=bbiRun({ignoreState:true,max:30}),fresh={},st=bbiStGet().items,now=Date.now(),cs={},out=[];
   bbiRun({max:30}).forEach(function(x){fresh[x.key]=1});
-  all.forEach(function(x){var it=st[x.key];if(it&&it.x)return;if(!(fresh[x.key]||(it&&now-(it.first||0)<INS_WIN)))return;if(cs[x.category])return;cs[x.category]=1;out.push(x)});
+  all.forEach(function(x){var it=st[x.key];if(it&&it.x)return;if(!(fresh[x.key]||(it&&now-(it.first||0)<INS_WIN)))return;var ck=x.category||x.key;if(cs[ck])return;cs[ck]=1;out.push(x)});
   return out.slice(0,3)}
-function insChip(x){if(x.cat==='limit')return x.type==='over'?'+'+fmt(x.over):'%'+x.pct;return (x.dir==='up'?'+':'−')+'%'+x.pct}
+function insChip(x){if(x.chip)return x.chip;if(x.cat==='limit')return x.type==='over'?'+'+fmt(x.over):'%'+x.pct;return (x.dir==='up'?'+':'−')+'%'+x.pct}
 function insHtml(x){var a=INS_AC[x.type]||['💬','#8f96c6'];
-  return '<div class="ins" data-k="'+esc(x.key)+'" style="--ac:'+a[1]+'"><div class="insh"><span>'+a[0]+'</span><b>'+esc(x.category)+'</b><em>'+(x.cat==='limit'?'Limit':'Harcama değişimi')+'</em><button type="button" class="insx" data-x="'+esc(x.key)+'" aria-label="Kapat">✕</button></div>'
+  return '<div class="ins" data-k="'+esc(x.key)+'" style="--ac:'+esc(x.color||a[1])+'"><div class="insh"><span>'+esc(x.ico||a[0])+'</span><b>'+esc(x.category)+'</b><em>'+esc(x.label||(x.cat==='limit'?'Limit':'Harcama değişimi'))+'</em><button type="button" class="insx" data-x="'+esc(x.key)+'" aria-label="Kapat">✕</button></div>'
    +'<div class="insb">'+esc(x.body)+'</div><div class="insf"><span class="inschip num">'+esc(insChip(x))+'</span><button type="button" class="insgo" data-g="'+esc(x.key)+'">İncele ›</button></div></div>'}
 function insMark(k){if(INS_SEEN[k]||document.hidden||tab!=='ozet')return;INS_SEEN[k]=1;
   var it=INS_CUR.filter(function(x){return x.key===k})[0];if(it&&!bbiStGet().items[k])bbiStMark(k,it.sev)}
@@ -4823,7 +4854,7 @@ function insWatch(){var c=$('insCard'),rows=c?c.querySelectorAll('.ins'):[];
   [].forEach.call(rows,function(r){INS_IO.observe(r)})}
 function insRender(){INS_T=0;var c=$('insCard');if(!c)return;
   if(tab!=='ozet'||isBasic())return;
-  if(mk(cur)!==nowK()){c.style.display='none';INS_SIG='';return}
+  if(mk(cur)!==nowK()){c.style.display='none';INS_SIG=null;return}
   var list=[];try{bbiData(true);list=insList()}catch(e){list=[]}
   var sig=list.map(function(x){return x.key+'|'+x.body}).join('¦');
   if(sig===INS_SIG&&(c.style.display!=='none'||!list.length))return;
@@ -4840,7 +4871,7 @@ function insGo(k){var x=INS_CUR.filter(function(z){return z.key===k})[0],n=x&&x.
       setTimeout(function(){try{el.scrollIntoView({behavior:'smooth',block:'center'});el.classList.remove('insfl');void el.offsetWidth;el.classList.add('insfl');setTimeout(function(){el.classList.remove('insfl')},1500)}catch(e){}},80)}
   }catch(e){}}
 function insDismiss(k){var x=INS_CUR.filter(function(z){return z.key===k})[0];if(!x)return;
-  if(!bbiStGet().items[k])bbiStMark(k,x.sev);bbiStDismiss(k);INS_SEEN[k]=1;INS_SIG='';insRender()}
+  if(!bbiStGet().items[k])bbiStMark(k,x.sev);bbiStDismiss(k);INS_SEEN[k]=1;INS_SIG=null;insRender()}
 (function(){var c=$('insCard');if(!c)return;c.onclick=function(ev){var t=ev.target,x=t.closest&&t.closest('[data-x]'),g=t.closest&&t.closest('[data-g]');
   if(x){ev.stopPropagation();ev.preventDefault();insDismiss(x.getAttribute('data-x'));return}
   if(g)insGo(g.getAttribute('data-g'))}})();
